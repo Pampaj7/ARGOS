@@ -1,0 +1,36 @@
+# Large data and model artifacts
+data/
+datasets/
+weights/
+checkpoints/
+*.pth
+*.pt
+*.onnx
+*.engine
+*.zip
+*.tar
+*.tar.gz
+*.tiff
+*.mp4
+
+# Downloaded upstream repositories
+stereo/
+Fast-FoundationStereo/
+s2m2/
+FoundationStereo/
+stereoanywhere/
+DEFOM-Stereo/
+MonSter-plusplus/
+
+# Python/runtime
+__pycache__/
+*.pyc
+.venv/
+.conda/
+.cache/
+
+# Generated bulky logs
+*.log
+wandb/
+runs/
+
