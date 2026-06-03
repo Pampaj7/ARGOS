@@ -21,7 +21,7 @@ Primary benchmark so far:
 | Stereo Anywhere | tested | Works with Depth Anything V2 prior; weaker than S2M2 on SERV-CT. |
 | OpenCV SGBM | tested | Classical baseline, much worse than learned models. |
 | FoundationStereo full | blocked | Code cloned, Google Drive weights quota-blocked. |
-| DEFOM-Stereo | cloned | Awaiting weight/dependency follow-up. |
+| DEFOM-Stereo | tested | VIT-L Middlebury, VITS RVC, and VITS SceneFlow evaluated on SERV-CT. |
 | RT-MonSter++ | tested | Zero-shot real-time checkpoint evaluated on SERV-CT. |
 | MonSter++ large | tested | MixAll large checkpoint evaluated on SERV-CT. |
 | RAFT-Stereo | tested | RVC and Middlebury checkpoints evaluated on SERV-CT. |
@@ -38,6 +38,7 @@ S2M2-S fine-tuning on SERV-CT:
 | Baseline S2M2-S | 1.46 px | 1.76 mm | pretrained, eval Experiment_2 CT |
 | Honest holdout tune | 1.38 px | 1.37 mm | train Experiment_1 CT, eval Experiment_2 CT |
 | All surgical tune | 0.81 px | 1.02 mm | train CT+RGB refs, eval CT |
+| DEFOM-Stereo VIT-L Middlebury | 1.73 px | 1.99 mm | pretrained zero-shot, full SERV-CT CT |
 | RT-MonSter++ zero-shot | 1.60 px | 2.05 mm | pretrained zero-shot, full SERV-CT CT |
 
 The all-surgical run is a domain-adapted checkpoint, not an independent holdout metric.
@@ -55,6 +56,17 @@ Key images are kept in `results/images/`:
 
 Full baseline table: `docs/SERVCT_BASELINE_SCOREBOARD.md`.
 
+## Protocol And Project Docs
+
+- `docs/EXPERIMENT_PROTOCOL.md`: zero-shot, honest fine-tune, all-surgical adaptation, and cross-dataset rules.
+- `docs/DATASETS.md`: dataset status and target unified ARGOS sample format.
+- `docs/MODEL_ZOO.md`: tested and pending model baselines.
+- `docs/ROADMAP.md`: project phases toward paper-ready experiments.
+- `configs/servct_baselines.yaml`: current SERV-CT benchmark metadata.
+- `configs/surgical_splits.yaml`: current surgical train/test split definitions.
+
+SERV-CT has a working converter to the unified local format under `/home/pampaj/Desktop/stereo/argos_data/servct/`. Converted data is intentionally excluded from git.
+
 ## Active Downloads
 
 Two detachable `screen` sessions are used on the workstation:
@@ -63,12 +75,11 @@ Two detachable `screen` sessions are used on the workstation:
 screen -ls
 tail -f /home/pampaj/Desktop/stereo/download_jobs/scared_full_download.log
 tail -f /home/pampaj/Desktop/stereo/download_jobs/training_extras_download.log
-tail -f /home/pampaj/Desktop/stereo/download_jobs/monsterpp_large_download.log
 ```
 
 The extra queue waits for SCARED to finish, then downloads S2M2-L/XL and EndoSLAM.
 
-MonSter++ is also being set up locally under `/home/pampaj/Desktop/stereo/MonSter-plusplus`; its upstream repo and model weights are intentionally excluded from this ARGOS repository. The RT zero-shot checkpoint has been tested, and the large checkpoint download has its own `screen` session.
+MonSter++ and DEFOM-Stereo are also set up locally under `/home/pampaj/Desktop/stereo/`; upstream repos and model weights are intentionally excluded from this ARGOS repository.
 
 ## Repository Policy
 

@@ -1,0 +1,22 @@
+servct:
+  root: /home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT
+  zero_shot_eval:
+    - Experiment_1
+    - Experiment_2
+  honest_train:
+    - Experiment_1
+  honest_test:
+    - Experiment_2
+  all_surgical:
+    - Experiment_1
+    - Experiment_2
+
+scared:
+  root: /home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/scared
+  status: downloading
+  split_policy: keep scene/keyframe families disjoint between train and test
+
+endoslam:
+  root: /home/pampaj/Desktop/stereo/datasets/EndoSLAM
+  status: queued
+  split_policy: use as support/pseudo-label/pose validation data until GT availability is confirmed

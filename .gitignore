@@ -1,6 +1,7 @@
 # Large data and model artifacts
 data/
 datasets/
+argos_data/
 weights/
 checkpoints/
 *.pth

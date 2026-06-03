@@ -20,6 +20,9 @@ RUNS = [
     ("CREStereo", ROOT / "stereo_matching_crestereo/output_servct_eval_crestereo/summary.json", "tested", "bundled epoch-570 checkpoint"),
     ("RAFT-Stereo RVC", ROOT / "RAFT-Stereo/output_servct_eval_raft_rvc/summary.json", "tested", "iRAFT RVC checkpoint, context_norm=instance"),
     ("RAFT-Stereo Middlebury", ROOT / "RAFT-Stereo/output_servct_eval_raft_middlebury/summary.json", "tested", "Middlebury checkpoint"),
+    ("DEFOM-Stereo VIT-L Middlebury", ROOT / "DEFOM-Stereo/output_servct_eval_defom_vitl_middlebury/summary.json", "tested", "VIT-L Middlebury checkpoint"),
+    ("DEFOM-Stereo VITS RVC", ROOT / "DEFOM-Stereo/output_servct_eval_defom_vits_rvc/summary.json", "tested", "VITS RVC checkpoint"),
+    ("DEFOM-Stereo VITS SceneFlow", ROOT / "DEFOM-Stereo/output_servct_eval_defom_vits_sceneflow/summary.json", "tested", "VITS SceneFlow checkpoint; smoke baseline"),
 ]
 
 REPO_STATUS = [
@@ -28,7 +31,7 @@ REPO_STATUS = [
     ("Selective-Stereo", "cloned; weights are Google Drive gated/manual", "CVPR 2024 Highlight, detail/frequency baseline"),
     ("CREStereo", "cloned and tested", "practical robust stereo baseline"),
     ("MonSter++", "cloned; RT and large tested", "monodepth-prior foundation stereo"),
-    ("DEFOM-Stereo", "cloned; checkpoint download running in screen `argos_defom_download`", "depth-foundation stereo baseline"),
+    ("DEFOM-Stereo", "cloned and tested; VIT-L Middlebury is best DEFOM run so far, VIT-L SceneFlow was unstable on SERV-CT", "depth-foundation stereo baseline"),
 ]
 
 
@@ -82,6 +85,8 @@ def write_markdown(df):
         "- `stereo_matching_crestereo/scripts_eval_servct_crestereo.py`: added SERV-CT evaluator and montage writer.",
         "- `MonSter-plusplus/MonSter++/core/monster.py` and `RT-MonSter++/core/monster.py`: patched DepthAnything checkpoint path to local `checkpoints/depth_anything_v2_{encoder}.pth`.",
         "- `MonSter-plusplus/*/scripts_eval_servct_monster.py`: added SERV-CT evaluator for RT and large checkpoints.",
+        "- `DEFOM-Stereo/checkpoints/depth_anything_v2_{vits,vitl}.pth`: symlinked to existing Stereo Anywhere DepthAnything V2 weights.",
+        "- `DEFOM-Stereo/scripts_eval_servct_defom.py`: added SERV-CT evaluator and montage writer.",
         "- `argos_baselines/scripts/make_servct_scoreboard.py`: creates this report and PNG ranking.",
         "",
         "## Next Baselines",
@@ -89,7 +94,7 @@ def write_markdown(df):
         "- Add S2M2-L/XL once the queued checkpoint download starts after SCARED.",
         "- Add IGEV++ once weights are available from Google Drive or a usable mirror.",
         "- Add Selective-Stereo once weights are available.",
-        "- Finish DEFOM-Stereo checkpoint download and add its SERV-CT evaluator.",
+        "- Optionally test more DEFOM checkpoints/iteration settings after SCARED conversion.",
     ]
     (OUT / "docs/servct_scoreboard.md").write_text("\n".join(lines) + "\n")
 

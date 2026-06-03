@@ -1,0 +1,39 @@
+benchmark:
+  name: servct_reference_ct
+  dataset_root: /home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT
+  reference: Reference_CT
+  frames: 16
+
+outputs:
+  workspace: /home/pampaj/Desktop/stereo
+  scoreboard_dir: /home/pampaj/Desktop/stereo/argos_baselines
+
+runs:
+  - name: sgbm
+    model: OpenCV SGBM
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/Fast-FoundationStereo/output_servct_eval_sgbm/summary.json
+  - name: fast_foundationstereo_onnx
+    model: Fast-FoundationStereo ONNX
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/Fast-FoundationStereo/output_servct_eval/summary.json
+  - name: s2m2_s
+    model: S2M2-S
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/s2m2/output_servct_eval_s2m2_S/summary.json
+  - name: s2m2_m
+    model: S2M2-M
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/s2m2/output_servct_eval_s2m2_M/summary.json
+  - name: monsterpp_mixall_large
+    model: MonSter++ MixAll large
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/MonSter-plusplus/MonSter++/output_servct_eval_monsterpp_mixall_i16/summary.json
+  - name: raft_stereo_rvc
+    model: RAFT-Stereo RVC
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/RAFT-Stereo/output_servct_eval_raft_rvc/summary.json
+  - name: crestereo
+    model: CREStereo
+    status: tested
+    summary: /home/pampaj/Desktop/stereo/stereo_matching_crestereo/output_servct_eval_crestereo/summary.json

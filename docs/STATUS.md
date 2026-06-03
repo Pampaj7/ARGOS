@@ -20,11 +20,23 @@
 - Cloned and evaluated CREStereo on SERV-CT.
 - Cloned RAFT-Stereo, downloaded Dropbox pretrained models, and evaluated RVC/Middlebury checkpoints on SERV-CT.
 - Cloned IGEV++ and Selective-Stereo; both are waiting on Google Drive/manual checkpoint access.
-- Started DEFOM-Stereo checkpoint download in detached `screen` session `argos_defom_download`.
+- Downloaded DEFOM-Stereo checkpoints and evaluated VITS SceneFlow, VITS RVC, and VIT-L Middlebury on SERV-CT.
+  - best DEFOM run so far: VIT-L Middlebury, disparity MAE 1.73 px, depth MAE 1.99 mm;
+  - VIT-L SceneFlow was unstable on SERV-CT depth and is not used as a primary score.
 - Added combined SERV-CT scoreboard:
   - `stereo/argos_baselines/docs/servct_scoreboard.md`;
   - `stereo/argos_baselines/images/servct_depth_mae_scoreboard.png`;
   - mirrored into ARGOS as `docs/SERVCT_BASELINE_SCOREBOARD.md`.
+- Added paper/repo scaffolding:
+  - `docs/EXPERIMENT_PROTOCOL.md`;
+  - `docs/DATASETS.md`;
+  - `docs/MODEL_ZOO.md`;
+  - `docs/ROADMAP.md`;
+  - `configs/servct_baselines.yaml`;
+  - `configs/surgical_splits.yaml`.
+- Added SERV-CT converter and verified it creates 16 unified ARGOS samples under `/home/pampaj/Desktop/stereo/argos_data/servct/`.
+- Added SCARED converter placeholder that reports available archives until the full dataset layout is available.
+- Added `scripts/run_all_servct_baselines.py` for lightweight regeneration of current scoreboard outputs.
 - Restarted long downloads in detached `screen` sessions after detecting stale network sockets:
   - `argos_scared_download`;
   - `argos_training_extras`;
@@ -34,7 +46,7 @@
 ## Current Tasks
 
 - Finish SCARED download and write SCARED converter to dense disparity/depth training format.
-- Finish DEFOM-Stereo download and evaluate on SERV-CT.
+- Extend the SCARED converter once the full archive layout is available.
 - Add S2M2-L/XL when the extra training download queue reaches those weights.
 - Add IGEV++/Selective-Stereo when checkpoints are available.
 - Prepare a larger S2M2 fine-tuning run using SERV-CT + SCARED.
