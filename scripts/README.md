@@ -9,5 +9,6 @@ Current source scripts live in the local model workspaces while experiments are 
 - `/home/pampaj/Desktop/stereo/Fast-FoundationStereo/scripts/eval_servct_onnx.py`
 - `/home/pampaj/Desktop/stereo/stereoanywhere/scripts/eval_servct_stereoanywhere.py`
 - `/home/pampaj/Desktop/stereo/MonSter-plusplus/RT-MonSter++/scripts_eval_servct_monster.py`
+- `/home/pampaj/Desktop/stereo/download_jobs/download_monsterpp_large.py`
 
 Stable versions can be copied here as the project settles.

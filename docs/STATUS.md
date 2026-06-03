@@ -17,6 +17,10 @@
   - depth RMSE: 3.42 mm;
   - frames: 16.
 - Large MonSter++ checkpoint follow-up is still pending.
+- Restarted long downloads in detached `screen` sessions after detecting stale network sockets:
+  - `argos_scared_download`;
+  - `argos_training_extras`;
+  - `argos_monsterpp_large`.
 - Initialized local ARGOS git repo with README, metrics, result images, and scripts. GitHub push is waiting for `gh auth login`.
 
 ## Current Tasks
