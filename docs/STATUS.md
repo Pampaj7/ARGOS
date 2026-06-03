@@ -37,6 +37,11 @@
 - Added SERV-CT converter and verified it creates 16 unified ARGOS samples under `/home/pampaj/Desktop/stereo/argos_data/servct/`.
 - Added SCARED converter placeholder that reports available archives until the full dataset layout is available.
 - Added `scripts/run_all_servct_baselines.py` for lightweight regeneration of current scoreboard outputs.
+- Integrated the ARGOS-Wound internal proposal direction into the main README:
+  - v0 geometry-anchored stereo/RGB benchmark;
+  - v1 active depth / ToF / LiDAR extension;
+  - failure-aware ARGOS-Fuse direction;
+  - open-wound ex-vivo acquisition and MICCAI 2027 positioning.
 - Restarted long downloads in detached `screen` sessions after detecting stale network sockets:
   - `argos_scared_download`;
   - `argos_training_extras`;
