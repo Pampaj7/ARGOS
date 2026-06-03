@@ -22,7 +22,7 @@ Primary benchmark so far:
 | OpenCV SGBM | tested | Classical baseline, much worse than learned models. |
 | FoundationStereo full | blocked | Code cloned, Google Drive weights quota-blocked. |
 | DEFOM-Stereo | cloned | Awaiting weight/dependency follow-up. |
-| MonSter++ | in progress | Repo cloned; common SERV-CT benchmark being prepared. |
+| MonSter++ | in progress | Repo cloned; Mix_all_large checkpoint downloading; common SERV-CT benchmark prepared. |
 
 ## Best Numbers So Far
 
@@ -57,6 +57,8 @@ tail -f /home/pampaj/Desktop/stereo/download_jobs/training_extras_download.log
 
 The extra queue waits for SCARED to finish, then downloads S2M2-L/XL and EndoSLAM.
 
+MonSter++ is also being set up locally under `/home/pampaj/Desktop/stereo/MonSter-plusplus`; its upstream repo and model weights are intentionally excluded from this ARGOS repository.
+
 ## Repository Policy
 
 This repo intentionally does **not** include downloaded upstream repositories, model weights, or datasets. It tracks only:
@@ -68,3 +70,12 @@ This repo intentionally does **not** include downloaded upstream repositories, m
 
 Large data lives locally under `/home/pampaj/Desktop/stereo/`.
 
+## GitHub Publishing
+
+The local ARGOS git repo is initialized. GitHub CLI is installed but not authenticated on this machine yet. To publish:
+
+```bash
+cd /home/pampaj/Desktop/ARGOS
+gh auth login
+gh repo create ARGOS --public --source=. --remote=origin --push
+```
