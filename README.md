@@ -23,7 +23,11 @@ Primary benchmark so far:
 | FoundationStereo full | blocked | Code cloned, Google Drive weights quota-blocked. |
 | DEFOM-Stereo | cloned | Awaiting weight/dependency follow-up. |
 | RT-MonSter++ | tested | Zero-shot real-time checkpoint evaluated on SERV-CT. |
-| MonSter++ large | in progress | Repo cloned; large checkpoint follow-up pending. |
+| MonSter++ large | tested | MixAll large checkpoint evaluated on SERV-CT. |
+| RAFT-Stereo | tested | RVC and Middlebury checkpoints evaluated on SERV-CT. |
+| CREStereo | tested | Bundled checkpoint evaluated on SERV-CT. |
+| IGEV++ | cloned | Awaiting Google Drive/manual weights. |
+| Selective-Stereo | cloned | Awaiting Google Drive/manual weights. |
 
 ## Best Numbers So Far
 
@@ -47,6 +51,9 @@ Key images are kept in `results/images/`:
 - `argos_s2m2_comparison.png`: S2M2-S/M vs previous baseline.
 - `argos_stereo_surgical_results.png`: early Fast-FoundationStereo/SERV-CT/SCARED summary.
 - `rtmonsterplusplus_zeroshot_servct_montage.png`: RT-MonSter++ zero-shot SERV-CT montage.
+- `servct_depth_mae_scoreboard.png`: current SERV-CT depth-MAE baseline ranking.
+
+Full baseline table: `docs/SERVCT_BASELINE_SCOREBOARD.md`.
 
 ## Active Downloads
 

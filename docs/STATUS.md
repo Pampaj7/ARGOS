@@ -16,7 +16,15 @@
   - depth MAE: 2.05 mm;
   - depth RMSE: 3.42 mm;
   - frames: 16.
-- Large MonSter++ checkpoint follow-up is still pending.
+- Downloaded and evaluated MonSter++ `Mix_all_large.pth` on SERV-CT.
+- Cloned and evaluated CREStereo on SERV-CT.
+- Cloned RAFT-Stereo, downloaded Dropbox pretrained models, and evaluated RVC/Middlebury checkpoints on SERV-CT.
+- Cloned IGEV++ and Selective-Stereo; both are waiting on Google Drive/manual checkpoint access.
+- Started DEFOM-Stereo checkpoint download in detached `screen` session `argos_defom_download`.
+- Added combined SERV-CT scoreboard:
+  - `stereo/argos_baselines/docs/servct_scoreboard.md`;
+  - `stereo/argos_baselines/images/servct_depth_mae_scoreboard.png`;
+  - mirrored into ARGOS as `docs/SERVCT_BASELINE_SCOREBOARD.md`.
 - Restarted long downloads in detached `screen` sessions after detecting stale network sockets:
   - `argos_scared_download`;
   - `argos_training_extras`;
@@ -26,7 +34,9 @@
 ## Current Tasks
 
 - Finish SCARED download and write SCARED converter to dense disparity/depth training format.
-- Try large MonSter++ checkpoint on SERV-CT when the large weights are available.
+- Finish DEFOM-Stereo download and evaluate on SERV-CT.
+- Add S2M2-L/XL when the extra training download queue reaches those weights.
+- Add IGEV++/Selective-Stereo when checkpoints are available.
 - Prepare a larger S2M2 fine-tuning run using SERV-CT + SCARED.
 - Publish lightweight ARGOS repo to GitHub once authentication is available.
 
