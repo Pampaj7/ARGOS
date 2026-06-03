@@ -22,7 +22,8 @@ Primary benchmark so far:
 | OpenCV SGBM | tested | Classical baseline, much worse than learned models. |
 | FoundationStereo full | blocked | Code cloned, Google Drive weights quota-blocked. |
 | DEFOM-Stereo | cloned | Awaiting weight/dependency follow-up. |
-| MonSter++ | in progress | Repo cloned; Mix_all_large checkpoint downloading; common SERV-CT benchmark prepared. |
+| RT-MonSter++ | tested | Zero-shot real-time checkpoint evaluated on SERV-CT. |
+| MonSter++ large | in progress | Repo cloned; large checkpoint follow-up pending. |
 
 ## Best Numbers So Far
 
@@ -33,6 +34,7 @@ S2M2-S fine-tuning on SERV-CT:
 | Baseline S2M2-S | 1.46 px | 1.76 mm | pretrained, eval Experiment_2 CT |
 | Honest holdout tune | 1.38 px | 1.37 mm | train Experiment_1 CT, eval Experiment_2 CT |
 | All surgical tune | 0.81 px | 1.02 mm | train CT+RGB refs, eval CT |
+| RT-MonSter++ zero-shot | 1.60 px | 2.05 mm | pretrained zero-shot, full SERV-CT CT |
 
 The all-surgical run is a domain-adapted checkpoint, not an independent holdout metric.
 
@@ -44,6 +46,7 @@ Key images are kept in `results/images/`:
 - `argos_s2m2_finetune_results.png`: S2M2 surgical fine-tuning results.
 - `argos_s2m2_comparison.png`: S2M2-S/M vs previous baseline.
 - `argos_stereo_surgical_results.png`: early Fast-FoundationStereo/SERV-CT/SCARED summary.
+- `rtmonsterplusplus_zeroshot_servct_montage.png`: RT-MonSter++ zero-shot SERV-CT montage.
 
 ## Active Downloads
 

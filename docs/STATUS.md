@@ -10,13 +10,19 @@
 - Started full SCARED download in detached `screen` session `argos_scared_download`.
 - Started extra download queue in detached `screen` session `argos_training_extras`.
 - Cloned MonSter++ and prepared common SERV-CT evaluation script.
-- Started downloading MonSter++ `Mix_all_large.pth` checkpoint from Hugging Face.
+- Evaluated RT-MonSter++ `Zero_shot.pth` on SERV-CT:
+  - disparity MAE: 1.60 px;
+  - disparity RMSE: 2.78 px;
+  - depth MAE: 2.05 mm;
+  - depth RMSE: 3.42 mm;
+  - frames: 16.
+- Large MonSter++ checkpoint follow-up is still pending.
 - Initialized local ARGOS git repo with README, metrics, result images, and scripts. GitHub push is waiting for `gh auth login`.
 
 ## Current Tasks
 
 - Finish SCARED download and write SCARED converter to dense disparity/depth training format.
-- Benchmark MonSter++ on SERV-CT.
+- Try large MonSter++ checkpoint on SERV-CT when the large weights are available.
 - Prepare a larger S2M2 fine-tuning run using SERV-CT + SCARED.
 - Publish lightweight ARGOS repo to GitHub once authentication is available.
 
