@@ -14,13 +14,13 @@ checkpoints/
 *.mp4
 
 # Downloaded upstream repositories
-stereo/
-Fast-FoundationStereo/
-s2m2/
-FoundationStereo/
-stereoanywhere/
-DEFOM-Stereo/
-MonSter-plusplus/
+/stereo/
+/Fast-FoundationStereo/
+/s2m2/
+/FoundationStereo/
+/stereoanywhere/
+/DEFOM-Stereo/
+/MonSter-plusplus/
 
 # Python/runtime
 __pycache__/
@@ -33,4 +33,3 @@ __pycache__/
 *.log
 wandb/
 runs/
-
