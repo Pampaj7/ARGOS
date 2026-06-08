@@ -8,8 +8,7 @@ import numpy as np
 import torch
 
 from s2m2.core.model.s2m2 import S2M2
-from s2m2.core.utils.model_utils import load_model, run_stereo_matching
-from s2m2.core.utils.vis_utils import apply_colormap
+from s2m2.core.utils.image_utils import image_crop, image_pad
 
 
 MODEL_CONFIG = {
@@ -51,7 +50,9 @@ def disp_vis(x, max_val=None):
     x = x.astype(np.float32)
     if max_val is not None:
         x = np.clip(x, 0, max_val)
-    return apply_colormap(x)
+    denom = max(float(x.max()), 1e-6)
+    x = (x / denom * 255.0).astype(np.uint8)
+    return cv2.applyColorMap(x, cv2.COLORMAP_TURBO)
 
 
 def load_custom_checkpoint(checkpoint_path, model_type, use_positivity, refine_iter, device):
@@ -67,6 +68,36 @@ def load_custom_checkpoint(checkpoint_path, model_type, use_positivity, refine_i
     state_dict = checkpoint["state_dict"] if "state_dict" in checkpoint else checkpoint
     model.my_load_state_dict(state_dict)
     return model.to(device).eval()
+
+
+def load_pretrained_no_open3d(pretrain_path, model_type, use_positivity, refine_iter, device):
+    cfg = MODEL_CONFIG[model_type]
+    model = S2M2(
+        feature_channels=cfg["feature_channels"],
+        dim_expansion=1,
+        num_transformer=cfg["n_transformer"],
+        use_positivity=use_positivity,
+        refine_iter=refine_iter,
+    )
+    ckpt_path = Path(pretrain_path) / f"CH{cfg['feature_channels']}NTR{cfg['n_transformer']}.pth"
+    checkpoint = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+    model.my_load_state_dict(checkpoint["state_dict"])
+    return model.to(device).eval()
+
+
+@torch.no_grad()
+def run_stereo_matching_no_open3d(model, left_torch, right_torch, device):
+    h, w = left_torch.shape[-2:]
+    left_pad = image_pad(left_torch, 32).to(device)
+    right_pad = image_pad(right_torch, 32).to(device)
+    with torch.amp.autocast(enabled=device.type == "cuda", device_type=device.type, dtype=torch.float16):
+        pred_disp, pred_occ, pred_conf = model(left_pad, right_pad)
+    pred_disp = image_crop(pred_disp, (h, w)).squeeze().float()
+    pred_occ = image_crop(pred_occ, (h, w)).squeeze().float()
+    pred_conf = image_crop(pred_conf, (h, w)).squeeze().float()
+    margin = 100
+    avg_conf = pred_conf[margin:-margin, margin:-margin].mean().item()
+    return pred_disp, pred_occ, pred_conf, avg_conf
 
 
 def main():
@@ -88,7 +119,7 @@ def main():
     if args.checkpoint:
         model = load_custom_checkpoint(args.checkpoint, args.model_type, not args.allow_negative, args.num_refine, device)
     else:
-        model = load_model(
+        model = load_pretrained_no_open3d(
             args.weights_dir,
             args.model_type,
             use_positivity=not args.allow_negative,
@@ -120,7 +151,7 @@ def main():
             left_t = torch.from_numpy(left).permute(2, 0, 1).unsqueeze(0).to(device)
             right_t = torch.from_numpy(right).permute(2, 0, 1).unsqueeze(0).to(device)
 
-            pred_disp, pred_occ, pred_conf, avg_conf, _ = run_stereo_matching(model, left_t, right_t, device)
+            pred_disp, pred_occ, pred_conf, avg_conf = run_stereo_matching_no_open3d(model, left_t, right_t, device)
             pred = pred_disp.detach().cpu().numpy().astype(np.float32)
             conf = pred_conf.detach().cpu().numpy().astype(np.float32)
             occ = pred_occ.detach().cpu().numpy().astype(np.float32)

@@ -6,8 +6,12 @@ import time
 from huggingface_hub import hf_hub_download, snapshot_download
 
 
-S2M2_DIR = Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights")
-ENDOSLAM_DIR = Path("/home/pampaj/Desktop/stereo/datasets/EndoSLAM")
+DEFAULT_STEREO_ROOT = Path(__file__).resolve().parents[2] / "stereo"
+S2M2_DIR = Path(
+    os.environ.get("ARGOS_S2M2_WEIGHTS_DIR", DEFAULT_STEREO_ROOT / "s2m2/weights/pretrain_weights")
+)
+ENDOSLAM_DIR = Path(os.environ.get("ARGOS_ENDOSLAM_DIR", DEFAULT_STEREO_ROOT / "datasets/EndoSLAM"))
+FORCE_DOWNLOAD = os.environ.get("ARGOS_FORCE_DOWNLOAD", "").lower() in {"1", "true", "yes"}
 
 
 def log(message):
@@ -35,6 +39,7 @@ def download_s2m2_weights():
             repo_type="model",
             filename=filename,
             local_dir=S2M2_DIR,
+            force_download=FORCE_DOWNLOAD,
         )
         size_gb = Path(path).stat().st_size / (1024 ** 3)
         log(f"done {filename} -> {path} ({size_gb:.2f} GiB)")
@@ -47,7 +52,7 @@ def download_endoslam():
         repo_id="introvoyz041/EndoSLAM",
         repo_type="dataset",
         local_dir=ENDOSLAM_DIR,
-        resume_download=True,
+        force_download=FORCE_DOWNLOAD,
     )
     log(f"done EndoSLAM snapshot -> {path}")
 

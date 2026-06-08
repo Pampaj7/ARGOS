@@ -1,0 +1,12 @@
+{
+  "scared_root": "stereo/Fast-FoundationStereo/data/surgical_stereo/scared_keyframes",
+  "model_file": "stereo/Fast-FoundationStereo/weights/onnx/20_30_48/320x736/20_30_48_iters_4_res_320x736.onnx",
+  "image_size": [
+    320,
+    736
+  ],
+  "onnxruntime_providers": [
+    "CUDAExecutionProvider",
+    "CPUExecutionProvider"
+  ]
+}

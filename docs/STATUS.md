@@ -59,12 +59,12 @@
 
 ## GitHub
 
-Local repo: `/home/pampaj/Desktop/ARGOS`
+Local repo: `/home/lpampaloni/ARGOS`
 
 Push command after authentication:
 
 ```bash
-cd /home/pampaj/Desktop/ARGOS
+cd /home/lpampaloni/ARGOS
 gh auth login
 gh repo create ARGOS --public --source=. --remote=origin --push
 ```

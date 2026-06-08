@@ -1,0 +1,48 @@
+{
+  "converted_frames": 100,
+  "requested_limit": 100,
+  "datasets": [
+    "dataset_1",
+    "dataset_5",
+    "dataset_8"
+  ],
+  "keyframes": [
+    "dataset_1/keyframe_1",
+    "dataset_1/keyframe_2",
+    "dataset_1/keyframe_3",
+    "dataset_5/keyframe_1",
+    "dataset_5/keyframe_2",
+    "dataset_5/keyframe_3",
+    "dataset_8/keyframe_0",
+    "dataset_8/keyframe_1",
+    "dataset_8/keyframe_2"
+  ],
+  "valid_pixel_ratio_mean": 0.6999850082397462,
+  "valid_pixel_ratio_median": 0.7185161590576172,
+  "depth_median_mm_mean": 66.7814432144165,
+  "disp_median_px_mean": 78.46964027404785,
+  "suspicious_frames": 0,
+  "clean_keyframe_stats": {
+    "valid_pixel_ratio": {
+      "mean": 0.5466278584798177,
+      "median": 0.5467140197753906
+    },
+    "depth_median_mm": {
+      "mean": 62.414222632514104,
+      "median": 58.56782913208008
+    },
+    "depth_p95_mm": {
+      "mean": 82.96121427747939,
+      "median": 76.23619842529297
+    },
+    "disp_median_px": {
+      "mean": 86.15886306762695,
+      "median": 84.35633087158203
+    },
+    "disp_p95_px": {
+      "mean": 125.82993689643013,
+      "median": 122.51698303222656
+    },
+    "frames": 45
+  }
+}

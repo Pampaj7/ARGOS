@@ -1,0 +1,11 @@
+{
+  "weights_dir": "stereo/s2m2/weights/pretrain_weights",
+  "ft_checkpoint": "results/scared_s2m2_xl_warped_finetune_run1/checkpoints/step_000500.pth",
+  "clean_root": "stereo/Fast-FoundationStereo/data/surgical_stereo/scared_keyframes",
+  "warped_metadata": "results/scared_warped_train_subset_metadata.csv",
+  "out_dir": "results/scared_s2m2_xl_warped_collapse_diagnosis",
+  "warped_compare_limit": 120,
+  "agreement_limit": 300,
+  "max_width": 1024,
+  "seed": 7
+}

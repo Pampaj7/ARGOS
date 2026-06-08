@@ -1,0 +1,9 @@
+{
+  "retention_le_1px": 0.20589429178948293,
+  "retention_le_2px": 0.35099084139515047,
+  "retention_le_3px": 0.4451835827959067,
+  "retention_le_5px": 0.5573550447331029,
+  "retention_le_10px": 0.6756246663348545,
+  "frames": 300,
+  "valid_px": 157804166
+}
