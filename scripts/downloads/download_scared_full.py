@@ -1,11 +1,19 @@
 from pathlib import Path
+import os
 import time
 
 from huggingface_hub import hf_hub_download
 
 
 REPO_ID = "kairuo/scared"
-TARGET_DIR = Path("/home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/scared")
+DEFAULT_STEREO_ROOT = Path(__file__).resolve().parents[2] / "stereo"
+TARGET_DIR = Path(
+    os.environ.get(
+        "ARGOS_SCARED_DIR",
+        DEFAULT_STEREO_ROOT / "Fast-FoundationStereo/data/surgical_stereo/scared",
+    )
+)
+FORCE_DOWNLOAD = os.environ.get("ARGOS_FORCE_DOWNLOAD", "").lower() in {"1", "true", "yes"}
 
 FILES = [
     "README.md",
@@ -34,7 +42,7 @@ def main():
             repo_type="dataset",
             filename=filename,
             local_dir=TARGET_DIR,
-            resume_download=True,
+            force_download=FORCE_DOWNLOAD,
         )
         size_gb = Path(path).stat().st_size / (1024 ** 3)
         print(f"[{time.strftime('%F %T')}] done {filename} -> {path} ({size_gb:.2f} GiB)", flush=True)

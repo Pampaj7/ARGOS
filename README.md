@@ -54,14 +54,14 @@ Two detachable `screen` sessions are used on the workstation:
 
 ```bash
 screen -ls
-tail -f /home/pampaj/Desktop/stereo/download_jobs/scared_full_download.log
-tail -f /home/pampaj/Desktop/stereo/download_jobs/training_extras_download.log
-tail -f /home/pampaj/Desktop/stereo/download_jobs/monsterpp_large_download.log
+tail -f stereo/download_jobs/scared_full.log
+tail -f stereo/download_jobs/training_extras.log
+tail -f stereo/download_jobs/monsterpp_large.log
 ```
 
 The extra queue waits for SCARED to finish, then downloads S2M2-L/XL and EndoSLAM.
 
-MonSter++ is also being set up locally under `/home/pampaj/Desktop/stereo/MonSter-plusplus`; its upstream repo and model weights are intentionally excluded from this ARGOS repository. The RT zero-shot checkpoint has been tested, and the large checkpoint download has its own `screen` session.
+MonSter++ is also being set up locally under `stereo/MonSter-plusplus`; its upstream repo and model weights are intentionally excluded from git tracking. The RT zero-shot checkpoint has been tested, and the large checkpoint download has its own `screen` session.
 
 ## Repository Policy
 
@@ -72,14 +72,14 @@ This repo intentionally does **not** include downloaded upstream repositories, m
 - compact result images,
 - small metric summaries/configs.
 
-Large data lives locally under `/home/pampaj/Desktop/stereo/`.
+Large data lives locally under `stereo/`, inside this project checkout, but is ignored by git.
 
 ## GitHub Publishing
 
 The local ARGOS git repo is initialized. GitHub CLI is installed but not authenticated on this machine yet. To publish:
 
 ```bash
-cd /home/pampaj/Desktop/ARGOS
+cd /home/lpampaloni/ARGOS
 gh auth login
 gh repo create ARGOS --public --source=. --remote=origin --push
 ```

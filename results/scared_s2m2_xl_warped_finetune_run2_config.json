@@ -1,0 +1,61 @@
+{
+  "name": "scared_s2m2_xl_warped_run2_safe_teacher_distill",
+  "do_not_run_yet": true,
+  "base_model": "S2M2-XL pretrained CH384NTR3.pth",
+  "train_data": "results/scared_warped_train_subset_metadata.csv",
+  "train_filters": {
+    "datasets": [
+      "dataset_1",
+      "dataset_2",
+      "dataset_3",
+      "dataset_4",
+      "dataset_5",
+      "dataset_6"
+    ],
+    "exclude_notes": true,
+    "min_valid_pixel_ratio": 0.2,
+    "teacher_gt_agreement_mask": "results/scared_s2m2_xl_warped_collapse_diagnosis/teacher_agreement_masks/*_agreement_bitmask.npz",
+    "gt_loss_agreement_threshold_px": 3,
+    "fallback_gt_loss_agreement_threshold_px": 5
+  },
+  "validation": {
+    "clean_val": "results/scared_clean_keyframes_val_dataset7.csv",
+    "every_steps": 50,
+    "selection": [
+      "valid_disp_depth_mae_mm",
+      "depth_bad2mm_pct",
+      "depth_median_abs_error_mm"
+    ]
+  },
+  "optimization": {
+    "trainable": "refiners",
+    "lr_primary": 1e-07,
+    "lr_fallback": 5e-08,
+    "weight_decay": 0.0001,
+    "max_width": 1024,
+    "crop": [
+      512,
+      768
+    ],
+    "candidate_steps": [
+      100,
+      250,
+      500
+    ],
+    "save_every_steps": 50,
+    "frozen_modules_eval_mode": true,
+    "note": "Keep frozen backbone/modules in eval mode; train only refiners to avoid BatchNorm/stat drift on noisy warped frames."
+  },
+  "loss": {
+    "gt_smooth_l1_weight": 0.1,
+    "teacher_distillation_smooth_l1_weight": 1.0,
+    "gt_loss_mask": "valid_mask & teacher_gt_abs_error <= threshold",
+    "teacher_loss_mask": "valid_mask",
+    "smooth_l1_beta": 0.5
+  },
+  "stop_rules": {
+    "stop_if_val_valid_disp_depth_mae_worse_than_zero_shot_by_factor": 1.25,
+    "zero_shot_val_valid_disp_depth_mae_mm": 1.0630835175514222,
+    "stop_if_signed_disp_bias_abs_px_exceeds": 2.0
+  }
+}
