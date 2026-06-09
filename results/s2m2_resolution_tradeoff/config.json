@@ -1,0 +1,9 @@
+{
+  "scared_root": "/home/pampaj/Desktop/ARGOS/dataset/scared_keyframes_gt_dataset8/dataset_8",
+  "s2m2_src": "/home/pampaj/Desktop/stereo/s2m2/src",
+  "weights_dir": "/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights",
+  "out_dir": "/home/pampaj/Desktop/ARGOS/results/s2m2_resolution_tradeoff",
+  "models": "['S', 'L', 'XL']",
+  "widths": "[0, 1024, 736, 512]",
+  "refine_iter": "3"
+}

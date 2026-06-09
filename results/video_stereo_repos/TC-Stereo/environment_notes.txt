@@ -1,0 +1,22 @@
+model_name: TC-Stereo
+repo_url: https://github.com/jiaxiZeng/Temporally-Consistent-Stereo-Matching
+repo_dir: /home/pampaj/Desktop/ARGOS/external/video_stereo_repos/Temporally-Consistent-Stereo-Matching
+commit_hash: unknown
+license: MIT
+checkpoint_available: manual Dropbox
+checkpoint_download_instructions: README points to Dropbox checkpoints for TartanAir, SceneFlow, and KITTI_raw; not present locally.
+expected_input_format: TartanAir/SceneFlow/KITTI_raw dataset layouts with image_left/image_right/disparity/pose.
+expected_output_format: Evaluation metrics/visualization from evaluate_stereo.py; custom export needs wrapper.
+supports_custom_left_right_sequence: possible with custom dataset wrapper
+requires_camera_pose: yes for temporal consistency training/eval datasets
+requires_optical_flow: no documented requirement
+requires_intrinsics_or_baseline: likely for depth/pose-aware evaluation; disparity inference itself may not
+temporal_window_length: sequence model; exact window controlled by dataset/config
+resolution_constraints: benchmark-specific; not cleanly documented
+documented_runtime: not documented
+documented_memory: not documented
+integration_difficulty: medium-high
+main_blockers: No local checkpoint; current shared env lacks wandb and exact torch/cupy stack; custom ARGOS loader needed.
+recommended_next_action: Download Dropbox checkpoint and build minimal ARGOS eval_stereo wrapper; likely best first non-SAV integration if checkpoint retrieval succeeds.
+demo_runs: no
+smoke_status: failed: missing wandb in shared env

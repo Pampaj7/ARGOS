@@ -1,0 +1,1 @@
+PYTHONPATH=/home/pampaj/Desktop/ARGOS/external/video_stereo_repos/dynamic_stereo /home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python evaluation/evaluate.py --help

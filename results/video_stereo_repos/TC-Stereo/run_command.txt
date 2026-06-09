@@ -1,0 +1,1 @@
+PYTHONPATH=/home/pampaj/Desktop/ARGOS/external/video_stereo_repos/Temporally-Consistent-Stereo-Matching /home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python evaluate_stereo.py --help

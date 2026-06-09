@@ -1,0 +1,20 @@
+{
+  "input": "/home/pampaj/Desktop/ARGOS/results/video_stereo_repos/test_sequence",
+  "checkpoint": "/home/pampaj/Desktop/ARGOS/external/video_stereo_repos/stereoanyvideo/checkpoints/StereoAnyVideo_MIX.pth",
+  "resize": [
+    384,
+    640
+  ],
+  "iters": 6,
+  "device": "cuda",
+  "frames": 5,
+  "disparity_shape": [
+    5,
+    1,
+    384,
+    640
+  ],
+  "disparity_min": 16.857627868652344,
+  "disparity_max": 91.74560546875,
+  "disparity_mean": 36.985897064208984
+}

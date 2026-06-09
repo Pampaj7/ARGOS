@@ -1,0 +1,1 @@
+PYTHONPATH=/home/pampaj/Desktop/ARGOS/external/video_stereo_repos/TemporalStereo /home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python projects/TemporalStereo/demo.py --help

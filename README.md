@@ -84,6 +84,21 @@ S2M2-S fine-tuning on SERV-CT:
 
 The all-surgical run is a domain-adapted checkpoint, not an independent holdout metric.
 
+Latest honest SERV-CT S2M2-S rerun:
+
+- `results/servct_s2m2_honest_finetune_gpu/`
+- Depth MAE improves from `1.7638 mm` to `1.4580 mm` on Experiment_2.
+- Disparity MAE stays essentially flat/slightly worse: `1.4615 px` to `1.4684 px`.
+- This is useful but mixed, so follow-up runs should tune loss weights/trainability.
+
+SERV-CT -> SCARED transfer check:
+
+- `results/scared_s2m2_servct_transfer_dataset8_rectified/`
+- On rectified SCARED dataset_8 keyframes, SERV-CT fine-tuning is almost neutral:
+  - depth MAE: `2.8372 mm` -> `2.8320 mm`;
+  - disparity MAE: `4.2431 px` -> `4.2832 px`.
+- This suggests SERV-CT-only adaptation is not enough for robust SCARED transfer.
+
 ## Planned Paper Structure
 
 1. **Problem**: open-wound perception is close-range, deformable, wet, specular, occluded by hands/tools, and safety-critical.
@@ -108,6 +123,20 @@ Key images are kept in `results/images/`:
 
 Full baseline table: `docs/SERVCT_BASELINE_SCOREBOARD.md`.
 
+## Dataset
+
+All local ARGOS data is organized under `dataset/`.
+
+- `dataset/scared_consecutive32/`: 32 consecutive SCARED stereo-video frames used for temporal/video-stereo comparison.
+- `dataset/scared_rect5/`: 5 SCARED keyframe stereo pairs used for smoke tests.
+- `dataset/servct_argos/`: SERV-CT ARGOS-format train/test samples with disparity/depth GT.
+- `dataset/raw/surgical_stereo/scared/`: full local SCARED zip archives and extracted test/keyframe folders.
+- `dataset/raw/surgical_stereo/servct/`: raw SERV-CT archive/extract.
+- `dataset/raw/external_datasets/`: external support datasets such as EndoSLAM.
+- `dataset/workspace_argos_data/`: processed data workspace used by local scripts.
+
+Raw and bulky processed data live physically in this folder for clarity, but are ignored by Git. See `dataset/README.md` and `dataset/manifest.json` for source and format details.
+
 ## Protocol And Project Docs
 
 - `docs/ARGOS.pdf`: internal ARGOS-Wound proposal and broader benchmark/method direction.
@@ -117,8 +146,9 @@ Full baseline table: `docs/SERVCT_BASELINE_SCOREBOARD.md`.
 - `docs/ROADMAP.md`: project phases toward paper-ready experiments.
 - `configs/servct_baselines.yaml`: current SERV-CT benchmark metadata.
 - `configs/surgical_splits.yaml`: current surgical train/test split definitions.
+- `results/video_stereo_repos/`: video-stereo repository scouting, common SCARED smoke-test sequence, and first StereoAnyVideo smoke metrics.
 
-SERV-CT has a working converter to the unified local format under `/home/pampaj/Desktop/stereo/argos_data/servct/`. Converted data is intentionally excluded from git.
+SERV-CT has a working converter to the unified local format under `dataset/workspace_argos_data/servct/`. The curated subset used by current reports is mirrored under `dataset/servct_argos/`.
 
 ## Immediate Next Steps
 
@@ -127,6 +157,7 @@ SERV-CT has a working converter to the unified local format under `/home/pampaj/
 - Fine-tune S2M2 on SERV-CT + SCARED using the protocol in `docs/EXPERIMENT_PROTOCOL.md`.
 - Add cross-dataset evaluation: SERV-CT to SCARED and SCARED to SERV-CT.
 - Add surgical robustness metrics: near-field bins, boundary/detail masks, and specular/textureless failure slices.
+- Integrate video-stereo baselines: StereoAnyVideo first as quality upper bound, then TC-Stereo or DynamicStereo once checkpoints/envs are ready.
 - Turn current scoreboards and montages into stable paper figures.
 - Translate the ARGOS-Wound proposal into concrete v0 acquisition requirements: sensor list, fiducial layout, anchor-state scan protocol, semantic label set, and release metadata.
 - Draft the ARGOS-Fuse evaluation target: fused surface, uncertainty map, and unsafe-region mask.
@@ -144,18 +175,29 @@ tail -f /home/pampaj/Desktop/stereo/download_jobs/monsterpp_large.log
 
 The extra queue waits for SCARED to finish, then downloads S2M2-L/XL and EndoSLAM.
 
-MonSter++, DEFOM-Stereo, RAFT-Stereo, CREStereo, and the other upstream baselines are set up locally under `/home/pampaj/Desktop/stereo/`; upstream repos, downloaded datasets, and model weights are intentionally excluded from this ARGOS repository. The RT and large MonSter++ checkpoints have been tested on SERV-CT.
+MonSter++, DEFOM-Stereo, RAFT-Stereo, CREStereo, StereoAnyVideo, and the other upstream baselines are set up locally under `/home/pampaj/Desktop/stereo/` or `external/video_stereo_repos/`; upstream repos and model weights are intentionally excluded from this ARGOS repository. Raw/downloaded datasets are organized under `dataset/raw/` and ignored by Git.
 
 ## Repository Policy
 
-This repo intentionally does **not** include downloaded upstream repositories, model weights, or datasets. It tracks only:
+This repo intentionally does **not** track downloaded upstream repositories, model weights, raw dataset archives, or full external datasets in Git. It tracks only:
 
 - project notes and README,
 - evaluation/fine-tuning scripts,
 - compact result images,
 - small metric summaries/configs.
+- curated ARGOS-ready dataset subsets under `dataset/`.
 
-Large data lives locally under `stereo/`, inside this project checkout, but is ignored by git.
+Large raw data lives locally under `dataset/raw/` for clarity, but is ignored by Git.
+
+## Experiment Logging Rule
+
+Every new ARGOS test should update:
+
+- the README in the result folder;
+- the README or local ARGOS notes in the method folder used for the run;
+- `docs/STATUS.md` when the result changes project direction or claims.
+
+Comparison figures should include both prediction/depth maps and error maps whenever GT or temporal-error targets are available.
 
 ## GitHub Publishing
 

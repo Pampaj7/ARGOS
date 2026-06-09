@@ -1,0 +1,22 @@
+model_name: StereoAnyVideo
+repo_url: https://github.com/TomTomTommi/stereoanyvideo
+repo_dir: /home/pampaj/Desktop/ARGOS/external/video_stereo_repos/stereoanyvideo
+commit_hash: 3a8beddc470cfb7bf07dbc2bf4f04fc95d35d84c
+license: Apache-2.0
+checkpoint_available: yes, local
+checkpoint_download_instructions: README Google Drive; local checkpoint found at checkpoints/StereoAnyVideo_MIX.pth.
+expected_input_format: Folder with left/*.png and right/*.png stereo video frames.
+expected_output_format: disparity.npy, normalized disparity PNGs, disparity_norm.mp4.
+supports_custom_left_right_sequence: yes
+requires_camera_pose: no
+requires_optical_flow: no explicit external flow
+requires_intrinsics_or_baseline: no for disparity inference; needed only to convert to metric depth
+temporal_window_length: frame_size default 150; ARGOS smoke used 5 frames and iters 6
+resolution_constraints: heavy; ARGOS smoke used 384x640 for memory/speed
+documented_runtime: not documented
+documented_memory: not documented; expected heavy
+integration_difficulty: low-medium
+main_blockers: Runtime/VRAM instrumentation still needed; model is heavy at high resolution; Google Drive checkpoint for fresh setup.
+recommended_next_action: Integrate first as video quality upper bound and add timed wrapper at 384x640/512x736/720x1280.
+demo_runs: yes
+smoke_status: success on ARGOS/SCARED test_sequence using CUDA

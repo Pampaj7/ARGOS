@@ -2,10 +2,14 @@
 data/
 datasets/
 argos_data/
+dataset/*
+!dataset/README.md
+!dataset/manifest.json
 weights/
 checkpoints/
 *.pth
 *.pt
+*.npy
 *.onnx
 *.engine
 *.zip
@@ -14,7 +18,16 @@ checkpoints/
 *.tiff
 *.mp4
 
+# Generated dense prediction payloads
+results/**/predictions/
+results/**/frame_baselines/
+results/**/test_sequence/
+results/**/outputs/
+results/**/videos/
+
 # Downloaded upstream repositories
+/external/video_stereo_repos/*
+!/external/video_stereo_repos/README.md
 /stereo/
 /Fast-FoundationStereo/
 /s2m2/

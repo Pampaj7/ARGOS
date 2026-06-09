@@ -1,0 +1,5 @@
+sequence,model_name,mean_consecutive_disp_diff,mean_consecutive_depth_diff,per_pixel_temporal_std,temporal_error_variation,frames
+consecutive32,S2M2-L@full,8.62762366571734,,27.41498565673828,,32
+consecutive32,S2M2-L@736,1.6737005326055712,,9.411334037780762,,32
+consecutive32,S2M2-S@512,1.2216604390451986,,8.38139533996582,,32
+consecutive32,StereoAnyVideo@384x640,1.0213556866491995,,7.571755409240723,,32
