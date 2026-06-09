@@ -1,0 +1,91 @@
+{
+  "summary": [
+    {
+      "sequence": "consecutive32",
+      "model_name": "S2M2-L@full",
+      "avg_runtime_ms": 486.4605023358308,
+      "median_runtime_ms": 485.15656107338145,
+      "peak_gpu_memory_mb": 2897.78564453125,
+      "mean_consecutive_disp_diff": 8.62762366571734,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 27.41498565673828,
+      "temporal_error_variation": null,
+      "frames": 32
+    },
+    {
+      "sequence": "consecutive32",
+      "model_name": "S2M2-L@736",
+      "avg_runtime_ms": 182.75157634707284,
+      "median_runtime_ms": 182.2073234943673,
+      "peak_gpu_memory_mb": 1671.11669921875,
+      "mean_consecutive_disp_diff": 1.6737005326055712,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 9.411334037780762,
+      "temporal_error_variation": null,
+      "frames": 32
+    },
+    {
+      "sequence": "consecutive32",
+      "model_name": "S2M2-S@512",
+      "avg_runtime_ms": 61.3337400391174,
+      "median_runtime_ms": 60.91255653882399,
+      "peak_gpu_memory_mb": 368.97509765625,
+      "mean_consecutive_disp_diff": 1.2216604390451986,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 8.38139533996582,
+      "temporal_error_variation": null,
+      "frames": 32
+    },
+    {
+      "sequence": "consecutive32",
+      "model_name": "StereoAnyVideo@384x640",
+      "avg_runtime_ms": 144.79540959291626,
+      "median_runtime_ms": 144.79540959291626,
+      "peak_gpu_memory_mb": 10133.61572265625,
+      "mean_consecutive_disp_diff": 1.0213556866491995,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 7.571755409240723,
+      "temporal_error_variation": null,
+      "frames": 32
+    }
+  ],
+  "per_frame": [],
+  "temporal": [
+    {
+      "sequence": "consecutive32",
+      "model_name": "S2M2-L@full",
+      "mean_consecutive_disp_diff": 8.62762366571734,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 27.41498565673828,
+      "temporal_error_variation": null,
+      "frames": 32
+    },
+    {
+      "sequence": "consecutive32",
+      "model_name": "S2M2-L@736",
+      "mean_consecutive_disp_diff": 1.6737005326055712,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 9.411334037780762,
+      "temporal_error_variation": null,
+      "frames": 32
+    },
+    {
+      "sequence": "consecutive32",
+      "model_name": "S2M2-S@512",
+      "mean_consecutive_disp_diff": 1.2216604390451986,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 8.38139533996582,
+      "temporal_error_variation": null,
+      "frames": 32
+    },
+    {
+      "sequence": "consecutive32",
+      "model_name": "StereoAnyVideo@384x640",
+      "mean_consecutive_disp_diff": 1.0213556866491995,
+      "mean_consecutive_depth_diff": null,
+      "per_pixel_temporal_std": 7.571755409240723,
+      "temporal_error_variation": null,
+      "frames": 32
+    }
+  ]
+}

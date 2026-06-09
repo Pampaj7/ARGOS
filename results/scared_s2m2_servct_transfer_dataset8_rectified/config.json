@@ -1,0 +1,11 @@
+{
+  "scared_root": "/home/pampaj/Desktop/ARGOS/dataset/scared_keyframes_gt_dataset8/dataset_8",
+  "s2m2_src": "/home/pampaj/Desktop/stereo/s2m2/src",
+  "weights_dir": "/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights",
+  "finetuned_checkpoint": "/home/pampaj/Desktop/ARGOS/results/servct_s2m2_honest_finetune_gpu/finetune_refiners_250/s2m2_servct_finetuned.pth",
+  "model_type": "S",
+  "refine_iter": "3",
+  "max_width": "640",
+  "rectify": "True",
+  "out_dir": "/home/pampaj/Desktop/ARGOS/results/scared_s2m2_servct_transfer_dataset8_rectified"
+}

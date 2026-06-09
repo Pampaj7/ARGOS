@@ -1,0 +1,22 @@
+model_name: DynamicStereo
+repo_url: https://github.com/facebookresearch/dynamic_stereo
+repo_dir: /home/pampaj/Desktop/ARGOS/external/video_stereo_repos/dynamic_stereo
+commit_hash: c5077aa19f73cf3e51e363bf8a3796c85eb2eaa0
+license: CC-BY-NC-4.0
+checkpoint_available: automatic/manual from README
+checkpoint_download_instructions: README provides wget URLs/scripts for checkpoints into ./checkpoints.
+expected_input_format: Dynamic Replica / Sintel configs; real-data eval config exists.
+expected_output_format: Depth/reconstruction evaluation outputs under exp_dir.
+supports_custom_left_right_sequence: possible through real-data config or wrapper
+requires_camera_pose: yes/likely; dataset provides intrinsics/extrinsics and depth
+requires_optical_flow: no for inference, but dataset includes flow/trajectories
+requires_intrinsics_or_baseline: yes for depth and Dynamic Replica format
+temporal_window_length: configs include 40-frame and 150-frame eval modes
+resolution_constraints: heavy video transformer; README examples target Dynamic Replica/Sintel
+documented_runtime: not clearly documented
+documented_memory: Dynamic Replica dataset memory documented; model eval memory not clearly documented
+integration_difficulty: medium-high
+main_blockers: Hydra/PyTorch3D/PyTorch 1.12 CUDA 11.3 env required; no checkpoint downloaded yet; non-commercial license.
+recommended_next_action: Create isolated dynamicstereo env and download real-data checkpoint; evaluate real config on ARGOS sequence if intrinsics format can be matched.
+demo_runs: no
+smoke_status: failed: missing hydra in shared env

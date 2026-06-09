@@ -1,0 +1,35 @@
+{
+  "gt5": "/home/pampaj/Desktop/ARGOS/results/video_stereo_repos/test_sequence",
+  "consecutive32": "/home/pampaj/Desktop/ARGOS/dataset/scared_consecutive32",
+  "models": [
+    {
+      "name": "S2M2-L@full",
+      "kind": "s2m2",
+      "variant": "L",
+      "width": 0
+    },
+    {
+      "name": "S2M2-L@736",
+      "kind": "s2m2",
+      "variant": "L",
+      "width": 736
+    },
+    {
+      "name": "S2M2-S@512",
+      "kind": "s2m2",
+      "variant": "S",
+      "width": 512
+    },
+    {
+      "name": "StereoAnyVideo@384x640",
+      "kind": "sav",
+      "resize_hw": [
+        384,
+        640
+      ],
+      "iters": 6
+    }
+  ],
+  "stereoanyvideo_checkpoint": "/home/pampaj/Desktop/ARGOS/external/video_stereo_repos/stereoanyvideo/checkpoints/StereoAnyVideo_MIX.pth",
+  "note": "No training. Previous benchmark folders are not modified."
+}

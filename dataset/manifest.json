@@ -1,0 +1,148 @@
+{
+  "version": 2,
+  "purpose": "Local data home for ARGOS: curated experiment subsets, raw source archives, and processed workspace data.",
+  "git_policy": {
+    "tracked": [
+      "dataset/README.md",
+      "dataset/manifest.json",
+      "small curated subsets when useful for reproducibility"
+    ],
+    "ignored": [
+      "dataset/raw/",
+      "dataset/workspace_argos_data/",
+      "large archives, videos, model outputs, and generated bulky data"
+    ]
+  },
+  "subsets": [
+    {
+      "name": "scared_consecutive32",
+      "path": "dataset/scared_consecutive32",
+      "category": "curated_subset",
+      "source_dataset": "SCARED test_dataset_9",
+      "source_archive_local": "dataset/raw/surgical_stereo/scared/test_dataset_9.zip",
+      "source_member": "test_dataset_9/keyframe_3/rgb.mp4",
+      "format": "rectified stereo image sequence",
+      "layout": {
+        "left": "left/*.png",
+        "right": "right/*.png"
+      },
+      "frames": 32,
+      "source_frame_range": [50, 81],
+      "has_gt": false,
+      "used_for": [
+        "Stereo Any Video temporal smoke/comparison",
+        "S2M2-S frame-by-frame temporal comparison",
+        "Fast-FoundationStereo ONNX frame-by-frame temporal comparison"
+      ],
+      "notes": "The source video is top/bottom stereo at 1280x2048; top half was saved as left, bottom half as right."
+    },
+    {
+      "name": "scared_rect5",
+      "path": "dataset/scared_rect5",
+      "category": "curated_subset",
+      "source_dataset": "SCARED test_dataset_8 rectified keyframes",
+      "source_archive_local": "dataset/raw/surgical_stereo/scared/test_dataset_8.zip",
+      "format": "rectified stereo keyframe pairs",
+      "layout": {
+        "left": "left/*.png",
+        "right": "right/*.png"
+      },
+      "frames": 5,
+      "has_gt": false,
+      "used_for": [
+        "Initial smoke tests",
+        "Historical 5-keyframe model comparison"
+      ],
+      "notes": "These frames are not consecutive video frames and should not be used for temporal-context claims."
+    },
+    {
+      "name": "servct_argos",
+      "path": "dataset/servct_argos",
+      "category": "curated_subset",
+      "source_dataset": "SERV-CT",
+      "source_archive_local": "dataset/raw/surgical_stereo/servct/SERV-CT.zip",
+      "format": "ARGOS stereo pair folders with GT",
+      "layout": {
+        "train": "honest_train/Experiment_*",
+        "test": "honest_test/Experiment_*",
+        "sample_files": [
+          "left.png",
+          "right.png",
+          "disp_gt.npy",
+          "depth_gt_mm.npy",
+          "valid_mask.npy",
+          "calib.json",
+          "metadata.json"
+        ]
+      },
+      "samples": {
+        "honest_train": 8,
+        "honest_test": 8
+      },
+      "has_gt": true,
+      "used_for": [
+        "SERV-CT baseline evaluation",
+        "Surgical stereo scoreboard",
+        "Fine-tuning sanity checks"
+      ]
+    },
+    {
+      "name": "raw_scared",
+      "path": "dataset/raw/surgical_stereo/scared",
+      "category": "raw_source",
+      "contains": [
+        "code.zip",
+        "dataset_1.zip",
+        "dataset_2.zip",
+        "dataset_3.zip",
+        "dataset_4.zip",
+        "dataset_5.zip",
+        "dataset_6.zip",
+        "dataset_7.zip",
+        "dataset_8.zip",
+        "dataset_9.zip",
+        "test_dataset_8.zip",
+        "test_dataset_9.zip",
+        "small extracted test/keyframe folders"
+      ],
+      "size_approx": "215G",
+      "git_tracked": false,
+      "compatibility_symlink": "stereo/Fast-FoundationStereo/data/surgical_stereo/scared"
+    },
+    {
+      "name": "raw_servct",
+      "path": "dataset/raw/surgical_stereo/servct",
+      "category": "raw_source",
+      "contains": [
+        "SERV-CT.zip",
+        "SERV-CT/"
+      ],
+      "size_approx": "82M",
+      "git_tracked": false,
+      "compatibility_symlink": "stereo/Fast-FoundationStereo/data/surgical_stereo/servct"
+    },
+    {
+      "name": "raw_external_datasets",
+      "path": "dataset/raw/external_datasets",
+      "category": "raw_source",
+      "contains": [
+        "EndoSLAM/"
+      ],
+      "size_approx": "302M",
+      "git_tracked": false,
+      "compatibility_symlink": "stereo/datasets"
+    },
+    {
+      "name": "workspace_argos_data",
+      "path": "dataset/workspace_argos_data",
+      "category": "processed_workspace",
+      "contains": [
+        "processed SERV-CT ARGOS-format data",
+        "SCARED consecutive clip source and split frame folders"
+      ],
+      "size_approx": "242M",
+      "git_tracked": false,
+      "compatibility_symlink": "stereo/argos_data"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "servct_root": "/home/pampaj/Desktop/ARGOS/dataset/raw/surgical_stereo/servct/SERV-CT",
+  "weights_dir": "/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights",
+  "model_type": "S",
+  "out_dir": "/home/pampaj/Desktop/ARGOS/results/servct_s2m2_honest_finetune_gpu/finetune_refiners_250",
+  "mode": "honest_holdout",
+  "steps": 250,
+  "lr": 2e-05,
+  "weight_decay": 0.0001,
+  "crop_h": 448,
+  "crop_w": 640,
+  "refine_iter": 3,
+  "trainable": "refiners",
+  "seed": 7
+}

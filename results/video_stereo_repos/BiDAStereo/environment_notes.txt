@@ -1,0 +1,22 @@
+model_name: BiDAStereo
+repo_url: https://github.com/TomTomTommi/bidastereo
+repo_dir: /home/pampaj/Desktop/ARGOS/external/video_stereo_repos/bidastereo
+commit_hash: 22c405d907a3063e0b78c81af3f81d8887aa827d
+license: MIT
+checkpoint_available: manual GitHub release
+checkpoint_download_instructions: README links release v0.0 checkpoints; copy to ./bidastereo/checkpoints/.
+expected_input_format: SceneFlow/Sintel/Dynamic Replica plus real-data eval config.
+expected_output_format: Evaluation outputs and visualizations from evaluation/evaluate.py.
+supports_custom_left_right_sequence: possible through real-data config/wrapper
+requires_camera_pose: yes/likely for Dynamic Replica; real-data may be less strict
+requires_optical_flow: alignment method may use RAFT/flow components; not a simple frame-only stereo CLI
+requires_intrinsics_or_baseline: likely for depth/eval; disparity model itself can operate on stereo pairs
+temporal_window_length: sample_len/kernel_size; README mentions reducing kernel_size 20 to 10 for memory
+resolution_constraints: evaluated on A6000 48GB; Dynamic Replica eval requires about 32GB unless kernel size reduced
+documented_runtime: A6000 48GB noted, no speed number
+documented_memory: 32GB for Dynamic Replica eval; training 8 V100 32GB or 4 A100 80GB
+integration_difficulty: high
+main_blockers: No local checkpoint; PyTorch3D/PyTorch 1.12 CUDA 11.3 env required; high memory expectation.
+recommended_next_action: Defer until TC-Stereo/DynamicStereo are sorted; useful as quality-oriented recent baseline, not deployment first.
+demo_runs: no
+smoke_status: failed: missing hydra in shared env

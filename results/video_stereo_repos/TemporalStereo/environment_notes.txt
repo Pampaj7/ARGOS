@@ -1,0 +1,22 @@
+model_name: TemporalStereo
+repo_url: https://github.com/youmi-zym/TemporalStereo
+repo_dir: /home/pampaj/Desktop/ARGOS/external/video_stereo_repos/TemporalStereo
+commit_hash: 0b5a94eb8fccce068a3cba8473190759cba42dc8
+license: Apache-2.0
+checkpoint_available: manual Google Drive
+checkpoint_download_instructions: README links Google Drive folder for pretrained checkpoints; not present locally.
+expected_input_format: Dataset loaders / annotation JSON; video_inference expects image folders plus camera pose/intrinsics style inputs.
+expected_output_format: Disparity visualizations / demo outputs; exact custom export needs wrapper.
+supports_custom_left_right_sequence: possible with wrapper
+requires_camera_pose: yes for video_inference path; maybe no for dataset demo
+requires_optical_flow: no documented requirement
+requires_intrinsics_or_baseline: yes/likely for video mode
+temporal_window_length: multi-frame model; configurable through project scripts, not cleanly exposed for ARGOS yet
+resolution_constraints: trained/eval examples use benchmark-specific shapes; max disparity 192 appears in demo metrics
+documented_runtime: not clearly documented in README
+documented_memory: not clearly documented in README
+integration_difficulty: high
+main_blockers: No local checkpoint; dependencies include Python 3.8, PyTorch 1.10/CUDA 11.3, Apex, Detectron2, Cupy; current smoke fails before argparse on matplotlib seaborn-whitegrid style in Python 3.12 env.
+recommended_next_action: Create isolated temporalstereo conda env; download checkpoint; patch matplotlib style or install compatible seaborn; then write ARGOS folder-sequence wrapper.
+demo_runs: no
+smoke_status: failed: matplotlib style/env mismatch
