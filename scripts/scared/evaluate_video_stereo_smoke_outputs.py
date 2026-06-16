@@ -15,7 +15,7 @@ OUT = ARGOS / "results/video_stereo_repos"
 TEST = OUT / "test_sequence"
 S2M2_SRC = Path("/home/pampaj/Desktop/stereo/s2m2/src")
 S2M2_WEIGHTS = Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights")
-SCARED_ROOT = ARGOS / "dataset/scared_keyframes_gt_dataset8/dataset_8"
+SCARED_ROOT = ARGOS / "dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8"
 
 
 def load_test_sequence():
@@ -192,4 +192,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

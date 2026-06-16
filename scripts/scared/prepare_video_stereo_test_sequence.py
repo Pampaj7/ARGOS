@@ -7,7 +7,7 @@ import numpy as np
 import tifffile
 
 
-SRC = Path("/home/pampaj/Desktop/ARGOS/dataset/scared_keyframes_gt_dataset8/dataset_8")
+SRC = Path("/home/pampaj/Desktop/ARGOS/dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8")
 OUT = Path("/home/pampaj/Desktop/ARGOS/results/video_stereo_repos/test_sequence")
 
 
@@ -99,4 +99,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

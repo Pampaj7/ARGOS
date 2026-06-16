@@ -10,6 +10,7 @@ checkpoints/
 *.pth
 *.pt
 *.npy
+*.npz
 *.onnx
 *.engine
 *.zip
@@ -24,10 +25,32 @@ results/**/frame_baselines/
 results/**/test_sequence/
 results/**/outputs/
 results/**/videos/
+results/**/scared_long_sequences/**/left/
+results/**/scared_long_sequences/**/right/
+results/**/scared_long_sequences/_source_videos/
+results/**/scared_long_predictions/**/*.png
+results/**/scared_long_predictions/**/*.mp4
+results/**/scared_long_predictions/**/chunks/
+results/**/temporal_refinement_cache/**/samples/
+results/**/temporal_refinement_cache/**/left_rgb/
+results/**/temporal_refinement_cache/**/s2m2_s512_disp/
+results/**/temporal_refinement_cache/**/s2m2_l736_disp/
+results/**/temporal_refinement_cache/**/sav_disp/
+
+# Local experiment history: keep on disk, do not show as commit candidates
+results/03_temporal_refinement/cache/temporal_refinement_cache/
+results/04_dataset_derivatives/SCARED/scared_long_predictions/
+results/04_dataset_derivatives/SCARED/scared_long_sequences/
+results/03_temporal_refinement/debug/temporal_refinement_debug_unet_*/
+results/03_temporal_refinement/training/unet/temporal_refinement_train_unet_*/
+results/03_temporal_refinement/training/convgru/temporal_refinement_train_convgru_*/
+results/03_temporal_refinement/evaluation/temporal_refinement_evaluation_l736_smoke/
+results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1/
 
 # Downloaded upstream repositories
 /external/video_stereo_repos/*
 !/external/video_stereo_repos/README.md
+/external/d4d/
 /stereo/
 /Fast-FoundationStereo/
 /s2m2/
@@ -42,8 +65,12 @@ __pycache__/
 .venv/
 .conda/
 .cache/
+.pytest_cache/
 
 # Generated bulky logs
 *.log
+nohup.out
+logs/*.log
+logs/nohup.out
 wandb/
 runs/

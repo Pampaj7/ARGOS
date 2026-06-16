@@ -7,19 +7,22 @@
       "dataset/manifest.json",
       "small curated subsets when useful for reproducibility"
     ],
-    "ignored": [
-      "dataset/raw/",
-      "dataset/workspace_argos_data/",
-      "large archives, videos, model outputs, and generated bulky data"
-    ]
+      "ignored": [
+        "dataset/SCARED/",
+        "dataset/SERVCT/",
+        "dataset/StereoMIS/",
+        "dataset/D4D/",
+        "dataset/EndoSLAM/",
+        "large archives, videos, model outputs, and generated bulky data"
+      ]
   },
   "subsets": [
     {
       "name": "scared_consecutive32",
-      "path": "dataset/scared_consecutive32",
+      "path": "dataset/SCARED/curated/consecutive32",
       "category": "curated_subset",
       "source_dataset": "SCARED test_dataset_9",
-      "source_archive_local": "dataset/raw/surgical_stereo/scared/test_dataset_9.zip",
+      "source_archive_local": "dataset/SCARED/raw/source/test_dataset_9.zip",
       "source_member": "test_dataset_9/keyframe_3/rgb.mp4",
       "format": "rectified stereo image sequence",
       "layout": {
@@ -38,10 +41,10 @@
     },
     {
       "name": "scared_rect5",
-      "path": "dataset/scared_rect5",
+      "path": "dataset/SCARED/curated/rect5",
       "category": "curated_subset",
       "source_dataset": "SCARED test_dataset_8 rectified keyframes",
-      "source_archive_local": "dataset/raw/surgical_stereo/scared/test_dataset_8.zip",
+      "source_archive_local": "dataset/SCARED/raw/source/test_dataset_8.zip",
       "format": "rectified stereo keyframe pairs",
       "layout": {
         "left": "left/*.png",
@@ -57,10 +60,10 @@
     },
     {
       "name": "servct_argos",
-      "path": "dataset/servct_argos",
+      "path": "dataset/SERVCT/argos/servct_argos",
       "category": "curated_subset",
       "source_dataset": "SERV-CT",
-      "source_archive_local": "dataset/raw/surgical_stereo/servct/SERV-CT.zip",
+      "source_archive_local": "dataset/SERVCT/raw/source/SERV-CT.zip",
       "format": "ARGOS stereo pair folders with GT",
       "layout": {
         "train": "honest_train/Experiment_*",
@@ -88,7 +91,7 @@
     },
     {
       "name": "raw_scared",
-      "path": "dataset/raw/surgical_stereo/scared",
+      "path": "dataset/SCARED/raw/source",
       "category": "raw_source",
       "contains": [
         "code.zip",
@@ -111,7 +114,7 @@
     },
     {
       "name": "raw_servct",
-      "path": "dataset/raw/surgical_stereo/servct",
+      "path": "dataset/SERVCT/raw/source",
       "category": "raw_source",
       "contains": [
         "SERV-CT.zip",
@@ -122,8 +125,78 @@
       "compatibility_symlink": "stereo/Fast-FoundationStereo/data/surgical_stereo/servct"
     },
     {
+      "name": "raw_stereomis",
+      "path": "dataset/StereoMIS/raw/source",
+      "category": "raw_source_downloaded",
+      "source_url": "https://zenodo.org/records/7727692",
+      "preferred_source_url": "https://zenodo.org/records/8154924",
+      "local_archive": "dataset/StereoMIS/raw/source/StereoMIS_0_0_1.zip",
+      "archive_size_bytes": 11150243822,
+      "md5": "e014067d348ad81fff94ac039b97abe8",
+      "sha256": "a57b829487a4306cb938cebd0d8bcde4a5bd38ed6bc1a2f2ce86512f7388284b",
+      "expected_domain": "real stereo endoscopic da Vinci Xi surgical video",
+      "reported_contents": [
+        "3 in-vivo porcine subjects",
+        "11 surgical sequences",
+        "vertically stacked stereo video",
+        "left-frame tool masks",
+        "camera forward kinematics",
+        "sequence start/stop frames"
+      ],
+      "inspected_contents": {
+        "sequences": 11,
+        "mp4_videos": 11,
+        "mask_png_files": 90912,
+        "stereo_calibration_files": 11,
+        "groundtruth_pose_files": 11,
+        "split_csv_files": 11,
+        "video_layout": "vertical stereo stack; P1 confirmed 1280x2048 split into 1280x1024 left/right",
+        "dense_depth_or_disparity_gt": false
+      },
+      "expected_use": [
+        "temporal stereo/refinement stress tests",
+        "teacher-student temporal consistency experiments",
+        "qualitative surgical-video evaluation"
+      ],
+      "gt_status": "pose/kinematics available; no dense depth/disparity GT found in archive listing",
+      "git_tracked": false
+    },
+    {
+      "name": "raw_d4d_dresden",
+      "path": "dataset/D4D/raw/source",
+      "category": "candidate_raw_source",
+      "source_url": "https://doi.org/10.25532/OPARA-1033",
+      "loader_repository": "https://github.com/reubendocea/d4d",
+      "local_loader_repository": "external/d4d",
+      "loader_commit": "70d6b94ff6de0511a77889597397b23e893559b0",
+      "expected_domain": "porcine cadaver abdominal surgical scenes with da Vinci Xi stereo endoscope and Zivid structured-light camera",
+      "reported_contents": [
+        "rectified left/right endoscope image clips",
+        "stereo depth maps in metres",
+        "structured-light point clouds",
+        "camera calibration",
+        "curated camera poses",
+        "instrument/tissue masks",
+        "clip/session/specimen hierarchy"
+      ],
+      "expected_use": [
+        "metric surgical stereo/depth validation",
+        "cross-dataset evaluation after SERV-CT and SCARED",
+        "temporal refinement validation on realistic tissue manipulation clips",
+        "mask-aware instrument/tissue robustness analysis"
+      ],
+      "download_status": "info.tar.gz downloaded; specimen_1.tar.gz download running in tmux session argos_d4d_specimen1_download",
+      "first_payload": {
+        "file": "specimen_1.tar.gz",
+        "size": "33.32 GB",
+        "url": "https://opara.zih.tu-dresden.de/bitstreams/96efe821-1088-4cdf-a07d-7d4a72f9f87a/download"
+      },
+      "gt_status": "expected stereo depth and structured-light geometry; first specimen payload downloading",
+      "git_tracked": false
+    },
+    {
       "name": "raw_external_datasets",
-      "path": "dataset/raw/external_datasets",
+      "path": "dataset/EndoSLAM/raw/source",
       "category": "raw_source",
       "contains": [
         "EndoSLAM/"
@@ -133,16 +206,22 @@
       "compatibility_symlink": "stereo/datasets"
     },
     {
-      "name": "workspace_argos_data",
-      "path": "dataset/workspace_argos_data",
+      "name": "scared_workspace",
+      "path": "dataset/SCARED/workspace",
       "category": "processed_workspace",
       "contains": [
-        "processed SERV-CT ARGOS-format data",
         "SCARED consecutive clip source and split frame folders"
       ],
-      "size_approx": "242M",
-      "git_tracked": false,
-      "compatibility_symlink": "stereo/argos_data"
+      "git_tracked": false
+    },
+    {
+      "name": "servct_workspace",
+      "path": "dataset/SERVCT/workspace",
+      "category": "processed_workspace",
+      "contains": [
+        "processed SERV-CT ARGOS-format data"
+      ],
+      "git_tracked": false
     }
   ]
 }

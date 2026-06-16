@@ -1,0 +1,6 @@
+{
+  "protocol": "adapter_end_to_end_per_frame; model load, disk I/O, metric/montage file writing included because legacy adapters are script-oriented",
+  "gpu": "NVIDIA GeForce RTX 3090, 24576 MiB, 595.71.05",
+  "ai_python": "/home/pampaj/miniforge3/envs/ai/bin/python\n2.10.0\n13.0\nTrue",
+  "ff_python": "/home/pampaj/Desktop/ARGOS/../stereo/Fast-FoundationStereo/.conda/bin/python\n2.6.0+cu124\n12.4\nTrue\n1.26.0\n['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider']"
+}

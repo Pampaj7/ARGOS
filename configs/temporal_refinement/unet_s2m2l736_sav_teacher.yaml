@@ -1,0 +1,47 @@
+experiment_name: argos_temporal_refiner_unet_s2m2l736_sav_teacher_v0
+
+data:
+  window_radius: 2
+  window_size: 5
+  baseline_model: S2M2-L@736
+  teacher_model: StereoAnyVideo@384x640
+  cache_root: dataset/processed/temporal_refinement
+  train_sources:
+    - scared_consecutive
+    - scared_warped
+  supervised_sources:
+    - scared_keyframes_gt
+    - servct_argos
+
+model:
+  type: tiny_unet_residual_refiner
+  input_channels: 9
+  output_confidence: false
+  residual_clamp_px: 4.0
+  norm: groupnorm
+  activation: silu
+
+loss:
+  gt_disp: 1.0
+  gt_depth: 0.2
+  teacher: 0.3
+  temporal_smoothness: 0.1
+  edge_preservation: 0.05
+  s2m2_anchor_no_gt: 0.05
+
+training:
+  freeze_s2m2: true
+  freeze_teacher: true
+  batch_size: 2
+  precision: amp
+  max_steps: 10000
+  sanity_overfit_steps: 100
+  learning_rate: 0.0002
+
+success_criteria:
+  max_depth_mae_regression_mm: 0.05
+  min_temporal_diff_reduction_vs_s2m2_l736: 0.2
+  max_bad2mm_regression_pp: 1.0
+  max_runtime_overhead_ms: 20
+  max_vram_overhead_mb: 1024
+

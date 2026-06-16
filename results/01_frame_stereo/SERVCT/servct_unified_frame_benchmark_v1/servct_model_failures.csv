@@ -1,0 +1,9 @@
+method,failure_stage,error_summary,attempted_fix,final_status
+RAFT-Stereo Realtime checkpoint,checkpoint_load,Checkpoint state_dict does not match the RAFTStereo architecture configured by the existing SERV-CT adapter.,"Retried with local Fast-FoundationStereo conda environment to fix missing opt_einsum; environment fixed, architecture mismatch remained.",runtime_failure
+FoundationStereo,audit,"Repository present, but pretrained_models directory contains no usable .pth/.pt checkpoint.",No inference launched in this aggregation pass; use existing adapters/checkpoints first.,missing_checkpoint
+IGEV++,audit,"Repository present, but no local .pth/.pt/.ckpt checkpoint was found; adapter/demo exists but cannot be run fairly.",No inference launched in this aggregation pass; use existing adapters/checkpoints first.,missing_checkpoint
+Selective-Stereo,audit,"Repository present, but no local .pth/.pt/.ckpt checkpoint was found; adapter/demo exists but cannot be run fairly.",No inference launched in this aggregation pass; use existing adapters/checkpoints first.,missing_checkpoint
+PPMStereo,audit,Excluded from raw frame-by-frame SERV-CT table.,No inference launched in this aggregation pass; use existing adapters/checkpoints first.,not_frame_based
+StereoAnyVideo,audit,Excluded from raw frame-by-frame SERV-CT table.,No inference launched in this aggregation pass; use existing adapters/checkpoints first.,not_frame_based
+TemporalStereo,audit,Excluded from raw frame-by-frame SERV-CT table.,No inference launched in this aggregation pass; use existing adapters/checkpoints first.,not_frame_based
+TC-Stereo,audit,Excluded from raw frame-by-frame SERV-CT table.,No inference launched in this aggregation pass; use existing adapters/checkpoints first.,not_frame_based
