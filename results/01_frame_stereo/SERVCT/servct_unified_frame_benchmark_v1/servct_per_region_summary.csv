@@ -1,0 +1,25 @@
+dataset,method,region,frames,depth_mae_mm,disparity_mae_px,notes
+SERV-CT honest_test,CREStereo,all_valid,8,2.286640018224716,2.0375346541404724,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,DEFOM-Stereo ViT-L ETH3D,all_valid,8,1.7944967150688171,1.68261057138443,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,DEFOM-Stereo ViT-L KITTI,all_valid,8,2.151780128479004,2.127985417842865,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,DEFOM-Stereo ViT-L Middlebury,all_valid,8,2.1752724051475525,2.2718897312879562,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,DEFOM-Stereo ViT-L SceneFlow,all_valid,8,5.419239029288292,8.373253792524338,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,DEFOM-Stereo ViT-S RVC,all_valid,8,2.121598407626152,2.2770766094326973,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,DEFOM-Stereo ViT-S SceneFlow,all_valid,8,2.8846533596515656,3.5307366847991943,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,Fast-FoundationStereo ONNX,all_valid,8,1.7633249908685684,1.7069649919867516,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,MonSter++ MixAll,all_valid,8,1.8333377689123154,1.7893186956644058,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,MonSter++ MixAll i16,all_valid,8,1.799226552248001,1.734049454331398,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,RAFT-Stereo ETH3D,all_valid,8,2.794293090701103,2.2018148079514503,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,RAFT-Stereo Middlebury,all_valid,8,2.682628884911537,2.2673881500959396,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,RAFT-Stereo RVC,all_valid,8,2.2766942381858826,2.3165204226970673,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,RAFT-Stereo SceneFlow,all_valid,8,2.9509530663490295,2.347526863217354,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,RT-MonSter++ zero-shot,all_valid,8,1.9251094162464142,1.7932085022330284,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,S2M2-L pretrained,all_valid,8,1.7619809061288834,1.5019833222031593,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,S2M2-M pretrained,all_valid,8,1.5808264389634132,1.413824811577797,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,S2M2-S all-surgical finetuned,all_valid,8,0.9462441802024841,0.8748925104737282,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,S2M2-S honest finetuned,all_valid,8,1.3677616342902184,1.3770041391253471,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,S2M2-S pretrained,all_valid,8,1.7638149783015251,1.4615202397108078,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,S2M2-XL pretrained,all_valid,8,18.36013286560774,48.324705228209496,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,SGBM,all_valid,8,51.56027317047119,12.177122920751572,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,StereoAnywhere,all_valid,8,2.4447478502988815,2.7116984128952026,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.
+SERV-CT honest_test,StereoAnywhere ViT-L,all_valid,8,2.26118440926075,2.1022354513406754,No occlusion/edge region masks were found in the ARGOS SERV-CT converted samples; only all_valid is reported.

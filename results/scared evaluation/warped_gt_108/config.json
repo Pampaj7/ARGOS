@@ -1,0 +1,16 @@
+{
+  "scared_root": "/home/pampaj/Desktop/ARGOS/dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8",
+  "metadata_csv": "dataset/SCARED/curated/warped_gt_108/metadata.csv",
+  "protocol_name": "scared_warped_gt_108",
+  "dataset_label": "dataset/SCARED/curated/warped_gt_108/metadata.csv",
+  "out_dir": "/home/pampaj/Desktop/ARGOS/results/scared evaluation",
+  "eval_subdir": "warped_gt_108",
+  "s2m2_src": "/home/pampaj/Desktop/stereo/s2m2/src",
+  "s2m2_weights_dir": "/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights",
+  "s2m2_refine_iter": "3",
+  "fastfoundation_onnx": "/home/pampaj/Desktop/stereo/Fast-FoundationStereo/weights/onnx/20_30_48/320x736/20_30_48_iters_4_res_320x736.onnx",
+  "sgbm_max_disp": "320",
+  "sgbm_block_size": "3",
+  "cpu": "False",
+  "aggregate_only": "True"
+}

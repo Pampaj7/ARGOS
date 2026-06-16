@@ -1,50 +1,64 @@
-# ARGOS Dataset Subsets
+# ARGOS Dataset Directory
 
 This folder is the local data home for ARGOS.
 
-It contains both:
+The rule is simple: one top-level folder per dataset. Raw files, curated subsets, workspace extracts, metadata, and download logs for a dataset live inside that dataset's folder.
 
-- small ARGOS-ready subsets used directly by current experiments and reports;
-- large raw/source datasets used to produce those subsets.
+```text
+dataset/
+  SCARED/
+  SERVCT/
+  StereoMIS/
+  D4D/
+  EndoSLAM/
+  README.md
+  manifest.json
+```
 
-All data payloads in this folder are intentionally ignored by Git, but they live here locally so the repository structure is clear. Git tracks only this `README.md` and `manifest.json`.
+Large payloads are intentionally ignored by Git. Git should track only lightweight documentation, manifests, and scripts.
 
-## Contents
+## Current Layout
 
-| Folder | Contents | Used For |
-|---|---|---|
-| `scared_consecutive32/` | 32 consecutive rectified stereo video frames split into `left/` and `right/`. | Temporal/video-stereo comparison: Stereo Any Video vs S2M2-S vs Fast-FoundationStereo. |
-| `scared_rect5/` | 5 SCARED keyframe stereo pairs split into `left/` and `right/`. | Smoke tests and historical keyframe baseline checks. Not valid for temporal claims. |
-| `servct_argos/` | SERV-CT ARGOS-format train/test stereo pairs with depth/disparity GT and valid masks. | Surgical GT baseline evaluation and scoreboards. |
-| `raw/surgical_stereo/scared/` | Full local SCARED zip archives plus extracted smoke/test folders. | Raw source data for SCARED conversion and temporal clips. |
-| `raw/surgical_stereo/servct/` | Raw SERV-CT archive/extract. | Source data for SERV-CT ARGOS conversion. |
-| `raw/external_datasets/EndoSLAM/` | Local EndoSLAM snapshot/support data. | Future domain expansion, pose/3D validation, possible pseudo-labeling. |
-| `workspace_argos_data/` | Processed data workspace mirrored from the local stereo lab. | Backward-compatible processed-data area used by scripts through symlinks. |
+| Dataset | Path | Status | Main Use |
+|---|---|---|---|
+| SCARED | `SCARED/` | raw archives and curated clips available | surgical stereo GT keyframes and temporal clips |
+| SERV-CT | `SERVCT/` | raw source and ARGOS-format samples available | metric SERV-CT benchmark and fine-tuning |
+| StereoMIS | `StereoMIS/` | downloaded and inventoried | real surgical stereo-video temporal robustness |
+| D4D / Dresden | `D4D/` | metadata downloaded; `specimen_1.tar.gz` downloading | surgical stereo/depth geometry validation |
+| EndoSLAM | `EndoSLAM/` | local support snapshot available | future pose/3D validation and pseudo-labeling |
 
-## SCARED Consecutive Clip
+## SCARED
 
-Source:
+```text
+SCARED/
+  raw/source/
+  curated/consecutive32/
+  curated/rect5/
+  curated/keyframes_gt_dataset8/
+  workspace/scared_consecutive/
+```
 
-`raw/surgical_stereo/scared/test_dataset_9.zip`
+Important subsets:
 
-Extracted video:
+- `SCARED/curated/consecutive32/`: 32 consecutive stereo frames from `test_dataset_9/keyframe_3/rgb.mp4`.
+- `SCARED/curated/rect5/`: 5 SCARED stereo pairs used for smoke tests.
+- `SCARED/curated/keyframes_gt_dataset8/`: SCARED dataset_8 keyframes with GT depth/disparity conversion used by S2M2 benchmarks.
+- `SCARED/raw/source/`: raw SCARED archives and extracted sources.
 
-`test_dataset_9/keyframe_3/rgb.mp4`
+The consecutive clip source video is top/bottom stereo at `1280x2048`; ARGOS splits it into `1280x1024` left/right frames.
 
-The original video is top/bottom stereo at 1280x2048. ARGOS splits it as:
+## SERV-CT
 
-- top half -> `left/*.png`
-- bottom half -> `right/*.png`
+```text
+SERVCT/
+  raw/source/
+  argos/servct_argos/
+  workspace/servct/
+```
 
-Current subset:
+`SERVCT/argos/servct_argos/` is the canonical ARGOS-format SERV-CT subset.
 
-- 32 consecutive frames.
-- Frame range from the source video: frames 50 through 81.
-- No GT depth/disparity is included for this clip.
-
-## SERV-CT ARGOS Format
-
-Each experiment folder contains:
+Each sample contains:
 
 - `left.png`
 - `right.png`
@@ -59,10 +73,83 @@ Current split:
 - `honest_train/`: 8 samples.
 - `honest_test/`: 8 samples.
 
+## StereoMIS
+
+```text
+StereoMIS/
+  raw/source/
+```
+
+StereoMIS is downloaded and inspected.
+
+Key local files:
+
+- `StereoMIS/raw/source/StereoMIS_0_0_1.zip`
+- `StereoMIS/raw/source/INVENTORY.md`
+- `StereoMIS/raw/source/stereomis_sequence_inventory.csv`
+- `StereoMIS/raw/source/metadata_extract/`
+- `StereoMIS/raw/source/preview_extract/`
+
+Confirmed contents:
+
+- 11 vertically stacked stereo videos.
+- 90,912 mask PNG files.
+- 11 stereo calibration files.
+- 11 pose/kinematics `groundtruth.txt` files.
+- No dense depth/disparity GT found in archive listing.
+
+Use StereoMIS for temporal robustness and qualitative surgical-video evaluation, not metric depth MAE.
+
+## D4D / Dresden
+
+```text
+D4D/
+  raw/source/
+```
+
+D4D is a high-priority surgical geometry dataset. It is much larger than StereoMIS.
+
+Local status:
+
+- `D4D/raw/source/info.tar.gz` downloaded.
+- `D4D/raw/source/info_extract/` extracted.
+- `D4D/raw/source/d4d_download_urls.tsv` records OPARA download URLs.
+- `D4D/raw/source/specimen_1.tar.gz` is downloading in tmux session `argos_d4d_specimen1_download`.
+
+Monitor D4D download:
+
+```bash
+tail -f dataset/D4D/raw/source/d4d_specimen_1_download.log
+ls -lh dataset/D4D/raw/source/specimen_1.tar.gz
+tmux attach -t argos_d4d_specimen1_download
+```
+
+Expected D4D contents after extraction:
+
+- rectified left/right endoscope frames;
+- stereo depth maps in metres;
+- structured-light point clouds;
+- masks;
+- camera calibration;
+- curated poses.
+
+Convert depth to millimetres for ARGOS reports.
+
+## EndoSLAM
+
+```text
+EndoSLAM/
+  raw/source/
+```
+
+EndoSLAM is currently support data for future domain expansion, pose/3D checks, and possible pseudo-labeling.
+
 ## Manifest
 
 Machine-readable dataset metadata is stored in:
 
-`manifest.json`
+```text
+manifest.json
+```
 
-Update the manifest whenever a new curated subset is added.
+Update `manifest.json` whenever a dataset is moved, added, downloaded, or converted.

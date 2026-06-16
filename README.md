@@ -8,6 +8,12 @@ The broader target is **ARGOS-Wound**: a staged, release-ready benchmark for ope
 
 The current v0 direction is to de-risk the geometric perception layer before moving to more complex autonomy modules. We evaluate modern stereo models on surgical stereo with ground truth, convert datasets into a unified ARGOS format, then fine-tune the strongest model family on surgical data.
 
+If the repository feels large, start here:
+
+- `docs/REPOSITORY_MAP.md`: where things live and which folders matter first.
+- `results/README.md`: which result folders are canonical versus development history.
+- `scripts/README.md`: runnable script entrypoints.
+
 Primary benchmark so far:
 
 - **SERV-CT**: rectified stereo endoscopy with CT/RGB-scan reference disparity and depth.
@@ -112,6 +118,13 @@ SERV-CT -> SCARED transfer check:
 
 ## Results
 
+Canonical current result packages:
+
+- `results/01_frame_stereo/SERVCT/servct_unified_frame_benchmark_v1/`: main SERV-CT frame-stereo benchmark with runtime/VRAM.
+- `presentation/argos_progress/`: slide-ready Monday presentation assets.
+- `results/servct evaluation/`: simple SERV-CT model baseline table.
+- `results/03_temporal_refinement/evaluation/temporal_refinement_evaluation_l736_v1/`: unified full-frame temporal-refinement evaluation.
+
 Key images are kept in `results/images/`:
 
 - `argos_surgical_stereo_model_comparison.png`: zero-shot model comparison.
@@ -125,15 +138,13 @@ Full baseline table: `docs/SERVCT_BASELINE_SCOREBOARD.md`.
 
 ## Dataset
 
-All local ARGOS data is organized under `dataset/`.
+All local ARGOS data is organized under `dataset/`, with one top-level folder per dataset.
 
-- `dataset/scared_consecutive32/`: 32 consecutive SCARED stereo-video frames used for temporal/video-stereo comparison.
-- `dataset/scared_rect5/`: 5 SCARED keyframe stereo pairs used for smoke tests.
-- `dataset/servct_argos/`: SERV-CT ARGOS-format train/test samples with disparity/depth GT.
-- `dataset/raw/surgical_stereo/scared/`: full local SCARED zip archives and extracted test/keyframe folders.
-- `dataset/raw/surgical_stereo/servct/`: raw SERV-CT archive/extract.
-- `dataset/raw/external_datasets/`: external support datasets such as EndoSLAM.
-- `dataset/workspace_argos_data/`: processed data workspace used by local scripts.
+- `dataset/SCARED/`: raw SCARED archives, curated keyframes/clips, and SCARED workspace extracts.
+- `dataset/SERVCT/`: raw SERV-CT archive/extract plus ARGOS-format train/test samples with disparity/depth GT.
+- `dataset/StereoMIS/`: downloaded StereoMIS archive, inventory, metadata extract, and preview material.
+- `dataset/D4D/`: D4D metadata, OPARA download URLs, and staged specimen downloads.
+- `dataset/EndoSLAM/`: EndoSLAM support data.
 
 Raw and bulky processed data live physically in this folder for clarity, but are ignored by Git. See `dataset/README.md` and `dataset/manifest.json` for source and format details.
 
@@ -146,9 +157,19 @@ Raw and bulky processed data live physically in this folder for clarity, but are
 - `docs/ROADMAP.md`: project phases toward paper-ready experiments.
 - `configs/servct_baselines.yaml`: current SERV-CT benchmark metadata.
 - `configs/surgical_splits.yaml`: current surgical train/test split definitions.
-- `results/video_stereo_repos/`: video-stereo repository scouting, common SCARED smoke-test sequence, and first StereoAnyVideo smoke metrics.
+- `results/02_video_stereo/video_stereo_repos/`: video-stereo repository scouting, common SCARED smoke-test sequence, and first StereoAnyVideo smoke metrics.
+- `results/03_temporal_refinement/design/argos_temporal_refinement_design/`: design for an ARGOS-owned lightweight temporal stereo refiner using frozen S2M2 predictions and StereoAnyVideo as teacher.
+- `results/03_temporal_refinement/cache/temporal_refinement_cache/debug_v1/`: first cache for Tiny U-Net temporal-refiner debugging.
+- `results/temporal_refinement_debug_unet_v1/`: first overfit/debug run for the ARGOS Tiny U-Net residual temporal refiner.
+- `results/temporal_refinement_debug_unet_v2_temporal_loss/`: temporal-loss debug run; useful negative result showing S2M2-window median regularization is conservative but not more temporally stable than V1.
+- `results/temporal_refinement_debug_unet_v3_teacher_delta_loss/`: first true consecutive-frame teacher-delta temporal distillation run; improves both teacher MAE and temporal diff over V1/V2.
+- `results/03_temporal_refinement/cache/temporal_refinement_cache/large_v1/`: first larger-cache scaffold. Currently seeded with all complete predictions available locally; needs long SCARED video prediction generation to reach 1,000+ samples.
+- `results/temporal_refinement_train_unet_v1_large/`: first longer Tiny U-Net training run using teacher-delta plus S2M2-anchor loss.
+- `results/04_dataset_derivatives/SCARED/scared_long_sequences/`: extracted consecutive SCARED stereo video streams for temporal-refinement training.
+- `results/04_dataset_derivatives/SCARED/scared_long_predictions/`: frozen S2M2-L@736 and StereoAnyVideo@384x640 predictions over the long SCARED streams.
+- `results/03_temporal_refinement/cache/temporal_refinement_cache/large_v2/`: first real 1,000+ sample temporal-refinement cache built from long SCARED streams.
 
-SERV-CT has a working converter to the unified local format under `dataset/workspace_argos_data/servct/`. The curated subset used by current reports is mirrored under `dataset/servct_argos/`.
+SERV-CT has a working converter to the unified local format under `dataset/SERVCT/workspace/servct/`. The curated subset used by current reports is under `dataset/SERVCT/argos/servct_argos/`.
 
 ## Immediate Next Steps
 
@@ -158,6 +179,8 @@ SERV-CT has a working converter to the unified local format under `dataset/works
 - Add cross-dataset evaluation: SERV-CT to SCARED and SCARED to SERV-CT.
 - Add surgical robustness metrics: near-field bins, boundary/detail masks, and specular/textureless failure slices.
 - Integrate video-stereo baselines: StereoAnyVideo first as quality upper bound, then TC-Stereo or DynamicStereo once checkpoints/envs are ready.
+- Use `temporal_refinement_cache/large_v2` for the next temporal-refiner training run. It contains `1,008` 5-frame samples from `8` long SCARED test keyframe streams with S2M2-L@736 and StereoAnyVideo@384x640 predictions in original disparity coordinates.
+- Scale the Tiny U-Net temporal refiner beyond the current seed run: larger batches/crops, more SCARED/SERV-CT GT, true consecutive-frame temporal teacher loss, S2M2 anchoring, and S2M2-S@512 deployment variant.
 - Turn current scoreboards and montages into stable paper figures.
 - Translate the ARGOS-Wound proposal into concrete v0 acquisition requirements: sensor list, fiducial layout, anchor-state scan protocol, semantic label set, and release metadata.
 - Draft the ARGOS-Fuse evaluation target: fused surface, uncertainty map, and unsafe-region mask.
@@ -187,7 +210,7 @@ This repo intentionally does **not** track downloaded upstream repositories, mod
 - small metric summaries/configs.
 - curated ARGOS-ready dataset subsets under `dataset/`.
 
-Large raw data lives locally under `dataset/raw/` for clarity, but is ignored by Git.
+Large raw data lives locally inside the corresponding dataset folder and is ignored by Git.
 
 ## Experiment Logging Rule
 

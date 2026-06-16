@@ -16,7 +16,7 @@ from PIL import Image
 ARGOS = Path("/home/pampaj/Desktop/ARGOS")
 OUT = ARGOS / "results/stereoanyvideo_temporal_eval"
 GT5 = ARGOS / "results/video_stereo_repos/test_sequence"
-CONSEC32 = ARGOS / "dataset/scared_consecutive32"
+CONSEC32 = ARGOS / "dataset/SCARED/curated/consecutive32"
 S2M2_SRC = Path("/home/pampaj/Desktop/stereo/s2m2/src")
 S2M2_WEIGHTS = Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights")
 SAV_REPO = ARGOS / "external/video_stereo_repos/stereoanyvideo"
@@ -477,4 +477,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
