@@ -1,0 +1,24 @@
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_3.zip
+  dir=../../dataset/SCARED
+  out=dataset_3.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_4.zip
+  dir=../../dataset/SCARED
+  out=dataset_4.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_5.zip
+  dir=../../dataset/SCARED
+  out=dataset_5.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_6.zip
+  dir=../../dataset/SCARED
+  out=dataset_6.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_7.zip
+  dir=../../dataset/SCARED
+  out=dataset_7.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_8.zip
+  dir=../../dataset/SCARED
+  out=dataset_8.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/dataset_9.zip
+  dir=../../dataset/SCARED
+  out=dataset_9.zip
+https://huggingface.co/datasets/kairuo/scared/resolve/main/test_dataset_9.zip
+  dir=../../dataset/SCARED
+  out=test_dataset_9.zip
