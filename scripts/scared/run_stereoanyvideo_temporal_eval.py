@@ -5,6 +5,9 @@ import os
 import sys
 import time
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR, DATASET_DIR, RESULTS_DIR
 
 import cv2
 import numpy as np
@@ -13,7 +16,7 @@ import torch.nn.functional as F
 from PIL import Image
 
 
-ARGOS = Path("/dtu/p1/leopam/ARGOS")
+ARGOS = ROOT_DIR
 OUT = ARGOS / "results/stereoanyvideo_temporal_eval"
 GT5 = ARGOS / "results/video_stereo_repos/test_sequence"
 CONSEC32 = ARGOS / "dataset/SCARED/curated/consecutive32"

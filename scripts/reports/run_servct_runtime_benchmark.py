@@ -19,6 +19,9 @@ import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR
 from statistics import mean, median, pstdev
 from typing import Any
 
@@ -30,7 +33,7 @@ import pandas as pd
 ROOT = Path.cwd()
 OUT = Path("results/servct_unified_frame_benchmark_v1")
 RUNTIME_TMP = OUT / "runtime_tmp"
-STEREO = Path("../external")
+STEREO = EXTERNAL_DIR
 SERVCT_ROOT = Path("Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT")
 FF_PY = Path(".miniconda/envs/argos/bin/python")
 AI_PY = "python"

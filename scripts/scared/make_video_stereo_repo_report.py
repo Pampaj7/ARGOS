@@ -3,9 +3,12 @@ import csv
 import json
 import subprocess
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR, DATASET_DIR, RESULTS_DIR
 
 
-ARGOS = Path("/dtu/p1/leopam/ARGOS")
+ARGOS = ROOT_DIR
 REPOS = ARGOS / "external/video_stereo_repos"
 OUT = ARGOS / "results/video_stereo_repos"
 

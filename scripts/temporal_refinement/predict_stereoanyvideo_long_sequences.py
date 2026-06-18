@@ -6,12 +6,15 @@ import shutil
 import subprocess
 import time
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR, DATASET_DIR, RESULTS_DIR
 
 import cv2
 import numpy as np
 
 
-ROOT = Path("/dtu/p1/leopam/ARGOS")
+ROOT = ROOT_DIR
 SAV_SCRIPT = Path("../../external/video_stereo_repos/stereoanyvideo/scripts/run_argos_scared_smoke.py")
 SAV_CKPT = Path("../../external/video_stereo_repos/stereoanyvideo/checkpoints/StereoAnyVideo_MIX.pth")
 

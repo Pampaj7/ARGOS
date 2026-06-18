@@ -1,10 +1,13 @@
 import argparse
 import subprocess
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from scripts.argos_paths import ROOT_DIR, ARGOS_ENV_PYTHON
 
 
-ROOT = Path("..")
-PYTHON = ROOT / ".miniconda/envs/argos/bin/python"
+ROOT = ROOT_DIR
+PYTHON = ARGOS_ENV_PYTHON
 
 
 COMMANDS = [
