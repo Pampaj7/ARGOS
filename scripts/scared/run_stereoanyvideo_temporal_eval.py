@@ -17,8 +17,8 @@ ARGOS = Path("/home/pampaj/Desktop/ARGOS")
 OUT = ARGOS / "results/stereoanyvideo_temporal_eval"
 GT5 = ARGOS / "results/video_stereo_repos/test_sequence"
 CONSEC32 = ARGOS / "dataset/SCARED/curated/consecutive32"
-S2M2_SRC = Path("/home/pampaj/Desktop/stereo/s2m2/src")
-S2M2_WEIGHTS = Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights")
+S2M2_SRC = Path("../../external/frame_stereo_repos/s2m2/src")
+S2M2_WEIGHTS = Path("../../external/frame_stereo_repos/s2m2/weights/pretrain_weights")
 SAV_REPO = ARGOS / "external/video_stereo_repos/stereoanyvideo"
 SAV_CKPT = SAV_REPO / "checkpoints/StereoAnyVideo_MIX.pth"
 

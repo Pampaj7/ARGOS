@@ -180,8 +180,8 @@ def write_csv(path, rows):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--scared_root", type=Path, default=Path("dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8"))
-    parser.add_argument("--s2m2_src", type=Path, default=Path("/home/pampaj/Desktop/stereo/s2m2/src"))
-    parser.add_argument("--weights_dir", type=Path, default=Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights"))
+    parser.add_argument("--s2m2_src", type=Path, default=Path("../../external/frame_stereo_repos/s2m2/src"))
+    parser.add_argument("--weights_dir", type=Path, default=Path("../../external/frame_stereo_repos/s2m2/weights/pretrain_weights"))
     parser.add_argument("--finetuned_checkpoint", type=Path, required=True)
     parser.add_argument("--model_type", default="S", choices=["S", "M", "L", "XL"])
     parser.add_argument("--refine_iter", type=int, default=3)

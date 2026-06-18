@@ -222,18 +222,18 @@ def write_csv(path: Path, summary: dict) -> None:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", type=Path, default=Path("/home/pampaj/Desktop/stereo/results/video_stereo_repo_scouting/smoke_inputs/scared_rect5"))
-    parser.add_argument("--stereoanyvideo_disp", type=Path, default=Path("/home/pampaj/Desktop/stereo/results/stereoanyvideo_scared_smoke/images/disparity.npy"))
-    parser.add_argument("--fastfoundation_pattern", default="/home/pampaj/Desktop/stereo/Fast-FoundationStereo/output_scared_rect_kf{idx}")
+    parser.add_argument("--input_dir", type=Path, default=Path("../results/video_stereo_repo_scouting/smoke_inputs/scared_rect5"))
+    parser.add_argument("--stereoanyvideo_disp", type=Path, default=Path("../results/stereoanyvideo_scared_smoke/images/disparity.npy"))
+    parser.add_argument("--fastfoundation_pattern", default="../external/frame_stereo_repos/Fast-FoundationStereo/output_scared_rect_kf{idx}")
     parser.add_argument("--fastfoundation_stack", type=Path, default=None)
     parser.add_argument("--skip_fastfoundation", action="store_true")
-    parser.add_argument("--s2m2_src", type=Path, default=Path("/home/pampaj/Desktop/stereo/s2m2/src"))
-    parser.add_argument("--s2m2_weights", type=Path, default=Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights"))
+    parser.add_argument("--s2m2_src", type=Path, default=Path("../external/frame_stereo_repos/s2m2/src"))
+    parser.add_argument("--s2m2_weights", type=Path, default=Path("../external/frame_stereo_repos/s2m2/weights/pretrain_weights"))
     parser.add_argument("--s2m2_model_type", default="S", choices=["S", "M", "L", "XL"])
     parser.add_argument("--s2m2_refine_iter", type=int, default=3)
     parser.add_argument("--s2m2_max_width", type=int, default=640)
     parser.add_argument("--target_shape", default="384x640")
-    parser.add_argument("--out_dir", type=Path, default=Path("/home/pampaj/Desktop/stereo/results/temporal_context_comparison_scared5"))
+    parser.add_argument("--out_dir", type=Path, default=Path("../results/temporal_context_comparison_scared5"))
     args = parser.parse_args()
 
     h, w = [int(x) for x in args.target_shape.lower().split("x")]

@@ -1,6 +1,6 @@
 # Stereo Workspace Structure
 
-This file is the local map for `/home/pampaj/Desktop/stereo`.
+This file is the local map for `../external/`.
 
 ## Main Buckets
 

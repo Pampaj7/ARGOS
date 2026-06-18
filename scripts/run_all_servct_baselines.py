@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 
-ROOT = Path("/home/pampaj/Desktop/stereo")
+ROOT = Path("..")
 PYTHON = ROOT / "Fast-FoundationStereo/.conda/bin/python"
 
 

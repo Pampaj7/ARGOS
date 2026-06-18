@@ -12,7 +12,7 @@ import torch
 
 
 ROOT = Path("/home/pampaj/Desktop/ARGOS")
-S2M2_REPO = Path("/home/pampaj/Desktop/stereo/s2m2")
+S2M2_REPO = Path("../../external/frame_stereo_repos/s2m2")
 sys.path.insert(0, str(S2M2_REPO / "src"))
 
 from s2m2.core.model.s2m2 import S2M2

@@ -325,8 +325,8 @@ def write_report(out_dir: Path, summary_rows, failures, dataset_note):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--scared_root", type=Path, default=Path("/home/pampaj/Desktop/ARGOS/dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8"))
-    parser.add_argument("--s2m2_src", type=Path, default=Path("/home/pampaj/Desktop/stereo/s2m2/src"))
-    parser.add_argument("--weights_dir", type=Path, default=Path("/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights"))
+    parser.add_argument("--s2m2_src", type=Path, default=Path("../../external/frame_stereo_repos/s2m2/src"))
+    parser.add_argument("--weights_dir", type=Path, default=Path("../../external/frame_stereo_repos/s2m2/weights/pretrain_weights"))
     parser.add_argument("--out_dir", type=Path, default=Path("/home/pampaj/Desktop/ARGOS/results/s2m2_size_tradeoff"))
     parser.add_argument("--models", nargs="*", default=["S", "L", "XL"], choices=["S", "L", "XL"])
     parser.add_argument("--widths", nargs="*", type=int, default=[0, 1024, 736, 512])

@@ -5,8 +5,8 @@ from pathlib import Path
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scared_root", default="/home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/scared")
-    parser.add_argument("--out_root", default="/home/pampaj/Desktop/stereo/argos_data")
+    parser.add_argument("--scared_root", default="../../external/frame_stereo_repos/Fast-FoundationStereo/data/surgical_stereo/scared")
+    parser.add_argument("--out_root", default="../../dataset")
     args = parser.parse_args()
 
     scared_root = Path(args.scared_root)

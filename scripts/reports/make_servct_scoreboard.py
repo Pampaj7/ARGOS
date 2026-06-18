@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-ROOT = Path("/home/pampaj/Desktop/stereo")
+ROOT = Path("../..")
 OUT = ROOT / "argos_baselines"
 
 RUNS = [

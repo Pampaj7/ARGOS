@@ -251,7 +251,7 @@ Large-cache/training utilities:
 ```bash
 cd /home/pampaj/Desktop/ARGOS
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/build_large_cache.py
 ```
 
@@ -262,21 +262,21 @@ Large V2 long-sequence cache utilities:
 ```bash
 cd /home/pampaj/Desktop/ARGOS
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/inventory_scared_sources.py
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/extract_scared_long_sequences.py --max-per-sequence 130
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/predict_s2m2_long_sequences.py \
   --sequences-root results/04_dataset_derivatives/SCARED/scared_long_sequences \
   --out-root results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/predict_stereoanyvideo_long_sequences.py \
   --sequences-root results/04_dataset_derivatives/SCARED/scared_long_sequences \
   --out-root results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640 \
@@ -284,7 +284,7 @@ PYTHONPATH=/home/pampaj/Desktop/ARGOS \
   --overlap 4
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/build_large_v2_cache.py
 ```
 
@@ -305,11 +305,11 @@ S2M2-S@512 multi-teacher fast cache:
 ```bash
 cd /home/pampaj/Desktop/ARGOS
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/build_large_v3_s2m2s512_fast_cache.py
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-/home/pampaj/Desktop/stereo/Fast-FoundationStereo/.conda/bin/python \
+../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
   scripts/temporal_refinement/train_refiner.py \
   --cache-root results/temporal_refinement_cache/large_v3_s2m2s512_fast \
   --index-file index.csv \
