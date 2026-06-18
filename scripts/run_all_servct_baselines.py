@@ -10,8 +10,8 @@ PYTHON = ROOT / "Fast-FoundationStereo/.conda/bin/python"
 COMMANDS = [
     {
         "name": "scoreboard",
-        "cwd": ROOT / "argos_baselines",
-        "cmd": [str(PYTHON), "scripts/make_servct_scoreboard.py"],
+        "cwd": ROOT,
+        "cmd": [str(PYTHON), "scripts/reports/make_servct_scoreboard.py"],
     },
 ]
 
