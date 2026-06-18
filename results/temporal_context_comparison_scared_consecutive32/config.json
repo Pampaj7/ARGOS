@@ -1,0 +1,14 @@
+{
+  "input_dir": "/home/pampaj/Desktop/stereo/argos_data/scared_consecutive/test_dataset_9_keyframe_3_32",
+  "stereoanyvideo_disp": "/home/pampaj/Desktop/stereo/results/stereoanyvideo_scared_consecutive32/images/disparity.npy",
+  "fastfoundation_pattern": "/home/pampaj/Desktop/stereo/Fast-FoundationStereo/output_scared_rect_kf{idx}",
+  "fastfoundation_stack": "/home/pampaj/Desktop/stereo/Fast-FoundationStereo/results/argos_scared_consecutive32_gpu/depth_meter.npy",
+  "skip_fastfoundation": "False",
+  "s2m2_src": "/home/pampaj/Desktop/stereo/s2m2/src",
+  "s2m2_weights": "/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights",
+  "s2m2_model_type": "S",
+  "s2m2_refine_iter": "3",
+  "s2m2_max_width": "640",
+  "target_shape": "384x640",
+  "out_dir": "/home/pampaj/Desktop/stereo/results/temporal_context_comparison_scared_consecutive32"
+}

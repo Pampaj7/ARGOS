@@ -11,6 +11,7 @@ The current v0 direction is to de-risk the geometric perception layer before mov
 If the repository feels large, start here:
 
 - `docs/REPOSITORY_MAP.md`: where things live and which folders matter first.
+- `external/`: third-party repositories for frame and video stereo models (formerly the 'stereo' workspace).
 - `results/README.md`: which result folders are canonical versus development history.
 - `scripts/README.md`: runnable script entrypoints.
 
@@ -191,14 +192,14 @@ Two detachable `screen` sessions are used on the workstation:
 
 ```bash
 screen -ls
-tail -f /home/pampaj/Desktop/stereo/download_jobs/scared_aria2_download.log
-tail -f /home/pampaj/Desktop/stereo/download_jobs/training_extras_download.log
-tail -f /home/pampaj/Desktop/stereo/download_jobs/monsterpp_large.log
+tail -f download_jobs/scared_aria2_download.log
+tail -f download_jobs/training_extras_download.log
+tail -f download_jobs/monsterpp_large.log
 ```
 
 The extra queue waits for SCARED to finish, then downloads S2M2-L/XL and EndoSLAM.
 
-MonSter++, DEFOM-Stereo, RAFT-Stereo, CREStereo, StereoAnyVideo, and the other upstream baselines are set up locally under `/home/pampaj/Desktop/stereo/` or `external/video_stereo_repos/`; upstream repos and model weights are intentionally excluded from this ARGOS repository. Raw/downloaded datasets are organized under `dataset/raw/` and ignored by Git.
+MonSter++, DEFOM-Stereo, RAFT-Stereo, CREStereo, StereoAnyVideo, and the other upstream baselines are set up locally under `external/frame_stereo_repos/` or `external/video_stereo_repos/`; upstream repos and model weights are intentionally excluded from this ARGOS repository via `.gitignore`. Raw/downloaded datasets are organized under `dataset/` and ignored by Git.
 
 ## Repository Policy
 
