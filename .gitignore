@@ -71,6 +71,16 @@ __pycache__/
 *.log
 nohup.out
 logs/*.log
+logs/*.latest
+logs/*.pid
 logs/nohup.out
 wandb/
 runs/
+
+# Large result directories
+results/03_temporal_refinement/training/
+results/temporal evaluation/frame_based_gt/
+results/temporal evaluation/causal_ema_benchmark/
+results/temporal evaluation/fair_interpretability_checks/
+results/temporal evaluation/scared_multisequence_compact/
+results/temporal evaluation/scared_multisequence_validation/

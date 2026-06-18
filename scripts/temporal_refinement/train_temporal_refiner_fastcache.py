@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import random
 import time
 from pathlib import Path
@@ -11,8 +12,10 @@ from pathlib import Path
 import cv2
 import numpy as np
 import torch
+import torch.distributed as dist
 import torch.nn.functional as F
 from torch.utils.data import Dataset
+from torch.utils.data.distributed import DistributedSampler
 
 from scripts.temporal_refinement.lib.losses import edge_aware_smoothness
 from scripts.temporal_refinement.lib.training import (
@@ -443,6 +446,40 @@ def clip_to_device(batch, device):
     return {key: value.to(device) if torch.is_tensor(value) else value for key, value in batch.items()}
 
 
+def make_grad_scaler(device: torch.device, amp_enabled: bool):
+    enabled = device.type == "cuda" and amp_enabled
+    if hasattr(torch.amp, "GradScaler"):
+        return torch.amp.GradScaler("cuda", enabled=enabled)
+    return torch.cuda.amp.GradScaler(enabled=enabled)
+
+
+def ddp_info() -> tuple[bool, int, int, int]:
+    world_size = int(os.environ.get("WORLD_SIZE", "1"))
+    rank = int(os.environ.get("RANK", "0"))
+    local_rank = int(os.environ.get("LOCAL_RANK", "0"))
+    return world_size > 1, rank, local_rank, world_size
+
+
+def unwrap_model(model):
+    return model.module if hasattr(model, "module") else model
+
+
+def is_main_process() -> bool:
+    return int(os.environ.get("RANK", "0")) == 0
+
+
+def ddp_mean_dict(values: dict[str, float], device: torch.device) -> dict[str, float]:
+    if not dist.is_available() or not dist.is_initialized():
+        return values
+    keys = sorted(values)
+    if not keys:
+        return values
+    tensor = torch.tensor([float(values[key]) for key in keys], dtype=torch.float64, device=device)
+    dist.all_reduce(tensor, op=dist.ReduceOp.SUM)
+    tensor /= dist.get_world_size()
+    return {key: float(value) for key, value in zip(keys, tensor.cpu().tolist())}
+
+
 def convgru_forward_clip(model: ConvGRURefiner, batch, device):
     batch = clip_to_device(batch, device)
     inputs = batch["input"]
@@ -640,12 +677,17 @@ def parse_args(argv=None):
 
 
 def run_training(args):
-    set_seed(args.seed)
+    ddp, rank, local_rank, world_size = ddp_info()
+    if ddp:
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend="nccl")
+
+    set_seed(args.seed + rank)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "checkpoints").mkdir(exist_ok=True)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(f"cuda:{local_rank}" if ddp else ("cuda" if torch.cuda.is_available() else "cpu"))
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats()
 
@@ -740,7 +782,13 @@ def run_training(args):
         loader_kwargs["persistent_workers"] = args.persistent_workers
         loader_kwargs["prefetch_factor"] = args.prefetch_factor
 
-    loader = torch.utils.data.DataLoader(train_clips if args.model == "convgru" else train_pairs, **loader_kwargs)
+    train_dataset = train_clips if args.model == "convgru" else train_pairs
+    train_sampler = DistributedSampler(train_dataset, num_replicas=world_size, rank=rank, shuffle=True) if ddp else None
+    if train_sampler is not None:
+        loader_kwargs["sampler"] = train_sampler
+        loader_kwargs["shuffle"] = False
+
+    loader = torch.utils.data.DataLoader(train_dataset, **loader_kwargs)
 
     if args.model == "convgru":
         model = ConvGRURefiner(
@@ -755,9 +803,11 @@ def run_training(args):
             base_channels=args.base_channels,
             residual_clamp_px=args.residual_clamp_px,
         ).to(device)
+    if ddp:
+        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
 
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr)
-    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda" and args.amp)
+    scaler = make_grad_scaler(device, args.amp)
     start_epoch = 1
     if args.resume is not None:
         checkpoint = torch.load(args.resume, map_location=device)
@@ -765,11 +815,15 @@ def run_training(args):
         opt.load_state_dict(checkpoint["optimizer_state_dict"])
         start_epoch = int(checkpoint["epoch"]) + 1
 
-    (args.out_dir / "config.yaml").write_text(
-        f"""cache_root: {args.cache_root}
+    if is_main_process():
+        (args.out_dir / "config.yaml").write_text(
+            f"""cache_root: {args.cache_root}
 index_file: {args.index_file}
 out_dir: {args.out_dir}
 cache_format: indexed_per_frame_float16_npy
+ddp:
+  enabled: {ddp}
+  world_size: {world_size}
 model_name: {args.model}
 backbone_prefix: {args.backbone_prefix}
 spatial_teacher_prefix: {args.spatial_teacher_prefix}
@@ -822,7 +876,7 @@ warmup:
 val_sequences: {val_sequences}
 resume: {args.resume}
 """
-    )
+        )
 
     log_path = args.out_dir / "train_log.csv"
     fieldnames = [
@@ -850,9 +904,10 @@ resume: {args.resume}
         "runtime_ms_per_frame",
     ]
 
-    with log_path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
+    if is_main_process():
+        with log_path.open("w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
 
     start = time.time()
     epoch_seconds = []
@@ -885,25 +940,29 @@ resume: {args.resume}
         "edge_weight": args.warmup_edge_weight,
     }
 
-    print("Starting generic temporal-refiner training")
-    print(f"device={device}")
-    print(f"model={args.model}")
-    print(f"cache_root={args.cache_root}")
-    print(f"index_file={args.index_file}")
-    print(f"backbone_prefix={args.backbone_prefix}")
-    print(f"spatial_teacher_prefix={args.spatial_teacher_prefix}")
-    print(f"temporal_teacher_prefix={args.temporal_teacher_prefix}")
-    print(f"spatial_target={args.spatial_target}")
-    if args.model == "convgru":
-        print(
-            f"train_clips={len(train_clips)} val_clips={len(val_clips)} "
-            f"sequence_length={args.sequence_length} eval_full_sequences={args.eval_full_sequences}",
-            flush=True,
-        )
-    else:
-        print(f"train_pairs={len(train_pairs)} val_single={len(val_single)} val_pairs={len(val_pairs)}", flush=True)
+    if is_main_process():
+        print("Starting generic temporal-refiner training")
+        print(f"device={device}")
+        print(f"ddp={ddp} world_size={world_size}")
+        print(f"model={args.model}")
+        print(f"cache_root={args.cache_root}")
+        print(f"index_file={args.index_file}")
+        print(f"backbone_prefix={args.backbone_prefix}")
+        print(f"spatial_teacher_prefix={args.spatial_teacher_prefix}")
+        print(f"temporal_teacher_prefix={args.temporal_teacher_prefix}")
+        print(f"spatial_target={args.spatial_target}")
+        if args.model == "convgru":
+            print(
+                f"train_clips={len(train_clips)} val_clips={len(val_clips)} "
+                f"sequence_length={args.sequence_length} eval_full_sequences={args.eval_full_sequences}",
+                flush=True,
+            )
+        else:
+            print(f"train_pairs={len(train_pairs)} val_single={len(val_single)} val_pairs={len(val_pairs)}", flush=True)
 
     for epoch in range(start_epoch, args.epochs + 1):
+        if train_sampler is not None:
+            train_sampler.set_epoch(epoch)
         if args.loss_schedule:
             active_weights = loss_weights_for_epoch(args, epoch, schedule_initial_weights)
             apply_loss_weights(args, active_weights)
@@ -929,41 +988,49 @@ resume: {args.resume}
                 "edge": args.edge_weight,
             }
 
-        print(
-            "active_loss_weights "
-            f"epoch={epoch} "
-            f"spatial={active_weights['spatial']:.6f} "
-            f"abs_sav={active_weights['abs_sav']:.6f} "
-            f"delta_sav={active_weights['delta_sav']:.6f} "
-            f"res={active_weights['res']:.6f} "
-            f"edge={active_weights['edge']:.6f}",
-            flush=True,
-        )
+        if is_main_process():
+            print(
+                "active_loss_weights "
+                f"epoch={epoch} "
+                f"spatial={active_weights['spatial']:.6f} "
+                f"abs_sav={active_weights['abs_sav']:.6f} "
+                f"delta_sav={active_weights['delta_sav']:.6f} "
+                f"res={active_weights['res']:.6f} "
+                f"edge={active_weights['edge']:.6f}",
+                flush=True,
+            )
 
         t0 = time.time()
         train = train_convgru_one_epoch(model, loader, opt, scaler, device, args) if args.model == "convgru" else train_one_epoch(model, loader, opt, scaler, device, args)
+        train = ddp_mean_dict(train, device)
         seconds = time.time() - t0
         epoch_seconds.append(seconds)
 
-        if epoch == 1 or epoch % args.eval_every == 0 or epoch == args.epochs:
+        if is_main_process() and (epoch == 1 or epoch % args.eval_every == 0 or epoch == args.epochs):
             if args.model == "convgru":
-                val = eval_convgru_clips(model, val_clips, device)
+                val = eval_convgru_clips(unwrap_model(model), val_clips, device)
                 temporal = val
             else:
-                val = eval_single(model, val_single, device)
-                temporal = eval_pairs(model, val_pairs, device)
+                val = eval_single(unwrap_model(model), val_single, device)
+                temporal = eval_pairs(unwrap_model(model), val_pairs, device)
             last_val = val
             last_temporal = temporal
-        else:
+        elif is_main_process():
             val = last_val
             temporal = last_temporal
+        if ddp:
+            dist.barrier()
+        if not is_main_process():
+            if ddp:
+                dist.barrier()
+            continue
 
         if args.model == "convgru":
             score = temporal["teacher_delta_mae"] + args.score_spatial_weight * val["mae_refined_to_l"]
         else:
             score = val["mae_refined_to_l"] + 0.5 * temporal["teacher_delta_mae"]
         checkpoint = {
-            "model_state_dict": model.state_dict(),
+            "model_state_dict": unwrap_model(model).state_dict(),
             "optimizer_state_dict": opt.state_dict(),
             "epoch": epoch,
             "score": score,
@@ -1013,13 +1080,20 @@ resume: {args.resume}
             f"teacher_delta={temporal['teacher_delta_mae']:.4f}",
             flush=True,
         )
+        if ddp:
+            dist.barrier()
+
+    if not is_main_process():
+        if ddp:
+            dist.destroy_process_group()
+        return {}
 
     if args.model == "convgru":
-        final_val = eval_convgru_clips(model, val_clips, device)
+        final_val = eval_convgru_clips(unwrap_model(model), val_clips, device)
         final_temporal = final_val
     else:
-        final_val = eval_single(model, val_single, device)
-        final_temporal = eval_pairs(model, val_pairs, device)
+        final_val = eval_single(unwrap_model(model), val_single, device)
+        final_temporal = eval_pairs(unwrap_model(model), val_pairs, device)
 
     metrics = {
         "best_epoch": best_epoch,
@@ -1045,17 +1119,20 @@ resume: {args.resume}
 
     (args.out_dir / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
     if args.model == "convgru":
-        save_convgru_qualitative(model, val_clips, args.out_dir, device)
+        save_convgru_qualitative(unwrap_model(model), val_clips, args.out_dir, device)
     else:
-        save_qualitative(model, val_single, args.out_dir, device)
+        save_qualitative(unwrap_model(model), val_single, args.out_dir, device)
 
+    if ddp:
+        dist.destroy_process_group()
     return metrics
 
 
 def main():
     args = parse_args()
     metrics = run_training(args)
-    print(json.dumps(metrics, indent=2))
+    if is_main_process():
+        print(json.dumps(metrics, indent=2))
 
 
 if __name__ == "__main__":

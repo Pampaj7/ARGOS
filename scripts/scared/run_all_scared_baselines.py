@@ -86,7 +86,10 @@ def collect_samples_from_metadata(metadata_csv: Path) -> list[dict]:
             calib = json.loads(calib_path.read_text())
             p1 = np.array(calib["P1"]["data"], dtype=np.float64).reshape(3, 4)
             p2 = np.array(calib["P2"]["data"], dtype=np.float64).reshape(3, 4)
-            frame = f"{row['dataset_id']}_{row['keyframe_id']}_frame_{int(row['frame_id']):06d}"
+            if row.get("dataset_id") and row.get("keyframe_id"):
+                frame = f"{row['dataset_id']}_{row['keyframe_id']}_frame_{int(row['frame_id']):06d}"
+            else:
+                frame = f"{row.get('sequence_id', 'sequence')}_frame_{int(row['frame_id']):06d}"
             samples.append(
                 {
                     "frame": frame,
