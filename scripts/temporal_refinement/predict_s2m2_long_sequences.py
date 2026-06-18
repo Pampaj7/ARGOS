@@ -5,13 +5,16 @@ import json
 import sys
 import time
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR, DATASET_DIR, RESULTS_DIR
 
 import cv2
 import numpy as np
 import torch
 
 
-ROOT = Path("/dtu/p1/leopam/ARGOS")
+ROOT = ROOT_DIR
 S2M2_REPO = Path("../../external/frame_stereo_repos/s2m2")
 sys.path.insert(0, str(S2M2_REPO / "src"))
 

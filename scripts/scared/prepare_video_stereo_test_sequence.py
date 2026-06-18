@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR, DATASET_DIR, RESULTS_DIR
 
 import cv2
 import numpy as np
