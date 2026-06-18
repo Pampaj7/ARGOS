@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from scripts.argos_paths import ROOT_DIR, EXTERNAL_DIR
+from scripts.argos_paths import ROOT_DIR, FRAME_STEREO_REPOS_DIR
 from statistics import mean, median, pstdev
 from typing import Any
 

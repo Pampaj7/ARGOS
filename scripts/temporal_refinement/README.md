@@ -249,9 +249,7 @@ V3 trains on consecutive cached pairs and distills StereoAnyVideo temporal dynam
 Large-cache/training utilities:
 
 ```bash
-cd /home/pampaj/Desktop/ARGOS
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+python \
   scripts/temporal_refinement/build_large_cache.py
 ```
 
@@ -260,9 +258,7 @@ PYTHONPATH=/home/pampaj/Desktop/ARGOS \
 Large V2 long-sequence cache utilities:
 
 ```bash
-cd /home/pampaj/Desktop/ARGOS
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+python \
   scripts/temporal_refinement/inventory_scared_sources.py
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \
@@ -303,9 +299,7 @@ Sanity note: several long test streams show large absolute differences between S
 S2M2-S@512 multi-teacher fast cache:
 
 ```bash
-cd /home/pampaj/Desktop/ARGOS
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+python \
   scripts/temporal_refinement/build_large_v3_s2m2s512_fast_cache.py
 
 PYTHONPATH=/home/pampaj/Desktop/ARGOS \

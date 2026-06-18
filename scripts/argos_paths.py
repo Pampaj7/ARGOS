@@ -6,6 +6,8 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 # Core subdirectories
 SCRIPTS_DIR = ROOT_DIR / "scripts"
 EXTERNAL_DIR = ROOT_DIR / "external"
+FRAME_STEREO_REPOS_DIR = EXTERNAL_DIR / "frame_stereo_repos"
+VIDEO_STEREO_REPOS_DIR = EXTERNAL_DIR / "video_stereo_repos"
 DATASET_DIR = ROOT_DIR / "dataset"
 RESULTS_DIR = ROOT_DIR / "results"
 CONFIGS_DIR = ROOT_DIR / "configs"
