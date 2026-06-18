@@ -1,0 +1,7 @@
+Method,Training / Checkpoint,Input res.,Depth MAE ↓,Bad-2 mm ↓,Disp. MAE ↓,Runtime ↓,VRAM ↓
+S2M2-S,CH128NTR1.pth,512 width,2.513,37.49%,8.493,57.8 ms,0.36 GB
+S2M2-L,CH256NTR3.pth,736 width,2.532,37.79%,8.466,178.9 ms,1.63 GB
+Fast-FoundationStereo ONNX,320x736,320x736,2.532,37.53%,8.421,44.1 ms,
+S2M2-L full,CH256NTR3.pth,1024x1280 full,2.534,37.81%,8.457,491.4 ms,2.83 GB
+S2M2-XL,CH384NTR3.pth,1024x1280 full,2.540,37.84%,8.432,894.6 ms,5.05 GB
+SGBM,OpenCV SGBM block=3 max_disp=320,1024x1280 full,2.700,37.83%,7.898,94.9 ms,

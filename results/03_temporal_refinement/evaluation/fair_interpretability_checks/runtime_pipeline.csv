@@ -1,0 +1,21 @@
+method,s2m2_l_backbone_runtime_ms,refiner_overhead_ms,end_to_end_runtime_ms,s2m2_l_backbone_peak_vram_mb,refiner_peak_vram_mb,total_peak_vram_mb_est,notes
+S2M2-L@736,187.76713038364855,0.0,187.76713038364855,1672.4599609375,0.0,1672.4599609375,raw backbone
+StereoAnyVideo@384x640,,,146.29532493752976,,,10132.17724609375,native method runtime when metadata exists
+Tiny U-Net e100,187.76713038364855,24.034698188881435,211.80182857252998,1672.4599609375,982.064453125,2654.5244140625,end-to-end estimate = backbone + cached-refiner timing
+ConvGRU V2 e30,187.76713038364855,24.051144951954484,211.81827533560303,1672.4599609375,982.904296875,2655.3642578125,end-to-end estimate = backbone + cached-refiner timing
+ConvGRU V2 e40,187.76713038364855,23.979755122071275,211.74688550571983,1672.4599609375,982.904296875,2655.3642578125,end-to-end estimate = backbone + cached-refiner timing
+ConvGRU V2 e50,187.76713038364855,24.042227989635787,211.80935837328434,1672.4599609375,982.904296875,2655.3642578125,end-to-end estimate = backbone + cached-refiner timing
+ConvGRU V2 latest,187.76713038364855,23.954332963778423,211.72146334742698,1672.4599609375,982.904296875,2655.3642578125,end-to-end estimate = backbone + cached-refiner timing
+S2M2-S@512,,,60.974148300906215,,,371.33447265625,native method runtime when metadata exists
+Fast-FoundationStereo ONNX,,,45.3597867449459,,,nan,native method runtime when metadata exists
+DEFOM-Stereo ViT-L ETH3D,,,1644.0549260739667,,,5373.89697265625,native method runtime when metadata exists
+CREStereo,,,444.3919263009985,,,1292.83203125,native method runtime when metadata exists
+S2M2-L full,,,491.8660837583817,,,2898.50439453125,native method runtime when metadata exists
+S2M2-XL,,,895.0777844042302,,,5176.24072265625,native method runtime when metadata exists
+MonSter++ MixAll,,,1875.6213780814926,,,4670.8427734375,native method runtime when metadata exists
+RT-MonSter++ zero-shot,,,132.16750623407557,,,2461.42578125,native method runtime when metadata exists
+RAFT-Stereo Middlebury,,,912.1839581702191,,,3419.97900390625,native method runtime when metadata exists
+StereoAnywhere,,,1506.4115330684358,,,8378.87841796875,native method runtime when metadata exists
+SGBM,,,95.74243458202825,,,nan,native method runtime when metadata exists
+EMA alpha=0.7,187.76713038364855,0.0,187.76713038364855,1672.4599609375,0.0,1672.4599609375,CPU post-processing overhead not timed; median5 uses future frames
+median5 non-causal,187.76713038364855,0.0,187.76713038364855,1672.4599609375,0.0,1672.4599609375,CPU post-processing overhead not timed; median5 uses future frames
