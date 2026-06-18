@@ -1,0 +1,11 @@
+sequence_id,num_frames,first_frame,last_frame,duplicates,missing_frames,files_ok,calibration_and_gt_ok,median_adjacent_rgb_absdiff,valid_for_temporal_eval,reason
+test_dataset_9_keyframe_3,103,0,102,0,0,True,True,20.57153606414795,True,ok
+dataset_1_keyframe_1,12,0,11,0,0,True,True,7.919885635375977,True,ok
+dataset_1_keyframe_2,12,0,11,0,0,True,True,13.537827491760254,True,ok
+dataset_1_keyframe_3,12,0,11,0,0,True,True,2.2850496768951416,True,ok
+dataset_5_keyframe_1,12,0,11,0,0,True,True,9.504377365112305,True,ok
+dataset_5_keyframe_2,12,0,11,0,0,True,True,10.68924331665039,True,ok
+dataset_5_keyframe_3,12,0,11,0,0,True,True,13.382970809936523,True,ok
+dataset_8_keyframe_0,12,0,11,0,0,True,True,5.649746417999268,True,ok
+dataset_8_keyframe_1,12,0,11,0,0,True,True,7.470723628997803,True,ok
+dataset_8_keyframe_2,12,0,11,0,0,True,True,7.885108470916748,True,ok

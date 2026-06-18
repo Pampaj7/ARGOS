@@ -1,0 +1,21 @@
+method,raw_temporal_diff,motion_compensated_temporal_mae,temporal_pairs,flow,causal,notes
+StereoAnyVideo@384x640,0.9319879751579434,0.7312633818855473,102,OpenCV Farneback local fallback,no,
+EMA alpha=0.7,0.9231390456358591,0.7427888949419937,102,OpenCV Farneback local fallback,yes,
+Tiny U-Net e100,0.9771443000611137,0.7451948516216933,102,OpenCV Farneback local fallback,no,
+median5 non-causal,0.8805769166963942,0.7464084116851583,102,OpenCV Farneback local fallback,no,uses future frames
+S2M2-XL,0.9859846920943728,0.7466477608563853,102,OpenCV Farneback local fallback,yes,
+MonSter++ MixAll,0.9919965091873618,0.7506684960395682,102,OpenCV Farneback local fallback,yes,
+S2M2-L full,0.9921940664450327,0.75489812081351,102,OpenCV Farneback local fallback,yes,
+ConvGRU V2 e40,1.08507708883753,0.7566976985510658,102,OpenCV Farneback local fallback,yes,
+S2M2-L@736,0.9878140498025745,0.756868244240097,102,OpenCV Farneback local fallback,yes,
+ConvGRU V2 e30,1.092206628883586,0.7616813042584587,102,OpenCV Farneback local fallback,yes,
+ConvGRU V2 e50,1.1396413375349606,0.7652129284014889,102,OpenCV Farneback local fallback,yes,
+ConvGRU V2 latest,1.1629930331426508,0.7654024494044921,102,OpenCV Farneback local fallback,yes,
+S2M2-S@512,0.9944954754090777,0.7726735358729082,102,OpenCV Farneback local fallback,yes,
+DEFOM-Stereo ViT-L ETH3D,1.0027786957867004,0.781167553043833,102,OpenCV Farneback local fallback,yes,
+Fast-FoundationStereo ONNX,1.0092914028494966,0.8034532216249728,102,OpenCV Farneback local fallback,yes,
+StereoAnywhere,1.0125670164239173,0.8070623050717747,102,OpenCV Farneback local fallback,yes,
+RAFT-Stereo Middlebury,1.0340518764421052,0.8189362863115236,102,OpenCV Farneback local fallback,yes,
+CREStereo,1.0370300242713852,0.8262847556787378,102,OpenCV Farneback local fallback,yes,
+RT-MonSter++ zero-shot,1.0554589751888723,0.8357560466609749,102,OpenCV Farneback local fallback,yes,
+SGBM,1.1299084115262126,2.656982876506506,102,OpenCV Farneback local fallback,yes,fragile classical baseline
