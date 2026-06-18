@@ -2,7 +2,7 @@
 set -euo pipefail
 
 INPUT="/dtu/p1/leopam/ARGOS/scripts/download_jobs/d4d_aria2_input.txt"
-DEST_DIR="/dtu/p1/leopam/ARGOS/dataset/D4D/raw/source"
+DEST_DIR="$(dirname "$0")/../../dataset/D4D/raw/source"
 
 echo "Starting D4D aria2 segmented download"
 
