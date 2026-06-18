@@ -121,3 +121,64 @@ class ConvGRURefiner(nn.Module):
         d1 = self.dec1(torch.cat([d1, e1], dim=1))
         delta = self.residual_clamp_px * torch.tanh(self.head(d1))
         return delta, hidden
+
+
+class AdaptiveMotionFusionRefiner(nn.Module):
+    """Causal adaptive temporal fusion model for online disparity filtering.
+
+    The network predicts a per-pixel raw/previous fusion weight, a reset mask,
+    and a bounded residual. The caller provides the previous filtered disparity
+    already aligned to the current frame. When no learned flow is available, the
+    same API can receive an identity-warped previous disparity plus motion proxy
+    channels.
+    """
+
+    def __init__(
+        self,
+        in_channels: int = 8,
+        base_channels: int = 48,
+        hidden_channels: int = 96,
+        residual_clamp_px: float = 1.5,
+    ):
+        super().__init__()
+        self.residual_clamp_px = float(residual_clamp_px)
+        self.enc1 = ConvBlock(in_channels, base_channels)
+        self.enc2 = ConvBlock(base_channels, base_channels * 2)
+        self.enc3 = ConvBlock(base_channels * 2, hidden_channels)
+        self.gru = ConvGRUCell(hidden_channels, hidden_channels)
+        self.dec2 = ConvBlock(hidden_channels + base_channels * 2, base_channels * 2)
+        self.dec1 = ConvBlock(base_channels * 2 + base_channels, base_channels)
+        self.head = nn.Conv2d(base_channels, 3, 3, padding=1)
+        nn.init.zeros_(self.head.weight)
+        nn.init.zeros_(self.head.bias)
+        # Head channels are alpha, reset, residual. Zero logits initialize
+        # alpha/reset at 0.5 and residual at 0, which matches fixed EMA before
+        # learning a spatially adaptive policy.
+        with torch.no_grad():
+            self.head.bias[0].fill_(0.0)
+            self.head.bias[1].fill_(0.0)
+            self.head.bias[2].fill_(0.0)
+
+    def forward(
+        self,
+        x: torch.Tensor,
+        raw_disp: torch.Tensor,
+        warped_prev_disp: torch.Tensor,
+        hidden: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        e1 = self.enc1(x)
+        e2 = self.enc2(F.avg_pool2d(e1, 2))
+        e3 = self.enc3(F.avg_pool2d(e2, 2))
+        hidden = self.gru(e3, hidden)
+        d2 = F.interpolate(hidden, size=e2.shape[-2:], mode="bilinear", align_corners=False)
+        d2 = self.dec2(torch.cat([d2, e2], dim=1))
+        d1 = F.interpolate(d2, size=e1.shape[-2:], mode="bilinear", align_corners=False)
+        d1 = self.dec1(torch.cat([d1, e1], dim=1))
+        head = self.head(d1)
+        alpha = torch.sigmoid(head[:, 0:1])
+        reset = torch.sigmoid(head[:, 1:2])
+        residual = self.residual_clamp_px * torch.tanh(head[:, 2:3])
+        previous_weight = (1.0 - alpha) * (1.0 - reset)
+        fused = alpha * raw_disp + previous_weight * warped_prev_disp + residual
+        fused = torch.clamp(fused, min=0.0)
+        return fused, alpha, reset, residual, hidden
