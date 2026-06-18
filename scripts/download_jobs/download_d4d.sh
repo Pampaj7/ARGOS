@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INPUT="/dtu/p1/leopam/ARGOS/scripts/download_jobs/d4d_aria2_input.txt"
-DEST_DIR="$(dirname "$0")/../../dataset/D4D/raw/source"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+INPUT="$SCRIPT_DIR/d4d_aria2_input.txt"
+DEST_DIR="$ROOT_DIR/dataset/D4D/raw/source"
 
 echo "Starting D4D aria2 segmented download"
 
 # We use the system aria2c if available, else fallback to the conda one
 ARIA2C="aria2c"
 if ! command -v aria2c &> /dev/null; then
-    ARIA2C="/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/aria2c"
+    ARIA2C="$ROOT_DIR/external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/aria2c"
 fi
 
 $ARIA2C \

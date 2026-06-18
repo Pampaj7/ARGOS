@@ -261,26 +261,26 @@ Large V2 long-sequence cache utilities:
 python \
   scripts/temporal_refinement/inventory_scared_sources.py
 
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+PYTHONPATH="$(pwd)" \
+.miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/extract_scared_long_sequences.py --max-per-sequence 130
 
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+PYTHONPATH="$(pwd)" \
+.miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/predict_s2m2_long_sequences.py \
   --sequences-root results/04_dataset_derivatives/SCARED/scared_long_sequences \
   --out-root results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736
 
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+PYTHONPATH="$(pwd)" \
+.miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/predict_stereoanyvideo_long_sequences.py \
   --sequences-root results/04_dataset_derivatives/SCARED/scared_long_sequences \
   --out-root results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640 \
   --chunk-size 64 \
   --overlap 4
 
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+PYTHONPATH="$(pwd)" \
+.miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/build_large_v2_cache.py
 ```
 
@@ -302,8 +302,8 @@ S2M2-S@512 multi-teacher fast cache:
 python \
   scripts/temporal_refinement/build_large_v3_s2m2s512_fast_cache.py
 
-PYTHONPATH=/home/pampaj/Desktop/ARGOS \
-../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python \
+PYTHONPATH="$(pwd)" \
+.miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/train_refiner.py \
   --cache-root results/temporal_refinement_cache/large_v3_s2m2s512_fast \
   --index-file index.csv \

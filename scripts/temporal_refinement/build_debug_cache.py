@@ -4,17 +4,16 @@ import json
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from scripts.argos_paths import DATASET_DIR, RESULTS_DIR, EXTERNAL_DIR, FRAME_STEREO_REPOS_DIR, VIDEO_STEREO_REPOS_DIR
+from scripts.argos_paths import DATASET_DIR, RESULTS_DIR
 
 import cv2
 import numpy as np
 
 
-ARGOS = Path("/dtu/p1/leopam/ARGOS")
-EVAL_ROOT = ARGOS / "results/stereoanyvideo_temporal_eval"
-GT5_SOURCE = ARGOS / "results/video_stereo_repos/test_sequence"
-CONSEC32_SOURCE = ARGOS / "dataset/SCARED/curated/consecutive32"
-OUT = ARGOS / "results/03_temporal_refinement/cache/debug_v1"
+EVAL_ROOT = RESULTS_DIR / "02_video_stereo/stereoanyvideo_temporal_eval"
+GT5_SOURCE = RESULTS_DIR / "02_video_stereo/test_sequence"
+CONSEC32_SOURCE = DATASET_DIR / "SCARED/curated/consecutive32"
+OUT = RESULTS_DIR / "03_temporal_refinement/cache/debug_v1"
 
 S2M2_MODEL = "S2M2-L@736"
 S2M2_DIRNAME = "S2M2-L_736"
