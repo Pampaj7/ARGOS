@@ -306,7 +306,7 @@ def write_report(args, metrics, best_epoch):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cache-root", type=Path, default=Path("results/temporal_refinement_cache/debug_v1"))
+    parser.add_argument("--cache-root", type=Path, default=Path("results/03_temporal_refinement/cache/debug_v1"))
     parser.add_argument("--out-dir", type=Path, default=Path("results/temporal_refinement_debug_unet_v1"))
     parser.add_argument("--epochs", type=int, default=80)
     parser.add_argument("--batch-size", type=int, default=1)

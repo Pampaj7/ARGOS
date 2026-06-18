@@ -165,8 +165,8 @@ def markdown_table(rows: list[dict[str, object]], columns: list[str]) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--metadata-csv", type=Path, default=Path("dataset/SCARED/curated/temporal_gt/test_dataset_9_keyframe_3/metadata.csv"))
-    parser.add_argument("--base-dir", type=Path, default=Path("results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3"))
-    parser.add_argument("--out-dir", type=Path, default=Path("results/temporal evaluation/causal_ema_benchmark"))
+    parser.add_argument("--base-dir", type=Path, default=Path("results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3"))
+    parser.add_argument("--out-dir", type=Path, default=Path("results/03_temporal_refinement/evaluation/causal_ema_benchmark"))
     parser.add_argument("--min-valid-ratio", type=float, default=0.20)
     args = parser.parse_args()
 

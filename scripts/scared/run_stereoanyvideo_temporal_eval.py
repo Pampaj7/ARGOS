@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from PIL import Image
 
 
-ARGOS = Path("/home/pampaj/Desktop/ARGOS")
+ARGOS = Path("/dtu/p1/leopam/ARGOS")
 OUT = ARGOS / "results/stereoanyvideo_temporal_eval"
 GT5 = ARGOS / "results/video_stereo_repos/test_sequence"
 CONSEC32 = ARGOS / "dataset/SCARED/curated/consecutive32"

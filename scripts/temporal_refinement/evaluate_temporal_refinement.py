@@ -376,7 +376,7 @@ def save_qualitative(out_dir: Path, rows: list[dict], rgbs: list[np.ndarray], ra
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--cache-root", type=Path, default=Path("results/temporal_refinement_cache/large_v3_s2m2s512_fast"))
+    p.add_argument("--cache-root", type=Path, default=Path("results/03_temporal_refinement/cache/large_v3_s2m2s512_fast"))
     p.add_argument("--index-file", default="index_s2m2l736.csv")
     p.add_argument("--out-dir", type=Path, default=Path("results/temporal_refinement_evaluation_l736_v1"))
     p.add_argument("--unet-run", type=Path, default=Path("results/temporal_refinement_train_unet_s2m2l736_fastcache_v2_conservative"))

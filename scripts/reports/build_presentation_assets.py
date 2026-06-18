@@ -30,7 +30,7 @@ from scripts.temporal_refinement.train_temporal_refiner_fastcache import split_f
 
 
 OUT = Path("presentation/argos_progress")
-CACHE = Path("results/temporal_refinement_cache/large_v3_s2m2s512_fast")
+CACHE = Path("results/03_temporal_refinement/cache/large_v3_s2m2s512_fast")
 INDEX = "index_s2m2l736.csv"
 UNIFIED = Path("results/temporal_refinement_evaluation_l736_v1")
 
@@ -270,7 +270,7 @@ def build_model_audit():
 
 
 def build_dataset_tables():
-    meta = json.loads(Path("results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json").read_text())
+    meta = json.loads(Path("results/03_temporal_refinement/cache/large_v3_s2m2s512_fast/metadata.json").read_text())
     long_meta = json.loads(Path("results/04_dataset_derivatives/SCARED/scared_long_sequences/metadata.json").read_text())
     rows = [
         {
@@ -285,7 +285,7 @@ def build_dataset_tables():
             "current_project_use": "temporal refinement training/evaluation",
             "limitations": "current unified full-frame validation sequence has has_gt=False",
             "status": "prepared and evaluated",
-            "evidence_source": "results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json",
+            "evidence_source": "results/03_temporal_refinement/cache/large_v3_s2m2s512_fast/metadata.json",
         },
         {
             "dataset": "SCARED dataset_8 keyframes",
@@ -346,7 +346,7 @@ def build_dataset_tables():
     ]
     write_csv(OUT / "tables/datasets_complete.csv", rows, cols)
     write_csv(OUT / "tables/datasets_slide_ready.csv", rows, ["dataset", "domain", "number_of_frames_used", "ground_truth_available", "current_project_use", "limitations"])
-    evidence("tables/datasets_complete.csv", "table", "dataset recap", "results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json")
+    evidence("tables/datasets_complete.csv", "table", "dataset recap", "results/03_temporal_refinement/cache/large_v3_s2m2s512_fast/metadata.json")
 
 
 def table_subsets():
@@ -445,7 +445,7 @@ def build_diagrams():
     simple_box_diagram(d / "scheduled_loss_training", "Scheduled-Loss Training", ["Epochs 1-10\n0.40/0.35/0.20/0.20/0.05", "Epochs 11-30\nlinear transition", "Epochs 31-100\n0.25/0.25/0.40/0.10/0.05"])
     simple_box_diagram(d / "dataset_overview", "ARGOS Dataset / Cache Overview", ["SCARED videos\n8 streams", "1040 stereo frames", "1008 valid\n5-frame windows", "Cached streams\nS2M2-S/L + SAV", "Validation\n126 frames no GT"])
     for name in ["frame_based_stereo_benchmark", "teacher_student_temporal_refinement", "tiny_unet_refinement", "convgru_refinement", "scheduled_loss_training", "dataset_overview"]:
-        evidence(f"diagrams/{name}.png", "diagram", name.replace("_", " "), "results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json")
+        evidence(f"diagrams/{name}.png", "diagram", name.replace("_", " "), "results/03_temporal_refinement/cache/large_v3_s2m2s512_fast/metadata.json")
 
 
 def scatter_plot(rows, x, y, label, out_name, highlight=None):

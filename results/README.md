@@ -2,24 +2,22 @@
 
 This folder stores ARGOS-owned outputs that are small enough to keep organized: reports, scoreboards, plots, JSON/CSV metrics, smoke logs, and presentation images.
 
-## Current Contents
+## Current Structure
 
 | Path | Purpose |
 |---|---|
-| `images/` | Portable montage/scoreboard PNGs. |
-| `video_stereo_repo_scouting/` | Scouting report for temporal/video stereo repositories. |
-| `stereoanyvideo_scared_smoke/` | Queued/automatic Stereo Any Video smoke test on 5 rectified SCARED frames. |
-| `temporal_context_comparison_scared5/` | First sequence comparison: Stereo Any Video vs S2M2-S vs Fast-FoundationStereo on 5 SCARED frames. |
-| `stereoanyvideo_scared_consecutive32/` | Stereo Any Video run on 32 truly consecutive SCARED stereo-video frames. |
-| `fastfoundation_scared_consecutive32/` | Fast-FoundationStereo ONNX run logs for the 32-frame SCARED consecutive clip. |
-| `temporal_context_comparison_scared_consecutive32/` | Corrected temporal comparison on 32 consecutive SCARED frames, with depth montages and temporal error maps: Stereo Any Video vs S2M2-S vs Fast-FoundationStereo. |
+| `01_frame_stereo/` | Baseline tables, metrics, and comparisons for pure frame-by-frame models (e.g. S2M2, Fast-FoundationStereo) on SERV-CT and SCARED. |
+| `02_video_stereo/` | Scouting reports and comparisons involving temporal baselines (e.g. StereoAnyVideo, TC-Stereo). |
+| `03_temporal_refinement/` | Outputs, metrics, and temporal evaluations specific to the ARGOS temporal refinement models (ConvGRU, Tiny U-Net). |
+| `04_dataset_derivatives/` | Extracted sequences, caches, and intermediate predictions used for generating results. |
+| `images/` | Portable montage/scoreboard PNGs for global use. |
 
 ## Convention
 
-New experiment outputs should follow:
+New experiment outputs should follow the numbering scheme and be placed in their corresponding domain:
 
 ```text
-results/<experiment_name>/
+results/<domain>/<experiment_name>/
   report.md
   report.json
   metrics/

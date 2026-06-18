@@ -13,25 +13,25 @@ RUNS = [
     {
         "model": "S2M2-L",
         "setting": "resize1024",
-        "result_dir": "results/scared_s2m2_L_float_eval",
+        "result_dir": "results/01_frame_stereo/SCARED/scared_s2m2_L_float_eval",
         "notes": "S2M2-L, max_width=1024",
     },
     {
         "model": "S2M2-L",
         "setting": "full-res",
-        "result_dir": "results/scared_s2m2_L_full_float_eval",
+        "result_dir": "results/01_frame_stereo/SCARED/scared_s2m2_L_full_float_eval",
         "notes": "S2M2-L, original 1024x1280",
     },
     {
         "model": "S2M2-XL",
         "setting": "resize1024",
-        "result_dir": "results/scared_s2m2_XL_float_eval",
+        "result_dir": "results/01_frame_stereo/SCARED/scared_s2m2_XL_float_eval",
         "notes": "S2M2-XL, max_width=1024",
     },
     {
         "model": "S2M2-XL",
         "setting": "full-res",
-        "result_dir": "results/scared_s2m2_XL_full_float_eval",
+        "result_dir": "results/01_frame_stereo/SCARED/scared_s2m2_XL_full_float_eval",
         "notes": "S2M2-XL, original 1024x1280",
     },
     {

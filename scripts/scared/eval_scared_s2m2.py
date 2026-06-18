@@ -120,7 +120,7 @@ def main():
     parser.add_argument("--datasets", nargs="*", default=None)
     parser.add_argument("--refine_iter", type=int, default=3)
     parser.add_argument("--max_width", type=int, default=1024, help="Resize wide inputs before inference; 0 keeps full resolution")
-    parser.add_argument("--out_dir", default="results/scared_s2m2_L_eval")
+    parser.add_argument("--out_dir", default="results/01_frame_stereo/SCARED/scared_s2m2_L_eval")
     args = parser.parse_args()
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

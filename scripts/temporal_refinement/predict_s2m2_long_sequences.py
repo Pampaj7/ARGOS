@@ -11,7 +11,7 @@ import numpy as np
 import torch
 
 
-ROOT = Path("/home/pampaj/Desktop/ARGOS")
+ROOT = Path("/dtu/p1/leopam/ARGOS")
 S2M2_REPO = Path("../../external/frame_stereo_repos/s2m2")
 sys.path.insert(0, str(S2M2_REPO / "src"))
 

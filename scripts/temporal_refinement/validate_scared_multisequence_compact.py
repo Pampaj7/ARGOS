@@ -117,13 +117,13 @@ def format_rows(rows: list[dict[str, object]]) -> str:
 def load_warped_or_temporal_prediction(method: str, sequence_id: str, frame_id: str) -> np.ndarray:
     if sequence_id == 'test_dataset_9_keyframe_3':
         dirs = {
-            'S2M2-S@512': ROOT / 'results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-S_512',
-            'S2M2-L@736': ROOT / 'results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-L_736',
+            'S2M2-S@512': ROOT / 'results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-S_512',
+            'S2M2-L@736': ROOT / 'results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-L_736',
         }
     else:
         dirs = {
-            'S2M2-S@512': ROOT / 'results/scared evaluation/warped_gt_108/S2M2-S',
-            'S2M2-L@736': ROOT / 'results/scared evaluation/warped_gt_108/S2M2-L',
+            'S2M2-S@512': ROOT / 'results/01_frame_stereo/SCARED/warped_gt_108/S2M2-S',
+            'S2M2-L@736': ROOT / 'results/01_frame_stereo/SCARED/warped_gt_108/S2M2-L',
         }
     return load_existing_prediction(dirs[method], sequence_id, frame_id)
 
@@ -255,8 +255,8 @@ def validate_sav_runtime(out_dir: Path) -> dict[str, object]:
 
 
 def main() -> None:
-    base = ROOT / 'results/temporal evaluation/scared_multisequence_compact'
-    out = ROOT / 'results/temporal evaluation/scared_multisequence_validation'
+    base = ROOT / 'results/03_temporal_refinement/evaluation/scared_multisequence_compact'
+    out = ROOT / 'results/03_temporal_refinement/evaluation/scared_multisequence_validation'
     (out / 'reference_images').mkdir(parents=True, exist_ok=True)
     per_seq = [r for r in read_csv(base / 'per_sequence_metrics.csv') if r['method'] in METHODS]
     frame_weighted = summarize(per_seq, sequence_balanced=False)

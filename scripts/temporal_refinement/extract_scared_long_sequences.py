@@ -10,7 +10,7 @@ from pathlib import Path
 import cv2
 
 
-ROOT = Path("/home/pampaj/Desktop/ARGOS")
+ROOT = Path("/dtu/p1/leopam/ARGOS")
 RAW = ROOT / "dataset/SCARED/raw/source"
 OUT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_sequences"
 SOURCE = OUT / "_source_videos"

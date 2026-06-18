@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path("..")
-PYTHON = ROOT / "Fast-FoundationStereo/.conda/bin/python"
+PYTHON = ROOT / ".miniconda/envs/argos/bin/python"
 
 
 COMMANDS = [

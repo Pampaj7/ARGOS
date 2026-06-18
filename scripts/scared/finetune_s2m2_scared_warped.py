@@ -137,7 +137,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--metadata_csv", default="results/scared_warped_train_subset_metadata.csv")
     parser.add_argument("--weights_dir", default="stereo/s2m2/weights/pretrain_weights")
-    parser.add_argument("--out_dir", default="results/scared_s2m2_xl_warped_finetune_run1")
+    parser.add_argument("--out_dir", default="results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1")
     parser.add_argument("--model_type", default="XL", choices=["S", "M", "L", "XL"])
     parser.add_argument("--steps", type=int, default=2000)
     parser.add_argument("--lr", type=float, default=1e-5)

@@ -257,10 +257,10 @@ def teacher_agreement(samples, zero, device, max_width, out_dir):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--weights_dir", default="stereo/s2m2/weights/pretrain_weights")
-    parser.add_argument("--ft_checkpoint", default="results/scared_s2m2_xl_warped_finetune_run1/checkpoints/step_000500.pth")
+    parser.add_argument("--ft_checkpoint", default="results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1/checkpoints/step_000500.pth")
     parser.add_argument("--clean_root", default="stereo/Fast-FoundationStereo/data/surgical_stereo/scared_keyframes")
     parser.add_argument("--warped_metadata", default="results/scared_warped_train_subset_metadata.csv")
-    parser.add_argument("--out_dir", default="results/scared_s2m2_xl_warped_collapse_diagnosis")
+    parser.add_argument("--out_dir", default="results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_collapse_diagnosis")
     parser.add_argument("--warped_compare_limit", type=int, default=120)
     parser.add_argument("--agreement_limit", type=int, default=300)
     parser.add_argument("--max_width", type=int, default=1024)

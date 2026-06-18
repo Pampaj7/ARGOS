@@ -142,7 +142,7 @@ def split_fast_by_sequence(cache_root: Path, val_sequences: int = 1):
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--cache-root", type=Path, default=Path("results/temporal_refinement_cache/large_v3_s2m2s512_fast"))
+    p.add_argument("--cache-root", type=Path, default=Path("results/03_temporal_refinement/cache/large_v3_s2m2s512_fast"))
     p.add_argument("--out-dir", type=Path, default=Path("results/temporal_refinement_train_unet_s2m2s512_fastcache_benchmark"))
     p.add_argument("--epochs", type=int, default=2)
     p.add_argument("--batch-size", type=int, default=4)
