@@ -242,10 +242,10 @@ def sort_key(row: dict[str, object]) -> tuple[int, float, float]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--metadata-csv", type=Path, default=Path("dataset/SCARED/curated/temporal_gt/test_dataset_9_keyframe_3/metadata.csv"))
-    parser.add_argument("--existing-temporal-csv", type=Path, default=Path("results/temporal evaluation/temporal_evaluation.csv"))
-    parser.add_argument("--frame-methods-dir", type=Path, default=Path("results/temporal evaluation/frame_based_gt/native_frame_methods"))
-    parser.add_argument("--out-csv", type=Path, default=Path("results/temporal evaluation/temporal_evaluation.csv"))
-    parser.add_argument("--out-md", type=Path, default=Path("results/temporal evaluation/temporal_evaluation.md"))
+    parser.add_argument("--existing-temporal-csv", type=Path, default=Path("results/03_temporal_refinement/evaluation/temporal_evaluation.csv"))
+    parser.add_argument("--frame-methods-dir", type=Path, default=Path("results/03_temporal_refinement/evaluation/frame_based_gt/native_frame_methods"))
+    parser.add_argument("--out-csv", type=Path, default=Path("results/03_temporal_refinement/evaluation/temporal_evaluation.csv"))
+    parser.add_argument("--out-md", type=Path, default=Path("results/03_temporal_refinement/evaluation/temporal_evaluation.md"))
     parser.add_argument("--min-valid-ratio", type=float, default=0.20)
     args = parser.parse_args()
 

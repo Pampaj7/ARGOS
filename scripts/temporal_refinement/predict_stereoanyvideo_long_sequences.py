@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 
 
-ROOT = Path("/home/pampaj/Desktop/ARGOS")
+ROOT = Path("/dtu/p1/leopam/ARGOS")
 SAV_SCRIPT = Path("../../external/video_stereo_repos/stereoanyvideo/scripts/run_argos_scared_smoke.py")
 SAV_CKPT = Path("../../external/video_stereo_repos/stereoanyvideo/checkpoints/StereoAnyVideo_MIX.pth")
 
@@ -25,7 +25,7 @@ def run_chunk(seq: Path, frame_ids: list[str], temp: Path, out_chunk: Path):
         shutil.copy2(seq / "left" / f"{fid}.png", temp / "left" / f"{idx:06d}.png")
         shutil.copy2(seq / "right" / f"{fid}.png", temp / "right" / f"{idx:06d}.png")
     cmd = [
-        "../../external/frame_stereo_repos/Fast-FoundationStereo/.conda/bin/python",
+        "../../external/frame_stereo_repos/.miniconda/envs/argos/bin/python",
         str(SAV_SCRIPT),
         "--input",
         str(temp.resolve()),

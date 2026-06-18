@@ -400,7 +400,7 @@ def save_motion_error(sequence_id: str, frames: list[Frame], preds: dict[str, li
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--out-dir', type=Path, default=ROOT / 'results/temporal evaluation/scared_multisequence_compact')
+    parser.add_argument('--out-dir', type=Path, default=ROOT / 'results/03_temporal_refinement/evaluation/scared_multisequence_compact')
     parser.add_argument('--device', default='cuda')
     args = parser.parse_args()
     out = args.out_dir
@@ -429,14 +429,14 @@ def main() -> None:
     }
 
     temporal_dirs = {
-        'S2M2-S@512': ROOT / 'results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-S_512',
-        'S2M2-L@736': ROOT / 'results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-L_736',
-        'Fast-FoundationStereo ONNX': ROOT / 'results/temporal evaluation/frame_based_gt/native_frame_methods/Fast-FoundationStereo_ONNX',
+        'S2M2-S@512': ROOT / 'results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-S_512',
+        'S2M2-L@736': ROOT / 'results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/S2M2-L_736',
+        'Fast-FoundationStereo ONNX': ROOT / 'results/03_temporal_refinement/evaluation/frame_based_gt/native_frame_methods/Fast-FoundationStereo_ONNX',
     }
     warped_dirs = {
-        'S2M2-S@512': ROOT / 'results/scared evaluation/warped_gt_108/S2M2-S',
-        'S2M2-L@736': ROOT / 'results/scared evaluation/warped_gt_108/S2M2-L',
-        'Fast-FoundationStereo ONNX': ROOT / 'results/scared evaluation/warped_gt_108/Fast-FoundationStereo_ONNX',
+        'S2M2-S@512': ROOT / 'results/01_frame_stereo/SCARED/warped_gt_108/S2M2-S',
+        'S2M2-L@736': ROOT / 'results/01_frame_stereo/SCARED/warped_gt_108/S2M2-L',
+        'Fast-FoundationStereo ONNX': ROOT / 'results/01_frame_stereo/SCARED/warped_gt_108/Fast-FoundationStereo_ONNX',
     }
 
     seq_cache: dict[str, dict[str, list[np.ndarray]]] = {}

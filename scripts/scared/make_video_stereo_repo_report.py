@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 
-ARGOS = Path("/home/pampaj/Desktop/ARGOS")
+ARGOS = Path("/dtu/p1/leopam/ARGOS")
 REPOS = ARGOS / "external/video_stereo_repos"
 OUT = ARGOS / "results/video_stereo_repos"
 

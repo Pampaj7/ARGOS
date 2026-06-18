@@ -281,7 +281,7 @@ def write_report(args, metrics):
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--cache-root", type=Path, default=Path("results/temporal_refinement_cache/large_v2_s2m2s512"))
+    p.add_argument("--cache-root", type=Path, default=Path("results/03_temporal_refinement/cache/large_v2_s2m2s512"))
     p.add_argument("--out-dir", type=Path, default=Path("results/temporal_refinement_train_unet_s2m2s512_v1"))
     p.add_argument("--epochs", type=int, default=100)
     p.add_argument("--batch-size", type=int, default=4)

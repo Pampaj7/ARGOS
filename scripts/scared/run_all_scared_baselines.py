@@ -433,7 +433,7 @@ def main() -> None:
     parser.add_argument("--metadata-csv", type=Path, default=None)
     parser.add_argument("--protocol-name", default="native_curated_scared")
     parser.add_argument("--dataset-label", default="dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8")
-    parser.add_argument("--out-dir", type=Path, default=ROOT / "results/scared evaluation")
+    parser.add_argument("--out-dir", type=Path, default=ROOT / "results/01_frame_stereo/SCARED")
     parser.add_argument("--eval-subdir", default="unified_keyframes")
     parser.add_argument("--s2m2-src", type=Path, default=STEREO_ROOT / "s2m2/src")
     parser.add_argument("--s2m2-weights-dir", type=Path, default=STEREO_ROOT / "s2m2/weights/pretrain_weights")

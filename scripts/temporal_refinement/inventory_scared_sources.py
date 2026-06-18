@@ -7,9 +7,9 @@ import zipfile
 from pathlib import Path
 
 
-ROOT = Path("/home/pampaj/Desktop/ARGOS")
+ROOT = Path("/dtu/p1/leopam/ARGOS")
 RAW = ROOT / "dataset/SCARED/raw/source"
-OUT = ROOT / "results/temporal_refinement_cache/large_v2_source_inventory.md"
+OUT = ROOT / "results/03_temporal_refinement/cache/large_v2_source_inventory.md"
 
 
 def ffprobe(path: Path) -> dict:

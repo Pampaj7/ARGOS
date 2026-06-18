@@ -7,11 +7,11 @@ import cv2
 import numpy as np
 
 
-ARGOS = Path("/home/pampaj/Desktop/ARGOS")
+ARGOS = Path("/dtu/p1/leopam/ARGOS")
 EVAL_ROOT = ARGOS / "results/stereoanyvideo_temporal_eval"
 GT5_SOURCE = ARGOS / "results/video_stereo_repos/test_sequence"
 CONSEC32_SOURCE = ARGOS / "dataset/SCARED/curated/consecutive32"
-OUT = ARGOS / "results/temporal_refinement_cache/debug_v1"
+OUT = ARGOS / "results/03_temporal_refinement/cache/debug_v1"
 
 S2M2_MODEL = "S2M2-L@736"
 S2M2_DIRNAME = "S2M2-L_736"

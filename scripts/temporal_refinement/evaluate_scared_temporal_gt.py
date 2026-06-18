@@ -548,7 +548,7 @@ def method_metrics(method: str, preds: list[np.ndarray], frames: list[dict], min
         "VRAM ↓": metadata.get("peak_vram_mb", np.nan),
         "causal": metadata.get("causal", ""),
         "kind": metadata.get("kind", ""),
-        "evidence_source": str((Path("results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3") / "predictions" / safe_name(method) / "metadata.json")),
+        "evidence_source": str((Path("results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3") / "predictions" / safe_name(method) / "metadata.json")),
     }
     return summary, per_frame
 
@@ -636,7 +636,7 @@ def write_report(out_dir: Path, summaries: list[dict], sequence_root: Path, meth
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--sequence-root", type=Path, default=ROOT / "dataset/SCARED/curated/temporal_gt/test_dataset_9_keyframe_3")
-    p.add_argument("--out-dir", type=Path, default=ROOT / "results/temporal evaluation/gt_temporal_test_dataset_9_keyframe_3")
+    p.add_argument("--out-dir", type=Path, default=ROOT / "results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3")
     p.add_argument("--max-frames", type=int, default=130)
     p.add_argument("--min-valid-ratio", type=float, default=0.2)
     p.add_argument("--sav-chunk-size", type=int, default=32)

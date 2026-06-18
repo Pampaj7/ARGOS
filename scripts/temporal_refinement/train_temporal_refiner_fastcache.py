@@ -614,7 +614,7 @@ def save_convgru_qualitative(model, dataset, out_dir: Path, device, max_items=8)
 def parse_args(argv=None):
     p = argparse.ArgumentParser()
 
-    p.add_argument("--cache-root", type=Path, default=Path("results/temporal_refinement_cache/large_v3_s2m2s512_fast"))
+    p.add_argument("--cache-root", type=Path, default=Path("results/03_temporal_refinement/cache/large_v3_s2m2s512_fast"))
     p.add_argument("--index-file", type=str, default="index.csv")
     p.add_argument("--out-dir", type=Path, default=Path("results/temporal_refinement_train_fastcache_generic"))
 

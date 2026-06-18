@@ -7,8 +7,8 @@ import numpy as np
 import tifffile
 
 
-SRC = Path("/home/pampaj/Desktop/ARGOS/dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8")
-OUT = Path("/home/pampaj/Desktop/ARGOS/results/video_stereo_repos/test_sequence")
+SRC = Path("/dtu/p1/leopam/ARGOS/dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8")
+OUT = Path("/dtu/p1/leopam/ARGOS/results/video_stereo_repos/test_sequence")
 
 
 def read_rgb(path: Path) -> np.ndarray:

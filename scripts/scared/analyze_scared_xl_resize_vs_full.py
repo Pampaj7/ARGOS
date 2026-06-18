@@ -35,7 +35,7 @@ def color_error(err, max_err=10.0):
 
 def main():
     root = Path("stereo/Fast-FoundationStereo/data/surgical_stereo/scared_keyframes")
-    out_dir = Path("results/scared_s2m2_XL_resize_vs_full")
+    out_dir = Path("results/01_frame_stereo/SCARED/scared_s2m2_XL_resize_vs_full")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

@@ -123,9 +123,9 @@ All disparity maps are stored in original image coordinates.
 
 
 def main():
-    root = Path("/home/pampaj/Desktop/ARGOS")
-    src = root / "results/temporal_refinement_cache/debug_v1"
-    out = root / "results/temporal_refinement_cache/large_v1"
+    root = Path("/dtu/p1/leopam/ARGOS")
+    src = root / "results/03_temporal_refinement/cache/debug_v1"
+    out = root / "results/03_temporal_refinement/cache/large_v1"
     if out.exists():
         shutil.rmtree(out)
     rows = copy_available_cache(src, out)

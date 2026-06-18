@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 
-OUT_DIR = Path("/home/pampaj/Desktop/ARGOS/results/s2m2_resolution_tradeoff")
+OUT_DIR = Path("/dtu/p1/leopam/ARGOS/results/s2m2_resolution_tradeoff")
 SRC_JSON = OUT_DIR / "s2m2_size_tradeoff.json"
 SRC_CSV = OUT_DIR / "s2m2_size_tradeoff.csv"
 

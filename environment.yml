@@ -1,0 +1,26 @@
+name: argos
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=11.8
+  - aria2
+  - pip
+  - pip:
+    - numpy
+    - pandas
+    - matplotlib
+    - opencv-python
+    - pyyaml
+    - tqdm
+    - scipy
+    - onnxruntime-gpu
+    - einops
+    - timm
+    - tensorboard
