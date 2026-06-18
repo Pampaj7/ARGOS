@@ -6,7 +6,7 @@ import pandas as pd
 
 
 ROOT = Path("../..")
-OUT = ROOT / "argos_baselines"
+OUT = ROOT / "results/servct_baselines"
 
 RUNS = [
     ("SGBM", ROOT / "Fast-FoundationStereo/output_servct_eval_sgbm/summary.json", "tested", "classical OpenCV baseline"),
