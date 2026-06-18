@@ -50,14 +50,9 @@ results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1/
 # Downloaded upstream repositories
 /external/video_stereo_repos/*
 !/external/video_stereo_repos/README.md
+/external/frame_stereo_repos/*
+!/external/frame_stereo_repos/README.md
 /external/d4d/
-/stereo/
-/Fast-FoundationStereo/
-/s2m2/
-/FoundationStereo/
-/stereoanywhere/
-/DEFOM-Stereo/
-/MonSter-plusplus/
 
 # Python/runtime
 __pycache__/

@@ -1,0 +1,12 @@
+{
+  "input_dir": "/home/pampaj/Desktop/stereo/results/video_stereo_repo_scouting/smoke_inputs/scared_rect5",
+  "stereoanyvideo_disp": "/home/pampaj/Desktop/stereo/results/stereoanyvideo_scared_smoke/images/disparity.npy",
+  "fastfoundation_pattern": "/home/pampaj/Desktop/stereo/Fast-FoundationStereo/output_scared_rect_kf{idx}",
+  "s2m2_src": "/home/pampaj/Desktop/stereo/s2m2/src",
+  "s2m2_weights": "/home/pampaj/Desktop/stereo/s2m2/weights/pretrain_weights",
+  "s2m2_model_type": "S",
+  "s2m2_refine_iter": "3",
+  "s2m2_max_width": "640",
+  "target_shape": "384x640",
+  "out_dir": "/home/pampaj/Desktop/stereo/results/temporal_context_comparison_scared5"
+}

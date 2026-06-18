@@ -1,0 +1,133 @@
+{
+  "date": "2026-06-08",
+  "scope": "Repository scouting, dependency assessment, and minimal non-invasive smoke checks only. No training, no global dependency installation, no modification of existing S2M2/Fast-FoundationStereo scripts.",
+  "smoke_input": {
+    "path": "/home/pampaj/Desktop/stereo/results/video_stereo_repo_scouting/smoke_inputs/scared_rect5",
+    "type": "symlinked 5-frame rectified SCARED stereo sequence",
+    "source_pattern": "/home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/scared/test_dataset_8_rectified/keyframe_{0..4}/Left_Image.png and Right_Image.png"
+  },
+  "local_environment": {
+    "python": "python3 available",
+    "torch": "not installed in base environment",
+    "smoke_test_policy": "help/script probes only; no pip or conda installs"
+  },
+  "repositories": [
+    {
+      "model_name": "Stereo Any Video",
+      "repo_url": "https://github.com/TomTomTommi/stereoanyvideo",
+      "commit_hash": "3a8beddc470cfb7bf07dbc2bf4f04fc95d35d84c",
+      "license": "Apache-2.0",
+      "python_version": "3.10 per README",
+      "pytorch_cuda_requirements": "PyTorch 2.1.1, torchvision 0.16.1, torchaudio 2.1.1, pytorch-cuda 12.1; README says installation with CUDA 12.2",
+      "checkpoint_available": true,
+      "checkpoint_notes": "Google Drive checkpoints; demo expects ./checkpoints/StereoAnyVideo_MIX.pth",
+      "demo_runs": false,
+      "demo_run_notes": "demo.py --help failed before argparse because cv2 is missing in base env",
+      "accepts_custom_stereo_sequence": true,
+      "input_format": "Folder with left/*.png|jpg and right/*.png|jpg under --path",
+      "output_format": "disparity.mp4, disparity_norm.mp4, optional disparity_norm_###.png and disparity_ori_###.png",
+      "temporal_window_or_memory": "frame_size default 150, kernel_size default 20; stereo_video tensor over frames",
+      "expected_resolution": "default resize (720,1280)",
+      "requires_camera_pose_or_flow": false,
+      "estimated_integration_difficulty": "medium",
+      "recommended_next_action": "Integrate first in isolated env; download checkpoint; run SCARED 5-frame smoke; add ARGOS adapter for disparity PNG/NPY and temporal metrics",
+      "notes": "Highest-priority and best practical fit for ARGOS. Partial clone due slow GitHub checkout; selected files were materialized and inspected."
+    },
+    {
+      "model_name": "TC-Stereo",
+      "repo_url": "https://github.com/jiaxiZeng/Temporally-Consistent-Stereo-Matching",
+      "commit_hash": "ad714ad676265d9ed15a8fcd77a3cb35e0e3025f",
+      "license": "MIT",
+      "python_version": "3.8 per README",
+      "pytorch_cuda_requirements": "PyTorch 2.0.1, torchvision 0.15.2, cupy_cuda117, CUDA 11.7",
+      "checkpoint_available": true,
+      "checkpoint_notes": "Dropbox checkpoints for TartanAir, SceneFlow, KITTI_raw",
+      "demo_runs": false,
+      "demo_run_notes": "Local tarball materialization failed after slow HTTP/2 stream; no dependency install attempted",
+      "accepts_custom_stereo_sequence": "adapter_required",
+      "input_format": "Dataset loaders for TartanAir/SceneFlow/KITTI-like sequences; temporal mode expects images plus pose/calibration",
+      "output_format": "Disparity PNG and metrics in evaluation/submission scripts",
+      "temporal_window_or_memory": "Carries previous disparity, feature map, network state, previous pose, K and baseline",
+      "expected_resolution": "Pads input to divisibility by 32; examples use KITTI/TartanAir sizes and max disparity validity around 192",
+      "requires_camera_pose_or_flow": true,
+      "estimated_integration_difficulty": "high",
+      "recommended_next_action": "Integrate second if SCARED intrinsics/baseline/pose are available or can be approximated; otherwise defer behind TemporalStereo",
+      "notes": "Strong ECCV 2024 scientific baseline, but geometry inputs make ARGOS integration more involved."
+    },
+    {
+      "model_name": "TemporalStereo",
+      "repo_url": "https://github.com/youmi-zym/TemporalStereo",
+      "commit_hash": "0b5a94eb8fccce068a3cba8473190759cba42dc8",
+      "license": "Apache-2.0",
+      "python_version": "3.8 per README",
+      "pytorch_cuda_requirements": "PyTorch 1.10.1+, CUDA 11.3, Apex, Detectron2, CuPy",
+      "checkpoint_available": true,
+      "checkpoint_notes": "Google Drive checkpoints",
+      "demo_runs": false,
+      "demo_run_notes": "video_inference.py --help failed before argparse because matplotlib is missing in base env",
+      "accepts_custom_stereo_sequence": "adapter_required",
+      "input_format": "data_root/left, data_root/right, pose_left.txt, optional disp_gt",
+      "output_format": "disp_0/*.png, color_disp/*.png, cats/*.png, error.txt",
+      "temporal_window_or_memory": "Previous-frame recurrent state via last_outputs; frame indices configurable",
+      "expected_resolution": "Default resize-to-shape 384 1280",
+      "requires_camera_pose_or_flow": true,
+      "estimated_integration_difficulty": "high",
+      "recommended_next_action": "Keep as fallback second integration if TC-Stereo pose/checkpoint work blocks progress",
+      "notes": "Older but relevant video stereo model; dependencies are heavier than SAV."
+    },
+    {
+      "model_name": "PPMStereo",
+      "repo_url": "https://github.com/cocowy1/PPMStereo",
+      "commit_hash": "d0ccf7705145502c1eea49e7be0ddeafbcfd6a08",
+      "license": "MIT",
+      "python_version": "3.10 in README install, environment.yml uses Python 3.8",
+      "pytorch_cuda_requirements": "README says PyTorch 1.12.1 + CUDA 11.x; environment.yml captured PyTorch 2.3.1 CUDA 12.1",
+      "checkpoint_available": true,
+      "checkpoint_notes": "Google Drive checkpoints for SceneFlow and SceneFlow+Dynamic Replica",
+      "demo_runs": false,
+      "demo_run_notes": "Raw demo inspected; local clone/tarball not completed because GitHub transfer was too slow and scouting had enough metadata",
+      "accepts_custom_stereo_sequence": true,
+      "input_format": "Folder with left/*.png|jpg and right/*.png|jpg under --path",
+      "output_format": "disparity.mp4, disparity_norm.mp4, left_right.mp4, optional disparity PNGs",
+      "temporal_window_or_memory": "Pick-and-Play Memory dynamic buffer; demo exposes frame_size, kernel_size, iters",
+      "expected_resolution": "Demo default resize (720,1280); training examples use 320x512; Dynamic Replica high-res may require large memory",
+      "requires_camera_pose_or_flow": false,
+      "estimated_integration_difficulty": "medium-high",
+      "recommended_next_action": "Explore after SAV and TC/TemporalStereo; only run if checkpoint download and GPU memory are acceptable",
+      "notes": "Very relevant recent baseline, but README recommends >=48GB GPU for Dynamic Replica evaluation."
+    },
+    {
+      "model_name": "TemporallyConsistentDepth",
+      "repo_url": "https://github.com/facebookresearch/TemporallyConsistentDepth",
+      "commit_hash": "be85390cf5db72a996bebba3d9f34439f1576196",
+      "license": "CC-BY-NC-4.0",
+      "python_version": "3.7.11 per environment.yml",
+      "pytorch_cuda_requirements": "PyTorch 1.10.2, CUDA 11.3",
+      "checkpoint_available": true,
+      "checkpoint_notes": "Fusion network weights are listed in repo tree; initialize.sh downloads DPT and RAFT-Stereo backbones",
+      "demo_runs": false,
+      "demo_run_notes": "Optional repo, not cloned locally; inspected raw README/tree/environment/license",
+      "accepts_custom_stereo_sequence": "not_directly",
+      "input_format": "Custom loader must return RGB, scaled depth, camera pose, and intrinsics; stereo disparity must be converted to depth first",
+      "output_format": "Visual comparison output and optional floating-point depth numpy files",
+      "temporal_window_or_memory": "Online point-based fusion over video",
+      "expected_resolution": "No fixed resolution documented in README",
+      "requires_camera_pose_or_flow": true,
+      "estimated_integration_difficulty": "high",
+      "recommended_next_action": "Do not integrate as stereo baseline now; keep as temporal depth fusion/post-processing idea after calibrated SCARED pose/intrinsics are available",
+      "notes": "Not pure stereo matching and non-commercial license; useful conceptually, less suited for first ARGOS baseline."
+    }
+  ],
+  "recommended_first_integrations": [
+    {
+      "rank": 1,
+      "model_name": "Stereo Any Video",
+      "reason": "Directly accepts rectified stereo image folders, public checkpoints, no pose required for disparity inference, video-native temporal consistency."
+    },
+    {
+      "rank": 2,
+      "model_name": "TC-Stereo",
+      "reason": "Strong ECCV 2024 geometry-aware temporal baseline. Use if SCARED intrinsics/baseline/pose can be supplied; otherwise TemporalStereo is the practical fallback."
+    }
+  ]
+}

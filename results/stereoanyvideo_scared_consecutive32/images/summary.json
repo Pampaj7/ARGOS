@@ -1,0 +1,20 @@
+{
+  "input": "/home/pampaj/Desktop/stereo/argos_data/scared_consecutive/test_dataset_9_keyframe_3_32",
+  "checkpoint": "/home/pampaj/Desktop/stereo/stereoanyvideo/checkpoints/StereoAnyVideo_MIX.pth",
+  "resize": [
+    384,
+    640
+  ],
+  "iters": 12,
+  "device": "cuda",
+  "frames": 32,
+  "disparity_shape": [
+    32,
+    1,
+    384,
+    640
+  ],
+  "disparity_min": 0.0001214388757944107,
+  "disparity_max": 64.00354766845703,
+  "disparity_mean": 12.710108757019043
+}
