@@ -7,12 +7,11 @@ import zipfile
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from scripts.argos_paths import DATASET_DIR, RESULTS_DIR, EXTERNAL_DIR, FRAME_STEREO_REPOS_DIR, VIDEO_STEREO_REPOS_DIR
+from scripts.argos_paths import ROOT_DIR, DATASET_DIR, RESULTS_DIR
 
 
-ROOT = Path("/dtu/p1/leopam/ARGOS")
-RAW = ROOT / "dataset/SCARED/raw/source"
-OUT = ROOT / "results/03_temporal_refinement/cache/large_v2_source_inventory.md"
+RAW = DATASET_DIR / "SCARED/raw/source"
+OUT = RESULTS_DIR / "03_temporal_refinement/cache/large_v2_source_inventory.md"
 
 
 def ffprobe(path: Path) -> dict:
@@ -63,7 +62,7 @@ def main():
     lines += ["", "## Extracted Sources", ""]
     lines.append("| Source | Frames | Size | Left/right extracted | Calibration | Notes |")
     lines.append("|---|---:|---|---|---|---|")
-    for mp4 in sorted(ROOT.glob("dataset/**/*.mp4")):
+    for mp4 in sorted(ROOT_DIR.glob("dataset/**/*.mp4")):
         meta = ffprobe(mp4)
         stream = meta.get("streams", [{}])[0] if meta.get("streams") else {}
         frames = stream.get("nb_frames", "?")
@@ -71,7 +70,7 @@ def main():
         seq_root = mp4.parent.parent if mp4.parent.name == "source" else mp4.parent
         left_right = (seq_root / "left").exists() and (seq_root / "right").exists()
         calib = any(mp4.parent.glob("*calib*")) or any(mp4.parent.glob("*calibration*"))
-        lines.append(f"| `{mp4.relative_to(ROOT)}` | {frames} | {wh} | {left_right} | {calib} | stereo video likely vertical stack |")
+        lines.append(f"| `{mp4.relative_to(ROOT_DIR)}` | {frames} | {wh} | {left_right} | {calib} | stereo video likely vertical stack |")
 
     lines += [
         "",

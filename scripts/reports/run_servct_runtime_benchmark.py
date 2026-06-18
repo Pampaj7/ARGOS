@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from scripts.argos_paths import ROOT_DIR, FRAME_STEREO_REPOS_DIR
+from scripts.argos_paths import ROOT_DIR, FRAME_STEREO_REPOS_DIR, RESULTS_DIR, ARGOS_ENV_PYTHON
 from statistics import mean, median, pstdev
 from typing import Any
 
@@ -30,14 +30,19 @@ import numpy as np
 import pandas as pd
 
 
-ROOT = Path.cwd()
-OUT = Path("results/servct_unified_frame_benchmark_v1")
+ROOT = ROOT_DIR
+OUT = RESULTS_DIR / "01_frame_stereo/SERVCT/servct_unified_frame_benchmark_v1"
 RUNTIME_TMP = OUT / "runtime_tmp"
 STEREO = FRAME_STEREO_REPOS_DIR
 SERVCT_ROOT = Path("Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT")
 FF_PY = Path(".miniconda/envs/argos/bin/python")
 AI_PY = "python"
+ARGOS_PY = str(ARGOS_ENV_PYTHON)
 FRAMES = 16
+
+
+def script(relative_path: str) -> str:
+    return str(ROOT / relative_path)
 
 
 @dataclass
@@ -74,7 +79,7 @@ def method_slug(name: str) -> str:
 
 def s2m2_job(method: str, model_type: str, out: str, checkpoint: str | None = None) -> RuntimeJob:
     cmd = [
-        str(Path("../../ARGOS/scripts/s2m2/eval_servct_s2m2.py")),
+        script("scripts/s2m2/eval_servct_s2m2.py"),
         "--servct_root",
         "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT",
         "--weights_dir",
@@ -109,28 +114,28 @@ def jobs() -> list[RuntimeJob]:
         RuntimeJob(
             "SGBM",
             STEREO / "Fast-FoundationStereo",
-            [".conda/bin/python", "../../ARGOS/scripts/fast_foundationstereo/eval_servct_sgbm.py", "--servct_root", "data/surgical_stereo/servct/SERV-CT", "--out_dir", "runtime_sgbm"],
+            [".conda/bin/python", script("scripts/fast_foundationstereo/eval_servct_sgbm.py"), "--servct_root", "data/surgical_stereo/servct/SERV-CT", "--out_dir", "runtime_sgbm"],
             "OpenCV",
             "cpu",
             "int/float32",
             "original",
         ),
-        RuntimeJob("StereoAnywhere ViT-L", STEREO / "stereoanywhere", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/stereoanywhere/eval_servct_stereoanywhere.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--weights", "weights/stereoanywhere_sceneflow.pth", "--loadmonomodel", "weights/depth_anything_v2_vitl.pth", "--vit_encoder", "vitl", "--out_dir", "runtime_stereoanywhere_vitl"], "PyTorch", "cuda", "fp32/adapter_default"),
-        RuntimeJob("StereoAnywhere", STEREO / "stereoanywhere", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/stereoanywhere/eval_servct_stereoanywhere.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--weights", "weights/stereoanywhere_sceneflow.pth", "--loadmonomodel", "weights/depth_anything_v2_vits.pth", "--vit_encoder", "vits", "--out_dir", "runtime_stereoanywhere"], "PyTorch", "cuda", "fp32/adapter_default"),
-        RuntimeJob("RAFT-Stereo RVC", STEREO / "RAFT-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/raft_stereo/eval_servct_raft.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/iraftstereo_rvc.pth", "--out_dir", "runtime_raft_rvc", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("RAFT-Stereo Middlebury", STEREO / "RAFT-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/raft_stereo/eval_servct_raft.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/raftstereo-middlebury.pth", "--out_dir", "runtime_raft_middlebury", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("RAFT-Stereo SceneFlow", STEREO / "RAFT-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/raft_stereo/eval_servct_raft.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/raftstereo-sceneflow.pth", "--out_dir", "runtime_raft_sceneflow", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("RAFT-Stereo ETH3D", STEREO / "RAFT-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/raft_stereo/eval_servct_raft.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/raftstereo-eth3d.pth", "--out_dir", "runtime_raft_eth3d", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("CREStereo", STEREO / "stereo_matching_crestereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/crestereo/eval_servct_crestereo.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--out_dir", "runtime_crestereo"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("DEFOM-Stereo ViT-L Middlebury", STEREO / "DEFOM-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/defom_stereo/eval_servct_defom.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_middlebury.pth", "--out_dir", "runtime_defom_vitl_middlebury", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("DEFOM-Stereo ViT-L ETH3D", STEREO / "DEFOM-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/defom_stereo/eval_servct_defom.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_eth3d.pth", "--out_dir", "runtime_defom_vitl_eth3d", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("DEFOM-Stereo ViT-L KITTI", STEREO / "DEFOM-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/defom_stereo/eval_servct_defom.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_kitti.pth", "--out_dir", "runtime_defom_vitl_kitti", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("DEFOM-Stereo ViT-S RVC", STEREO / "DEFOM-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/defom_stereo/eval_servct_defom.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vits_rvc.pth", "--out_dir", "runtime_defom_vits_rvc", "--dinov2_encoder", "vits", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("DEFOM-Stereo ViT-S SceneFlow", STEREO / "DEFOM-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/defom_stereo/eval_servct_defom.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vits_sceneflow.pth", "--out_dir", "runtime_defom_vits_sceneflow", "--dinov2_encoder", "vits", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("DEFOM-Stereo ViT-L SceneFlow", STEREO / "DEFOM-Stereo", [str(Path("../.miniconda/envs/argos/bin/python")), "../../ARGOS/scripts/defom_stereo/eval_servct_defom.py", "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_sceneflow.pth", "--out_dir", "runtime_defom_vitl_sceneflow", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("MonSter++ MixAll i16", STEREO / "MonSter-plusplus/MonSter++", [str(Path("../../.miniconda/envs/argos/bin/python")), "scripts_eval_servct_monster.py", "--servct_root", "../../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/Mix_all_large.pth", "--out_dir", "runtime_monsterpp_mixall_i16", "--valid_iters", "16", "--encoder", "vitl", "--hidden_dims", "128", "128", "128"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("MonSter++ MixAll", STEREO / "MonSter-plusplus/MonSter++", [str(Path("../../.miniconda/envs/argos/bin/python")), "scripts_eval_servct_monster.py", "--servct_root", "../../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/Mix_all_large.pth", "--out_dir", "runtime_monsterpp_mixall", "--valid_iters", "4", "--encoder", "vitl", "--hidden_dims", "128", "128", "128"], "PyTorch", "cuda", "fp32"),
-        RuntimeJob("RT-MonSter++ zero-shot", STEREO / "MonSter-plusplus/RT-MonSter++", [str(Path("../../.miniconda/envs/argos/bin/python")), "../../../ARGOS/scripts/monsterplusplus/eval_servct_rtmonsterplusplus.py", "--servct_root", "../../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/Zero_shot.pth", "--out_dir", "runtime_rtmonsterpp", "--valid_iters", "4"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("StereoAnywhere ViT-L", STEREO / "stereoanywhere", [ARGOS_PY, script("scripts/stereoanywhere/eval_servct_stereoanywhere.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--weights", "weights/stereoanywhere_sceneflow.pth", "--loadmonomodel", "weights/depth_anything_v2_vitl.pth", "--vit_encoder", "vitl", "--out_dir", "runtime_stereoanywhere_vitl"], "PyTorch", "cuda", "fp32/adapter_default"),
+        RuntimeJob("StereoAnywhere", STEREO / "stereoanywhere", [ARGOS_PY, script("scripts/stereoanywhere/eval_servct_stereoanywhere.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--weights", "weights/stereoanywhere_sceneflow.pth", "--loadmonomodel", "weights/depth_anything_v2_vits.pth", "--vit_encoder", "vits", "--out_dir", "runtime_stereoanywhere"], "PyTorch", "cuda", "fp32/adapter_default"),
+        RuntimeJob("RAFT-Stereo RVC", STEREO / "RAFT-Stereo", [ARGOS_PY, script("scripts/raft_stereo/eval_servct_raft.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/iraftstereo_rvc.pth", "--out_dir", "runtime_raft_rvc", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("RAFT-Stereo Middlebury", STEREO / "RAFT-Stereo", [ARGOS_PY, script("scripts/raft_stereo/eval_servct_raft.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/raftstereo-middlebury.pth", "--out_dir", "runtime_raft_middlebury", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("RAFT-Stereo SceneFlow", STEREO / "RAFT-Stereo", [ARGOS_PY, script("scripts/raft_stereo/eval_servct_raft.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/raftstereo-sceneflow.pth", "--out_dir", "runtime_raft_sceneflow", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("RAFT-Stereo ETH3D", STEREO / "RAFT-Stereo", [ARGOS_PY, script("scripts/raft_stereo/eval_servct_raft.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "models/raftstereo-eth3d.pth", "--out_dir", "runtime_raft_eth3d", "--valid_iters", "32", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("CREStereo", STEREO / "stereo_matching_crestereo", [ARGOS_PY, script("scripts/crestereo/eval_servct_crestereo.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--out_dir", "runtime_crestereo"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("DEFOM-Stereo ViT-L Middlebury", STEREO / "DEFOM-Stereo", [ARGOS_PY, script("scripts/defom_stereo/eval_servct_defom.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_middlebury.pth", "--out_dir", "runtime_defom_vitl_middlebury", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("DEFOM-Stereo ViT-L ETH3D", STEREO / "DEFOM-Stereo", [ARGOS_PY, script("scripts/defom_stereo/eval_servct_defom.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_eth3d.pth", "--out_dir", "runtime_defom_vitl_eth3d", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("DEFOM-Stereo ViT-L KITTI", STEREO / "DEFOM-Stereo", [ARGOS_PY, script("scripts/defom_stereo/eval_servct_defom.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_kitti.pth", "--out_dir", "runtime_defom_vitl_kitti", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("DEFOM-Stereo ViT-S RVC", STEREO / "DEFOM-Stereo", [ARGOS_PY, script("scripts/defom_stereo/eval_servct_defom.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vits_rvc.pth", "--out_dir", "runtime_defom_vits_rvc", "--dinov2_encoder", "vits", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("DEFOM-Stereo ViT-S SceneFlow", STEREO / "DEFOM-Stereo", [ARGOS_PY, script("scripts/defom_stereo/eval_servct_defom.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vits_sceneflow.pth", "--out_dir", "runtime_defom_vits_sceneflow", "--dinov2_encoder", "vits", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("DEFOM-Stereo ViT-L SceneFlow", STEREO / "DEFOM-Stereo", [ARGOS_PY, script("scripts/defom_stereo/eval_servct_defom.py"), "--servct_root", "../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/defomstereo_vitl_sceneflow.pth", "--out_dir", "runtime_defom_vitl_sceneflow", "--dinov2_encoder", "vitl", "--valid_iters", "16", "--corr_implementation", "reg"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("MonSter++ MixAll i16", STEREO / "MonSter-plusplus/MonSter++", [ARGOS_PY, "scripts_eval_servct_monster.py", "--servct_root", "../../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/Mix_all_large.pth", "--out_dir", "runtime_monsterpp_mixall_i16", "--valid_iters", "16", "--encoder", "vitl", "--hidden_dims", "128", "128", "128"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("MonSter++ MixAll", STEREO / "MonSter-plusplus/MonSter++", [ARGOS_PY, "scripts_eval_servct_monster.py", "--servct_root", "../../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/Mix_all_large.pth", "--out_dir", "runtime_monsterpp_mixall", "--valid_iters", "4", "--encoder", "vitl", "--hidden_dims", "128", "128", "128"], "PyTorch", "cuda", "fp32"),
+        RuntimeJob("RT-MonSter++ zero-shot", STEREO / "MonSter-plusplus/RT-MonSter++", [ARGOS_PY, script("scripts/monsterplusplus/eval_servct_rtmonsterplusplus.py"), "--servct_root", "../../Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT", "--restore_ckpt", "checkpoints/Zero_shot.pth", "--out_dir", "runtime_rtmonsterpp", "--valid_iters", "4"], "PyTorch", "cuda", "fp32"),
     ]
 
 

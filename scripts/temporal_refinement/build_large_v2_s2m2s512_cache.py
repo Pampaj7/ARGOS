@@ -7,7 +7,7 @@ import random
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from scripts.argos_paths import DATASET_DIR, RESULTS_DIR, EXTERNAL_DIR, FRAME_STEREO_REPOS_DIR, VIDEO_STEREO_REPOS_DIR
+from scripts.argos_paths import RESULTS_DIR
 
 import cv2
 import numpy as np
@@ -15,12 +15,11 @@ import numpy as np
 from scripts.temporal_refinement.build_debug_cache import colorize
 
 
-ROOT = Path("/dtu/p1/leopam/ARGOS")
-SEQ_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_sequences"
-S_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_s512"
-L_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736"
-SAV_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640"
-OUT = ROOT / "results/03_temporal_refinement/cache/large_v2_s2m2s512"
+SEQ_ROOT = RESULTS_DIR / "04_dataset_derivatives/SCARED/scared_long_sequences"
+S_ROOT = RESULTS_DIR / "04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_s512"
+L_ROOT = RESULTS_DIR / "04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736"
+SAV_ROOT = RESULTS_DIR / "04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640"
+OUT = RESULTS_DIR / "03_temporal_refinement/cache/large_v2_s2m2s512"
 
 
 def read_rgb(path: Path) -> np.ndarray:
