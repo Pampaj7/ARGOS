@@ -33,7 +33,7 @@ import pandas as pd
 ROOT = Path.cwd()
 OUT = Path("results/servct_unified_frame_benchmark_v1")
 RUNTIME_TMP = OUT / "runtime_tmp"
-STEREO = EXTERNAL_DIR
+STEREO = FRAME_STEREO_REPOS_DIR
 SERVCT_ROOT = Path("Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT")
 FF_PY = Path(".miniconda/envs/argos/bin/python")
 AI_PY = "python"

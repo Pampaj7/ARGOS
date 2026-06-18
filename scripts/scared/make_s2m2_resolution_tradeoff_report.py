@@ -2,9 +2,12 @@
 import csv
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import DATASET_DIR, RESULTS_DIR, EXTERNAL_DIR, FRAME_STEREO_REPOS_DIR, VIDEO_STEREO_REPOS_DIR
 
 
-OUT_DIR = Path("/dtu/p1/leopam/ARGOS/results/s2m2_resolution_tradeoff")
+OUT_DIR = Path(str(RESULTS_DIR / "01_frame_stereo/SCARED/s2m2_resolution_tradeoff"))
 SRC_JSON = OUT_DIR / "s2m2_size_tradeoff.json"
 SRC_CSV = OUT_DIR / "s2m2_size_tradeoff.csv"
 

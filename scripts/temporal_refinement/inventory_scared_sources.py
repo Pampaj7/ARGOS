@@ -5,6 +5,9 @@ import json
 import subprocess
 import zipfile
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from scripts.argos_paths import DATASET_DIR, RESULTS_DIR, EXTERNAL_DIR, FRAME_STEREO_REPOS_DIR, VIDEO_STEREO_REPOS_DIR
 
 
 ROOT = Path("/dtu/p1/leopam/ARGOS")
