@@ -6,25 +6,26 @@ This document tracks the model baselines relevant for ARGOS.
 
 | Model | Local Path | Checkpoint | Status |
 |---|---|---|---|
-| S2M2-S/M | `/home/pampaj/Desktop/stereo/s2m2` | HF pretrained S/M | tested on SERV-CT |
-| S2M2-S fine-tuned | `/home/pampaj/Desktop/stereo/s2m2` | SERV-CT adapted | tested on SERV-CT |
-| Fast-FoundationStereo ONNX | `/home/pampaj/Desktop/stereo/Fast-FoundationStereo` | ONNX demo weights | tested on SERV-CT |
-| Stereo Anywhere | `/home/pampaj/Desktop/stereo/stereoanywhere` | SceneFlow + DepthAnything V2 | tested on SERV-CT |
-| MonSter++ large | `/home/pampaj/Desktop/stereo/MonSter-plusplus` | `Mix_all_large.pth` | tested on SERV-CT |
-| RT-MonSter++ | `/home/pampaj/Desktop/stereo/MonSter-plusplus` | `Zero_shot.pth` | tested on SERV-CT |
-| RAFT-Stereo | `/home/pampaj/Desktop/stereo/RAFT-Stereo` | RVC/Middlebury | tested on SERV-CT |
-| CREStereo | `/home/pampaj/Desktop/stereo/stereo_matching_crestereo` | bundled `epoch-570.pth` | tested on SERV-CT |
+| S2M2-S/M | `../external/frame_stereo_repos/s2m2` | HF pretrained S/M | tested on SERV-CT |
+| S2M2-S fine-tuned | `../external/frame_stereo_repos/s2m2` | SERV-CT adapted | tested on SERV-CT |
+| Fast-FoundationStereo ONNX | `../external/frame_stereo_repos/Fast-FoundationStereo` | ONNX demo weights | tested on SERV-CT |
+| Stereo Anywhere | `../external/frame_stereo_repos/stereoanywhere` | SceneFlow + DepthAnything V2 | tested on SERV-CT |
+| MonSter++ large | `../external/frame_stereo_repos/MonSter-plusplus` | `Mix_all_large.pth` | tested on SERV-CT |
+| RT-MonSter++ | `../external/frame_stereo_repos/MonSter-plusplus` | `Zero_shot.pth` | tested on SERV-CT |
+| RAFT-Stereo | `../external/frame_stereo_repos/RAFT-Stereo` | RVC/Middlebury | tested on SERV-CT |
+| CREStereo | `../external/frame_stereo_repos/stereo_matching_crestereo` | bundled `epoch-570.pth` | tested on SERV-CT |
+| StereoAnyVideo | `../external/video_stereo_repos/stereoanyvideo` | Temporal stereo | Video baseline |SERV-CT |
 | OpenCV SGBM | local script | none | tested on SERV-CT |
 
 ## Prepared Or Pending
 
 | Model | Local Path | Blocker | Why It Matters |
 |---|---|---|---|
-| S2M2-L/XL | `/home/pampaj/Desktop/stereo/s2m2` | queued weights | scaling test for best current family |
-| DEFOM-Stereo | `/home/pampaj/Desktop/stereo/DEFOM-Stereo` | VIT-L Middlebury best so far; VIT-L SceneFlow unstable | depth-foundation stereo baseline |
-| IGEV++ | `/home/pampaj/Desktop/stereo/IGEV-plusplus` | Google Drive/manual weights | strong pure stereo baseline |
-| Selective-Stereo | `/home/pampaj/Desktop/stereo/Selective-Stereo` | Google Drive/manual weights | detail/frequency baseline |
-| FoundationStereo full | `/home/pampaj/Desktop/stereo/FoundationStereo` | Google Drive quota | full NVLabs foundation baseline |
+| S2M2-L/XL | `../external/frame_stereo_repos/s2m2` | queued weights | scaling test for best current family |
+| DEFOM-Stereo | `../external/frame_stereo_repos/DEFOM-Stereo` | VIT-L Middlebury best so far; VIT-L SceneFlow unstable | depth-foundation stereo baseline |
+| IGEV++ | `../external/frame_stereo_repos/IGEV-plusplus` | Google Drive/manual weights | strong pure stereo baseline |
+| Selective-Stereo | `../external/frame_stereo_repos/Selective-Stereo` | Google Drive/manual weights | detail/frequency baseline |
+| FoundationStereo full | `../external/frame_stereo_repos/FoundationStereo` | Google Drive quota | full NVLabs foundation baseline |
 
 ## Current Interpretation
 

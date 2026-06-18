@@ -1,6 +1,6 @@
 # ARGOS Scripts
 
-This folder tracks ARGOS-specific scripts and adapters. Upstream model repositories are not vendored here; they live locally under `/home/pampaj/Desktop/stereo/` and are ignored by the ARGOS git repo.
+This folder tracks ARGOS-specific scripts and adapters. Upstream model repositories are not vendored here; they live locally under `../external/` and are ignored by the ARGOS git repo.
 
 The script layer is meant to make the project paper-reproducible while keeping the repository lightweight:
 
@@ -9,7 +9,7 @@ The script layer is meant to make the project paper-reproducible while keeping t
 - report scripts regenerate scoreboards and paper figures;
 - download scripts document background dataset/model queues.
 
-External upstream repos live under `/home/pampaj/Desktop/stereo/`; ARGOS keeps
+External upstream repos live under `../external/`; ARGOS keeps
 the adapters and report builders here so the paper-facing workflow is easier to
 reproduce.
 

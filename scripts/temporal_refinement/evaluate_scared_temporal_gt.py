@@ -21,10 +21,10 @@ from scripts.temporal_refinement.lib.models import ConvGRURefiner, TinyUNetRefin
 from scripts.temporal_refinement.lib.training import colorize
 
 
-S2M2_REPO = Path("/home/pampaj/Desktop/stereo/s2m2")
+S2M2_REPO = Path("../../external/frame_stereo_repos/s2m2")
 S2M2_SRC = S2M2_REPO / "src"
 S2M2_WEIGHTS = S2M2_REPO / "weights/pretrain_weights"
-SAV_REPO = Path("/home/pampaj/Desktop/stereo/stereoanyvideo")
+SAV_REPO = Path("../../external/video_stereo_repos/stereoanyvideo")
 SAV_CKPT = SAV_REPO / "checkpoints/StereoAnyVideo_MIX.pth"
 
 

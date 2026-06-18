@@ -81,8 +81,8 @@ def convert(root, out_root, reference):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--servct_root", default="/home/pampaj/Desktop/stereo/Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT")
-    parser.add_argument("--out_root", default="/home/pampaj/Desktop/stereo/argos_data")
+    parser.add_argument("--servct_root", default="../../external/frame_stereo_repos/Fast-FoundationStereo/data/surgical_stereo/servct/SERV-CT")
+    parser.add_argument("--out_root", default="../../dataset")
     parser.add_argument("--reference", choices=["Reference_CT", "Reference_RGB"], default="Reference_CT")
     args = parser.parse_args()
     count = convert(args.servct_root, args.out_root, args.reference)

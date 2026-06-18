@@ -63,7 +63,7 @@ This file is the quick orientation map for the local ARGOS workspace.
 
 Downloaded upstream stereo repos live outside this ARGOS repo under:
 
-`/home/pampaj/Desktop/stereo/`
+`../external/frame_stereo_repos/` and `../external/video_stereo_repos/`
 
 ARGOS tracks adapters, reports, configs, and compact evidence. It does not
 vendored upstream repos or model weights.

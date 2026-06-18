@@ -66,7 +66,7 @@
   - `docs/ROADMAP.md`;
   - `configs/servct_baselines.yaml`;
   - `configs/surgical_splits.yaml`.
-- Added SERV-CT converter and verified it creates 16 unified ARGOS samples under `/home/pampaj/Desktop/stereo/argos_data/servct/`.
+- Added SERV-CT converter and verified it creates 16 unified ARGOS samples under `../dataset/servct/`.
 - Added SCARED converter placeholder that reports available archives until the full dataset layout is available.
 - Added `scripts/run_all_servct_baselines.py` for lightweight regeneration of current scoreboard outputs.
 - Integrated the ARGOS-Wound internal proposal direction into the main README:
