@@ -26,9 +26,9 @@
 **Bullets:**
 - 8 SCARED long streams, 1040 stereo frames, 1008 valid 5-frame windows.
 - Cached streams: S2M2-S@512, S2M2-L@736, StereoAnyVideo@384x640.
-- Unified validation uses 126 full-frame rows from `test_dataset_9_keyframe_3`.
+- Unified validation uses 126 full-frame rows from `test_dataset_9_keyframe_3` (now with GT attached!).
 **Speaker notes:** Explain why caching predictions lets us iterate on refiners quickly.
-**Important caveat:** Current unified validation rows have `has_gt=False`.
+**Important caveat:** GT metrics exclude invalid pixels based on the confidence threshold.
 
 ## Slide 4: SOTA Exploration Audit
 **Core message:** We explored both frame-stereo and video-stereo repos before selecting the current pipeline.
@@ -54,11 +54,11 @@
 **Core message:** Strong frame models still flicker when run independently over video.
 **Recommended asset:** `videos/01_rgb_raw_s2m2.mp4`, `plots/temporal_vs_backbone.png`
 **Bullets:**
-- Raw S2M2-L full-frame temporal diff: 1.2553 on the unified validation sequence.
-- SAV teacher temporal diff: 0.9672.
+- Raw S2M2-L full-frame temporal diff: 0.984 on the unified validation sequence.
+- SAV teacher temporal diff: 0.925.
 - This gap motivates temporal refinement.
 **Speaker notes:** Play video and ask audience to watch the disparity surface rather than RGB motion.
-**Important caveat:** Temporal diff is not a substitute for geometric GT accuracy.
+**Important caveat:** Geometric GT evaluation uses rectified data subsets where valid depth is present.
 
 ## Slide 7: StereoAnyVideo As Teacher
 **Core message:** StereoAnyVideo is a strong temporal reference but not the deployment target.
@@ -114,11 +114,11 @@
 **Core message:** ConvGRU V2 epoch 30 improves temporal stability with moderate backbone deviation.
 **Recommended asset:** `tables/unified_fullframe_evaluation_slide_ready.csv`, `plots/checkpoint_evolution_convgru_v2.png`
 **Bullets:**
-- Raw S2M2-L temporal diff: 1.2553.
+- Raw S2M2-L temporal diff: 0.984.
 - ConvGRU V2 epoch 30 temporal diff: 1.1545.
 - ConvGRU V2 epoch 30 teacher-delta: 0.6290.
 **Speaker notes:** Use epoch 30–50 as Pareto candidates, not final epoch alone.
-**Important caveat:** Depth/disp GT metrics are unavailable for this full-frame sequence.
+**Important caveat:** The refined methods now also undergo GT evaluation.
 
 ## Slide 13: Learned Causal Model Vs Classical Smoothing
 **Core message:** Classical smoothing can win temporal metrics, but causality and geometry matter.
@@ -131,14 +131,14 @@
 **Important caveat:** Median5 non-causal should not be presented as a deployable causal baseline.
 
 ## Slide 14: Limitations
-**Core message:** The current strongest temporal result still lacks GT-backed geometry on the evaluated sequence.
+**Core message:** The current strongest temporal result relies on GT masks which discard many pixels.
 **Recommended asset:** `presentation_summary.md`
 **Bullets:**
-- Unified full-frame validation has no GT/calibration.
-- Temporal smoothness does not prove depth correctness.
+- Unified full-frame validation is limited by sparse GT depth.
+- Temporal smoothness on unmasked regions does not prove overall depth correctness.
 - Some long SCARED streams show teacher/backbone scale disagreement.
 **Speaker notes:** State limitations plainly before next steps.
-**Important caveat:** Avoid any claim of surgical depth accuracy improvement from the no-GT sequence.
+**Important caveat:** Avoid overclaiming accuracy on regions without GT data.
 
 ## Slide 15: Next Steps
 **Core message:** Move from temporal behavior to geometry-validated surgical depth.

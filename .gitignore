@@ -45,6 +45,7 @@ results/03_temporal_refinement/debug/temporal_refinement_debug_unet_*/
 results/03_temporal_refinement/training/unet/temporal_refinement_train_unet_*/
 results/03_temporal_refinement/training/convgru/temporal_refinement_train_convgru_*/
 results/03_temporal_refinement/evaluation/temporal_refinement_evaluation_l736_smoke/
+results/03_temporal_refinement/playground/
 results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1/
 
 # Downloaded upstream repositories
