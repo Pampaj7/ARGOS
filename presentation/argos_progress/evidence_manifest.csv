@@ -3,6 +3,7 @@ tables/model_audit_complete.csv,table,repository-wide model status audit,results
 tables/datasets_complete.csv,table,dataset recap,results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json,,,
 tables/frame_stereo_benchmark.csv,table,S2M2 frame benchmark,results/s2m2_resolution_tradeoff/s2m2_resolution_tradeoff.csv,,,
 tables/unified_fullframe_evaluation.csv,table,unified full-frame temporal evaluation,results/temporal_refinement_evaluation_l736_v1/summary.csv,,,
+tables/temporal_evaluation_gt.md,table,temporal evaluation with SCARED GT,results/02_video_stereo/all_methods_fair_eval/temporal_evaluation_gt.md,,,
 diagrams/frame_based_stereo_benchmark.png,diagram,frame based stereo benchmark,results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json,,,
 diagrams/teacher_student_temporal_refinement.png,diagram,teacher student temporal refinement,results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json,,,
 diagrams/tiny_unet_refinement.png,diagram,tiny unet refinement,results/temporal_refinement_cache/large_v3_s2m2s512_fast/metadata.json,,,

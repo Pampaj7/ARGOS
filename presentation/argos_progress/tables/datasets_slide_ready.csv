@@ -1,5 +1,0 @@
-dataset,domain,number_of_frames_used,ground_truth_available,current_project_use,limitations
-SCARED long temporal cache,robotic/surgical stereo,1040,no for current long validation rows,temporal refinement training/evaluation,current unified full-frame validation sequence has has_gt=False
-SCARED dataset_8 keyframes,surgical stereo,5,yes,frame benchmark and transfer checks,small GT subset
-SERV-CT ARGOS,surgical/lab stereo,,yes,baseline scoring and fine-tuning evidence,domain differs from SCARED temporal videos
-Future RGB-D / 3D-printed phantom plans,open surgery-like acquisition,0,planned,future ARGOS validation,not yet measured in repo
