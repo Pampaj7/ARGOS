@@ -34,6 +34,11 @@ from scripts.temporal_refinement.lib.training import colorize
 from scripts.temporal_refinement.lib.warp_fusion_losses import warp_fusion_loss
 from scripts.temporal_refinement.lib.warp_fusion_model import CausalWarpedFusionRefiner
 
+PSEUDO_TARGET_WARNING = (
+    "WARNING: fused_to_sav_mae is teacher proximity, not ground-truth geometry; "
+    "fused_to_spatial_mae uses S2M2-L as an auxiliary teacher, not GT."
+)
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Datasets
@@ -373,7 +378,7 @@ def save_reference_images(refiner, flow_model, dataset, out_dir, device, args, e
             colorize(geo_err, 8.0, cv2.COLORMAP_TURBO),
             colorize(td, 8.0, cv2.COLORMAP_MAGMA),
         ]
-        labels = ["RGB", "raw S2M2-S", "EMA0.50", "warped prev", "adaptive", "SAV GT", "alpha", "reset/occ", "geom error", "temp err"]
+        labels = ["RGB", "raw S2M2-S", "EMA0.50", "warped prev", "adaptive", "SAV teacher", "alpha", "reset/occ", "geom error", "temp err"]
         
         small = []
         for tile, label in zip(tiles, labels):
@@ -411,7 +416,14 @@ def main():
     p.add_argument("--residual-l1-weight", type=float, default=0.08)
     p.add_argument("--edge-weight", type=float, default=0.04)
     p.add_argument("--alpha-prior-weight", type=float, default=0.02)
+    p.add_argument("--alpha-prior", type=float, default=0.5)
     p.add_argument("--alpha-prior-decay-epochs", type=int, default=20)
+    p.add_argument("--alpha-collapse-std-min", type=float, default=0.02)
+    p.add_argument("--reset-weight", type=float, default=0.04)
+    p.add_argument("--anti-collapse-weight", type=float, default=0.05)
+    p.add_argument("--score-temporal-weight", type=float, default=1.0)
+    p.add_argument("--score-sav-weight", type=float, default=0.10)
+    p.add_argument("--score-spatial-weight", type=float, default=0.05)
     args = p.parse_args()
 
     world = int(os.environ.get("WORLD_SIZE", "1"))
@@ -428,6 +440,11 @@ def main():
     torch.backends.cudnn.allow_tf32 = True
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    if rank == 0:
+        config = vars(args).copy()
+        config["ddp_world_size"] = world
+        config["effective_batch_size"] = args.batch_size * world
+        (args.out_dir / "config.json").write_text(json.dumps(config, indent=2, default=str) + "\n")
 
     # Models
     raft_path = Path(args.raft_checkpoint)
@@ -507,7 +524,11 @@ def main():
                 residual_l1_weight=args.residual_l1_weight,
                 edge_weight=args.edge_weight,
                 alpha_prior_weight=args.alpha_prior_weight,
-                alpha_prior_decay_epochs=args.alpha_prior_decay_epochs
+                alpha_prior=args.alpha_prior,
+                alpha_prior_decay_epochs=args.alpha_prior_decay_epochs,
+                alpha_collapse_std_min=args.alpha_collapse_std_min,
+                reset_weight=args.reset_weight,
+                anti_collapse_weight=args.anti_collapse_weight
             )
             
             loss.backward()
@@ -519,7 +540,8 @@ def main():
         train_metrics = mean_rows(epoch_rows)
         peak = float(torch.cuda.max_memory_allocated() / 1024**2)
         
-        abort = False
+        if ddp:
+            dist.barrier()
         # Validation
         if rank == 0:
             val_metrics = evaluate_sequences(refiner.module if ddp else refiner, flow_model, val_loader, device, args)
@@ -538,9 +560,11 @@ def main():
             with (args.out_dir / "debug_validation.csv").open("a") as f:
                 csv.DictWriter(f, fieldnames=["epoch"] + val_keys, extrasaction="ignore").writerow({"epoch": epoch, **val_metrics})
 
+            if epoch == 1:
+                print(PSEUDO_TARGET_WARNING, flush=True)
             print(f"epoch={epoch:02d} sec={seconds:.1f} loss={train_metrics['loss']:.4f} "
                   f"alpha={val_metrics['alpha_mean']:.3f} "
-                  f"val_geo={val_metrics['fused_to_sav_mae']:.4f} "
+                  f"teacher_mae={val_metrics['fused_to_sav_mae']:.4f} "
                   f"val_temp={val_metrics.get('fused_temporal_mae', 0.0):.4f} "
                   f"peak_vram={peak:.0f}MB", flush=True)
 
@@ -555,12 +579,38 @@ def main():
                     
             if epoch > 1 and m.get("fused_temporal_mae", 0) >= m.get("ema_temporal_mae", 100):
                 print("WARNING: motion-compensated temporal error worse than EMA.")
-                
+
+            score = (
+                args.score_temporal_weight * m.get("fused_temporal_mae", 0.0)
+                + args.score_sav_weight * m.get("fused_to_sav_mae", 0.0)
+                + args.score_spatial_weight * m.get("fused_to_spatial_mae", 0.0)
+            )
+            best_path = args.out_dir / "checkpoint_best.pth"
+            best_score_path = args.out_dir / "best_score.json"
+            previous_best = float("inf")
+            if best_score_path.exists():
+                previous_best = float(json.loads(best_score_path.read_text())["score"])
+            if score < previous_best:
+                torch.save({
+                    "model": (refiner.module if ddp else refiner).state_dict(),
+                    "optimizer": opt.state_dict(),
+                    "epoch": epoch,
+                    "score": score,
+                    "val_metrics": m,
+                    "metric_warning": PSEUDO_TARGET_WARNING,
+                    "args": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
+                }, best_path)
+                best_score_path.write_text(json.dumps({"epoch": epoch, "score": score}, indent=2) + "\n")
+
             torch.save({
                 "model": (refiner.module if ddp else refiner).state_dict(),
                 "optimizer": opt.state_dict(),
-                "epoch": epoch
+                "epoch": epoch,
+                "metric_warning": PSEUDO_TARGET_WARNING,
+                "args": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
             }, checkpoint_path)
+        if ddp:
+            dist.barrier()
 
     if ddp:
         torch.distributed.destroy_process_group()
