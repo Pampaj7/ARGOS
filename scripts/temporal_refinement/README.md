@@ -17,23 +17,25 @@ Design document:
 
 ```text
 scripts/temporal_refinement/
-  lib/
-    datasets.py
-    losses.py
-    metrics.py
-    models.py
-    training.py
-  build_debug_cache.py
-  build_large_cache.py
-  build_large_v2_cache.py
-  build_large_v3_s2m2s512_fast_cache.py
-  predict_s2m2_long_sequences.py
-  predict_stereoanyvideo_long_sequences.py
-  train_refiner.py
-  train_temporal_refiner_fastcache.py
-  evaluate_temporal_refinement.py
-  legacy/
+  adapters/        external baseline adapters
+  cache_builders/  offline prediction/cache generation
+  data_prep/       raw dataset extraction and inventory
+  eval_scripts/    reproducible benchmark/evaluation scripts
+  lib/             shared models, metrics, flow, losses, utilities
+  playground/      modular research playground for new fusion variants
+  train_*.py       experimental training entry points
 ```
+
+`train_warp_fusion.py` is an advanced experimental training script for causal
+flow-warped adaptive fusion. Use it for controlled experiments only. The
+`playground/` package is the modular research framework for new fusion variants
+where components should be swapped through configs/registries instead of adding
+new one-off scripts.
+
+Metric naming warning: `StereoAnyVideo` is a teacher/pseudo-target, not real GT.
+Metrics such as `fused_to_sav_mae` measure teacher proximity, not ground-truth
+geometry. Metrics such as `fused_to_spatial_mae` use S2M2-L as an auxiliary
+teacher, not GT. Surgical GT metrics must be reported separately when available.
 
 There is no separate `argos/temporal_refinement/` package anymore; keeping the code here avoids duplicate homes for the same project area.
 
