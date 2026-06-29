@@ -1,0 +1,29 @@
+experiment_name: dual_memory
+stereo_source: s2m2_s512
+motion_estimator: rgb_difference
+warper: flow
+short_term_memory:
+  name: enabled
+long_term_memory:
+  name: enabled
+uncertainty: none
+teacher: stereoanyvideo
+semantic_prior: none
+fusion:
+  name: dual_memory
+  base_channels: 40
+  long_decay: 0.95
+  residual_clamp_px: 2.0
+losses:
+  teacher: 0.35
+  spatial_teacher: 0.15
+  raw_fidelity: 0.10
+  motion_compensated: 0.20
+  residual: 0.05
+  source_weight_entropy: 0.01
+workflow:
+  mode: smoke
+  sequence_length: 5
+  batch_size: 1
+  crop_height: 64
+  crop_width: 96

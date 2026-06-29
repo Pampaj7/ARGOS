@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-06-29 13:37:03",
+  "input_root": "/dtu/p1/leopam/ARGOS/dataset/SCARED/curated/temporal_gt_rectified",
+  "audit_frame_csv": "/dtu/p1/leopam/ARGOS/dataset/SCARED/curated/audit/temporal_gt_rectified_integrity/frame_integrity.csv",
+  "output_root": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2",
+  "model": "S2M2-S",
+  "variant": "S",
+  "resize_width": 512,
+  "device_requested": "cuda",
+  "skip_suspicious": true,
+  "min_valid_ratio": 0.05,
+  "safe_sequences_only": false,
+  "save_predictions": false,
+  "total_sequences": 27,
+  "total_frames": 22950,
+  "total_frames_evaluated": 20621,
+  "total_frames_skipped": 2329,
+  "weighted_metrics_over_frames": {
+    "disparity_mae": 6.829471384440535,
+    "disparity_rmse": 9.256683951829169,
+    "bad_1px": 72.96114795890018,
+    "bad_2px": 54.18712785214271,
+    "bad_3px": 42.715268635392626,
+    "depth_mae": 3.5437596988229942
+  },
+  "unweighted_mean_over_sequences": {
+    "disparity_mae": 7.0354279094933,
+    "disparity_rmse": 9.561847836678007,
+    "bad_1px": 72.61581426527262,
+    "bad_2px": 54.59109286283633,
+    "bad_3px": 43.82908832587437,
+    "depth_mae": 3.7070896097315944
+  },
+  "total_runtime_sec": 3656.8950861478224,
+  "median_runtime_ms_per_frame": 56.97797401808202,
+  "peak_vram_mb": 395.21337890625,
+  "estimated_prediction_cache_storage_saved_bytes": 108113428480,
+  "estimated_prediction_cache_storage_saved_gib": 100.6884765625
+}
