@@ -1,0 +1,20 @@
+experiment_name: fixed_ema
+stereo_source: s2m2_s512
+motion_estimator: zero
+warper: identity
+uncertainty: none
+teacher: stereoanyvideo
+semantic_prior: none
+fusion:
+  name: fixed_ema
+  alpha: 0.50
+losses:
+  teacher: 0.40
+  raw_fidelity: 0.10
+  temporal: 0.10
+workflow:
+  mode: smoke
+  sequence_length: 5
+  batch_size: 1
+  crop_height: 64
+  crop_width: 96

@@ -1,0 +1,27 @@
+experiment_name: semantic_uncertainty_fusion
+stereo_source: s2m2_s512
+motion_estimator: rgb_difference
+warper: flow
+uncertainty:
+  name: model_disagreement
+  normalize: 8.0
+teacher: stereoanyvideo
+semantic_prior: optional_masks
+fusion:
+  name: flow_warped_adaptive
+  base_channels: 48
+  residual_clamp_px: 2.0
+losses:
+  teacher: 0.40
+  spatial_teacher: 0.15
+  raw_fidelity: 0.10
+  motion_compensated: 0.20
+  residual: 0.05
+  alpha_prior: 0.02
+  uncertainty: 0.01
+workflow:
+  mode: smoke
+  sequence_length: 5
+  batch_size: 1
+  crop_height: 64
+  crop_width: 96

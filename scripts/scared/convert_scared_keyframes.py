@@ -68,6 +68,8 @@ def scatter_min_depth(points_rect, p1, p2, image_shape):
     u = u[in_bounds]
     v = v[in_bounds]
     z = z[in_bounds]
+    if z.size == 0:
+        return np.zeros((h, w), np.float32), np.zeros((h, w), np.float32)
 
     flat_idx = v * w + u
     order = np.lexsort((z, flat_idx))

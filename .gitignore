@@ -47,6 +47,11 @@ results/03_temporal_refinement/training/convgru/temporal_refinement_train_convgr
 results/03_temporal_refinement/evaluation/temporal_refinement_evaluation_l736_smoke/
 results/03_temporal_refinement/playground/
 results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1/
+results/03_temporal_refinement/evaluation/gt_temporal_dataset_1_keyframe_1/
+results/03_temporal_refinement/evaluation/gt_temporal_rectified_dataset_1_keyframe_1/
+results/03_temporal_refinement/scared_s2m2_temporal_baselines_v*/
+results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache/
+results/dataset_audits/
 
 # Downloaded upstream repositories
 /external/video_stereo_repos/*
@@ -54,6 +59,8 @@ results/01_frame_stereo/SCARED/scared_s2m2_xl_warped_finetune_run1/
 /external/frame_stereo_repos/*
 !/external/frame_stereo_repos/README.md
 /external/d4d/
+/external/lietorch/
+/external/surgical_mono_repos/
 
 # Python/runtime
 __pycache__/
