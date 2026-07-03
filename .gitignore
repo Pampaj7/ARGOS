@@ -25,6 +25,8 @@ results/**/frame_baselines/
 results/**/test_sequence/
 results/**/outputs/
 results/**/videos/
+results/**/diagnostics/
+results/**/*_smoke/
 results/**/scared_long_sequences/**/left/
 results/**/scared_long_sequences/**/right/
 results/**/scared_long_sequences/_source_videos/
@@ -70,6 +72,11 @@ __pycache__/
 .miniconda/
 .cache/
 .pytest_cache/
+.vscode/
+.swp
+core.*
+explore.py
+*.pid
 
 # Generated bulky logs
 *.log

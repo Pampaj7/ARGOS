@@ -1,0 +1,82 @@
+{
+  "source_run": "results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2_v2_artifact_temporal",
+  "no_training_now": true,
+  "teacher_sources_future": [
+    "oracle from GT for target construction",
+    "optional SAV teacher later",
+    "optional RAFT/SAV only in future teacher-generation run"
+  ],
+  "selected_clip_file": "results/03_temporal_refinement/evaluation/distillation_planning/candidate_clips_for_distillation.csv",
+  "targets": {
+    "residual_target": {
+      "definition": "delta_disp = teacher_or_oracle_disp - s2m2_disp",
+      "shape": "HxW float32 per selected frame",
+      "required_inputs": [
+        "s2m2_disp",
+        "teacher_or_oracle_disp",
+        "valid_mask"
+      ]
+    },
+    "confidence_target": {
+      "definition": "1 where S2M2 error is low, 0 where correction is needed",
+      "initial_thresholds": {
+        "positive": "abs(s2m2_disp - gt_disp) <= 1 px and valid",
+        "negative": "abs error >= 3 px or high artifact mask"
+      },
+      "required_inputs": [
+        "s2m2_disp",
+        "gt_disp",
+        "valid_mask"
+      ]
+    },
+    "artifact_mask_target": {
+      "definition": "union of high boundary error, flicker, temporal mismatch regions",
+      "components": [
+        "abs error on GT disparity edges",
+        "same-pixel temporal error variation",
+        "same-pixel motion mismatch"
+      ],
+      "required_inputs": [
+        "current/previous s2m2_disp",
+        "current/previous gt_disp",
+        "valid masks",
+        "RGB for boundary context"
+      ]
+    },
+    "blending_target": {
+      "definition": "weights over cheap online candidates: raw S2M2, EMA, adaptive no-RAFT",
+      "candidate_inputs": [
+        "raw_s2m2",
+        "causal_ema(raw_s2m2)",
+        "adaptive_no_raft(raw_s2m2, RGB/disparity gradients, temporal deltas)"
+      ],
+      "supervision": "oracle choose lowest valid masked error per pixel/patch, smoothed to avoid noisy hard labels"
+    }
+  },
+  "future_files": {
+    "clip_manifest": "candidate_clips_for_distillation.csv",
+    "target_manifest": "distillation_targets_manifest.csv",
+    "targets_dir": "not created yet; only selected clips when training is approved"
+  },
+  "first_experiment": {
+    "model": "tiny causal residual/blending head",
+    "inputs": [
+      "current RGB",
+      "raw S2M2 disparity",
+      "previous raw S2M2 disparity",
+      "cheap edge/temporal scalar maps"
+    ],
+    "outputs": [
+      "delta_disp",
+      "confidence",
+      "artifact_mask",
+      "blend_logits"
+    ],
+    "losses": [
+      "L1 residual on valid pixels",
+      "BCE confidence/artifact masks",
+      "CE/KL blend weights",
+      "small residual regularizer"
+    ]
+  }
+}

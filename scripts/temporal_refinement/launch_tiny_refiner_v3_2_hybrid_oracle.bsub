@@ -1,0 +1,23 @@
+#!/bin/bash
+#BSUB -J argos_v3_2_hybrid
+#BSUB -q p1
+#BSUB -gpu "num=2:mode=shared"
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=64GB]"
+#BSUB -W 12:00
+#BSUB -o results/03_temporal_refinement/training/tiny_refiner_v3_2_hybrid_oracle/lsf_%J.out
+#BSUB -e results/03_temporal_refinement/training/tiny_refiner_v3_2_hybrid_oracle/lsf_%J.err
+
+set -euo pipefail
+cd /dtu/p1/leopam/ARGOS
+export PYTHONPATH="$(pwd)"
+export OMP_NUM_THREADS=4
+source .miniconda/etc/profile.d/conda.sh
+conda activate argos
+
+mkdir -p results/03_temporal_refinement/training/tiny_refiner_v3_2_hybrid_oracle
+
+python scripts/temporal_refinement/train_tiny_refiner_v3_2_hybrid_oracle.py \
+  --num-workers 20 \
+  --overwrite

@@ -1,0 +1,22 @@
+{
+  "headline": "low-res oracle target is GT-consistent",
+  "evidence": {
+    "raw_mae_masked_gt": 12.298817936450392,
+    "oracle_all_mae_masked_gt": 5.731827851796654,
+    "raw_mae_plain_gt": 51.45453051270421,
+    "oracle_all_mae_plain_gt": 44.08530030425426,
+    "oracle_all_violation_pct_masked": 0.0,
+    "delta_reconstruction_mae": 0.0,
+    "clips_where_oracle_worse_than_raw_masked": 0,
+    "clips": 6
+  },
+  "likely_causes": [],
+  "recommendation": {
+    "classification": "target-space oracle passes consistency audit",
+    "do_not_train_more_on_current_targets": false,
+    "preferred_fix": "none for target consistency",
+    "acceptable_fix_if_storage_allows": "n/a",
+    "minimum_metadata_fix": "already stores target-space raw/gt maps",
+    "label_fix": "low-res labels are computed directly at target scale"
+  }
+}

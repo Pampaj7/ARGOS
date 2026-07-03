@@ -1,0 +1,46 @@
+{
+  "question": "Can frozen DINO features predict S2M2 high-error/artifact/flicker regions?",
+  "no_feature_cache_by_default": true,
+  "candidate_frame_file": "results/03_temporal_refinement/evaluation/distillation_planning/candidate_frames_for_dino_probe.csv",
+  "inputs": [
+    "left RGB frame",
+    "optional low-res S2M2 disparity/error scalar maps for ablation labels only"
+  ],
+  "target_masks": {
+    "s2m2_high_error": "abs(s2m2_disp - gt_disp) >= 3 px on valid pixels",
+    "boundary_artifact": "GT edge p80/p90 intersect high disparity error",
+    "flicker": "same-pixel temporal error variation above clip q75",
+    "motion_mismatch": "same-pixel temporal motion mismatch above clip q75",
+    "validity_stress": "low valid-pixel regions / masks as diagnostic, not positive error labels"
+  },
+  "split": {
+    "train_sequences": [
+      "candidate clips excluding one clean and one stress sequence"
+    ],
+    "val_sequences": [
+      "one clean_core clip",
+      "one stress clip"
+    ],
+    "test_sequences": [
+      "held-out catastrophic or low_valid sequence"
+    ],
+    "rule": "sequence-level split only; never split adjacent frames across train/test"
+  },
+  "metrics": [
+    "AUC",
+    "F1",
+    "IoU",
+    "Pearson/Spearman correlation with continuous error",
+    "calibration by error bin"
+  ],
+  "storage_safe_features": {
+    "default": "run DINO on selected frames only and keep derived CSV metrics",
+    "if_needed": "save compressed patch/token features for selected clips only, e.g. npz float16/PCA tokens",
+    "never_default": "no full-resolution dense DINO feature cache over all 22,950 frames"
+  },
+  "ablations": [
+    "RGB-only DINO linear probe",
+    "DINO + raw S2M2 scalar maps",
+    "patch-level vs frame-level labels"
+  ]
+}

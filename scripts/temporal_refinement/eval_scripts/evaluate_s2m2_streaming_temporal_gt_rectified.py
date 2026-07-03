@@ -30,10 +30,55 @@ ROOT = Path(__file__).resolve().parents[3]
 S2M2_REPO = ROOT / "external/frame_stereo_repos/s2m2"
 S2M2_SRC = S2M2_REPO / "src"
 S2M2_WEIGHTS = S2M2_REPO / "weights/pretrain_weights"
+LIB_DIR = ROOT / "scripts" / "temporal_refinement" / "lib"
+sys.path.insert(0, str(LIB_DIR))
+
+from artifact_metrics import frame_artifact_metrics  # noqa: E402
 
 DEFAULT_INPUT_ROOT = ROOT / "dataset/SCARED/curated/temporal_gt_rectified"
 DEFAULT_AUDIT_FRAME_CSV = ROOT / "dataset/SCARED/curated/audit/temporal_gt_rectified_integrity/frame_integrity.csv"
-DEFAULT_OUTPUT_ROOT = ROOT / "results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2"
+DEFAULT_OUTPUT_ROOT = ROOT / "results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2_v2_artifact_temporal"
+
+TEMPORAL_FIELDS = [
+    "temporal_pair",
+    "previous_frame_id",
+    "temporal_valid_intersection_pct",
+    "temporal_disp_diff_mean",
+    "temporal_depth_diff_mean",
+    "gt_temporal_disp_diff_mean",
+    "gt_temporal_depth_diff_mean",
+    "temporal_error_variation_mean",
+    "temporal_motion_mismatch_mean",
+]
+
+ARTIFACT_FIELDS = [
+    "edge_sharpness_ratio_raw",
+    "edge_sharpness_ratio_raw_edges",
+    "boundary_disp_mae_px",
+    "boundary_disp_mae_px_p80",
+    "ghosting_score_px_tau2",
+    "ghosting_gt_error_px_tau2",
+    "ghosting_score_px_tau5",
+    "ghosting_gt_error_px_tau5",
+    "occlusion_disp_mae_px",
+    "lag_rate",
+    "lag_error_margin_px",
+    "rgb_disp_edge_corr",
+    "rgb_disp_edge_corr_rgb_edges",
+    "raw_temporal_disp_diff_px",
+    "samepixel_temporal_mae_px",
+    "samepixel_temporal_error_variation_px",
+    "samepixel_temporal_motion_mismatch_px",
+    "motion_compensated_temporal_mae_px",
+    "flow_forward_runtime_ms",
+    "flow_backward_runtime_ms",
+    "flow_runtime_used_ms",
+]
+
+ARTIFACT_SUMMARY_FIELDS = [
+    "artifact_temporal_pairs",
+    *[f"{field}_{suffix}" for field in ARTIFACT_FIELDS for suffix in ("mean", "median", "valid_count")],
+]
 
 FRAME_FIELDS = [
     "sequence_id",
@@ -50,6 +95,8 @@ FRAME_FIELDS = [
     "depth_mae",
     "runtime_ms",
     "warning_flags",
+    *TEMPORAL_FIELDS,
+    *ARTIFACT_FIELDS,
 ]
 
 SEQUENCE_FIELDS = [
@@ -70,6 +117,22 @@ SEQUENCE_FIELDS = [
     "depth_mae_median",
     "runtime_ms_mean",
     "runtime_ms_median",
+    "temporal_pairs",
+    "temporal_pair_coverage",
+    "temporal_disp_diff_mean",
+    "temporal_disp_diff_median",
+    "temporal_depth_diff_mean",
+    "temporal_depth_diff_median",
+    "gt_temporal_disp_diff_mean",
+    "gt_temporal_disp_diff_median",
+    "gt_temporal_depth_diff_mean",
+    "gt_temporal_depth_diff_median",
+    "temporal_error_variation_mean",
+    "temporal_error_variation_median",
+    "temporal_motion_mismatch_mean",
+    "temporal_motion_mismatch_median",
+    "temporal_valid_intersection_pct_mean",
+    *ARTIFACT_SUMMARY_FIELDS,
     "warnings",
 ]
 
@@ -128,6 +191,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit-sequences", type=int, default=0)
     parser.add_argument("--limit-frames-per-sequence", type=int, default=0)
     parser.add_argument("--save-predictions", nargs="?", const=True, default=False, type=parse_bool)
+    parser.add_argument("--temporal-metrics", nargs="?", const=True, default=False, type=parse_bool)
+    parser.add_argument("--artifact-metrics", nargs="?", const=True, default=False, type=parse_bool)
+    parser.add_argument("--sequence-split-csv", type=Path, default=None)
+    parser.add_argument("--sequence-group", choices=["all", "core_eval", "stress_eval", "exclude_or_diagnostic"], default="all")
     parser.add_argument("--diagnostics", nargs="?", const=True, default=True, type=parse_bool)
     parser.add_argument("--diagnostic-count", type=int, default=3)
     parser.add_argument("--overwrite", nargs="?", const=True, default=False, type=parse_bool)
@@ -214,6 +281,15 @@ def discover_sequences(input_root: Path, safe_sequences: set[str] | None, limit_
     if limit_sequences > 0:
         sequences = sequences[:limit_sequences]
     return sequences
+
+
+def read_sequence_split(path: Path | None, group: str) -> set[str] | None:
+    if group == "all":
+        return None
+    if path is None:
+        raise ValueError(f"--sequence-group {group} requires --sequence-split-csv")
+    with path.open(newline="") as f:
+        return {row["sequence_id"] for row in csv.DictReader(f) if row.get("group") == group}
 
 
 def shard_sequences(sequences: list[Path], worker_id: int, worker_count: int) -> list[Path]:
@@ -391,8 +467,141 @@ def metric_row(
     return row, abs_disp_error
 
 
-def skipped_frame_row(frame: FrameRecord, valid_pixel_pct: float, reason: str, warning_flags: str) -> dict[str, Any]:
+def blank_temporal_fields() -> dict[str, Any]:
     return {
+        "temporal_pair": False,
+        "previous_frame_id": "",
+        "temporal_valid_intersection_pct": math.nan,
+        "temporal_disp_diff_mean": math.nan,
+        "temporal_depth_diff_mean": math.nan,
+        "gt_temporal_disp_diff_mean": math.nan,
+        "gt_temporal_depth_diff_mean": math.nan,
+        "temporal_error_variation_mean": math.nan,
+        "temporal_motion_mismatch_mean": math.nan,
+    }
+
+
+def temporal_metric_row(
+    frame_id: str,
+    pred_disp: np.ndarray,
+    gt_disp: np.ndarray,
+    gt_depth: np.ndarray,
+    valid_mask: np.ndarray,
+    pred_depth: np.ndarray,
+    abs_disp_error: np.ndarray,
+    previous: dict[str, Any] | None,
+) -> dict[str, Any]:
+    if previous is None:
+        return blank_temporal_fields()
+    if pred_disp.shape != previous["pred_disp"].shape:
+        pred_disp = cv2.resize(pred_disp, (previous["pred_disp"].shape[1], previous["pred_disp"].shape[0]), interpolation=cv2.INTER_LINEAR)
+        pred_depth = cv2.resize(pred_depth, (previous["pred_depth"].shape[1], previous["pred_depth"].shape[0]), interpolation=cv2.INTER_LINEAR)
+    valid = (
+        valid_mask
+        & previous["valid_mask"]
+        & np.isfinite(pred_disp)
+        & np.isfinite(previous["pred_disp"])
+        & np.isfinite(gt_disp)
+        & np.isfinite(previous["gt_disp"])
+        & np.isfinite(gt_depth)
+        & np.isfinite(previous["gt_depth"])
+        & np.isfinite(pred_depth)
+        & np.isfinite(previous["pred_depth"])
+        & (pred_disp > 0.1)
+        & (previous["pred_disp"] > 0.1)
+        & (gt_disp > 0)
+        & (previous["gt_disp"] > 0)
+        & (gt_depth > 0)
+        & (previous["gt_depth"] > 0)
+    )
+    row = blank_temporal_fields()
+    row["temporal_pair"] = True
+    row["previous_frame_id"] = previous["frame_id"]
+    row["temporal_valid_intersection_pct"] = float(np.mean(valid)) if valid.size else math.nan
+    if not valid.any():
+        return row
+    pred_delta = np.abs(pred_disp[valid] - previous["pred_disp"][valid])
+    gt_delta = np.abs(gt_disp[valid] - previous["gt_disp"][valid])
+    row.update(
+        {
+            "temporal_disp_diff_mean": float(np.mean(pred_delta)),
+            "temporal_depth_diff_mean": float(np.mean(np.abs(pred_depth[valid] - previous["pred_depth"][valid]))),
+            "gt_temporal_disp_diff_mean": float(np.mean(gt_delta)),
+            "gt_temporal_depth_diff_mean": float(np.mean(np.abs(gt_depth[valid] - previous["gt_depth"][valid]))),
+            "temporal_error_variation_mean": float(np.mean(np.abs(abs_disp_error[valid] - previous["abs_disp_error"][valid]))),
+            "temporal_motion_mismatch_mean": float(np.mean(np.abs(pred_delta - gt_delta))),
+        }
+    )
+    return row
+
+
+def blank_artifact_fields() -> dict[str, Any]:
+    return {field: math.nan for field in ARTIFACT_FIELDS}
+
+
+def artifact_frame_metrics_row(
+    pred_disp: np.ndarray,
+    gt_disp: np.ndarray,
+    valid_mask: np.ndarray,
+    rgb: np.ndarray,
+) -> dict[str, Any]:
+    row = blank_artifact_fields()
+    metrics = frame_artifact_metrics(
+        pred=pred_disp,
+        raw=pred_disp,
+        gt=gt_disp,
+        valid_mask=valid_mask,
+        rgb=rgb,
+    )
+    row.update(metrics)
+    return row
+
+
+def artifact_pair_metrics_row(
+    pred_disp: np.ndarray,
+    gt_disp: np.ndarray,
+    valid_mask: np.ndarray,
+    abs_disp_error: np.ndarray,
+    previous: dict[str, Any] | None,
+) -> dict[str, Any]:
+    row: dict[str, Any] = {}
+    if previous is None:
+        return row
+    valid = (
+        valid_mask
+        & previous["valid_mask"]
+        & np.isfinite(pred_disp)
+        & np.isfinite(previous["pred_disp"])
+        & np.isfinite(gt_disp)
+        & np.isfinite(previous["gt_disp"])
+        & (pred_disp > 0.1)
+        & (previous["pred_disp"] > 0.1)
+        & (gt_disp > 0)
+        & (previous["gt_disp"] > 0)
+    )
+    if valid.any():
+        pred_delta = np.abs(pred_disp[valid] - previous["pred_disp"][valid])
+        gt_delta = np.abs(gt_disp[valid] - previous["gt_disp"][valid])
+        row.update(
+            {
+                "raw_temporal_disp_diff_px": float(np.mean(pred_delta)),
+                "samepixel_temporal_mae_px": float(np.mean(pred_delta)),
+                "samepixel_temporal_error_variation_px": float(np.mean(np.abs(abs_disp_error[valid] - previous["abs_disp_error"][valid]))),
+                "samepixel_temporal_motion_mismatch_px": float(np.mean(np.abs(pred_delta - gt_delta))),
+            }
+        )
+
+    lag_mask = valid_mask & previous["valid_mask"] & np.isfinite(previous["gt_disp"]) & np.isfinite(gt_disp) & np.isfinite(pred_disp)
+    err_current = float(np.mean(np.abs(pred_disp[lag_mask] - gt_disp[lag_mask]))) if lag_mask.any() else None
+    err_prev_gt = float(np.mean(np.abs(pred_disp[lag_mask] - previous["gt_disp"][lag_mask]))) if lag_mask.any() else None
+    lagged = err_current is not None and err_prev_gt is not None and err_prev_gt < err_current
+    row["lag_rate"] = 1.0 if lagged else 0.0 if err_current is not None and err_prev_gt is not None else math.nan
+    row["lag_error_margin_px"] = float(err_current - err_prev_gt) if lagged else math.nan
+    return row
+
+
+def skipped_frame_row(frame: FrameRecord, valid_pixel_pct: float, reason: str, warning_flags: str) -> dict[str, Any]:
+    row = {
         "sequence_id": frame.sequence_id,
         "frame_id": frame.frame_id,
         "valid_pixel_pct": valid_pixel_pct,
@@ -408,6 +617,9 @@ def skipped_frame_row(frame: FrameRecord, valid_pixel_pct: float, reason: str, w
         "runtime_ms": None,
         "warning_flags": warning_flags,
     }
+    row.update(blank_temporal_fields())
+    row.update(blank_artifact_fields())
+    return row
 
 
 def scalar_preview(values: np.ndarray, valid: np.ndarray | None, vmax: float, cmap: int = cv2.COLORMAP_TURBO) -> np.ndarray:
@@ -506,6 +718,7 @@ def evaluate_sequence(
         prediction_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"[{now()}] evaluating {sequence_root.name}: {len(frames)} candidate frames", flush=True)
+    previous_temporal: dict[str, Any] | None = None
     for idx, frame in enumerate(frames, start=1):
         skip, reason, valid_pixel_pct, audit_flags = frame_should_skip(
             frame,
@@ -528,6 +741,49 @@ def evaluate_sequence(
         row, abs_disp_error = metric_row(frame, gt_disp, gt_depth, valid_mask, pred_disp, runtime_ms, audit_flags)
         if not row["included"]:
             row["exclusion_reason"] = ";".join(filter(None, [row["exclusion_reason"], "post_inference_metric_filter"]))
+            row.update(blank_artifact_fields())
+        else:
+            row.update(blank_temporal_fields())
+            row.update(blank_artifact_fields())
+            pred_for_metrics = pred_disp if (bool(args.temporal_metrics) or bool(args.artifact_metrics)) else None
+            if pred_for_metrics is not None and pred_for_metrics.shape != gt_disp.shape:
+                pred_for_metrics = cv2.resize(pred_for_metrics, (gt_disp.shape[1], gt_disp.shape[0]), interpolation=cv2.INTER_LINEAR)
+            pred_depth = frame.fx * frame.baseline / np.maximum(pred_for_metrics, 1e-6) if pred_for_metrics is not None else None
+            metric_valid = (
+                valid_mask
+                & np.isfinite(gt_disp)
+                & np.isfinite(gt_depth)
+                & np.isfinite(pred_for_metrics)
+                & (gt_disp > 0)
+                & (gt_depth > 0)
+                & (pred_for_metrics > 0.1)
+            ) if pred_for_metrics is not None else None
+            if pred_for_metrics is not None and bool(args.artifact_metrics):
+                row.update(artifact_frame_metrics_row(pred_for_metrics, gt_disp, valid_mask, left_rgb))
+                row.update(artifact_pair_metrics_row(pred_for_metrics, gt_disp, valid_mask, abs_disp_error, previous_temporal))
+            if pred_for_metrics is not None and bool(args.temporal_metrics):
+                row.update(
+                    temporal_metric_row(
+                        frame.frame_id,
+                        pred_for_metrics,
+                        gt_disp,
+                        gt_depth,
+                        metric_valid,
+                        pred_depth,
+                        abs_disp_error,
+                        previous_temporal,
+                    )
+                )
+            if pred_for_metrics is not None and (bool(args.temporal_metrics) or bool(args.artifact_metrics)):
+                previous_temporal = {
+                    "frame_id": frame.frame_id,
+                    "pred_disp": pred_for_metrics,
+                    "gt_disp": gt_disp,
+                    "gt_depth": gt_depth,
+                    "valid_mask": metric_valid,
+                    "pred_depth": pred_depth,
+                    "abs_disp_error": abs_disp_error,
+                }
         frame_rows.append(row)
         if bool(args.diagnostics):
             evaluated_for_diag.append(
@@ -557,8 +813,9 @@ def evaluate_sequence(
 
 def summarize_sequence(sequence_id: str, frame_rows: list[dict[str, Any]], frames: list[FrameRecord]) -> dict[str, Any]:
     included = [row for row in frame_rows if row["included"]]
+    temporal_rows = [row for row in included if truthy(row.get("temporal_pair"))]
     warnings = sorted({str(row["warning_flags"]) for row in frame_rows if row.get("warning_flags")})
-    return {
+    row = {
         "sequence_id": sequence_id,
         "num_frames_total": len(frames),
         "frames_evaluated": len(included),
@@ -576,8 +833,38 @@ def summarize_sequence(sequence_id: str, frame_rows: list[dict[str, Any]], frame
         "depth_mae_median": median([finite_float(row["depth_mae"]) for row in included]),
         "runtime_ms_mean": mean([finite_float(row["runtime_ms"]) for row in included]),
         "runtime_ms_median": median([finite_float(row["runtime_ms"]) for row in included]),
+        "temporal_pairs": len(temporal_rows),
+        "temporal_pair_coverage": len(temporal_rows) / max(len(included) - 1, 1) if len(included) > 1 else 0.0,
+        "temporal_disp_diff_mean": mean([finite_float(row["temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "temporal_disp_diff_median": median([finite_float(row["temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "temporal_depth_diff_mean": mean([finite_float(row["temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "temporal_depth_diff_median": median([finite_float(row["temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_disp_diff_mean": mean([finite_float(row["gt_temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_disp_diff_median": median([finite_float(row["gt_temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_depth_diff_mean": mean([finite_float(row["gt_temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_depth_diff_median": median([finite_float(row["gt_temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "temporal_error_variation_mean": mean([finite_float(row["temporal_error_variation_mean"]) for row in temporal_rows]),
+        "temporal_error_variation_median": median([finite_float(row["temporal_error_variation_mean"]) for row in temporal_rows]),
+        "temporal_motion_mismatch_mean": mean([finite_float(row["temporal_motion_mismatch_mean"]) for row in temporal_rows]),
+        "temporal_motion_mismatch_median": median([finite_float(row["temporal_motion_mismatch_mean"]) for row in temporal_rows]),
+        "temporal_valid_intersection_pct_mean": mean([finite_float(row["temporal_valid_intersection_pct"]) for row in temporal_rows]),
         "warnings": ";".join(warnings),
     }
+    row.update(artifact_summary(included))
+    return row
+
+
+def artifact_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    out: dict[str, Any] = {
+        "artifact_temporal_pairs": sum(math.isfinite(finite_float(row.get("raw_temporal_disp_diff_px"))) for row in rows)
+    }
+    for field in ARTIFACT_FIELDS:
+        values = [finite_float(row.get(field)) for row in rows]
+        finite = [value for value in values if math.isfinite(value)]
+        out[f"{field}_mean"] = float(np.mean(finite)) if finite else None
+        out[f"{field}_median"] = float(np.median(finite)) if finite else None
+        out[f"{field}_valid_count"] = len(finite)
+    return out
 
 
 def weighted_frame_metric(rows: list[dict[str, Any]], key: str) -> float | None:
@@ -592,6 +879,29 @@ def weighted_frame_metric(rows: list[dict[str, Any]], key: str) -> float | None:
             values.append(value)
             weights.append(weight)
     return float(np.average(values, weights=weights)) if values else None
+
+
+def aggregate_temporal_metrics(frame_rows: list[dict[str, Any]], sequence_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    temporal_rows = [row for row in frame_rows if truthy(row.get("included")) and truthy(row.get("temporal_pair"))]
+    evaluated_sequences = [row for row in sequence_rows if int(row["frames_evaluated"]) > 0]
+    expected_pairs = sum(max(int(row["frames_evaluated"]) - 1, 0) for row in evaluated_sequences)
+    return {
+        "temporal_pairs": len(temporal_rows),
+        "temporal_pair_coverage": len(temporal_rows) / expected_pairs if expected_pairs else 0.0,
+        "temporal_disp_diff_mean": mean([finite_float(row["temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "temporal_disp_diff_median": median([finite_float(row["temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "temporal_depth_diff_mean": mean([finite_float(row["temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "temporal_depth_diff_median": median([finite_float(row["temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_disp_diff_mean": mean([finite_float(row["gt_temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_disp_diff_median": median([finite_float(row["gt_temporal_disp_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_depth_diff_mean": mean([finite_float(row["gt_temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "gt_temporal_depth_diff_median": median([finite_float(row["gt_temporal_depth_diff_mean"]) for row in temporal_rows]),
+        "temporal_error_variation_mean": mean([finite_float(row["temporal_error_variation_mean"]) for row in temporal_rows]),
+        "temporal_error_variation_median": median([finite_float(row["temporal_error_variation_mean"]) for row in temporal_rows]),
+        "temporal_motion_mismatch_mean": mean([finite_float(row["temporal_motion_mismatch_mean"]) for row in temporal_rows]),
+        "temporal_motion_mismatch_median": median([finite_float(row["temporal_motion_mismatch_mean"]) for row in temporal_rows]),
+        "temporal_valid_intersection_pct_mean": mean([finite_float(row["temporal_valid_intersection_pct"]) for row in temporal_rows]),
+    }
 
 
 def aggregate_summary(
@@ -619,6 +929,10 @@ def aggregate_summary(
         "min_valid_ratio": args.min_valid_ratio,
         "safe_sequences_only": bool(args.safe_sequences_only),
         "save_predictions": bool(args.save_predictions),
+        "temporal_metrics": bool(args.temporal_metrics),
+        "artifact_metrics": bool(args.artifact_metrics),
+        "sequence_split_csv": str(args.sequence_split_csv) if args.sequence_split_csv else None,
+        "sequence_group": args.sequence_group,
         "total_sequences": len(sequence_rows),
         "total_frames": total_frames,
         "total_frames_evaluated": total_frames_evaluated,
@@ -638,6 +952,19 @@ def aggregate_summary(
             "bad_2px": mean([finite_float(row["bad_2px_mean"]) for row in evaluated_sequences]),
             "bad_3px": mean([finite_float(row["bad_3px_mean"]) for row in evaluated_sequences]),
             "depth_mae": mean([finite_float(row["depth_mae_mean"]) for row in evaluated_sequences]),
+        },
+        "temporal_metrics_over_pairs": aggregate_temporal_metrics(frame_rows, sequence_rows),
+        "artifact_metrics_over_frames": artifact_summary(included_frames),
+        "no_flow_metrics_not_computed": {
+            "motion_compensated_temporal_mae_px": "not_computed_no_flow",
+            "flow_forward_runtime_ms": "not_computed_no_flow",
+            "flow_backward_runtime_ms": "not_computed_no_flow",
+            "flow_runtime_used_ms": "not_computed_no_flow",
+            "ghosting_score_px_tau2": "not_computed_no_flow",
+            "ghosting_gt_error_px_tau2": "not_computed_no_flow",
+            "ghosting_score_px_tau5": "not_computed_no_flow",
+            "ghosting_gt_error_px_tau5": "not_computed_no_flow",
+            "occlusion_disp_mae_px": "not_computed_no_flow",
         },
         "total_runtime_sec": float(time.perf_counter() - start_time),
         "median_runtime_ms_per_frame": median([finite_float(row["runtime_ms"]) for row in included_frames]),
@@ -669,6 +996,7 @@ def write_readme(path: Path, summary: dict[str, Any]) -> None:
         "",
         "This run evaluates S2M2-S frame-by-frame on rectified SCARED temporal-GT and discards predictions by default.",
         "No RAFT, StereoAnyVideo, ConvGRU, temporal smoothing, oracle selection, or optical flow is run by this script.",
+        "This is a no-flow streaming evaluation: motion-compensated temporal metrics, ghosting, and occlusion metrics that require optical flow are not computed.",
         "",
         f"- Input root: `{summary['input_root']}`",
         f"- Audit frame CSV: `{summary['audit_frame_csv']}`",
@@ -680,6 +1008,9 @@ def write_readme(path: Path, summary: dict[str, Any]) -> None:
         f"- Skip suspicious: `{summary['skip_suspicious']}`",
         f"- Minimum valid ratio: `{summary['min_valid_ratio']}`",
         f"- Saved predictions: `{summary['save_predictions']}`",
+        f"- Temporal metrics: `{summary['temporal_metrics']}`",
+        f"- Artifact metrics: `{summary['artifact_metrics']}`",
+        f"- Sequence group: `{summary['sequence_group']}`",
         f"- Disparity MAE weighted: `{weighted['disparity_mae']}`",
         f"- Disparity RMSE weighted: `{weighted['disparity_rmse']}`",
         f"- Bad-1px weighted pct: `{weighted['bad_1px']}`",
@@ -697,6 +1028,34 @@ def write_readme(path: Path, summary: dict[str, Any]) -> None:
         "- `aggregate_summary.json`: machine-readable aggregate summary.",
         "- `diagnostics/<sequence_id>/`: compact contact sheets for selected evaluated frames.",
     ]
+    if summary.get("temporal_metrics"):
+        temporal = summary["temporal_metrics_over_pairs"]
+        lines.extend(
+            [
+                "",
+                "Temporal metrics are same-pixel, non-motion-compensated frame-to-previous-included-frame differences.",
+                f"- Temporal pairs: `{temporal['temporal_pairs']}`",
+                f"- Temporal pair coverage: `{temporal['temporal_pair_coverage']}`",
+                f"- Temporal disparity diff mean: `{temporal['temporal_disp_diff_mean']}`",
+                f"- GT temporal disparity diff mean: `{temporal['gt_temporal_disp_diff_mean']}`",
+                f"- Temporal motion mismatch mean: `{temporal['temporal_motion_mismatch_mean']}`",
+            ]
+        )
+    if summary.get("artifact_metrics"):
+        artifact = summary["artifact_metrics_over_frames"]
+        lines.extend(
+            [
+                "",
+                "Artifact metrics reuse the old v4 frame-only definitions where possible.",
+                "Same-pixel temporal/artifact proxies are reported separately from motion-compensated metrics.",
+                "Prediction arrays are not cached unless `--save-predictions true` is passed.",
+                f"- Edge sharpness ratio raw mean: `{artifact['edge_sharpness_ratio_raw_mean']}`",
+                f"- Boundary disparity MAE mean px: `{artifact['boundary_disp_mae_px_mean']}`",
+                f"- RGB/disparity edge correlation mean: `{artifact['rgb_disp_edge_corr_mean']}`",
+                f"- Same-pixel temporal MAE mean px: `{artifact['samepixel_temporal_mae_px_mean']}`",
+                "- Motion-compensated temporal metrics: `not_computed_no_flow`",
+            ]
+        )
     path.write_text("\n".join(lines) + "\n")
 
 
@@ -713,7 +1072,7 @@ def parse_gpu_ids(value: str, num_gpus: int) -> list[str]:
 
 
 def build_worker_command(args: argparse.Namespace, worker_id: int, worker_count: int, worker_output: Path) -> list[str]:
-    return [
+    command = [
         sys.executable,
         str(Path(__file__).resolve()),
         "--input-root", str(args.input_root),
@@ -729,12 +1088,18 @@ def build_worker_command(args: argparse.Namespace, worker_id: int, worker_count:
         "--limit-sequences", str(args.limit_sequences),
         "--limit-frames-per-sequence", str(args.limit_frames_per_sequence),
         "--save-predictions", str(bool(args.save_predictions)).lower(),
+        "--temporal-metrics", str(bool(args.temporal_metrics)).lower(),
+        "--artifact-metrics", str(bool(args.artifact_metrics)).lower(),
+        "--sequence-group", args.sequence_group,
         "--diagnostics", str(bool(args.diagnostics)).lower(),
         "--diagnostic-count", str(args.diagnostic_count),
         "--overwrite", "true",
         "--worker-id", str(worker_id),
         "--worker-count", str(worker_count),
     ]
+    if args.sequence_split_csv is not None:
+        command.extend(["--sequence-split-csv", str(args.sequence_split_csv)])
+    return command
 
 
 def run_multi_gpu(args: argparse.Namespace) -> int:
@@ -859,6 +1224,10 @@ def main() -> int:
         f"skip_suspicious={bool(args.skip_suspicious)}",
         f"min_valid_ratio={args.min_valid_ratio}",
         f"save_predictions={bool(args.save_predictions)}",
+        f"temporal_metrics={bool(args.temporal_metrics)}",
+        f"artifact_metrics={bool(args.artifact_metrics)}",
+        f"sequence_split_csv={args.sequence_split_csv}",
+        f"sequence_group={args.sequence_group}",
         f"diagnostics={bool(args.diagnostics)}",
         f"num_gpus={args.num_gpus}",
         f"worker_id={args.worker_id}",
@@ -868,7 +1237,12 @@ def main() -> int:
 
     audit = read_audit_frames(args.audit_frame_csv)
     safe_sequences = read_safe_sequences(args.audit_frame_csv) if bool(args.safe_sequences_only) else None
-    sequences = discover_sequences(args.input_root, safe_sequences, args.limit_sequences)
+    split_sequences = read_sequence_split(args.sequence_split_csv, args.sequence_group)
+    sequences = discover_sequences(args.input_root, safe_sequences, 0)
+    if split_sequences is not None:
+        sequences = [path for path in sequences if path.name in split_sequences]
+    if args.limit_sequences > 0:
+        sequences = sequences[: args.limit_sequences]
     if args.worker_id >= 0:
         sequences = shard_sequences(sequences, args.worker_id, args.worker_count)
     run_log.append(f"[{now()}] discovered_sequences={len(sequences)}")

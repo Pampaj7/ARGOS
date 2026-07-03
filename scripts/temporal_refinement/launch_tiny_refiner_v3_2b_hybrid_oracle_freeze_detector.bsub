@@ -1,0 +1,46 @@
+#!/bin/bash
+#BSUB -J argos_v3_2b_hybrid
+#BSUB -q p1
+#BSUB -gpu "num=2:mode=shared"
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=192GB]"
+#BSUB -W 12:00
+#BSUB -o results/03_temporal_refinement/training/tiny_refiner_v3_2b_hybrid_oracle_freeze_detector_lsf_%J.out
+#BSUB -e results/03_temporal_refinement/training/tiny_refiner_v3_2b_hybrid_oracle_freeze_detector_lsf_%J.err
+
+set -euo pipefail
+
+cd /dtu/p1/leopam/ARGOS
+export PYTHONPATH="$(pwd)"
+export OMP_NUM_THREADS=4
+
+source .miniconda/etc/profile.d/conda.sh
+conda activate argos
+
+OUT="results/03_temporal_refinement/training/tiny_refiner_v3_2b_hybrid_oracle_freeze_detector"
+LOG_DIR="results/03_temporal_refinement/training"
+TMP_STDOUT="${LOG_DIR}/tiny_refiner_v3_2b_stdout_${LSB_JOBID:-manual}.log"
+TMP_STDERR="${LOG_DIR}/tiny_refiner_v3_2b_stderr_${LSB_JOBID:-manual}.log"
+
+set +e
+python scripts/temporal_refinement/train_tiny_refiner_v3_2_hybrid_oracle.py \
+  --output-root "$OUT" \
+  --freeze-detector true \
+  --sparsity-weight 0.02 \
+  --residual-lr 3e-4 \
+  --detector-lr 0 \
+  --backbone-lr 1e-5 \
+  --oracle-batch-ratio 0.25 \
+  --full-gt-batch-ratio 0.75 \
+  --num-workers 20 \
+  --overwrite true \
+  > "$TMP_STDOUT" 2> "$TMP_STDERR"
+rc=$?
+set -e
+
+mkdir -p "$OUT"
+mv "$TMP_STDOUT" "$OUT/stdout.log" 2>/dev/null || true
+mv "$TMP_STDERR" "$OUT/stderr.log" 2>/dev/null || true
+echo "TRAIN_EXIT=$rc" > "$OUT/train_exit.txt"
+exit "$rc"

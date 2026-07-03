@@ -1,0 +1,197 @@
+{
+  "frames": 502,
+  "keys": {
+    "raw_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "gt_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "valid_mask": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_selected_candidate_id_no_flow": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_selected_candidate_id_raw_fixed_raftsmall": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_selected_candidate_id_all_available": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_no_flow_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_raw_fixed_raftsmall_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_all_available_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_disp_no_flow": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "oracle_disp_all_available": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "delta_disp_oracle_no_flow_minus_raw": {
+      "dtypes": {
+        "float32": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "delta_disp_oracle_all_available_minus_raw": {
+      "dtypes": {
+        "float32": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "raw_confidence_binary": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "high_error_mask": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "high_boundary_error_mask": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "high_temporal_mismatch_mask": {
+      "dtypes": {
+        "uint8": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "fixed_ema_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "adaptive_no_raft_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "raftsmall_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    },
+    "sav_disp": {
+      "dtypes": {
+        "float16": 502
+      },
+      "shapes": {
+        "(256, 320)": 502
+      },
+      "frames": 502
+    }
+  },
+  "key_sets": {
+    "('adaptive_no_raft_disp', 'delta_disp_oracle_all_available_minus_raw', 'delta_disp_oracle_no_flow_minus_raw', 'fixed_ema_disp', 'gt_disp', 'high_boundary_error_mask', 'high_error_mask', 'high_temporal_mismatch_mask', 'oracle_all_available_disp', 'oracle_disp_all_available', 'oracle_disp_no_flow', 'oracle_no_flow_disp', 'oracle_raw_fixed_raftsmall_disp', 'oracle_selected_candidate_id_all_available', 'oracle_selected_candidate_id_no_flow', 'oracle_selected_candidate_id_raw_fixed_raftsmall', 'raftsmall_disp', 'raw_confidence_binary', 'raw_disp', 'sav_disp', 'valid_mask')": 502
+  }
+}

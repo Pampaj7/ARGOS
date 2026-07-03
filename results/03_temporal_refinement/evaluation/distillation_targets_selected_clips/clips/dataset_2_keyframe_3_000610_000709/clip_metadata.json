@@ -1,0 +1,30 @@
+{
+  "clip_id": "dataset_2_keyframe_3_000610_000709",
+  "sequence_id": "dataset_2_keyframe_3",
+  "frame_start": "000610",
+  "frame_end": "000709",
+  "frames_processed": 63,
+  "target_scale": 0.25,
+  "downsample_min_valid_ratio": 0.25,
+  "candidate_ids": {
+    "raw_s2m2": 0,
+    "fixed_ema_alpha_0.35": 1,
+    "adaptive_no_raft": 2,
+    "raft_small_6_warped_ema_alpha_0.50": 3,
+    "stereoanyvideo": 4
+  },
+  "candidates_available": [
+    "raw_s2m2",
+    "fixed_ema_alpha_0.35",
+    "adaptive_no_raft",
+    "raft_small_6_warped_ema_alpha_0.50",
+    "stereoanyvideo"
+  ],
+  "raw_s2m2_runtime_ms_mean": 73.09566325108919,
+  "raw_s2m2_peak_vram_mb": 392.97509765625,
+  "sav_chunk_size": 32,
+  "sav_pad_last_chunk": true,
+  "sav_chunks_used": 2,
+  "sav_padded_frames": 1,
+  "sav_available": true
+}

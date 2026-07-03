@@ -1,0 +1,24 @@
+{
+  "dataset_root": "/dtu/p1/leopam/ARGOS/dataset/SCARED/curated/temporal_gt_rectified",
+  "frame_metrics_csv": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2_v2_artifact_temporal/frame_metrics.csv",
+  "output_root": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/evaluation/s2m2_gt_refiner_targets_full",
+  "target_scale": 0.25,
+  "min_valid_ratio": 0.25,
+  "sequences": 27,
+  "frames": 20621,
+  "output_size_mb": 2826.9976682662964,
+  "raw_disp_mae_lowres": 7.0247049055537225,
+  "raw_bad_1px_lowres": 73.56937079468865,
+  "raw_bad_3px_lowres": 44.15210882892168,
+  "valid_ratio_lowres_mean": 0.45534485404934594,
+  "delta_abs_mean": 7.0247049055537225,
+  "runtime_sec": 3650.496692785062,
+  "runtime_ms_per_frame_mean": 58.18447599618898,
+  "estimated_size_for_20621_frames_mb": 2826.9976682662964,
+  "no_full_resolution_prediction_cache": true,
+  "teachers_not_run": [
+    "SAV",
+    "RAFT",
+    "DINO"
+  ]
+}

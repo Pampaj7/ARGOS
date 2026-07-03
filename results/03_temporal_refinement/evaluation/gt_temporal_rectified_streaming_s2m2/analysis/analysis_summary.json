@@ -1,0 +1,81 @@
+{
+  "result_dir": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2",
+  "out_dir": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/evaluation/gt_temporal_rectified_streaming_s2m2/analysis",
+  "thresholds": {
+    "disparity_mae_mean": {
+      "q25": 2.2395749660961846,
+      "q50": 5.08548632431493,
+      "q75": 10.046397881879326,
+      "upper_fence": 21.756632255554038
+    },
+    "bad_3px_mean": {
+      "q25": 21.84659455824796,
+      "q50": 38.12841143143227,
+      "q75": 67.01711924636402,
+      "upper_fence": 134.7729062785381
+    },
+    "depth_mae_mean": {
+      "q25": 1.9337884193888948,
+      "q50": 2.9858841097746858,
+      "q75": 5.370730440558168,
+      "upper_fence": 10.526143472312077
+    },
+    "valid_pixel_pct_mean": {
+      "q10": 0.1182144738658229,
+      "q25": 0.168128177218346,
+      "q50": 0.20840611457824706
+    },
+    "skipped_ratio": {
+      "q75": 0.08628809059843542
+    }
+  },
+  "group_counts": {
+    "core_eval": 11,
+    "stress_eval": 12,
+    "exclude_or_diagnostic": 4
+  },
+  "correlations": {
+    "sequence_level": {
+      "disparity_mae_mean": -0.07050265809084874,
+      "bad_3px_mean": -0.1343519284923341,
+      "depth_mae_mean": 0.1288812071214665
+    },
+    "frame_level": {
+      "disparity_mae": -0.046421031009295566,
+      "bad_3px": -0.1750745897187659,
+      "depth_mae": -0.003751599076385265
+    }
+  },
+  "contribution_summary": {
+    "all_weighted_disparity_mae": 6.8294713844405495,
+    "without_top_3_weighted_disparity_mae": 5.387744463792552,
+    "top_3_sequences": [
+      "dataset_4_keyframe_4",
+      "dataset_5_keyframe_1",
+      "dataset_5_keyframe_2"
+    ],
+    "without_top_7_weighted_disparity_mae": 3.569528558811597,
+    "top_7_sequences": [
+      "dataset_4_keyframe_1",
+      "dataset_4_keyframe_3",
+      "dataset_4_keyframe_4",
+      "dataset_5_keyframe_1",
+      "dataset_5_keyframe_2",
+      "dataset_5_keyframe_3",
+      "dataset_5_keyframe_4"
+    ]
+  },
+  "group_weighted_metrics": {
+    "core_eval_weighted_disparity_mae": 3.1220246010604824,
+    "stress_eval_weighted_disparity_mae": 8.58168956720877,
+    "exclude_or_diagnostic_weighted_disparity_mae": 13.060073715679906
+  },
+  "median_sequence_bad_3px": 38.12841143143227,
+  "conclusion": "Poor aggregate metrics are outlier-heavy but not isolated: removing the top three disparity-MAE sequences lowers weighted disparity MAE from 6.829 px to 5.388 px, while median sequence bad-3px remains 38.13%.",
+  "plots": [
+    "sequence_disp_mae_sorted.png",
+    "sequence_bad3_sorted.png",
+    "error_vs_valid_ratio.png",
+    "frame_error_histogram.png"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "raft_small": {
+    "requested": true,
+    "checkpoint": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/RAFT/checkpoints/raft-small.pth",
+    "available_clips": [
+      "dataset_2_keyframe_1_000000_000087",
+      "dataset_5_keyframe_3_001100_001199",
+      "dataset_4_keyframe_3_000270_000369",
+      "dataset_7_keyframe_1_000540_000639",
+      "dataset_2_keyframe_3_000610_000709",
+      "dataset_5_keyframe_1_000030_000129"
+    ],
+    "failed_clips": {}
+  },
+  "stereoanyvideo": {
+    "requested": true,
+    "sav_chunk_size": 32,
+    "sav_pad_last_chunk": true,
+    "available_clips": [
+      "dataset_2_keyframe_1_000000_000087",
+      "dataset_5_keyframe_3_001100_001199",
+      "dataset_4_keyframe_3_000270_000369",
+      "dataset_7_keyframe_1_000540_000639",
+      "dataset_2_keyframe_3_000610_000709",
+      "dataset_5_keyframe_1_000030_000129"
+    ],
+    "failed_clips": {},
+    "chunk_metadata": {
+      "dataset_2_keyframe_1_000000_000087": {
+        "sav_chunk_size": 32,
+        "sav_pad_last_chunk": true,
+        "sav_chunks_used": 3,
+        "sav_padded_frames": 8,
+        "sav_available": true
+      },
+      "dataset_5_keyframe_3_001100_001199": {
+        "sav_chunk_size": 32,
+        "sav_pad_last_chunk": true,
+        "sav_chunks_used": 2,
+        "sav_padded_frames": 9,
+        "sav_available": true
+      },
+      "dataset_4_keyframe_3_000270_000369": {
+        "sav_chunk_size": 32,
+        "sav_pad_last_chunk": true,
+        "sav_chunks_used": 3,
+        "sav_padded_frames": 0,
+        "sav_available": true
+      },
+      "dataset_7_keyframe_1_000540_000639": {
+        "sav_chunk_size": 32,
+        "sav_pad_last_chunk": true,
+        "sav_chunks_used": 4,
+        "sav_padded_frames": 28,
+        "sav_available": true
+      },
+      "dataset_2_keyframe_3_000610_000709": {
+        "sav_chunk_size": 32,
+        "sav_pad_last_chunk": true,
+        "sav_chunks_used": 2,
+        "sav_padded_frames": 1,
+        "sav_available": true
+      },
+      "dataset_5_keyframe_1_000030_000129": {
+        "sav_chunk_size": 32,
+        "sav_pad_last_chunk": true,
+        "sav_chunks_used": 4,
+        "sav_padded_frames": 28,
+        "sav_available": true
+      }
+    }
+  },
+  "raft_full": {
+    "requested": false,
+    "available_clips": [],
+    "failed_clips": {},
+    "note": "not implemented for this selected-clip smoke script"
+  }
+}

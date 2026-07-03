@@ -1,0 +1,11 @@
+{
+  "output_root": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/evaluation/distillation_targets_selected_clips",
+  "clips_processed": 6,
+  "frames_processed": 502,
+  "target_scale": 0.25,
+  "save_full_resolution_targets": false,
+  "mean_raw_disp_mae": 12.76423242574288,
+  "mean_oracle_no_flow_disp_mae": 11.4889767575527,
+  "mean_oracle_all_available_disp_mae": 8.474137968196496,
+  "elapsed_seconds": 283.51597753097303
+}
