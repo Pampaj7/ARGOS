@@ -1,0 +1,50 @@
+{
+  "dataset": "SERV-CT",
+  "prepared_root": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct",
+  "sequence_layout": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/sequences",
+  "n_frames": 16,
+  "sequences": [
+    {
+      "sequence_id": "honest_test__Experiment_2",
+      "split": "honest_test",
+      "experiment": "Experiment_2",
+      "frames": 8,
+      "frame_ids": [
+        "009",
+        "010",
+        "011",
+        "012",
+        "013",
+        "014",
+        "015",
+        "016"
+      ]
+    },
+    {
+      "sequence_id": "honest_train__Experiment_1",
+      "split": "honest_train",
+      "experiment": "Experiment_1",
+      "frames": 8,
+      "frame_ids": [
+        "001",
+        "002",
+        "003",
+        "004",
+        "005",
+        "006",
+        "007",
+        "008"
+      ]
+    }
+  ],
+  "raw_disparity_recipe": {
+    "generator": "scripts/temporal_refinement/data_prep/predict_s2m2_long_sequences.py",
+    "variant": "S",
+    "width": 512,
+    "note": "unchanged upstream generator; output in original image disparity coords",
+    "out_root": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/s2m2_s512"
+  },
+  "gt_convention": "positive px, left reference, rectified (matches ARGOS; no conversion)",
+  "continuity": "weak_sparse (streaming/window refiners run in causal-replay mode)",
+  "non_destructive": true
+}

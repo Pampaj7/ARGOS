@@ -1,0 +1,6 @@
+# OOD data derivatives are regenerable from adapters + S2M2 generator; keep only manifests/text
+**/sequences/
+**/s2m2_s512/
+**/shards/
+*.npy
+*.npz

@@ -1,0 +1,79 @@
+{
+  "v3.2c": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/tiny_refiner_v3_2c_hybrid_oracle_freeze_detector_long/checkpoints/best.pt",
+    "epoch": 29,
+    "residual_scale": 3.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": 0.7,
+    "input_channels": 16,
+    "params": 194818,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  },
+  "EGBM-v1": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/experimental_refiner_vx_training/checkpoints/best.pt",
+    "epoch": 5,
+    "residual_scale": 3.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": null,
+    "input_channels": 16,
+    "params": 4042068,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  },
+  "EGBM-v2": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/egbm_v2_experimental/checkpoints/best.pt",
+    "epoch": 11,
+    "residual_scale": 3.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": null,
+    "input_channels": 16,
+    "params": 6779757,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  },
+  "EGBM-v2-CARE": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/egbm_v2_care/checkpoints/best.pt",
+    "epoch": 9,
+    "residual_scale": 3.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": null,
+    "input_channels": 16,
+    "params": 4352473,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  },
+  "EGBM-v3-CARE-S": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/egbm_v3_care_streaming/checkpoints/best.pt",
+    "epoch": 5,
+    "residual_scale": 3.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": null,
+    "input_channels": 16,
+    "params": 4420122,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  },
+  "MPC": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/magnitude_proposal_critic_refiner/checkpoints/best_pareto.pt",
+    "epoch": 1,
+    "residual_scale": 32.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": null,
+    "input_channels": 16,
+    "params": 4665066,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  },
+  "CPV": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/training/counterfactual_proposal_verifier_refiner/checkpoints/best_pareto.pt",
+    "epoch": 7,
+    "residual_scale": 32.0,
+    "context_frames": 4,
+    "bad_threshold_px": 3.0,
+    "threshold": null,
+    "input_channels": 16,
+    "params": 4707790,
+    "policy": "selected primary-dataset checkpoint; no OOD tuning"
+  }
+}

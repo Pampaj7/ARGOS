@@ -1,0 +1,17 @@
+sequence_id,frame_id,frame_index,previous_frame_id,next_frame_id,target_path,frame_offset,target_h,target_w,dataset,split,continuity_flag
+honest_test__Experiment_2,009,0,,010,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,0,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,010,1,009,011,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,1,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,011,2,010,012,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,2,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,012,3,011,013,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,3,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,013,4,012,014,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,4,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,014,5,013,015,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,5,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,015,6,014,016,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,6,144,180,SERV-CT,honest_test,weak_sparse
+honest_test__Experiment_2,016,7,015,,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_test__Experiment_2.npz,7,144,180,SERV-CT,honest_test,weak_sparse
+honest_train__Experiment_1,001,0,,002,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,0,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,002,1,001,003,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,1,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,003,2,002,004,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,2,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,004,3,003,005,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,3,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,005,4,004,006,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,4,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,006,5,005,007,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,5,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,007,6,006,008,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,6,144,180,SERV-CT,honest_train,weak_sparse
+honest_train__Experiment_1,008,7,007,,/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/servct/shards/honest_train__Experiment_1.npz,7,144,180,SERV-CT,honest_train,weak_sparse

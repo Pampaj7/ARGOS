@@ -1,0 +1,27 @@
+{
+  "dataset": "SERV-CT",
+  "n_frames": 16,
+  "checks": {
+    "1_disparity_sign_plausibility": "PASS",
+    "2_finite_values": "PASS",
+    "3_valid_mask_consistency": "PASS (dense GT masks, 100% valid on scanned region)",
+    "4_depth_disparity_roundtrip_mm": {
+      "mean": 2.364,
+      "max": 8.274,
+      "verdict": "PASS (<10mm mean; small-disp pixels dominate error)"
+    },
+    "5_resize_scale_correctness": "PASS (native px preserved; target_scale=0.25 area-avg same recipe as training)",
+    "6_left_right_orientation": "PASS (GT+disp both left-reference rectified; positive disparity)",
+    "7_temporal_ordering": "PASS",
+    "8_frame_count_consistency": "PASS (16 frames, 8+8; raw/gt/valid all present)",
+    "9_gt_raw_alignment": "PASS (identical grid after shared downsample; raw MAE 1.1-1.3px sane)",
+    "10_error_distribution_sanity": "PASS (raw MAE 1.1-1.3px, bad3 3-8% -- plausible S2M2 zero-shot)",
+    "11_random_visual_overlays": "see zero_shot_benchmark/servct/qualitative/*.png",
+    "12_no_future_frame_leakage": "PASS (causal window indices=[t,t-1,t-2,t-3], clamped at seq start)"
+  },
+  "raw_baseline": {
+    "test_mae_px": 1.284,
+    "train_mae_px": 1.127
+  },
+  "verdict": "VALIDATED for zero-shot dense-disparity OOD benchmark"
+}

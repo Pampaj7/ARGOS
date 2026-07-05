@@ -1,0 +1,123 @@
+{
+  "dataset": "servct",
+  "device": "cuda",
+  "n_frames": 16,
+  "n_sequences": 2,
+  "models": [
+    "raw",
+    "v3.2c",
+    "EGBM-v1",
+    "EGBM-v2",
+    "EGBM-v2-CARE",
+    "EGBM-v3-CARE-S",
+    "MPC",
+    "CPV"
+  ],
+  "protocol": "zero-shot; selected primary checkpoints; no OOD tuning; lowres 0.25 grid; causal 4-frame window",
+  "per_model": {
+    "raw": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 1.2020023502409458,
+      "delta_mae": 0.0,
+      "rel_impr": 0.0,
+      "refined_bad3": 5.961612654320987,
+      "new_bad3_pct_of_rawgood": 0.0,
+      "harmful_rate": 0.0,
+      "beneficial_rate": 0.0,
+      "net_benefit_ratio": 0.0,
+      "corr_p99": 0.0,
+      "runtime_ms": 0.0
+    },
+    "v3.2c": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 1.7423334419727325,
+      "delta_mae": -0.5403310917317867,
+      "rel_impr": -0.44018644117398253,
+      "refined_bad3": 18.16333912037037,
+      "new_bad3_pct_of_rawgood": 13.307099239019948,
+      "harmful_rate": 0.4693189034406172,
+      "beneficial_rate": 0.02666991027112076,
+      "net_benefit_ratio": 0.0308930737587962,
+      "corr_p99": 1.3099547922611237,
+      "runtime_ms": 13.650276378029957
+    },
+    "EGBM-v1": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 1.7342983856797218,
+      "delta_mae": -0.532296035438776,
+      "rel_impr": -0.46303523554293247,
+      "refined_bad3": 12.833960262345679,
+      "new_bad3_pct_of_rawgood": 8.482425495732729,
+      "harmful_rate": 0.6989702837064271,
+      "beneficial_rate": 0.2725532761944133,
+      "net_benefit_ratio": 0.5359500141764144,
+      "corr_p99": 1.9507300034165382,
+      "runtime_ms": 15.581585350446403
+    },
+    "EGBM-v2": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 1.9503881633281708,
+      "delta_mae": -0.748385813087225,
+      "rel_impr": -0.6653547421965341,
+      "refined_bad3": 15.490933641975309,
+      "new_bad3_pct_of_rawgood": 11.21737893315493,
+      "harmful_rate": 0.739487899722557,
+      "beneficial_rate": 0.2340780103197927,
+      "net_benefit_ratio": 0.36533068293783444,
+      "corr_p99": 2.1567907109856606,
+      "runtime_ms": 11.94932809448801
+    },
+    "EGBM-v2-CARE": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 1.8059833347797394,
+      "delta_mae": -0.6039809845387936,
+      "rel_impr": -0.5421113969385831,
+      "refined_bad3": 12.555941358024691,
+      "new_bad3_pct_of_rawgood": 8.54487808828472,
+      "harmful_rate": 0.6791564539073265,
+      "beneficial_rate": 0.2936978310810713,
+      "net_benefit_ratio": 0.5067812920779512,
+      "corr_p99": 2.187214821577072,
+      "runtime_ms": 10.632708086632192
+    },
+    "EGBM-v3-CARE-S": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 1.9951983503997326,
+      "delta_mae": -0.7931960001587868,
+      "rel_impr": -0.6959804436308208,
+      "refined_bad3": 14.503520447530864,
+      "new_bad3_pct_of_rawgood": 10.945562938477348,
+      "harmful_rate": 0.7641568529056109,
+      "beneficial_rate": 0.2136106416450178,
+      "net_benefit_ratio": 0.32397227886806945,
+      "corr_p99": 2.2326372116804123,
+      "runtime_ms": 12.278225432964973
+    },
+    "MPC": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 6.550392974168062,
+      "delta_mae": -5.348390623927116,
+      "rel_impr": -4.634496919809655,
+      "refined_bad3": 47.270447530864196,
+      "new_bad3_pct_of_rawgood": 44.23738866982677,
+      "harmful_rate": 0.8264511660129684,
+      "beneficial_rate": 0.15666134404538531,
+      "net_benefit_ratio": 0.28074654961204165,
+      "corr_p99": 12.767306750640273,
+      "runtime_ms": 8.571232014219277
+    },
+    "CPV": {
+      "raw_mae": 1.2020023502409458,
+      "refined_mae": 6.260544180870056,
+      "delta_mae": -5.05854183062911,
+      "rel_impr": -4.345857491540643,
+      "refined_bad3": 42.6147762345679,
+      "new_bad3_pct_of_rawgood": 39.32456495089798,
+      "harmful_rate": 0.8229721433860866,
+      "beneficial_rate": 0.15583955094351737,
+      "net_benefit_ratio": 0.41019617740477654,
+      "corr_p99": 12.42979948176071,
+      "runtime_ms": 8.54685228841845
+    }
+  }
+}

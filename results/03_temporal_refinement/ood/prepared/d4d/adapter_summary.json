@@ -1,0 +1,175 @@
+{
+  "dataset": "D4D",
+  "prepared_root": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/prepared/d4d",
+  "n_sequences": 16,
+  "n_frames": 12022,
+  "sequences": [
+    {
+      "sequence_id": "specimen_1__2025_03_06-16_49_40",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-16_49_40",
+      "n_frames": 516,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-16_53_09",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-16_53_09",
+      "n_frames": 266,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-16_54_09",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-16_54_09",
+      "n_frames": 405,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-16_56_00",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-16_56_00",
+      "n_frames": 1080,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_03_37",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_03_37",
+      "n_frames": 589,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_04_37",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_04_37",
+      "n_frames": 1639,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_10_48",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_10_48",
+      "n_frames": 354,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_33_33",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_33_33",
+      "n_frames": 868,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_35_04",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_35_04",
+      "n_frames": 453,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_36_19",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_36_19",
+      "n_frames": 863,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_38_21",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_38_21",
+      "n_frames": 901,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_39_51",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_39_51",
+      "n_frames": 898,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_43_05",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_43_05",
+      "n_frames": 573,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_46_07",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_46_07",
+      "n_frames": 793,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_50_08",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_50_08",
+      "n_frames": 413,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    },
+    {
+      "sequence_id": "specimen_1__2025_03_06-17_51_03",
+      "specimen": "specimen_1",
+      "session": "2025_03_06-17_51_03",
+      "n_frames": 1411,
+      "img_w": 894,
+      "img_h": 714,
+      "fx_px": 798.31803,
+      "baseline_m": 0.004234953831620212
+    }
+  ],
+  "status": "INVENTORY ONLY \u2014 excluded from dense zero-shot disparity benchmark",
+  "blockers": [
+    "B2 no dense per-frame disparity GT (Zivid sparse)",
+    "rectification params present but not applied"
+  ],
+  "non_destructive": true,
+  "future_use": "GT-free temporal-stability OOD diagnostics after rectification, or few-frame GT eval at Zivid scan instants (see missing_requirements.md)"
+}

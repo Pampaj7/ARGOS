@@ -1,0 +1,9 @@
+date: 2026-07-05
+node(full run): n-62-12-83  (NVIDIA H100 PCIe, LSF p1i)
+python: 3.10.20
+torch: 2.5.1+cu121
+numpy: 2.2.6
+upstream_stereo: S2M2-S @512 pretrained (external/frame_stereo_repos/s2m2/weights/pretrain_weights/CH128NTR1.pth)
+refiner_grid: 144x180  target_scale=0.25  DISP_SCALE=64  context_frames=4 (causal, no future leak)
+gpu_runtime_ms_per_frame@144x180: MPC~8.6 CPV~8.5 EGBM-v3-CARE-S~12.3 (others similar)
+git_head: f11cd2809c3ceffd62cf1084b9e3e60b7031b9ba
