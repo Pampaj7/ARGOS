@@ -1,0 +1,67 @@
+{
+  "generated_by": "scripts/temporal_refinement/ood/adapters/discover_ood_datasets.py",
+  "purpose": "Zero-shot OOD benchmark for ARGOS temporal stereo refiners (Agent B)",
+  "argos_refiner_upstream": "S2M2-S @ 512 (pretrained, zero-shot) \u2014 refiners correct this raw disparity",
+  "datasets": {
+    "SERV-CT": {
+      "root": "/dtu/p1/leopam/ARGOS/dataset/SERVCT/argos/servct_argos",
+      "raw_source": "/dtu/p1/leopam/ARGOS/dataset/SERVCT/raw/extracted/SERV-CT",
+      "n_frames": 16,
+      "sequences": {
+        "honest_test/Experiment_2": [
+          "009",
+          "010",
+          "011",
+          "012",
+          "013",
+          "014",
+          "015",
+          "016"
+        ],
+        "honest_train/Experiment_1": [
+          "001",
+          "002",
+          "003",
+          "004",
+          "005",
+          "006",
+          "007",
+          "008"
+        ]
+      },
+      "n_sequences": 2,
+      "gt": "dense disparity (px) + depth (mm) + valid mask, aligned to LEFT rectified image",
+      "rectified": true,
+      "disp_convention": "positive pixel disparity, left reference (matches ARGOS/S2M2)",
+      "temporal": "each Experiment is an ordered set of pairs; continuity WEAK/SPARSE",
+      "raw_disparity_status": "ABSENT \u2014 pretrained S2M2-S inference required (zero-shot upstream)",
+      "license": "SERV-CT (Edwards et al. 2020), academic use; cite original"
+    },
+    "D4D": {
+      "root": "/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted",
+      "specimens_extracted": [
+        "specimen_1"
+      ],
+      "specimens_not_extracted": [
+        "specimen_3",
+        "specimen_4",
+        "specimen_5 (tar.gz present, not extracted)"
+      ],
+      "n_sessions": 16,
+      "n_frames_total_approx": 12687,
+      "n_clips_total": 43,
+      "gt": "Zivid structured-light scans (depth_images + pointcloud), ~2 per session at scan timepoints",
+      "dense_perframe_disp_gt": false,
+      "rectified": "params available (R,P per side); must apply cv2.remap",
+      "disp_convention": "after rectification: positive px left reference (to be produced)",
+      "temporal": "true temporal video within clips (ordered frames, ~fps continuity)",
+      "raw_disparity_status": "ABSENT \u2014 pretrained S2M2-S inference required",
+      "license": "D4D Dresden 4D (Wagner et al.), academic use; cite original",
+      "blocker": "no dense per-frame GT disparity \u2014 requires Zivid pointcloud reprojection + per-frame pose to build GT"
+    }
+  },
+  "headline": {
+    "servct": "READY for zero-shot after S2M2-S raw-disp generation; dense GT; weak temporal.",
+    "d4d": "NOT READY \u2014 no dense per-frame GT disparity; heavy Zivid->disp conversion required."
+  }
+}

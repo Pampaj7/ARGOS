@@ -1,0 +1,19 @@
+dataset,sequence_id,n_frames,has_stereo,has_raw_disp,has_gt,gt_type,temporal_continuity,usable_zero_shot_singleframe,usable_zero_shot_streaming,exclusion_reason
+SERV-CT,honest_test/Experiment_2,8,True,False,True,dense_disp_px,weak_sparse,True,False,
+SERV-CT,honest_train/Experiment_1,8,True,False,True,dense_disp_px,weak_sparse,True,False,train split (still zero-shot but reserve as OOD holdout; not used for tuning)
+D4D,specimen_1/2025_03_06-16_49_40,521,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-16_53_09,268,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-16_54_09,428,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-16_56_00,1127,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_03_37,634,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_04_37,1751,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_10_48,377,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_33_33,916,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_35_04,482,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_36_19,887,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_38_21,964,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_39_51,970,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_43_05,601,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_46_07,836,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_50_08,427,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
+D4D,specimen_1/2025_03_06-17_51_03,1498,True,False,True,zivid_sparse_scan,strong_video,False,False,no dense per-frame GT disparity; needs Zivid reprojection+pose conversion before benchmark
