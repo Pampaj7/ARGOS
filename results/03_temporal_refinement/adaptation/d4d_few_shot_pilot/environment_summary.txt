@@ -1,0 +1,6 @@
+date: 2026-07-06
+queues: p1 (batch matrix) + p1i (interactive finish); p1gpush not a queue
+python: Python 3.10.20
+git_head: 96724f5d114aca3c15451d91ade11420c5026808
+runs: 84; models v3.2c + EGBM-v3-CARE-S; modes calib/head/full/scratch/zero-shot
+frozen eval: session_disjoint val(22)+test(30); raw frozen-test MAE 3.50

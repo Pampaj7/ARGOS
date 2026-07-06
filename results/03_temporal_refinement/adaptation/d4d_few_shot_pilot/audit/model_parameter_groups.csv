@@ -1,0 +1,7 @@
+model,adaptation_mode,trainable_modules,frozen_modules,trainable_params,total_params,trainable_pct
+v3.2c,calibration_only,bad_head,(complement),65,194818,0.033
+v3.2c,head_only,bad_head;residual_head,(complement),130,194818,0.067
+v3.2c,full,ALL,none (S2M2 backbone always frozen),194818,194818,100.0
+EGBM-v3-CARE-S,calibration_only,bad_head;damping_head;threshold_head;router_head;boundary_atten,(complement),10856,4420122,0.246
+EGBM-v3-CARE-S,head_only,bad_head;damping_head;threshold_head;router_head;boundary_atten;expert_heads;boundary_head;care_head,(complement),94577,4420122,2.14
+EGBM-v3-CARE-S,full,ALL,none (S2M2 backbone always frozen),4420122,4420122,100.0
