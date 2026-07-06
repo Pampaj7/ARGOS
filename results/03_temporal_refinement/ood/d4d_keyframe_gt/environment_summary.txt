@@ -1,0 +1,8 @@
+date: 2026-07-06
+python: Python 3.10.20
+opencv: 4.13.0
+numpy: 2.2.6
+scipy: 1.15.3
+git_head: 85405d75a75d0b8489be039e2f89b8b1f7baf064
+specimen_1: 16 sessions, 86 candidate anchors, 58 usable, run CPU (login node), sequential
+output_root: dataset/D4D/processed/keyframe_stereo_gt/

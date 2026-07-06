@@ -1,0 +1,5 @@
+session,file,format,vertices,properties,units,frame,equals_depth_backprojection
+2025_03_06-16_49_40,1741276188_724794149.ply,binary_little_endian 1.0 (Open3D),1970502,"double x,y,z + uchar r,g,b",metres,zivid_optical_frame,True
+2025_03_06-16_53_09,1741276395_576524019.ply,binary_little_endian 1.0 (Open3D),1944406,"double x,y,z + uchar r,g,b",metres,zivid_optical_frame,True
+2025_03_06-16_54_09,1741276454_627159595.ply,binary_little_endian 1.0 (Open3D),1938289,"double x,y,z + uchar r,g,b",metres,zivid_optical_frame,True
+2025_03_06-16_56_00,1741276567_518405675.ply,binary_little_endian 1.0 (Open3D),1863289,"double x,y,z + uchar r,g,b",metres,zivid_optical_frame,True

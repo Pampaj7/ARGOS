@@ -1,0 +1,7 @@
+file,frame,W,H,distortion_model,fx,cx,Tx_P03,R_is_identity
+left.yaml,narrow_stereo/left,894,714,plumb_bob,733.382,421.296,0.0,False
+right.yaml,narrow_stereo/right,894,714,plumb_bob,731.255,487.59,-3.3808,False
+left_rect.yaml,narrow_stereo/left_rect,894,714,plumb_bob,798.318,435.704,0.0,True
+right_rect.yaml,narrow_stereo/right_rect,894,714,plumb_bob,798.318,435.704,-3.3808,True
+color_camera_info.yaml,zivid_optical_frame,2448,2048,plumb_bob,2486.351,1220.635,0.0,True
+DERIVED,stereo_rectified,894,714,-,798.318,,-3.3808,baseline_mm=4.235

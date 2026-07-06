@@ -1,0 +1,5 @@
+session,file,shape,dtype,finite_pct,min_m,max_m,p50_m,invalid,units,frame,resolution_note
+2025_03_06-16_49_40,1741276188_724794149.npy,"(2048, 2448)",float32,39.3,0.1367,0.6059,0.2559,NaN,metres (optical-axis Z),zivid_optical (color cam aligned),2448x2048 = Zivid color resolution
+2025_03_06-16_53_09,1741276395_576524019.npy,"(2048, 2448)",float32,38.78,0.1369,0.6055,0.2554,NaN,metres (optical-axis Z),zivid_optical (color cam aligned),2448x2048 = Zivid color resolution
+2025_03_06-16_54_09,1741276454_627159595.npy,"(2048, 2448)",float32,38.66,0.1361,0.6063,0.2546,NaN,metres (optical-axis Z),zivid_optical (color cam aligned),2448x2048 = Zivid color resolution
+2025_03_06-16_56_00,1741276567_518405675.npy,"(2048, 2448)",float32,37.17,0.1364,0.6081,0.2543,NaN,metres (optical-axis Z),zivid_optical (color cam aligned),2448x2048 = Zivid color resolution

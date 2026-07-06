@@ -1,0 +1,17 @@
+{
+  "root": "/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted",
+  "specimen_1_sessions": 16,
+  "session_subdirs": [
+    "camera_info",
+    "clips",
+    "color_images",
+    "depth_images",
+    "left_images",
+    "masks",
+    "pointcloud",
+    "right_images",
+    "snr_images",
+    "tf"
+  ],
+  "hierarchy": "dataset -> specimen_N -> session_timestamp -> {stereo stream, camera_info, zivid geometry (2/clip), tf/, clips.json}"
+}

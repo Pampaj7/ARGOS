@@ -1,0 +1,3 @@
+?? results/03_temporal_refinement/ood/d4d_keyframe_gt/
+?? results/03_temporal_refinement/ood/d4d_keyframe_gt_audit/
+?? scripts/temporal_refinement/ood/d4d/

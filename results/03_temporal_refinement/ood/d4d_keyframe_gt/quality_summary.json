@@ -1,0 +1,8 @@
+{
+  "total_converted_anchors": 58,
+  "valid": 38,
+  "usable_with_warning": 20,
+  "rejected": 0,
+  "benchmark_usable": 58,
+  "note": "27 additional candidate anchors failed conversion (missing tf series or snr file); see audit log"
+}

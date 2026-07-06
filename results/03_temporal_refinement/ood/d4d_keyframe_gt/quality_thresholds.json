@@ -1,0 +1,8 @@
+{
+  "min_valid_coverage_pct": 12.0,
+  "max_stereo_zivid_offset_ms": 60.0,
+  "warn_stereo_zivid_offset_ms": 40.0,
+  "warn_max_interp_gap_ms": 500.0,
+  "disp_min_plausible": 1.0,
+  "disp_max_plausible": 250.0
+}
