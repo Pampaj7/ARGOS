@@ -1,0 +1,8 @@
+{
+  "filesystem": "10.66.80.119:/raid5",
+  "size_tb": 66.0,
+  "used_tb": 33.0,
+  "avail_tb": 33.0,
+  "extracted_d4d": "234G",
+  "processed_gt": "1.9G"
+}

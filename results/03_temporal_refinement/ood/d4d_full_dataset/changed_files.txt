@@ -1,0 +1,4 @@
+ M scripts/temporal_refinement/ood/d4d/d4d_keyframe_gt.py
+?? results/03_temporal_refinement/ood/d4d_full_dataset/
+?? scripts/temporal_refinement/ood/d4d/build_full_benchmark.py
+?? scripts/temporal_refinement/ood/d4d/validate_d4d_benchmark.py

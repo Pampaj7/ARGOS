@@ -1,0 +1,6 @@
+specimen,fx,baseline_mm,convention,matches_specimen_1_fx
+specimen_1,798.32,4.235,,True
+specimen_1,798.32,4.235,direct_polaris,True
+specimen_2,834.34,3.965,direct_ps,False
+specimen_3,834.88,4.44,direct_polaris,False
+specimen_3,834.88,4.44,direct_ps,False

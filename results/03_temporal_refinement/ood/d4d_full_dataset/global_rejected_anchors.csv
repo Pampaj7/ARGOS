@@ -1,0 +1,37 @@
+anchor_id,specimen,session,clip,anchor,status,reason,valid_coverage_pct,stereo_zivid_offset_ms,interp_gap_ms,convention
+specimen_2__2025_04_10-16_32_24__Clip_1__end,specimen_2,2025_04_10-16_32_24,Clip_1,end,rejected,low_coverage(9.9%),9.91,1.302480697631836,0.0,direct_ps
+specimen_2__2025_04_10-16_28_15__Clip_1__end,specimen_2,2025_04_10-16_28_15,Clip_1,end,rejected,low_coverage(9.7%),9.697,6.64520263671875,16.051769256591797,direct_ps
+specimen_3__2025_05_08-14_52_45__Clip_1__end,specimen_3,2025_05_08-14_52_45,Clip_1,end,rejected,low_coverage(10.8%),10.833,14.3280029296875,17.711877822875977,direct_ps
+specimen_2__2025_04_10-16_33_49__Clip_1__start,specimen_2,2025_04_10-16_33_49,Clip_1,start,rejected,low_coverage(11.0%),10.951,9.153127670288086,17.790555953979492,direct_ps
+specimen_2__2025_04_10-16_33_49__Clip_4__end,specimen_2,2025_04_10-16_33_49,Clip_4,end,rejected,low_coverage(11.5%),11.469,6.726264953613281,14.950037002563477,direct_ps
+specimen_2__2025_04_10-16_33_49__Clip_5__start,specimen_2,2025_04_10-16_33_49,Clip_5,start,rejected,low_coverage(11.5%),11.469,6.726264953613281,14.950037002563477,direct_ps
+specimen_2__2025_04_10-16_33_49__Clip_5__end,specimen_2,2025_04_10-16_33_49,Clip_5,end,rejected,low_coverage(11.9%),11.862,5.647420883178711,16.033172607421875,direct_ps
+specimen_3__2025_05_08-14_55_19__Clip_1__start,specimen_3,2025_05_08-14_55_19,Clip_1,start,rejected,low_coverage(11.8%),11.771,2.8226375579833984,18.983840942382812,direct_ps
+specimen_3__2025_05_08-14_55_19__Clip_1__end,specimen_3,2025_05_08-14_55_19,Clip_1,end,rejected,low_coverage(7.8%),7.803,14.33110237121582,18.053770065307617,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_1__start,specimen_3,2025_05_08-14_53_37,Clip_1,start,rejected,low_coverage(11.8%),11.794,8.378744125366211,15.19775390625,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_1__end,specimen_3,2025_05_08-14_53_37,Clip_1,end,rejected,low_coverage(11.8%),11.841,14.288902282714844,18.99409294128418,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_2__start,specimen_3,2025_05_08-14_53_37,Clip_2,start,rejected,low_coverage(11.8%),11.841,14.288902282714844,18.99409294128418,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_2__end,specimen_3,2025_05_08-14_53_37,Clip_2,end,rejected,low_coverage(11.9%),11.868,0.9396076202392578,16.95537567138672,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_3__start,specimen_3,2025_05_08-14_53_37,Clip_3,start,rejected,low_coverage(11.9%),11.868,0.9396076202392578,16.95537567138672,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_3__end,specimen_3,2025_05_08-14_53_37,Clip_3,end,rejected,low_coverage(11.8%),11.779,6.690502166748047,15.959739685058594,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_4__start,specimen_3,2025_05_08-14_53_37,Clip_4,start,rejected,low_coverage(11.8%),11.779,6.690502166748047,15.959739685058594,direct_ps
+specimen_3__2025_05_08-14_53_37__Clip_4__end,specimen_3,2025_05_08-14_53_37,Clip_4,end,rejected,low_coverage(11.5%),11.476,15.667200088500977,17.964601516723633,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_1__start,specimen_3,2025_05_08-14_56_07,Clip_1,start,rejected,low_coverage(11.6%),11.602,2.423524856567383,18.062829971313477,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_1__end,specimen_3,2025_05_08-14_56_07,Clip_1,end,rejected,low_coverage(10.3%),10.3,8.714914321899414,16.733407974243164,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_2__start,specimen_3,2025_05_08-14_56_07,Clip_2,start,rejected,low_coverage(10.3%),10.3,8.714914321899414,16.733407974243164,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_2__end,specimen_3,2025_05_08-14_56_07,Clip_2,end,rejected,low_coverage(9.8%),9.785,13.790130615234375,17.980575561523438,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_3__start,specimen_3,2025_05_08-14_56_07,Clip_3,start,rejected,low_coverage(9.8%),9.785,13.790130615234375,17.980575561523438,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_3__end,specimen_3,2025_05_08-14_56_07,Clip_3,end,rejected,low_coverage(9.7%),9.658,12.166976928710938,18.932342529296875,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_4__start,specimen_3,2025_05_08-14_56_07,Clip_4,start,rejected,low_coverage(9.7%),9.658,12.166976928710938,18.932342529296875,direct_ps
+specimen_3__2025_05_08-14_56_07__Clip_4__end,specimen_3,2025_05_08-14_56_07,Clip_4,end,rejected,low_coverage(7.9%),7.89,16.39270782470703,15.097856521606445,direct_ps
+specimen_3__2025_05_08-14_50_11__Clip_4__end,specimen_3,2025_05_08-14_50_11,Clip_4,end,rejected,low_coverage(11.7%),11.672,4.167795181274414,16.860246658325195,direct_ps
+specimen_3__2025_05_08-14_50_11__Clip_5__start,specimen_3,2025_05_08-14_50_11,Clip_5,start,rejected,low_coverage(11.7%),11.672,4.167795181274414,16.860246658325195,direct_ps
+specimen_3__2025_05_08-14_50_11__Clip_5__end,specimen_3,2025_05_08-14_50_11,Clip_5,end,rejected,low_coverage(11.4%),11.429,12.927532196044922,16.434669494628906,direct_ps
+specimen_3__2025_05_08-14_59_26__Clip_1__start,specimen_3,2025_05_08-14_59_26,Clip_1,start,rejected,low_coverage(11.5%),11.528,0.0171661376953125,19.304990768432617,direct_ps
+specimen_3__2025_05_08-14_59_26__Clip_1__end,specimen_3,2025_05_08-14_59_26,Clip_1,end,rejected,low_coverage(8.9%),8.937,13.440847396850586,17.547130584716797,direct_ps
+specimen_3__2025_05_08-14_59_26__Clip_2__start,specimen_3,2025_05_08-14_59_26,Clip_2,start,rejected,low_coverage(8.9%),8.937,13.440847396850586,17.547130584716797,direct_ps
+specimen_1__2025_03_06-17_35_04__Clip_1__end,specimen_1,2025_03_06-17_35_04,Clip_1,end,rejected,[Errno 2] No such file or directory: '/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted/specimen_1/specimen_1/2025_03_06-17,,,,
+specimen_1__2025_03_06-17_04_37__Clip_5__end,specimen_1,2025_03_06-17_04_37,Clip_5,end,rejected,[Errno 2] No such file or directory: '/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted/specimen_1/specimen_1/2025_03_06-17,,,,
+specimen_3__2025_05_08-14_24_24__Clip_1__end,specimen_3,2025_05_08-14_24_24,Clip_1,end,rejected,[Errno 2] No such file or directory: '/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted/specimen_3/2025_05_08-14_24_24/snr_,,,,
+specimen_1__2025_03_06-17_36_19__Clip_4__end,specimen_1,2025_03_06-17_36_19,Clip_4,end,rejected,[Errno 2] No such file or directory: '/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted/specimen_1/specimen_1/2025_03_06-17,,,,
+specimen_3__2025_05_08-14_36_52__Clip_1__end,specimen_3,2025_05_08-14_36_52,Clip_1,end,rejected,[Errno 2] No such file or directory: '/dtu/p1/leopam/ARGOS/dataset/D4D/raw/extracted/specimen_3/2025_05_08-14_36_52/snr_,,,,

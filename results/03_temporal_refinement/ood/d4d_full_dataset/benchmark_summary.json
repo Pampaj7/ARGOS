@@ -1,0 +1,50 @@
+{
+  "git_commit": "a5352a58621e86be88c60a3d83cb73b508f664ed",
+  "transform_chain_version": "v2-multiconv (mire45_bridge | direct_ps | direct_polaris)",
+  "specimens_processed": [
+    "specimen_1",
+    "specimen_2",
+    "specimen_3"
+  ],
+  "n_sessions": 36,
+  "total_ok_anchors": 197,
+  "status_counts": {
+    "valid": 142,
+    "usable_with_warning": 24,
+    "rejected": 31
+  },
+  "benchmark_usable": 166,
+  "conversion_rejected_tf_chain": 5,
+  "coverage_pct": {
+    "min": 12.2,
+    "median": 22.1,
+    "max": 35.3
+  },
+  "stereo_zivid_offset_ms": {
+    "min": 0.0,
+    "median": 12.3,
+    "max": 54.7
+  },
+  "conventions": {
+    "": 58,
+    "direct_polaris": 38,
+    "direct_ps": 101
+  },
+  "per_specimen": {
+    "specimen_1": {
+      "anchors": 82,
+      "valid": 60,
+      "warning": 22
+    },
+    "specimen_2": {
+      "anchors": 39,
+      "valid": 31,
+      "warning": 2
+    },
+    "specimen_3": {
+      "anchors": 76,
+      "valid": 51,
+      "warning": 0
+    }
+  }
+}

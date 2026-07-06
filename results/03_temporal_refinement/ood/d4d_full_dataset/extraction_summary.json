@@ -1,0 +1,51 @@
+{
+  "extracted_done": [
+    "specimen_1",
+    "specimen_2",
+    "specimen_3"
+  ],
+  "extracting": [
+    "specimen_4 (137G archive, in progress, resumable)"
+  ],
+  "blocked": [
+    "specimen_5 (0.3MB archive, not gzip format -> corrupt/stub)"
+  ],
+  "method": "pigz -d | tar -xk (skip-existing, no overwrite); rc=0 for spec_3",
+  "inventory": [
+    {
+      "specimen": "specimen_1",
+      "archive_gb": 35.78,
+      "extracted": true,
+      "sessions": 16,
+      "status": "done"
+    },
+    {
+      "specimen": "specimen_2",
+      "archive_gb": 80.27,
+      "extracted": true,
+      "sessions": 9,
+      "status": "done"
+    },
+    {
+      "specimen": "specimen_3",
+      "archive_gb": 88.55,
+      "extracted": true,
+      "sessions": 15,
+      "status": "done"
+    },
+    {
+      "specimen": "specimen_4",
+      "archive_gb": 147.1,
+      "extracted": true,
+      "sessions": 4,
+      "status": "extracting"
+    },
+    {
+      "specimen": "specimen_5",
+      "archive_gb": 0.0,
+      "extracted": false,
+      "sessions": 0,
+      "status": "corrupt(not gzip)"
+    }
+  ]
+}

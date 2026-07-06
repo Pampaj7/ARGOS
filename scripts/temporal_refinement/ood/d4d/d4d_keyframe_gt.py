@@ -89,16 +89,56 @@ def interp_pose(tfs, t: float):
     return T, off, gap
 
 
-def chain_cam_from_zivid(tf_dir: Path, t: float):
-    """Validated MiRe45-bridged chain. Returns (T_cam_zivid, diagnostics)."""
-    T_ps_cam, o1, g1 = interp_pose(load_tf_series(tf_dir, "polaris_spectra_to_camera_optical"), t)
-    T_ps_M45, o2, g2 = interp_pose(load_tf_series(tf_dir, "polaris_spectra_to_polaris_spectra_MiRe45"), t)
-    T_pol_M45, o3, g3 = interp_pose(load_tf_series(tf_dir, "polaris_to_MiRe45"), t)
-    T_pol_ziv, o4, g4 = interp_pose(load_tf_series(tf_dir, "polaris_to_zivid_optical_frame"), t)
-    T = np.linalg.inv(T_ps_cam) @ T_ps_M45 @ np.linalg.inv(T_pol_M45) @ T_pol_ziv
-    diag = {"pose_offsets_ms": {"cam": o1 * 1e3, "ps_MiRe45": o2 * 1e3, "pol_MiRe45": o3 * 1e3, "zivid": o4 * 1e3},
-            "max_interp_gap_ms": max(g1, g2, g3, g4) * 1e3}
-    return T, diag
+# Per-specimen tf conventions (validated by reprojection alignment; do NOT force one).
+#  * mire45_bridge (specimen_1): camera in polaris_spectra, zivid in polaris, bridged via MiRe45 marker.
+#  * direct_ps    (specimen_2): both camera and zivid published in polaris_spectra -> no bridge.
+#  * direct_polaris (fallback): both published in polaris.
+CONV_PREFIXES = {
+    "mire45_bridge": ["polaris_spectra_to_camera_optical", "polaris_spectra_to_polaris_spectra_MiRe45",
+                      "polaris_to_MiRe45", "polaris_to_zivid_optical_frame"],
+    "direct_ps": ["polaris_spectra_to_camera_optical", "polaris_spectra_to_zivid_optical_frame"],
+    "direct_polaris": ["polaris_to_camera_optical", "polaris_to_zivid_optical_frame"],
+}
+
+
+def detect_convention(tf_dir: Path) -> str | None:
+    have = lambda p: bool(glob.glob(str(tf_dir / f"{p}_*.json")))
+    for conv, prefixes in CONV_PREFIXES.items():
+        if all(have(p) for p in prefixes):
+            return conv
+    return None
+
+
+def load_session_tf(tf_dir: Path) -> dict:
+    """Detect the tf convention and load its required series ONCE per session."""
+    conv = detect_convention(tf_dir)
+    if conv is None:
+        raise ValueError("no known tf convention (missing camera/zivid tracker frames)")
+    series = {p: load_tf_series(tf_dir, p) for p in CONV_PREFIXES[conv]}
+    empty = [p for p, s in series.items() if not s]
+    if empty:
+        raise ValueError(f"empty tf series: {empty}")
+    series["_convention"] = conv
+    return series
+
+
+def chain_cam_from_zivid(series: dict, t: float):
+    """Zivid->camera_optical transform for the detected convention. Returns (T, diagnostics)."""
+    conv = series["_convention"]
+    if conv == "mire45_bridge":
+        T_ps_cam, o1, g1 = interp_pose(series["polaris_spectra_to_camera_optical"], t)
+        T_ps_M45, o2, g2 = interp_pose(series["polaris_spectra_to_polaris_spectra_MiRe45"], t)
+        T_pol_M45, o3, g3 = interp_pose(series["polaris_to_MiRe45"], t)
+        T_pol_ziv, o4, g4 = interp_pose(series["polaris_to_zivid_optical_frame"], t)
+        T = np.linalg.inv(T_ps_cam) @ T_ps_M45 @ np.linalg.inv(T_pol_M45) @ T_pol_ziv
+        gaps = [g1, g2, g3, g4]; offs = {"cam": o1 * 1e3, "ps_MiRe45": o2 * 1e3, "pol_MiRe45": o3 * 1e3, "zivid": o4 * 1e3}
+    else:  # direct_ps / direct_polaris
+        cam_pre, ziv_pre = CONV_PREFIXES[conv]
+        T_cam, o1, g1 = interp_pose(series[cam_pre], t)
+        T_ziv, o2, g2 = interp_pose(series[ziv_pre], t)
+        T = np.linalg.inv(T_cam) @ T_ziv
+        gaps = [g1, g2]; offs = {"cam": o1 * 1e3, "zivid": o2 * 1e3}
+    return T, {"convention": conv, "pose_offsets_ms": offs, "max_interp_gap_ms": max(gaps) * 1e3}
 
 
 # ----------------------------- geometry -----------------------------------
@@ -138,7 +178,7 @@ def project_zbuffer(pts_cam, snr, color, R_rect, P_rect, W, H):
 
 
 # ----------------------------- one anchor ---------------------------------
-def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True) -> dict:
+def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True, tf_series: dict | None = None) -> dict:
     ci = session / "camera_info"
     left, right = load_cam(ci / "left.yaml"), load_cam(ci / "right.yaml")
     Kz = np.array(yaml.safe_load((ci / "color_camera_info.yaml").read_text())["K"]).reshape(3, 3)
@@ -153,7 +193,8 @@ def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True) 
     zcolor = cv2.cvtColor(cv2.imread(str(session / "color_images" / f"{zivid_stem}.png")), cv2.COLOR_BGR2RGB)
     pts_z, snr_pts, col_pts = backproject_zivid(depth, snr, zcolor, Kz)
 
-    T_cam_ziv, tdiag = chain_cam_from_zivid(session / "tf", t_scan)
+    series = tf_series if tf_series is not None else load_session_tf(session / "tf")
+    T_cam_ziv, tdiag = chain_cam_from_zivid(series, t_scan)
     pts_cam = (T_cam_ziv @ np.concatenate([pts_z, np.ones((len(pts_z), 1))], 1).T).T[:, :3]
     gt_depth, snr_map, col_map, n_in, n_front = project_zbuffer(
         pts_cam, snr_pts, col_pts, left["R"], left["P"], W, H)
@@ -225,6 +266,53 @@ def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True) 
 
 
 # ----------------------------- driver -------------------------------------
+def session_root(specimen: str) -> Path:
+    """Handle both extraction layouts: specimen/specimen/<session> (specimen_1) and
+    specimen/<session> (specimen_2+)."""
+    dbl = RAW_ROOT / specimen / specimen
+    if dbl.is_dir() and any(p.is_dir() and p.name.startswith("20") for p in dbl.glob("*")):
+        return dbl
+    return RAW_ROOT / specimen
+
+
+def list_sessions(specimen: str) -> list[Path]:
+    root = session_root(specimen)
+    if not root.is_dir():
+        return []
+    return [s for s in sorted(root.glob("*")) if s.is_dir() and (s / "left_images").exists()]
+
+
+def process_session(specimen: str, session: Path, out_root: Path, make_diag: bool, resume: bool) -> list[dict]:
+    """Process all anchors of one session; tf loaded once. Returns per-anchor rows."""
+    rows = []
+    try:
+        series = load_session_tf(session / "tf")
+    except Exception as e:
+        for a in enumerate_anchors(session):
+            rows.append({"specimen": specimen, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
+                         "status_convert": "rejected", "reject_reason": f"tf:{e}"})
+        return rows
+    for a in enumerate_anchors(session):
+        out_dir = out_root / specimen / session.name / (a["clip"] or "clip") / f"{a['anchor']}_anchor"
+        if resume and (out_dir / "metadata.json").exists():
+            try:
+                meta = json.loads((out_dir / "metadata.json").read_text())
+                meta.update({"specimen": specimen, "session": session.name, "clip": a["clip"],
+                             "anchor": a["anchor"], "out_dir": str(out_dir), "status_convert": "resumed"})
+                rows.append(meta); continue
+            except Exception:
+                pass
+        try:
+            meta = build_anchor(session, a["zivid_stem"], out_dir, make_diag=make_diag, tf_series=series)
+            meta.update({"specimen": specimen, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
+                         "out_dir": str(out_dir), "status_convert": "ok"})
+            rows.append(meta)
+        except Exception as e:
+            rows.append({"specimen": specimen, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
+                         "status_convert": "rejected", "reject_reason": str(e)[:120]})
+    return rows
+
+
 def enumerate_anchors(session: Path):
     cj = session / "clips.json"
     if not cj.exists():
@@ -241,42 +329,72 @@ def enumerate_anchors(session: Path):
     return anchors
 
 
+def _worker(argt):
+    specimen, session, out_root, make_diag, resume = argt
+    return process_session(specimen, session, out_root, make_diag, resume)
+
+
 def main() -> int:
+    import csv
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--session", type=Path, help="one session dir (smoke)")
-    ap.add_argument("--specimen", default=None, help="specimen name for full run e.g. specimen_1")
+    ap.add_argument("--specimen", default=None, help="single specimen (legacy)")
+    ap.add_argument("--specimens", default=None, help="comma list e.g. specimen_1,specimen_2 (default: all extracted)")
     ap.add_argument("--out", type=Path, default=OUT_ROOT)
+    ap.add_argument("--report-root", type=Path, default=None)
     ap.add_argument("--no-diag", action="store_true")
+    ap.add_argument("--resume", action="store_true", help="skip anchors with existing metadata.json")
+    ap.add_argument("--workers", type=int, default=1)
+    ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
-    sessions = []
+    # build (specimen, session) work list
+    jobs = []
     if args.session:
-        sessions = [args.session]
-    elif args.specimen:
-        inner = RAW_ROOT / args.specimen / args.specimen
-        sessions = [s for s in sorted(inner.glob("*")) if s.is_dir()]
+        jobs = [(args.session.parent.name, args.session)]
+    else:
+        if args.specimens:
+            specs = args.specimens.split(",")
+        elif args.specimen:
+            specs = [args.specimen]
+        else:
+            specs = sorted({p.name for p in RAW_ROOT.glob("specimen_*") if p.is_dir()})
+        for sp in specs:
+            for sess in list_sessions(sp):
+                jobs.append((sp, sess))
+
+    if args.dry_run:
+        n_anchor = sum(len(enumerate_anchors(s)) for _, s in jobs)
+        print(json.dumps({"specimens": sorted({j[0] for j in jobs}), "sessions": len(jobs),
+                          "candidate_anchors": n_anchor, "resume": args.resume, "workers": args.workers}, indent=2))
+        return 0
+
+    work = [(sp, sess, args.out, not args.no_diag, args.resume) for sp, sess in jobs]
     rows = []
-    for session in sessions:
-        spec = session.parent.parent.name
-        for a in enumerate_anchors(session):
-            out_dir = args.out / spec / session.name / (a["clip"] or "clip") / f"{a['anchor']}_anchor"
-            try:
-                meta = build_anchor(session, a["zivid_stem"], out_dir, make_diag=not args.no_diag)
-                meta.update({"specimen": spec, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
-                             "out_dir": str(out_dir)})
-                rows.append(meta)
-                print(f"[ok] {spec}/{session.name}/{a['clip']}/{a['anchor']}: "
-                      f"valid={meta['valid_coverage_pct']}% photoMAE={meta['photometric_rgb_mae']:.1f} "
-                      f"off={meta['stereo_zivid_offset_ms']:.0f}ms disp[{meta['disp_min']:.1f},{meta['disp_max']:.1f}]")
-            except Exception as e:
-                print(f"[FAIL] {spec}/{session.name}/{a['clip']}/{a['anchor']}: {e}")
-    if rows:
-        args.out.mkdir(parents=True, exist_ok=True)
-        import csv
-        keys = sorted({k for r in rows for k in r if not isinstance(rows[0].get(k), dict)})
-        with (args.out / "keyframe_manifest.csv").open("w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=keys, extrasaction="ignore"); w.writeheader(); w.writerows(rows)
-        print(f"\nwrote {len(rows)} anchors -> {args.out/'keyframe_manifest.csv'}")
+    if args.workers > 1:
+        from multiprocessing import Pool
+        with Pool(args.workers) as pool:
+            for res in pool.imap_unordered(_worker, work):
+                rows.extend(res)
+                done = {r["specimen"] for r in res}
+                print(f"[session done] {list(done)} {res[0]['session'] if res else ''} (+{len(res)} anchors)")
+    else:
+        for w in work:
+            res = _worker(w); rows.extend(res)
+            print(f"[session done] {w[0]}/{w[1].name} (+{len(res)} anchors)")
+
+    args.out.mkdir(parents=True, exist_ok=True)
+    ok = [r for r in rows if r.get("status_convert") in ("ok", "resumed")]
+    keys = sorted({k for r in ok for k in r if not isinstance(r.get(k), dict)}) if ok else []
+    with (args.out / "keyframe_manifest.csv").open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=keys, extrasaction="ignore"); w.writeheader(); w.writerows(ok)
+    # rejects (chain/tf failures) recorded separately
+    rej = [r for r in rows if r.get("status_convert") == "rejected"]
+    if rej:
+        rk = ["specimen", "session", "clip", "anchor", "reject_reason"]
+        with (args.out / "conversion_rejected.csv").open("w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=rk, extrasaction="ignore"); w.writeheader(); w.writerows(rej)
+    print(f"\n{len(ok)} anchors -> {args.out/'keyframe_manifest.csv'} ({len(rej)} rejected)")
     return 0
 
 

@@ -1,0 +1,247 @@
+{
+  "result": "PASS",
+  "n_checks": 47,
+  "n_fail": 0,
+  "failures": [],
+  "warnings": [
+    "2 anchors missing right_rectified (absent right stereo pair; left GT valid)"
+  ],
+  "n_usable_anchors": 166,
+  "checks": [
+    {
+      "check": "unique_anchor_ids",
+      "ok": true,
+      "detail": "0 dups"
+    },
+    {
+      "check": "manifest_essential_paths_exist",
+      "ok": true,
+      "detail": "0 missing/shape-mismatch"
+    },
+    {
+      "check": "right_rectified_present",
+      "ok": true,
+      "detail": "2 missing right view (warning, left-ref GT unaffected)"
+    },
+    {
+      "check": "depth_disparity_roundtrip",
+      "ok": true,
+      "detail": "0 anchors exceed 0.01px"
+    },
+    {
+      "check": "mask_agrees_finite_gt",
+      "ok": true,
+      "detail": "0 disagreements"
+    },
+    {
+      "check": "valid_only_has_no_rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "valid_and_warning_clean",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "split_no_leak::session_disjoint",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::session_disjoint",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::leave_one_specimen_out/hold_specimen_1",
+      "ok": true,
+      "detail": "0 overlapping specimen_id"
+    },
+    {
+      "check": "split_clip_integrity::leave_one_specimen_out/hold_specimen_1",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::leave_one_specimen_out/hold_specimen_2",
+      "ok": true,
+      "detail": "0 overlapping specimen_id"
+    },
+    {
+      "check": "split_clip_integrity::leave_one_specimen_out/hold_specimen_2",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::leave_one_specimen_out/hold_specimen_3",
+      "ok": true,
+      "detail": "0 overlapping specimen_id"
+    },
+    {
+      "check": "split_clip_integrity::leave_one_specimen_out/hold_specimen_3",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/1session_seed0",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/1session_seed0",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/1session_seed1",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/1session_seed1",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/1session_seed2",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/1session_seed2",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/2session_seed0",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/2session_seed0",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/2session_seed1",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/2session_seed1",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/2session_seed2",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/2session_seed2",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/4session_seed0",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/4session_seed0",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/4session_seed1",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/4session_seed1",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/4session_seed2",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/4session_seed2",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/8session_seed0",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/8session_seed0",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/8session_seed1",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/8session_seed1",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/8session_seed2",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/8session_seed2",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/frac10pct",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/frac10pct",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/frac25pct",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/frac25pct",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::few_shot/frac50pct",
+      "ok": true,
+      "detail": "0 overlapping session_id"
+    },
+    {
+      "check": "split_clip_integrity::few_shot/frac50pct",
+      "ok": true,
+      "detail": "0 clips split across"
+    },
+    {
+      "check": "split_no_leak::specimen_disjoint",
+      "ok": true,
+      "detail": "0 overlapping specimen_id"
+    },
+    {
+      "check": "split_clip_integrity::specimen_disjoint",
+      "ok": true,
+      "detail": "0 clips split across"
+    }
+  ]
+}

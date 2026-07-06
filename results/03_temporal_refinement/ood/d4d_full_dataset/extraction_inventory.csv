@@ -1,0 +1,6 @@
+specimen,archive_gb,extracted,sessions,status
+specimen_1,35.78,True,16,done
+specimen_2,80.27,True,9,done
+specimen_3,88.55,True,15,done
+specimen_4,147.1,True,4,extracting
+specimen_5,0.0,False,0,corrupt(not gzip)

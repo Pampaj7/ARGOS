@@ -1,0 +1,51 @@
+# D4D benchmark validation — **PASS**
+
+- checks: 47  failures: 0  usable anchors: 166
+
+- [x] unique_anchor_ids — 0 dups
+- [x] manifest_essential_paths_exist — 0 missing/shape-mismatch
+- [x] right_rectified_present — 2 missing right view (warning, left-ref GT unaffected)
+- [x] depth_disparity_roundtrip — 0 anchors exceed 0.01px
+- [x] mask_agrees_finite_gt — 0 disagreements
+- [x] valid_only_has_no_rejected 
+- [x] valid_and_warning_clean 
+- [x] split_no_leak::session_disjoint — 0 overlapping session_id
+- [x] split_clip_integrity::session_disjoint — 0 clips split across
+- [x] split_no_leak::leave_one_specimen_out/hold_specimen_1 — 0 overlapping specimen_id
+- [x] split_clip_integrity::leave_one_specimen_out/hold_specimen_1 — 0 clips split across
+- [x] split_no_leak::leave_one_specimen_out/hold_specimen_2 — 0 overlapping specimen_id
+- [x] split_clip_integrity::leave_one_specimen_out/hold_specimen_2 — 0 clips split across
+- [x] split_no_leak::leave_one_specimen_out/hold_specimen_3 — 0 overlapping specimen_id
+- [x] split_clip_integrity::leave_one_specimen_out/hold_specimen_3 — 0 clips split across
+- [x] split_no_leak::few_shot/1session_seed0 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/1session_seed0 — 0 clips split across
+- [x] split_no_leak::few_shot/1session_seed1 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/1session_seed1 — 0 clips split across
+- [x] split_no_leak::few_shot/1session_seed2 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/1session_seed2 — 0 clips split across
+- [x] split_no_leak::few_shot/2session_seed0 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/2session_seed0 — 0 clips split across
+- [x] split_no_leak::few_shot/2session_seed1 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/2session_seed1 — 0 clips split across
+- [x] split_no_leak::few_shot/2session_seed2 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/2session_seed2 — 0 clips split across
+- [x] split_no_leak::few_shot/4session_seed0 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/4session_seed0 — 0 clips split across
+- [x] split_no_leak::few_shot/4session_seed1 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/4session_seed1 — 0 clips split across
+- [x] split_no_leak::few_shot/4session_seed2 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/4session_seed2 — 0 clips split across
+- [x] split_no_leak::few_shot/8session_seed0 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/8session_seed0 — 0 clips split across
+- [x] split_no_leak::few_shot/8session_seed1 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/8session_seed1 — 0 clips split across
+- [x] split_no_leak::few_shot/8session_seed2 — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/8session_seed2 — 0 clips split across
+- [x] split_no_leak::few_shot/frac10pct — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/frac10pct — 0 clips split across
+- [x] split_no_leak::few_shot/frac25pct — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/frac25pct — 0 clips split across
+- [x] split_no_leak::few_shot/frac50pct — 0 overlapping session_id
+- [x] split_clip_integrity::few_shot/frac50pct — 0 clips split across
+- [x] split_no_leak::specimen_disjoint — 0 overlapping specimen_id
+- [x] split_clip_integrity::specimen_disjoint — 0 clips split across

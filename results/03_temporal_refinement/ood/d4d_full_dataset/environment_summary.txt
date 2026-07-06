@@ -1,0 +1,6 @@
+date: 2026-07-06
+node(convert): login (CPU, EPYC); extraction: pigz
+python: Python 3.10.20
+git_head: a5352a58621e86be88c60a3d83cb73b508f664ed
+workers: 8-10 (session-parallel, tf cached per session)
+canonical command: d4d_keyframe_gt.py --specimens specimen_1,specimen_2,specimen_3 --resume --workers 10
