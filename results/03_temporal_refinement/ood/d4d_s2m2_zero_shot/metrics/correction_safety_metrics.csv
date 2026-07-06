@@ -1,0 +1,7 @@
+model,harmful_rate,modified_ratio,new_Bad3,pct_improved
+raw,0.0,0.0,0.0,0.0
+v3.2c,0.512,0.324,14.23,14.6
+EGBM-v1,0.728,0.796,21.64,9.5
+EGBM-v2,0.713,0.958,30.01,5.1
+EGBM-v2-CARE,0.685,0.897,21.44,9.5
+EGBM-v3-CARE-S,0.719,0.62,18.97,9.5

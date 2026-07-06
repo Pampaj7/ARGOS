@@ -70,10 +70,12 @@ def edge_map(raw: np.ndarray) -> np.ndarray:
 def frame_metrics(raw, refined, gt, valid, edge) -> dict:
     m = valid
     n = int(m.sum())
+    d = {"valid_px": n}
+    if n == 0:  # no valid GT overlap for this frame/anchor
+        return d
     raw, refined, gt = raw[m], refined[m], gt[m]
     er, ef = np.abs(raw - gt), np.abs(refined - gt)
     applied = refined - raw
-    d = {"valid_px": n}
     d["raw_mae"] = float(er.mean()); d["refined_mae"] = float(ef.mean())
     d["delta_mae"] = d["raw_mae"] - d["refined_mae"]
     d["rel_impr"] = d["delta_mae"] / max(d["raw_mae"], 1e-6)

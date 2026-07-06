@@ -1,0 +1,5 @@
+raw/
+shards/
+predictions/
+*.npy
+*.npz

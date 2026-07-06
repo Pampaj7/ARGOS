@@ -1,0 +1,7 @@
+{
+  "evaluated": 156,
+  "skipped": 10,
+  "unique_s2m2_frames": 400,
+  "peak_vram_mb": 414.4,
+  "device": "cuda"
+}

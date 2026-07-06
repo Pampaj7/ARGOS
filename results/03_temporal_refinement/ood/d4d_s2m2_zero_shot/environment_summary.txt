@@ -1,0 +1,8 @@
+date: 2026-07-06
+node: n-62-12-83 (H100 PCIe)
+queues used: p1i (p1gpush does not exist on this cluster)
+python: Python 3.10.20
+git_head: e2f934e5dc4542eede86d116c0922a3a8a3f2c73
+context_build: 156 anchors, 10 skipped, 400 unique S2M2 frames, peak VRAM 414MB
+eval: 137 valid-overlap anchors, 5 refiners + raw, MPC/CPV blocked (odd-dim)
+S2M2-S: CH128NTR1.pth width512; refiner grid target_scale=0.25 (224x179)

@@ -1,0 +1,58 @@
+[
+  {
+    "model": "raw",
+    "anchors": 137,
+    "disp_MAE": 4.09,
+    "Bad1": 67.69,
+    "Bad3": 33.24,
+    "Bad5": 18.62,
+    "boundary_MAE": 10.547,
+    "new_Bad3": 0.0,
+    "harmful_rate": 0.0,
+    "pct_improved": 0.0,
+    "modified_ratio": 0.0,
+    "runtime_ms": 0.0
+  },
+  {
+    "model": "EGBM-v1",
+    "anchors": 137,
+    "disp_MAE": 4.812,
+    "Bad1": 79.8,
+    "Bad3": 45.57,
+    "Bad5": 25.64,
+    "boundary_MAE": 10.933,
+    "new_Bad3": 21.64,
+    "harmful_rate": 0.728,
+    "pct_improved": 9.5,
+    "modified_ratio": 0.796,
+    "runtime_ms": 12.94
+  },
+  {
+    "model": "EGBM-v2-CARE",
+    "anchors": 137,
+    "disp_MAE": 4.821,
+    "Bad1": 80.75,
+    "Bad3": 45.0,
+    "Bad5": 26.22,
+    "boundary_MAE": 10.648,
+    "new_Bad3": 21.44,
+    "harmful_rate": 0.685,
+    "pct_improved": 9.5,
+    "modified_ratio": 0.897,
+    "runtime_ms": 13.34
+  },
+  {
+    "model": "EGBM-v3-CARE-S",
+    "anchors": 137,
+    "disp_MAE": 4.662,
+    "Bad1": 76.16,
+    "Bad3": 43.95,
+    "Bad5": 25.75,
+    "boundary_MAE": 10.971,
+    "new_Bad3": 18.97,
+    "harmful_rate": 0.719,
+    "pct_improved": 9.5,
+    "modified_ratio": 0.62,
+    "runtime_ms": 16.01
+  }
+]

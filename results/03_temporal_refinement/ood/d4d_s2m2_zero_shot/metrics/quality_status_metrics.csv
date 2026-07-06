@@ -1,0 +1,13 @@
+model,quality,delta_mae,harmful_rate,n,new_bad3_pct,raw_mae,refined_bad3,refined_mae
+raw,usable_with_warning,0.0,0.0,21,0.0,3.364,18.78,3.364
+raw,valid,0.0,0.0,116,0.0,4.222,35.85,4.222
+v3.2c,usable_with_warning,-0.051,0.455,21,10.73,3.364,25.98,3.415
+v3.2c,valid,-0.43,0.522,116,14.86,4.222,44.52,4.652
+EGBM-v1,usable_with_warning,-0.235,0.556,21,15.2,3.364,28.75,3.598
+EGBM-v1,valid,-0.81,0.76,116,22.81,4.222,48.61,5.031
+EGBM-v2,usable_with_warning,-0.307,0.567,21,18.39,3.364,29.54,3.671
+EGBM-v2,valid,-1.026,0.74,116,32.12,4.222,50.95,5.248
+EGBM-v2-CARE,usable_with_warning,-0.248,0.566,21,18.17,3.364,29.05,3.611
+EGBM-v2-CARE,valid,-0.818,0.706,116,22.03,4.222,47.89,5.04
+EGBM-v3-CARE-S,usable_with_warning,-0.208,0.526,21,12.78,3.364,27.27,3.571
+EGBM-v3-CARE-S,valid,-0.638,0.754,116,20.09,4.222,46.97,4.859

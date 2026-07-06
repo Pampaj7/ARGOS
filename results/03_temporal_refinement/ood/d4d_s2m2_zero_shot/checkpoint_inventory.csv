@@ -1,0 +1,9 @@
+model,checkpoint,md5,params,residual_scale,policy,train_domain
+S2M2-S,external/frame_stereo_repos/s2m2/weights/pretrain_weights/CH128NTR1.pth,330612ab4fc0,~(backbone),-,"variant S, width512, disparity original coords, use_positivity, refine_iter=3",pretrained(non-surgical)
+v3.2c,results/03_temporal_refinement/training/tiny_refiner_v3_2c_hybrid_oracle_freeze_detector_long/checkpoints/best.pt,12004d3a567e,194818,3.0,threshold_gate thr=0.7,SCARED (s2m2_s512 targets)
+EGBM-v1,results/03_temporal_refinement/training/experimental_refiner_vx_training/checkpoints/best.pt,f5c859b1c901,4042068,3.0,internal_gate,SCARED (s2m2_s512 targets)
+EGBM-v2,results/03_temporal_refinement/training/egbm_v2_experimental/checkpoints/best.pt,29664e485eea,6779757,3.0,internal_gate,SCARED (s2m2_s512 targets)
+EGBM-v2-CARE,results/03_temporal_refinement/training/egbm_v2_care/checkpoints/best.pt,ae1dd3b98e7f,4352473,3.0,internal_gate,SCARED (s2m2_s512 targets)
+EGBM-v3-CARE-S,results/03_temporal_refinement/training/egbm_v3_care_streaming/checkpoints/best.pt,166bc824d641,4420122,3.0,internal_gate,SCARED (s2m2_s512 targets)
+MPC,results/03_temporal_refinement/training/magnitude_proposal_critic_refiner/checkpoints/best_pareto.pt,4a06a627ab92,4665066,32.0,internal_gate,SCARED (s2m2_s512 targets)
+CPV,results/03_temporal_refinement/training/counterfactual_proposal_verifier_refiner/checkpoints/best_pareto.pt,297ec84cf850,4707790,32.0,internal_gate,SCARED (s2m2_s512 targets)
