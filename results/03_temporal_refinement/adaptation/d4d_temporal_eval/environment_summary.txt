@@ -1,0 +1,6 @@
+date: 2026-07-06
+queue: p1i (H100)
+flow: RAFT raft-things.pth (frozen), fwd-bwd occlusion
+configs: raw, zero_shot, calib_2s(seed2), calib_8s(seed1,30a), full_4s(seed1,11a), scratch_4s(seed1,11a)
+clips: 6 (2/specimen), <=120 frames, grid 224x179
+git_head: 609d78b8e1f629d2051d115c99f8298bbf83a28c

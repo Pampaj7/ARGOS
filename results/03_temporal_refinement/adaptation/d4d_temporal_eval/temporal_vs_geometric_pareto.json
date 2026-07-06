@@ -1,0 +1,62 @@
+[
+  {
+    "config": "raw",
+    "anchor_mae": 3.5,
+    "mc_inconsistency": 0.3899,
+    "hf_energy": 0.5066,
+    "depth_mc_mm": 0.691,
+    "boundary_mc": 2.8024,
+    "modified_ratio": NaN,
+    "applied_abs": NaN
+  },
+  {
+    "config": "zero_shot",
+    "anchor_mae": 4.72,
+    "mc_inconsistency": 0.3971,
+    "hf_energy": 0.5251,
+    "depth_mc_mm": 0.7168,
+    "boundary_mc": 2.698,
+    "modified_ratio": 0.2467,
+    "applied_abs": 0.3458
+  },
+  {
+    "config": "calib_2s",
+    "anchor_mae": 3.66,
+    "mc_inconsistency": 0.3996,
+    "hf_energy": 0.5249,
+    "depth_mc_mm": 0.7216,
+    "boundary_mc": 2.7602,
+    "modified_ratio": 0.2022,
+    "applied_abs": 0.2116
+  },
+  {
+    "config": "calib_8s",
+    "anchor_mae": 3.5,
+    "mc_inconsistency": 0.4,
+    "hf_energy": 0.525,
+    "depth_mc_mm": 0.7231,
+    "boundary_mc": 2.7577,
+    "modified_ratio": 0.17,
+    "applied_abs": 0.1954
+  },
+  {
+    "config": "full_4s",
+    "anchor_mae": 4.09,
+    "mc_inconsistency": 0.3944,
+    "hf_energy": 0.5206,
+    "depth_mc_mm": 0.7057,
+    "boundary_mc": 2.7041,
+    "modified_ratio": 0.1939,
+    "applied_abs": 0.2411
+  },
+  {
+    "config": "scratch_4s",
+    "anchor_mae": 3.47,
+    "mc_inconsistency": 0.3899,
+    "hf_energy": 0.5066,
+    "depth_mc_mm": 0.691,
+    "boundary_mc": 2.8022,
+    "modified_ratio": 0.0,
+    "applied_abs": 0.0023
+  }
+]
