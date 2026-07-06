@@ -1,0 +1,27 @@
+{
+  "run_id": "shuffled__clip8__seed0",
+  "mode": "shuffled",
+  "clip_len": 8,
+  "params": 752161,
+  "steps": 1500,
+  "lam_tgm": 1.0,
+  "wall_time_s": 583.5,
+  "test_geometric": {
+    "refined_mae": 5.293,
+    "raw_mae": 5.2153,
+    "delta_mae": -0.0778,
+    "refined_bad1": 76.4463,
+    "refined_bad3": 44.8722,
+    "refined_bad5": 27.7074,
+    "new_bad3_pct_of_rawgood": 13.6978,
+    "harmful_rate": 0.5591,
+    "modified_pixel_ratio": 0.6907,
+    "beneficial_rate": 0.4276
+  },
+  "test_temporal": {
+    "tgm_error": 1.9174,
+    "terr_jitter": 1.7699,
+    "boundary_tgm": 2.3786,
+    "hf_error_energy": 2.9516
+  }
+}

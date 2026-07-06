@@ -1,0 +1,8 @@
+{
+  "model": "VDPPCausal",
+  "params": 752161,
+  "arch": "5ch geo input -> 3conv enc(hid96) -> causal ConvGRU -> bounded residual(3tanh)",
+  "input": "raw,gx,gy,edge,valid /DISP_SCALE",
+  "backbone": "S2M2-S frozen",
+  "clip_len": 8
+}

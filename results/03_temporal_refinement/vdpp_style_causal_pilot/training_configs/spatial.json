@@ -1,0 +1,27 @@
+{
+  "run_id": "spatial__clip8__seed0",
+  "mode": "spatial",
+  "clip_len": 8,
+  "params": 752161,
+  "steps": 1500,
+  "lam_tgm": 1.0,
+  "wall_time_s": 737.9,
+  "test_geometric": {
+    "refined_mae": 5.074,
+    "raw_mae": 5.2153,
+    "delta_mae": 0.1413,
+    "refined_bad1": 73.3179,
+    "refined_bad3": 40.9389,
+    "refined_bad5": 25.9834,
+    "new_bad3_pct_of_rawgood": 4.8654,
+    "harmful_rate": 0.4215,
+    "modified_pixel_ratio": 0.4153,
+    "beneficial_rate": 0.5677
+  },
+  "test_temporal": {
+    "tgm_error": 1.7121,
+    "terr_jitter": 1.5849,
+    "boundary_tgm": 2.11,
+    "hf_error_energy": 2.6164
+  }
+}

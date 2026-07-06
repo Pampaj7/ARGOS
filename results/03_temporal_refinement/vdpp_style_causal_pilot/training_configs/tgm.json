@@ -1,0 +1,27 @@
+{
+  "run_id": "tgm__clip8__seed0",
+  "mode": "tgm",
+  "clip_len": 8,
+  "params": 752161,
+  "steps": 1500,
+  "lam_tgm": 1.0,
+  "wall_time_s": 588.6,
+  "test_geometric": {
+    "refined_mae": 5.1097,
+    "raw_mae": 5.2153,
+    "delta_mae": 0.1056,
+    "refined_bad1": 74.0609,
+    "refined_bad3": 42.1235,
+    "refined_bad5": 26.1218,
+    "new_bad3_pct_of_rawgood": 7.0134,
+    "harmful_rate": 0.4677,
+    "modified_pixel_ratio": 0.4793,
+    "beneficial_rate": 0.5227
+  },
+  "test_temporal": {
+    "tgm_error": 1.5499,
+    "terr_jitter": 1.4494,
+    "boundary_tgm": 1.9951,
+    "hf_error_energy": 2.3561
+  }
+}

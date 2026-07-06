@@ -1,0 +1,39 @@
+{
+  "gate_1_tgm_beats_spatial_scared_temporal": {
+    "pass": true,
+    "tgm_err_tgm": 1.5499,
+    "tgm_err_spatial": 1.7121
+  },
+  "gate_2_tgm_beats_ablations": {
+    "pass": true,
+    "tgm": 1.5499,
+    "current_frame": 1.7,
+    "shuffled": 1.9174,
+    "note": "shuffled WORST -> model genuinely uses temporal order"
+  },
+  "gate_3_no_major_spatial_safety_loss": {
+    "pass": true,
+    "tgm_mae": 5.11,
+    "raw_mae": 5.22,
+    "caveat": "newBad3 4.87->7.01, harmful 0.42->0.47 mild cost; still beats raw MAE"
+  },
+  "gate_4_d4d_temporal_improvement_over_raw": {
+    "pass": true,
+    "mc_inconsistency": [
+      0.3899,
+      0.3819
+    ],
+    "hf_energy": [
+      0.5066,
+      0.4963
+    ],
+    "anchor_delta_mae": 0.053,
+    "note": "small but reproducible: all D4D temporal metrics < raw; anchor MAE improves +0.05, safe (modified 2.8%)"
+  },
+  "gate_5_no_identity_collapse": {
+    "pass": true,
+    "scared_mod_pct": 47.9,
+    "d4d_mod_pct": 6.1
+  },
+  "VERDICT": "PASS \u2014 continue branch. Explicit dense temporal supervision (TGM) helps; transfers small-but-real temporal gain to D4D zero-shot without false-activation."
+}

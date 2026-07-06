@@ -1,0 +1,5 @@
+run_id,mode,clip_len,params,steps,lam_tgm,wall_time_s,test_mae,test_tgm_error
+spatial__clip8__seed0,spatial,8,752161,1500,1.0,737.9,5.074,1.7121
+tgm__clip8__seed0,tgm,8,752161,1500,1.0,588.6,5.1097,1.5499
+current_frame__clip8__seed0,current_frame,8,752161,1500,1.0,560.1,5.1641,1.7
+shuffled__clip8__seed0,shuffled,8,752161,1500,1.0,583.5,5.293,1.9174

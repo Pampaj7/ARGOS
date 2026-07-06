@@ -1,0 +1,6 @@
+date: 2026-07-06
+queue: p1i (H100, mode=shared)
+python: Python 3.10.20
+git_head: c209d0a429dd0319968d888928914704d3a16d66
+model: VDPPCausal 752k params, S2M2 frozen
+matrix: spatial/tgm/current_frame/shuffled, clip8, 1500 steps, seed0
