@@ -1,0 +1,344 @@
+{
+  "current_frame_only__seed0": {
+    "mc_inconsistency": {
+      "mean_diff": -0.002,
+      "ci95": [
+        -0.0058,
+        -0.0
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": -0.0018,
+      "ci95": [
+        -0.0051,
+        -0.0
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": -0.0004,
+      "ci95": [
+        -0.001,
+        0.0
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0165,
+      "ci95": [
+        -0.0485,
+        -0.0003
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    }
+  },
+  "current_frame_only__seed1": {
+    "mc_inconsistency": {
+      "mean_diff": -0.002,
+      "ci95": [
+        -0.0061,
+        0.0
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": -0.0016,
+      "ci95": [
+        -0.0049,
+        0.0
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": -0.0006,
+      "ci95": [
+        -0.0017,
+        0.0
+      ],
+      "pct_clips_improved": 25.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0181,
+      "ci95": [
+        -0.0545,
+        0.0002
+      ],
+      "pct_clips_improved": 25.0,
+      "n_clips": 4
+    }
+  },
+  "current_frame_only__seed2": {
+    "mc_inconsistency": {
+      "mean_diff": -0.0038,
+      "ci95": [
+        -0.0062,
+        -0.0017
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": -0.0037,
+      "ci95": [
+        -0.0058,
+        -0.002
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": -0.0009,
+      "ci95": [
+        -0.002,
+        0.0001
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.02,
+      "ci95": [
+        -0.0539,
+        -0.0021
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    }
+  },
+  "full_history__seed0": {
+    "mc_inconsistency": {
+      "mean_diff": 0.0001,
+      "ci95": [
+        -0.0002,
+        0.0005
+      ],
+      "pct_clips_improved": 25.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": 0.0004,
+      "ci95": [
+        0.0001,
+        0.0007
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": 0.0004,
+      "ci95": [
+        -0.0002,
+        0.001
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0045,
+      "ci95": [
+        -0.0104,
+        -0.0011
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    }
+  },
+  "full_history__seed1": {
+    "mc_inconsistency": {
+      "mean_diff": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": 0.0,
+      "ci95": [
+        -0.0,
+        0.0
+      ],
+      "pct_clips_improved": 25.0,
+      "n_clips": 4
+    }
+  },
+  "full_history__seed2": {
+    "mc_inconsistency": {
+      "mean_diff": 0.0029,
+      "ci95": [
+        -0.0,
+        0.0088
+      ],
+      "pct_clips_improved": 25.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": 0.0058,
+      "ci95": [
+        0.0002,
+        0.0172
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": 0.002,
+      "ci95": [
+        0.0003,
+        0.0051
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0194,
+      "ci95": [
+        -0.0591,
+        0.0008
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    }
+  },
+  "shuffled_history__seed0": {
+    "mc_inconsistency": {
+      "mean_diff": -0.0006,
+      "ci95": [
+        -0.0019,
+        0.0002
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": 0.0003,
+      "ci95": [
+        0.0002,
+        0.0004
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": 0.0011,
+      "ci95": [
+        0.0009,
+        0.0014
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0125,
+      "ci95": [
+        -0.0364,
+        -0.0003
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    }
+  },
+  "shuffled_history__seed1": {
+    "mc_inconsistency": {
+      "mean_diff": 0.0018,
+      "ci95": [
+        -0.0001,
+        0.0057
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": 0.0043,
+      "ci95": [
+        -0.0002,
+        0.013
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": -0.0003,
+      "ci95": [
+        -0.0016,
+        0.0017
+      ],
+      "pct_clips_improved": 75.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0114,
+      "ci95": [
+        -0.0316,
+        -0.0012
+      ],
+      "pct_clips_improved": 100.0,
+      "n_clips": 4
+    }
+  },
+  "shuffled_history__seed2": {
+    "mc_inconsistency": {
+      "mean_diff": 0.0001,
+      "ci95": [
+        -0.0,
+        0.0003
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    },
+    "hf_energy": {
+      "mean_diff": 0.0006,
+      "ci95": [
+        -0.0,
+        0.0017
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    },
+    "depth_mc_mm": {
+      "mean_diff": 0.0006,
+      "ci95": [
+        0.0002,
+        0.0014
+      ],
+      "pct_clips_improved": 0.0,
+      "n_clips": 4
+    },
+    "boundary_mc": {
+      "mean_diff": -0.0182,
+      "ci95": [
+        -0.0549,
+        0.0002
+      ],
+      "pct_clips_improved": 50.0,
+      "n_clips": 4
+    }
+  }
+}

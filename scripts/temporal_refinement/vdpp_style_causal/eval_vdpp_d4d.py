@@ -32,17 +32,20 @@ def load_vdpp(ckpt, device):
 
 
 @torch.no_grad()
-def vdpp_causal_clip(model, raw_seq, valid_seq, device):
-    """Streaming causal refine of a full clip. raw_seq/valid_seq [T,H,W]."""
+def vdpp_causal_clip(model, raw_seq, valid_seq, device, temporal_mode="full_history", clen=8):
+    """Causal refine of a clip in non-overlapping windows of clen (bounds shuffled cost)."""
     T = raw_seq.shape[0]
-    rt = torch.from_numpy(raw_seq).to(device)[None, :, None]
-    vt = torch.from_numpy(valid_seq).to(device)[None, :, None]
-    refined = model(rt, vt, mode="tgm")[0, :, 0].cpu().numpy()
-    return refined, refined - raw_seq
+    out = np.zeros_like(raw_seq)
+    for st in range(0, T, clen):
+        sl = slice(st, min(st + clen, T))
+        rt = torch.from_numpy(raw_seq[sl]).to(device)[None, :, None]
+        vt = torch.from_numpy(valid_seq[sl]).to(device)[None, :, None]
+        out[sl] = model(rt, vt, temporal_mode=temporal_mode)[0, :, 0].cpu().numpy()
+    return out, out - raw_seq
 
 
 @torch.no_grad()
-def anchor_eval(model, device):
+def anchor_eval(model, device, tmode="full_history"):
     samples, shards, idx = load_samples_and_shards(ROOT / "results/03_temporal_refinement/ood/d4d_s2m2_zero_shot/d4d_index.csv")
     meta = {r["sequence_id"]: r for r in idx}
     ds = FullFrameDataset(samples, shards, 4)
@@ -58,7 +61,7 @@ def anchor_eval(model, device):
         raw_seq = z["raw_disp"][:samples[i].offset + 1].astype(np.float32)
         vseq = (z["valid_mask"][:samples[i].offset + 1] > 0).astype(np.float32)
         vseq = (np.isfinite(raw_seq) & (raw_seq > 0)).astype(np.float32)
-        refined_seq, _ = vdpp_causal_clip(model, raw_seq, vseq, device)
+        refined_seq, _ = vdpp_causal_clip(model, raw_seq, vseq, device, tmode)
         refined = refined_seq[samples[i].offset]
         d = frame_metrics(raw, refined, gt, valid, edge_map(raw))
         d["specimen"] = meta[samples[i].sequence_id]["specimen"]
@@ -73,6 +76,7 @@ def anchor_eval(model, device):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", type=Path, required=True)
+    ap.add_argument("--temporal-mode", default="full_history")
     ap.add_argument("--clips-per-specimen", type=int, default=2)
     ap.add_argument("--max-frames", type=int, default=120)
     ap.add_argument("--out", type=Path, default=OUT)
@@ -83,7 +87,8 @@ def main():
     raft = TE.FrozenRAFT(TE.RAFT_CKPT).to(device).eval()
 
     # sparse anchor geometric
-    ag, arows = anchor_eval(model, device)
+    tmode = args.temporal_mode
+    ag, arows = anchor_eval(model, device, tmode)
     (args.out / "d4d_anchor_metrics.csv").parent.mkdir(parents=True, exist_ok=True)
     with (args.out / "d4d_anchor_metrics.csv").open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=sorted({k for r in arows for k in r})); w.writeheader(); w.writerows(arows)
@@ -107,7 +112,7 @@ def main():
             continue
         for cfg_name, do_refine in [("raw", False), ("vdpp_tgm", True)]:
             if do_refine:
-                disp_seq, applied = vdpp_causal_clip(model, base["raw_seq"], base["valid_seq"], device)
+                disp_seq, applied = vdpp_causal_clip(model, base["raw_seq"], base["valid_seq"], device, tmode)
                 gate = damp = None
             else:
                 disp_seq, applied, gate, damp = base["raw_seq"], None, None, None

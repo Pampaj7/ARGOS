@@ -1,0 +1,15 @@
+# Files changed/added for VDPP causal temporal-usage confirmation study
+
+## Modified
+scripts/temporal_refinement/vdpp_style_causal/train_vdpp_causal.py  # decoupled temporal_input_mode / loss_mode, windowed eval
+scripts/temporal_refinement/vdpp_style_causal/eval_vdpp_d4d.py      # windowed D4D causal eval, --temporal-mode flag
+
+## New
+scripts/temporal_refinement/vdpp_style_causal/summarize_confirmation.py  # aggregation + 5-gate decision
+logs/vdpp_seed.sh, logs/vr_cf2.sh, logs/vr_sh{0,1,2}.sh, logs/vp_{a,b}.sh, logs/vdpp_shuf{1,2}.sh, logs/vdpp_abl.sh, logs/vdpp_factorial.sh, logs/vdpp_rest.sh  # resumable factorial-matrix launchers
+logs/vdpp_d4d_confirm.sh, logs/vdpp_d4d_confirm_i.sh, logs/vdpp_shuf_d4d.sh  # D4D confirmation launchers
+logs/vdpp_lam_sweep.sh  # TGM-weight sweep launcher
+logs/vdpp_csmoke.sh, logs/vdpp_smoke.sh  # smoke tests (outputs deleted after passing)
+
+## Results (this study)
+results/03_temporal_refinement/vdpp_style_causal_confirmation/  # full study output (see README.md)

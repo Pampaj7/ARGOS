@@ -1,0 +1,27 @@
+{
+  "anchor": {
+    "anchors": 137,
+    "mae": 4.042795799944523,
+    "raw_mae": 4.0900602471219365,
+    "delta_mae": 0.047264447177413606,
+    "new_bad3": 0.060525485367834586,
+    "harmful": 0.00565731438540522,
+    "modified": 0.017559646955733733
+  },
+  "temporal": {
+    "raw": {
+      "mc_inconsistency": 0.3629,
+      "hf_energy": 0.48,
+      "depth_mc_mm": 0.6547,
+      "boundary_mc": 2.6136,
+      "modified_ratio": NaN
+    },
+    "vdpp_tgm": {
+      "mc_inconsistency": 0.355,
+      "hf_energy": 0.4726,
+      "depth_mc_mm": 0.6528,
+      "boundary_mc": 2.5953,
+      "modified_ratio": 0.0967
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "g1_full_tgm_beats_full_spatial": {
+    "full_tgm_mean": 1.6456,
+    "full_spatial_mean": 1.7023,
+    "pass": true
+  },
+  "g2_full_tgm_beats_current_tgm": {
+    "full_mean": 1.6456,
+    "full_std": 0.0534,
+    "current_mean": 1.6816,
+    "current_std": 0.0033,
+    "full_seeds": [
+      1.6121,
+      1.721,
+      1.6038
+    ],
+    "current_seeds": [
+      1.6781,
+      1.6861,
+      1.6806
+    ],
+    "pass_on_mean": true,
+    "robust_no_overlap": false
+  },
+  "g3_full_tgm_beats_shuffled_tgm": {
+    "full_mean": 1.6456,
+    "full_std": 0.0534,
+    "shuffled_mean": 1.6501,
+    "shuffled_std": 0.0107,
+    "full_seeds": [
+      1.6121,
+      1.721,
+      1.6038
+    ],
+    "shuffled_seeds": [
+      1.638,
+      1.6641,
+      1.6482
+    ],
+    "pass_on_mean": true,
+    "robust_no_overlap": false,
+    "note": "full_history+TGM's worst seed (1.7210) is WORSE than shuffled_history+TGM's best seed (1.638) -> means differ but per-seed distributions overlap heavily"
+  },
+  "g4_d4d_sign_stable_across_seeds": {
+    "mc_inconsistency_improves_all_seeds": false
+  },
+  "g5_no_identity_collapse_or_unsafe": "see d4d anchor modified/harmful",
+  "VERDICT": "MARGINAL \u2014 means favor full_history+TGM but per-seed distributions overlap with the shuffled/current-frame ablations (high seed variance, esp. full_history+TGM std=0.053 driven by one high-error seed). Do NOT claim confirmed temporal usage from this pilot scale; the original pilot's clean separation was an artefact of the loss confound."
+}

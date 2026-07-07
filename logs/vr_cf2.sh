@@ -1,0 +1,5 @@
+#!/bin/bash
+source /dtu/p1/leopam/ARGOS/.miniconda/etc/profile.d/conda.sh
+conda activate argos; cd /dtu/p1/leopam/ARGOS; export PYTHONPATH="$(pwd)"
+python scripts/temporal_refinement/vdpp_style_causal/train_vdpp_causal.py --temporal-input-mode current_frame_only --loss-mode spatial_plus_tgm --seed 2 --lam-tgm 1.0 --clip-len 8 --steps 1200 --eval-every 1200 --out results/03_temporal_refinement/vdpp_style_causal_confirmation/runs 2>&1 | grep -viE 'warn|future'|tail -1
+echo "R_current_frame_only_2_DONE"

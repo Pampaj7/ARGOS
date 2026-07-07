@@ -1,0 +1,7 @@
+temporal_input_mode,loss_mode,lam_tgm,n_seeds,geo_refined_mae_mean,geo_refined_mae_std,geo_delta_mae_mean,geo_delta_mae_std,geo_refined_bad3_mean,geo_refined_bad3_std,geo_new_bad3_pct_of_rawgood_mean,geo_new_bad3_pct_of_rawgood_std,geo_harmful_rate_mean,geo_harmful_rate_std,geo_modified_pixel_ratio_mean,geo_modified_pixel_ratio_std,tmp_tgm_error_mean,tmp_tgm_error_std,tmp_terr_jitter_mean,tmp_terr_jitter_std,tmp_hf_error_energy_mean,tmp_hf_error_energy_std,tmp_boundary_tgm_mean,tmp_boundary_tgm_std
+current_frame_only,spatial_plus_tgm,1.0,3,5.1313,0.0185,0.0839,0.0186,41.4382,0.0567,2.2373,1.1612,0.3731,0.1129,0.1122,0.0181,1.6816,0.0033,1.5666,0.0048,2.6402,0.0085,2.1355,0.0064
+full_history,spatial_only,1.0,3,5.1379,0.0199,0.0774,0.0199,41.511,0.0686,1.7379,0.9094,0.3004,0.172,0.1287,0.1001,1.7023,0.0117,1.5817,0.0093,2.6621,0.0161,2.1492,0.018
+full_history,spatial_plus_tgm,0.2,3,5.1182,0.0087,0.0971,0.0088,41.3413,0.0419,2.0735,0.9062,0.303,0.0676,0.1012,0.0336,1.6887,0.0147,1.5695,0.0115,2.6396,0.0224,2.1406,0.012
+full_history,spatial_plus_tgm,0.5,3,5.1373,0.0495,0.078,0.0495,41.167,0.3271,3.2948,0.1636,0.3274,0.0418,0.2969,0.0327,1.6619,0.0081,1.5479,0.0045,2.5956,0.0095,2.1268,0.0045
+full_history,spatial_plus_tgm,1.0,3,5.1301,0.0794,0.0851,0.0794,41.0263,0.4472,2.9268,2.2454,0.234,0.1667,0.2524,0.1834,1.6456,0.0534,1.5355,0.0491,2.5715,0.0932,2.115,0.0463
+shuffled_history,spatial_plus_tgm,1.0,3,5.15,0.0231,0.0653,0.023,41.3005,0.2021,2.2647,0.7343,0.404,0.0892,0.2339,0.0359,1.6501,0.0107,1.5405,0.0108,2.5918,0.0203,2.1264,0.0171
