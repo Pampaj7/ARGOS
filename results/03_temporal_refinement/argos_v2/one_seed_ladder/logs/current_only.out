@@ -1,0 +1,16 @@
+{
+  "config": "current_only",
+  "params": 522082,
+  "val": {
+    "raw_mae": 5.974122554063797,
+    "refined_mae": 5.974122554063797,
+    "delta_mae": 0.0,
+    "raw_bad3": 44.61984872817993,
+    "refined_bad3": 44.61910891532898,
+    "new_bad3": 0.0,
+    "modified_pixel_ratio": 0.0,
+    "split": "val",
+    "sequences": 4
+  },
+  "out": "results/03_temporal_refinement/argos_v2/one_seed_ladder/current_only_seed0"
+}

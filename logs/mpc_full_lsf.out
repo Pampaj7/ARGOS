@@ -1,0 +1,69 @@
+Job <28871069> is submitted to queue <p1i>.
+{
+  "checkpoint": "results/03_temporal_refinement/training/magnitude_proposal_critic_refiner/checkpoints/best_pareto.pt",
+  "selected_all": {
+    "frames": 502,
+    "raw_mae": 11.323126086082116,
+    "refined_mae": 9.17877375076254,
+    "oracle_mae": 6.806202574317674,
+    "oracle_gap_recovered_pct": 47.47373582338855,
+    "raw_bad3": 51.298808374141814,
+    "refined_bad3": 49.309514148549596,
+    "new_bad3_frame_mean_pct": 5.123846086924624,
+    "new_bad3_pixel_weighted_pct": 0.7090180073747897,
+    "modified_pct": 51.97084916330053
+  },
+  "selected_pathological": {
+    "frames": 151,
+    "raw_mae": 20.13213161443243,
+    "refined_mae": 17.651645892503247,
+    "oracle_mae": 15.54995183281551,
+    "oracle_gap_recovered_pct": 54.13331296778347,
+    "raw_bad3": 83.68583471977743,
+    "refined_bad3": 78.01987599171105,
+    "new_bad3_frame_mean_pct": 7.327715229072675,
+    "new_bad3_pixel_weighted_pct": 1.783261779368667,
+    "modified_pct": 71.1754884051725
+  },
+  "selected_clean": {
+    "frames": 351,
+    "raw_mae": 7.533496927162181,
+    "refined_mae": 5.533748983233063,
+    "oracle_mae": 3.0446466255052136,
+    "oracle_gap_recovered_pct": 44.549223287552095,
+    "raw_bad3": 37.36592809439545,
+    "refined_bad3": 36.95833284280206,
+    "new_bad3_frame_mean_pct": 4.175742837738426,
+    "new_bad3_pixel_weighted_pct": 0.6830011086523863,
+    "modified_pct": 43.70902430426158
+  },
+  "full_gt_val": {
+    "raw_mae": 5.199558075952941,
+    "refined_mae": 5.166613688811185,
+    "raw_bad3": 38.87813943558047,
+    "refined_bad3": 38.917609029537736,
+    "new_bad3_from_raw_good_pct": 9.824315733273758e-05,
+    "modified_pct": 33.89046903813163,
+    "detector_auc": 0.7889795662346313,
+    "detector_ap": 0.5935600896575643
+  },
+  "full_gt_test": {
+    "raw_mae": 4.669023784765881,
+    "refined_mae": 4.6385896414071865,
+    "raw_bad3": 33.53598512226546,
+    "refined_bad3": 33.76283000289816,
+    "new_bad3_from_raw_good_pct": 0.0020865249231804615,
+    "modified_pct": 34.071124377319144,
+    "detector_auc": 0.7302206817887329,
+    "detector_ap": 0.11735909484390647
+  }
+}
+{
+  "model": "magnitude_proposal_critic_refiner",
+  "params": 4665066,
+  "batch": 16,
+  "ms_per_frame_fp32": 7.1218,
+  "peak_vram_mb": 4470.3,
+  "identity_delta_px": 0.0
+}
+MPC_FULL_OK

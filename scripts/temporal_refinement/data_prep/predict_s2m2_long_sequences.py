@@ -71,8 +71,8 @@ def main():
     import argparse
 
     p = argparse.ArgumentParser()
-    p.add_argument("--sequences-root", type=Path, default=ROOT / "results/04_dataset_derivatives/SCARED/scared_long_sequences")
-    p.add_argument("--out-root", type=Path, default=ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736")
+    p.add_argument("--sequences-root", type=Path, default=ROOT / "dataset/SCARED/curated/temporal_sequences")
+    p.add_argument("--out-root", type=Path, default=RESULTS_DIR / "03_temporal_refinement/cache/scared_long_predictions/s2m2_l736")
     p.add_argument("--variant", choices=sorted(MODEL_CONFIGS), default="L")
     p.add_argument("--width", type=int, default=736)
     p.add_argument("--max-frames", type=int, default=0)

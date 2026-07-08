@@ -1,0 +1,17 @@
+{
+  "config": "raw_s2m2",
+  "params": 0,
+  "elapsed_s": 43.0980658531189,
+  "val": {
+    "raw_mae": 5.974122554063797,
+    "refined_mae": 5.974122554063797,
+    "delta_mae": 0.0,
+    "raw_bad3": 44.61984872817993,
+    "refined_bad3": 44.61984872817993,
+    "new_bad3": 0.0,
+    "modified_pixel_ratio": 0.0,
+    "split": "val",
+    "sequences": 4
+  },
+  "best_metric": Infinity
+}

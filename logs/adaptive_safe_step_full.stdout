@@ -1,0 +1,73 @@
+ASSR_FULL_START Sun Jul  5 08:01:06 CEST 2026 host=n-62-12-83 gpu=1
+cmd=.miniconda/envs/argos/bin/python scripts/temporal_refinement/train_adaptive_safe_step_proposal_refiner.py --output-root results/03_temporal_refinement/training/adaptive_safe_step_proposal_refiner --stage-a-epochs 8 --stage-b-epochs 12 --crops-per-epoch 60000 --batch-size 512 --eval-batch-size 64 --eval-clip-batch 16 --num-workers 24 --overwrite true
+ASSR_TRAIN_EXIT=0 Sun Jul  5 08:30:02 CEST 2026
+{
+  "checkpoint": "results/03_temporal_refinement/training/adaptive_safe_step_proposal_refiner/checkpoints/best_pareto.pt",
+  "selected_all": {
+    "frames": 502,
+    "raw_mae": 11.323126086082116,
+    "refined_mae": 9.243070996318206,
+    "oracle_mae": 6.806202574317674,
+    "oracle_gap_recovered_pct": 46.05026151862775,
+    "raw_bad3": 51.298808374141814,
+    "refined_bad3": 49.54669506836281,
+    "new_bad3_frame_mean_pct": 4.513056566004052,
+    "new_bad3_pixel_weighted_pct": 0.6273685502554582,
+    "modified_pct": 50.077629878954454
+  },
+  "selected_pathological": {
+    "frames": 151,
+    "raw_mae": 20.13213161443243,
+    "refined_mae": 17.80224167905896,
+    "oracle_mae": 15.54995183281551,
+    "oracle_gap_recovered_pct": 50.846759542710934,
+    "raw_bad3": 83.68583471977743,
+    "refined_bad3": 78.71644465399696,
+    "new_bad3_frame_mean_pct": 6.023758149750386,
+    "new_bad3_pixel_weighted_pct": 1.4491029620097111,
+    "modified_pct": 69.29820144672222
+  },
+  "selected_clean": {
+    "frames": 351,
+    "raw_mae": 7.533496927162181,
+    "refined_mae": 5.560920645623465,
+    "oracle_mae": 3.0446466255052136,
+    "oracle_gap_recovered_pct": 43.94390877349106,
+    "raw_bad3": 37.36592809439545,
+    "refined_bad3": 36.997885417562934,
+    "new_bad3_frame_mean_pct": 3.863153605475002,
+    "new_bad3_pixel_weighted_pct": 0.6074671260864885,
+    "modified_pct": 41.80895094239339
+  },
+  "full_gt_val": {
+    "raw_mae": 5.199558099465748,
+    "refined_mae": 5.099059928012508,
+    "raw_bad3": 39.44632910431906,
+    "refined_bad3": 39.255687271857376,
+    "new_bad3_from_raw_good_pct": 1.096322566315281,
+    "modified_pct": 43.63953626658545,
+    "detector_auc": NaN,
+    "detector_ap": NaN
+  },
+  "full_gt_test": {
+    "raw_mae": 4.669023754732249,
+    "refined_mae": 4.599661720905489,
+    "raw_bad3": 34.09395508626508,
+    "refined_bad3": 34.21857492269643,
+    "new_bad3_from_raw_good_pct": 1.3935966376508717,
+    "modified_pct": 42.05439155971876,
+    "detector_auc": NaN,
+    "detector_ap": NaN
+  }
+}
+ASSR_EVAL_EXIT=0 Sun Jul  5 08:32:37 CEST 2026
+{
+  "model": "counterfactual_proposal_verifier_refiner",
+  "params": 4707790,
+  "batch": 16,
+  "ms_per_frame_fp32": 7.5041,
+  "peak_vram_mb": 4464.5,
+  "identity_or_loaded_delta_px": 0.6292144060134888
+}
+ASSR_BENCH_EXIT=0 Sun Jul  5 08:32:48 CEST 2026
+ASSR_FULL_DONE train=0 eval=0 bench=0 Sun Jul  5 08:32:48 CEST 2026

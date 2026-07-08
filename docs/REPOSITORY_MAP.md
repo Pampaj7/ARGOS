@@ -30,13 +30,13 @@ This file is the quick orientation map for the local ARGOS workspace.
 
 | Path | Purpose | Size Class |
 |---|---|---|
-| `dataset/SCARED/` | SCARED raw archives, curated clips, and workspace extracts | huge, ignored |
+| `dataset/SCARED/` | SCARED raw archives and curated train/inference data | huge, ignored |
 | `dataset/SERVCT/` | SERV-CT raw archive plus ARGOS-format GT samples | medium, ignored |
 | `dataset/StereoMIS/` | downloaded StereoMIS archive, inventory, metadata, preview | large, ignored |
 | `dataset/D4D/` | D4D metadata and staged specimen downloads | large, ignored |
 | `dataset/EndoSLAM/` | EndoSLAM support data | medium, ignored |
-| `results/04_dataset_derivatives/SCARED/scared_long_sequences/` | extracted long SCARED frame streams | large |
-| `results/04_dataset_derivatives/SCARED/scared_long_predictions/` | frozen S2M2/StereoAnyVideo predictions | large |
+| `dataset/SCARED/curated/long_sequences/` | extracted long SCARED frame streams | large |
+| `dataset/SCARED/curated/long_predictions/` | frozen S2M2/StereoAnyVideo predictions | large |
 | `results/03_temporal_refinement/cache/temporal_refinement_cache/` | `.npz`/indexed training caches | very large, ignored payload |
 
 ## Results To Use In Slides

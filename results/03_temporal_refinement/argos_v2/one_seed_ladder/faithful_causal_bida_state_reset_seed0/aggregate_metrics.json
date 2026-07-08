@@ -1,0 +1,17 @@
+{
+  "config": "faithful_causal_bida_state_reset",
+  "params": 489185,
+  "elapsed_s": 55.3919723033905,
+  "val": {
+    "raw_mae": 5.974122554063797,
+    "refined_mae": 5.959306836128235,
+    "delta_mae": 0.014815717935562134,
+    "raw_bad3": 44.61984872817993,
+    "refined_bad3": 43.917409896850586,
+    "new_bad3": 2.2576804906129837,
+    "modified_pixel_ratio": 0.9887241125106812,
+    "split": "val",
+    "sequences": 4
+  },
+  "best_metric": Infinity
+}

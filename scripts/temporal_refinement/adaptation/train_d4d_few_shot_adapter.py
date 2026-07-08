@@ -47,7 +47,7 @@ from train_tiny_refiner_v3_1_staged_abstention import FullFrameDataset  # noqa: 
 from model_registry import build_registry  # noqa: E402
 
 INDEX = ROOT / "results/03_temporal_refinement/ood/d4d_s2m2_zero_shot/d4d_index.csv"
-SPLITS = ROOT / "dataset/D4D/processed/keyframe_stereo_gt/splits"
+SPLITS = ROOT / "dataset/D4D/processed/keyframe_stereo_gt_curated/splits"
 OUT_ROOT = ROOT / "results/03_temporal_refinement/adaptation/d4d_few_shot_pilot/runs"
 
 W_GOOD, W_SPARSE = 1.0, 0.05

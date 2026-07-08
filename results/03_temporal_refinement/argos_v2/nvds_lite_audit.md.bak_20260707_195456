@@ -1,0 +1,153 @@
+# ARGOS v2 NVDS-Lite Audit
+
+## Repository State
+
+- Branch: `fable-wildcard-cfr`.
+- `SOTA/` is untracked and contains `ARGOS (5).pdf`; requested lowercase `sota/` does not exist.
+- Worktree contains many untracked experiment files from prior work.
+- `results/03_temporal_refinement/ood/d4d_full_dataset/extraction_log.txt` is modified; this task treats OOD files as read-only and does not touch them.
+
+## NVDS-Lite Code State
+
+Inspected:
+
+- `scripts/temporal_refinement/nvds_lite_causal/build_aux_cache.py`
+- `scripts/temporal_refinement/nvds_lite_causal/model.py`
+- `scripts/temporal_refinement/nvds_lite_causal/train_nvds_lite.py`
+- `scripts/temporal_refinement/nvds_lite_causal/run_matrix.py`
+- `scripts/temporal_refinement/nvds_lite_causal/validate_flow.py`
+- `scripts/temporal_refinement/nvds_lite_causal/validate_causal_and_grad.py`
+
+Model configs A-F are implemented:
+
+- A: NVDS-lite, RGB, full causal history, spatial + TGM + warp + safety + sparsity.
+- B: same as A, no warp loss.
+- C: same as A, disparity-only.
+- D: current-frame-only ablation.
+- E: shuffled-history ablation.
+- F: naive multi-frame concat baseline.
+
+Current fixed loss weights in code:
+
+```text
+lambda_tgm = 1.0
+lambda_warp = 1.0 for A/C/D/E/F, 0.0 for B
+lambda_safe = 0.2
+lambda_sparse = 0.02
+```
+
+This reflects the post-collapse fix. Older logs with `lambda_safe=0.5` and `lambda_sparse=0.05` are stale.
+
+## Flow Convention And Cache
+
+`warp_with_support` / `warp_disp` use backward grid sampling:
+
+```text
+output(p) = source(p + flow(p))
+```
+
+To warp `t-1` into `t`, cache must store target-to-source flow:
+
+```text
+warp_flow[t-1] = RAFT(frame_t -> frame_t-1)
+```
+
+`build_aux_cache.py` implements this convention. Existing aux cache files contain:
+
+```text
+rgb:       uint8, shape [T, 256, 320, 3]
+warp_flow: float16, shape [T-1, 2, 256, 320]
+occ:       uint8, shape [T-1, 256, 320]
+```
+
+Aux cache size: approximately `7.9G`.
+
+## Mask Convention
+
+Training warp loss uses:
+
+- current validity;
+- warped previous validity;
+- in-bounds sampling support;
+- target-frame occlusion from cached `occ`;
+- finite/border-safe sampling region.
+
+It does not intersect with unwarped previous validity.
+
+## Existing Validation
+
+Existing validation files:
+
+- `validation/flow_mask_validation.json`
+- `validation/causal_leakage_tests.json`
+- contact sheets `contact_sheet_pair1..4.png`
+
+Flow direction validation on 24 SCARED pairs:
+
+```text
+no-warp photometric error: 0.0220
+source-to-target flow:     0.0303
+target-to-source flow:     0.0107
+chosen direction:          target-to-source / bwd_flow
+NaN/Inf in warped disp:    0
+```
+
+Causal/gradient validation:
+
+- NVDS-lite and concat are causal under future RGB/disparity/validity perturbation;
+- all tested max output diffs at frames `<= t` are 0;
+- all refiner parameters have finite gradients;
+- cached raw/rgb/flow/valid/GT are non-differentiable tensors;
+- RAFT/S2M2 are not instantiated in the training graph;
+- spatial/TGM/warp losses are finite and positive.
+
+Missing required files before full final matrix:
+
+- `gradient_graph_validation.json` (currently embedded inside `causal_leakage_tests.json`);
+- `identity_departure_validation.json`;
+- `runtime_validation.json`.
+
+## Existing Runs
+
+Valid final runs: none.
+
+Partial/stale runs:
+
+- `timing/A__nvds_lite__rgb1__full_history__clip8__seed0`: 100-step timing run with fixed weights; useful for runtime only, not scientific matrix.
+- `logs/nvds_smoke.log`: old smoke with `lambda_safe=0.5`, `lambda_sparse=0.05`; stale due to identity-collapse setup.
+- `logs/nvds_validate_all.log`: includes stale A/B 150-step pilot with old conservative weights; stale for matrix.
+- `logs/nvds_diag_pilot.log`: failed with `FileNotFoundError` and shell typo; invalid.
+- `logs/nvds_matrix_g1.log`: produced D seed0 once, but no corresponding `config.json` remains in `runs/`; not a complete matrix.
+- `logs/nvds_matrix_g0.log`: loaded shards and exited/skipped without final outputs.
+- `logs/nvds_matrix.log`: terminated.
+
+Do not mix these runs.
+
+## Current Bottleneck
+
+The current `eval_sequences` function is non-overlapping windowed causal evaluation. It scores each frame once, but resets temporal history at artificial clip boundaries. The final requested evaluation requires proper causal streaming/sliding evaluation. This is the main code gap before final matrix reporting.
+
+Training is also evaluation-heavy. The 100-step A timing run reported:
+
+```text
+total: 251.0 s
+eval:  135.7 s
+train: 115.3 s
+```
+
+Validation dominates runtime at current settings.
+
+## Restart Plan
+
+1. Add missing validation/reporting helpers only; do not change model science.
+2. Re-run py_compile.
+3. Re-run flow, causal/gradient, identity departure, runtime validation.
+4. Run a small smoke with fixed weights and delete smoke output after success.
+5. Launch the final A-F, seeds 0/1/2 matrix with two GPU workers:
+   - GPU0: expensive configs A/B/C;
+   - GPU1: D/E/F;
+   - fixed `clip_len=8`, same steps, same losses, same split.
+6. Summarize SCARED matrix.
+7. Only after valid SCARED matrix, run D4D/SERV-CT read-only evaluations.
+8. Write final NVDS-lite decision gate and causal-BiDA next-step plan.
+

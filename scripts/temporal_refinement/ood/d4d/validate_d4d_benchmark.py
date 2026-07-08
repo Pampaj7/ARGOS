@@ -17,7 +17,7 @@ import cv2
 import numpy as np
 
 ROOT = Path("/dtu/p1/leopam/ARGOS")
-GT = ROOT / "dataset/D4D/processed/keyframe_stereo_gt"
+GT = ROOT / "dataset/D4D/processed/keyframe_stereo_gt_curated"
 MANIF = GT / "manifests"
 SPLITS = GT / "splits"
 REPORT = ROOT / "results/03_temporal_refinement/ood/d4d_full_dataset"

@@ -178,7 +178,8 @@ def project_zbuffer(pts_cam, snr, color, R_rect, P_rect, W, H):
 
 
 # ----------------------------- one anchor ---------------------------------
-def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True, tf_series: dict | None = None) -> dict:
+def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True, tf_series: dict | None = None,
+                 clip: str | None = None, anchor_kind: str | None = None, pose_source: str = "nominal") -> dict:
     ci = session / "camera_info"
     left, right = load_cam(ci / "left.yaml"), load_cam(ci / "right.yaml")
     Kz = np.array(yaml.safe_load((ci / "color_camera_info.yaml").read_text())["K"]).reshape(3, 3)
@@ -193,11 +194,32 @@ def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True, 
     zcolor = cv2.cvtColor(cv2.imread(str(session / "color_images" / f"{zivid_stem}.png")), cv2.COLOR_BGR2RGB)
     pts_z, snr_pts, col_pts = backproject_zivid(depth, snr, zcolor, Kz)
 
-    series = tf_series if tf_series is not None else load_session_tf(session / "tf")
-    T_cam_ziv, tdiag = chain_cam_from_zivid(series, t_scan)
+    # Pose selection. Two sources, both map Zivid/world points into the left camera frame:
+    #  * nominal : Polaris tf chain -> camera_optical (UNrectified); project with R_rect.
+    #  * curated : official D4D curated_camera_pose_{start,end}.txt = camera-to-world where the
+    #    camera is the RECTIFIED-left frame and world == Zivid frame (see external/d4d visualize.py
+    #    lines 134/176/180/264 and loader.endoscope_params which builds intrinsics from the rectified
+    #    P matrix). So world->rectified-left = inv(curated); points are ALREADY rectified -> R = I.
+    if pose_source == "curated":
+        if clip is None or anchor_kind is None:
+            raise ValueError("curated pose needs clip + anchor_kind")
+        pose_file = session / "clips" / clip / f"curated_camera_pose_{anchor_kind}.txt"
+        if not pose_file.exists():
+            raise FileNotFoundError(f"no curated pose {pose_file}")
+        curated = np.loadtxt(pose_file).reshape(4, 4)
+        T_cam_ziv = np.linalg.inv(curated)
+        R_proj = np.eye(3)
+        tdiag = {"convention": "curated_pose", "curated_pose_file": str(pose_file)}
+        chain_label = "inv(curated_camera_pose_{start,end}) [rectified-left <- Zivid/world]"
+    else:
+        series = tf_series if tf_series is not None else load_session_tf(session / "tf")
+        T_cam_ziv, tdiag = chain_cam_from_zivid(series, t_scan)
+        R_proj = left["R"]
+        chain_label = "inv(T_ps<-cam).T_ps<-MiRe45.inv(T_polaris<-MiRe45).T_polaris<-zivid"
+    tdiag["pose_source"] = pose_source
     pts_cam = (T_cam_ziv @ np.concatenate([pts_z, np.ones((len(pts_z), 1))], 1).T).T[:, :3]
     gt_depth, snr_map, col_map, n_in, n_front = project_zbuffer(
-        pts_cam, snr_pts, col_pts, left["R"], left["P"], W, H)
+        pts_cam, snr_pts, col_pts, R_proj, left["P"], W, H)
 
     valid = np.isfinite(gt_depth)
     gt_disp = np.where(valid, fx * baseline_m / np.maximum(gt_depth, 1e-9), np.nan).astype(np.float32)
@@ -235,7 +257,7 @@ def build_anchor(session: Path, zivid_stem: str, out_dir: Path, make_diag=True, 
         "zivid_stem": zivid_stem, "zivid_timestamp": t_scan,
         "stereo_frame": lname, "stereo_timestamp": float(st_ts[si]),
         "stereo_zivid_offset_ms": stereo_off_ms,
-        "transform_chain": "inv(T_ps<-cam).T_ps<-MiRe45.inv(T_polaris<-MiRe45).T_polaris<-zivid",
+        "transform_chain": chain_label,
         **tdiag,
         "fx_px": fx, "baseline_m": baseline_m, "baseline_mm": baseline_m * 1e3,
         "resolution": [W, H], "units": "depth_m, disparity_px, positive_left_reference",
@@ -282,16 +304,20 @@ def list_sessions(specimen: str) -> list[Path]:
     return [s for s in sorted(root.glob("*")) if s.is_dir() and (s / "left_images").exists()]
 
 
-def process_session(specimen: str, session: Path, out_root: Path, make_diag: bool, resume: bool) -> list[dict]:
+def process_session(specimen: str, session: Path, out_root: Path, make_diag: bool, resume: bool,
+                    pose_source: str = "nominal") -> list[dict]:
     """Process all anchors of one session; tf loaded once. Returns per-anchor rows."""
     rows = []
-    try:
-        series = load_session_tf(session / "tf")
-    except Exception as e:
-        for a in enumerate_anchors(session):
-            rows.append({"specimen": specimen, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
-                         "status_convert": "rejected", "reject_reason": f"tf:{e}"})
-        return rows
+    # nominal needs the Polaris tf chain; curated reads per-clip pose files instead.
+    series = None
+    if pose_source == "nominal":
+        try:
+            series = load_session_tf(session / "tf")
+        except Exception as e:
+            for a in enumerate_anchors(session):
+                rows.append({"specimen": specimen, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
+                             "status_convert": "rejected", "reject_reason": f"tf:{e}"})
+            return rows
     for a in enumerate_anchors(session):
         out_dir = out_root / specimen / session.name / (a["clip"] or "clip") / f"{a['anchor']}_anchor"
         if resume and (out_dir / "metadata.json").exists():
@@ -303,7 +329,8 @@ def process_session(specimen: str, session: Path, out_root: Path, make_diag: boo
             except Exception:
                 pass
         try:
-            meta = build_anchor(session, a["zivid_stem"], out_dir, make_diag=make_diag, tf_series=series)
+            meta = build_anchor(session, a["zivid_stem"], out_dir, make_diag=make_diag, tf_series=series,
+                                clip=a["clip"], anchor_kind=a["anchor"], pose_source=pose_source)
             meta.update({"specimen": specimen, "session": session.name, "clip": a["clip"], "anchor": a["anchor"],
                          "out_dir": str(out_dir), "status_convert": "ok"})
             rows.append(meta)
@@ -330,8 +357,8 @@ def enumerate_anchors(session: Path):
 
 
 def _worker(argt):
-    specimen, session, out_root, make_diag, resume = argt
-    return process_session(specimen, session, out_root, make_diag, resume)
+    specimen, session, out_root, make_diag, resume, pose_source = argt
+    return process_session(specimen, session, out_root, make_diag, resume, pose_source)
 
 
 def main() -> int:
@@ -344,6 +371,8 @@ def main() -> int:
     ap.add_argument("--report-root", type=Path, default=None)
     ap.add_argument("--no-diag", action="store_true")
     ap.add_argument("--resume", action="store_true", help="skip anchors with existing metadata.json")
+    ap.add_argument("--pose-source", choices=["nominal", "curated"], default="nominal",
+                    help="nominal Polaris tf chain (default) or official curated_camera_pose_{start,end}.txt")
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
@@ -369,7 +398,7 @@ def main() -> int:
                           "candidate_anchors": n_anchor, "resume": args.resume, "workers": args.workers}, indent=2))
         return 0
 
-    work = [(sp, sess, args.out, not args.no_diag, args.resume) for sp, sess in jobs]
+    work = [(sp, sess, args.out, not args.no_diag, args.resume, args.pose_source) for sp, sess in jobs]
     rows = []
     if args.workers > 1:
         from multiprocessing import Pool

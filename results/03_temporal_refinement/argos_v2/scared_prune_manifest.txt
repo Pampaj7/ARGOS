@@ -1,0 +1,12 @@
+SCARED prune manifest generated: 2026-07-08T11:09:46.837410
+base: /dtu/p1/leopam/ARGOS
+
+EXISTS	325G	347737679571	dataset/SCARED/curated/temporal_gt_rectified
+EXISTS	4.8G	5073523587	dataset/SCARED/curated/temporal_gt
+EXISTS	1.6G	1686726730	dataset/SCARED/curated/warped_gt_108
+EXISTS	2.8G	2971246615	results/03_temporal_refinement/evaluation/s2m2_gt_refiner_targets_full
+EXISTS	12G	12747537263	results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache
+EXISTS	129G	137533743818	results/03_temporal_refinement/cache/temporal_refinement_cache
+
+TOTAL_BYTES	507750457584
+TOTAL_HUMAN	473GB

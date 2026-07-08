@@ -1,0 +1,5 @@
+specimen,sessions,anchors,valid,warning,rejected,conventions,fx_range,baseline_mm_range
+specimen_1,16,82,80,2,0,curated_pose,798.3-798.3,4.23-4.23
+specimen_2,8,39,39,0,0,curated_pose,834.3-834.3,3.96-3.96
+specimen_3,15,76,75,0,1,curated_pose,834.9-834.9,4.44-4.44
+specimen_4,32,165,43,0,122,curated_pose,765.6-765.6,4.09-4.09

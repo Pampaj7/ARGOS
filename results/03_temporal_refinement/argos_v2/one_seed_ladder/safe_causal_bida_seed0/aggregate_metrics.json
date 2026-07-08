@@ -1,0 +1,17 @@
+{
+  "config": "safe_causal_bida",
+  "params": 522082,
+  "elapsed_s": 517.3043267726898,
+  "val": {
+    "raw_mae": 5.974122554063797,
+    "refined_mae": 5.974122554063797,
+    "delta_mae": 0.0,
+    "raw_bad3": 44.61984872817993,
+    "refined_bad3": 44.61983633041382,
+    "new_bad3": 0.0,
+    "modified_pixel_ratio": 0.0,
+    "split": "val",
+    "sequences": 4
+  },
+  "best_metric": 5.974122554063797
+}

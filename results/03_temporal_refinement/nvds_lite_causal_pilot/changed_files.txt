@@ -1,0 +1,13 @@
+# ARGOS v2 NVDS-lite changed/added files so far
+
+results/03_temporal_refinement/argos_v2/sota_context_extracted.md
+results/03_temporal_refinement/argos_v2/nvds_lite_audit.md
+results/03_temporal_refinement/argos_v2/README.md
+results/03_temporal_refinement/nvds_lite_causal_pilot/environment_summary.txt
+results/03_temporal_refinement/nvds_lite_causal_pilot/changed_files.txt
+scripts/temporal_refinement/nvds_lite_causal/model.py
+scripts/temporal_refinement/nvds_lite_causal/validate_causal_and_grad.py
+scripts/temporal_refinement/nvds_lite_causal/validate_identity_runtime.py
+logs/argos_v2_nvds_matrix_g0.sh
+logs/argos_v2_nvds_matrix_g1.sh
+

@@ -271,7 +271,7 @@ def build_model_audit():
 
 def build_dataset_tables():
     meta = json.loads(Path("results/03_temporal_refinement/cache/large_v3_s2m2s512_fast/metadata.json").read_text())
-    long_meta = json.loads(Path("results/04_dataset_derivatives/SCARED/scared_long_sequences/metadata.json").read_text())
+    long_meta = json.loads(Path("dataset/SCARED/curated/temporal_sequences/metadata.json").read_text())
     rows = [
         {
             "dataset": "SCARED long temporal cache",
@@ -299,7 +299,7 @@ def build_dataset_tables():
             "current_project_use": "frame benchmark and transfer checks",
             "limitations": "small GT subset",
             "status": "prepared and benchmarked",
-            "evidence_source": "dataset/SCARED/curated/keyframes_gt_dataset8/",
+            "evidence_source": "dataset/SCARED/curated/geometric_gt/strong_keyframes/",
         },
         {
             "dataset": "SERV-CT ARGOS",

@@ -1,0 +1,24 @@
+#!/bin/bash
+#BSUB -J egbm_v1_long
+#BSUB -q p1
+#BSUB -gpu "num=1:mode=shared"
+#BSUB -n 48
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=256GB]"
+#BSUB -W 72:00
+#BSUB -o results/03_temporal_refinement/training/egbm_v1_long_control_lsf_%J.out
+#BSUB -e results/03_temporal_refinement/training/egbm_v1_long_control_lsf_%J.err
+
+set -euo pipefail
+
+cd /dtu/p1/leopam/ARGOS
+export PYTHONPATH="$(pwd)"
+export OMP_NUM_THREADS=8
+
+source .miniconda/etc/profile.d/conda.sh
+conda activate argos
+
+python scripts/temporal_refinement/train_egbm_v1_long_control.py \
+  --output-root results/03_temporal_refinement/training/egbm_v1_long_control \
+  --num-workers 48 \
+  --overwrite true

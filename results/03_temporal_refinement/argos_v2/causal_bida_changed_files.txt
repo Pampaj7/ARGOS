@@ -1,0 +1,15 @@
+external/bidavideo/  # cloned official reference, locally ignored via .git/info/exclude
+scripts/temporal_refinement/causal_bida/__init__.py
+scripts/temporal_refinement/causal_bida/official_blocks.py
+scripts/temporal_refinement/causal_bida/model.py
+scripts/temporal_refinement/causal_bida/tests/test_shapes.py
+results/03_temporal_refinement/argos_v2/sota_context_extracted.md
+results/03_temporal_refinement/argos_v2/official_bidastabilizer_architecture.md
+results/03_temporal_refinement/argos_v2/official_bidastabilizer_module_map.csv
+results/03_temporal_refinement/argos_v2/bidastabilizer_license_audit.md
+results/03_temporal_refinement/argos_v2/causal_bida_adaptation_plan.md
+results/03_temporal_refinement/argos_v2/causal_bida_implementation_report.md
+results/03_temporal_refinement/argos_v2/causal_bida_test_report.md
+results/03_temporal_refinement/argos_v2/causal_bida_changed_files.txt
+results/03_temporal_refinement/argos_v2/causal_bida_next_experiments.md
+.git/info/exclude  # local-only ignore entry for /external/bidavideo/

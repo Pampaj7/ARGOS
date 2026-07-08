@@ -28,10 +28,10 @@ ROOT = Path("/dtu/p1/leopam/ARGOS")
 sys.path.insert(0, str(ROOT / "scripts/temporal_refinement/ood/d4d"))
 from d4d_keyframe_gt import session_root  # noqa: E402
 
-GT = ROOT / "dataset/D4D/processed/keyframe_stereo_gt"
+GT = ROOT / "dataset/D4D/processed/keyframe_stereo_gt_curated"
 MANIF = GT / "manifests"
 SPLITS = GT / "splits"
-REPORT = ROOT / "results/03_temporal_refinement/ood/d4d_full_dataset"
+REPORT = ROOT / "results/03_temporal_refinement/ood/d4d_full_dataset_curated"
 
 THRESH = {"min_valid_coverage_pct": 12.0, "max_stereo_zivid_offset_ms": 60.0,
           "warn_stereo_zivid_offset_ms": 40.0, "warn_max_interp_gap_ms": 500.0,
@@ -48,7 +48,8 @@ def git_commit():
 
 def classify(r):
     vc = float(r["valid_coverage_pct"]); off = float(r["stereo_zivid_offset_ms"])
-    gap = float(r["max_interp_gap_ms"]); dmin = float(r["disp_min"]); dmax = float(r["disp_max"])
+    # curated poses have no Polaris interpolation -> no max_interp_gap_ms; treat as 0 (no gap warning).
+    gap = float(r.get("max_interp_gap_ms") or 0.0); dmin = float(r["disp_min"]); dmax = float(r["disp_max"])
     if vc < THRESH["min_valid_coverage_pct"]:
         return "rejected", f"low_coverage({vc:.1f}%)"
     if off > THRESH["max_stereo_zivid_offset_ms"]:
@@ -100,6 +101,19 @@ def wcsv(path, rows):
 
 
 def main():
+    global GT, MANIF, SPLITS, REPORT
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--gt-root", type=Path, default=GT,
+                    help="anchor GT root (default keyframe_stereo_gt_curated; pass keyframe_stereo_gt for the retired nominal-pose variant, if regenerated)")
+    ap.add_argument("--report-root", type=Path, default=REPORT,
+                    help="override report dir (default: results/.../d4d_full_dataset_curated)")
+    args = ap.parse_args()
+    GT = args.gt_root
+    MANIF = GT / "manifests"
+    SPLITS = GT / "splits"
+    REPORT = args.report_root
+
     REPORT.mkdir(parents=True, exist_ok=True)
     rows = list(csv.DictReader((GT / "keyframe_manifest.csv").open()))
     rej_conv = list(csv.DictReader((GT / "conversion_rejected.csv").open())) if (GT / "conversion_rejected.csv").exists() else []
@@ -119,7 +133,8 @@ def main():
             "convention": r.get("convention", ""),
             "stereo_timestamp": r["stereo_timestamp"], "zivid_timestamp": r["zivid_timestamp"],
             "stereo_zivid_offset_ms": r["stereo_zivid_offset_ms"],
-            "tracker_interpolation_interval_ms": r["max_interp_gap_ms"],
+            "tracker_interpolation_interval_ms": r.get("max_interp_gap_ms", ""),
+            "pose_source": r.get("pose_source", "nominal"),
             "left_rectified_path": rel(out / "left_rectified.png"), "right_rectified_path": rel(out / "right_rectified.png"),
             "gt_depth_path": rel(out / "gt_depth_left.npy"), "gt_disparity_path": rel(out / "gt_disparity_left.npy"),
             "valid_mask_path": rel(out / "valid_mask.png"), "snr_path": rel(out / "snr_mask.npy"),
@@ -137,7 +152,7 @@ def main():
         quality.append({"anchor_id": anchor_id, "specimen": r["specimen"], "session": r["session"],
                         "clip": r["clip"], "anchor": r["anchor"], "status": status, "reason": reason,
                         "valid_coverage_pct": r["valid_coverage_pct"], "stereo_zivid_offset_ms": r["stereo_zivid_offset_ms"],
-                        "interp_gap_ms": r["max_interp_gap_ms"], "convention": r.get("convention", "")})
+                        "interp_gap_ms": r.get("max_interp_gap_ms", ""), "convention": r.get("convention", "")})
         if status == "rejected":
             rejected.append(quality[-1])
     # conversion-time rejects (tf/chain) into rejected list

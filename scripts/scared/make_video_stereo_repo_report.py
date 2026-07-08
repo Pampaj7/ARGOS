@@ -208,8 +208,8 @@ def main():
             f"| {r['model_name']} | {r['valid_disp_mae']:.4f} | {r['valid_depth_mae']:.4f} | {r['valid_depth_median']:.4f} | "
             f"{r['bad_2px']:.2f} | {r['bad_2mm']:.2f} | {r['pred_disp_le_0_5_ratio']:.4f} | "
             f"{r['mean_abs_consecutive_pred_disp_diff']:.4f} | {r['temporal_error_variation']:.4f} | "
-            f"{'' if r['avg_runtime_ms'] is None else f'{r['avg_runtime_ms']:.2f}'} | "
-            f"{'' if r['peak_gpu_memory_mb'] is None else f'{r['peak_gpu_memory_mb']:.1f}'} |"
+            f"{'' if r['avg_runtime_ms'] is None else format(r['avg_runtime_ms'], '.2f')} | "
+            f"{'' if r['peak_gpu_memory_mb'] is None else format(r['peak_gpu_memory_mb'], '.1f')} |"
         )
 
     lines.extend(

@@ -2,3 +2,4 @@ specimen,sessions,anchors,valid,warning,rejected,conventions,fx_range,baseline_m
 specimen_1,16,82,60,22,0,",direct_polaris",798.3-798.3,4.23-4.23
 specimen_2,8,39,31,2,6,direct_ps,834.3-834.3,3.96-3.96
 specimen_3,15,76,51,0,25,"direct_polaris,direct_ps",834.9-834.9,4.44-4.44
+specimen_4,32,165,44,0,121,"direct_polaris,direct_ps",765.6-765.6,4.09-4.09

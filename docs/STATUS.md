@@ -242,7 +242,7 @@
 
 - Built the first real long-sequence temporal-refinement source set:
   - inventory report: `results/temporal_refinement_cache/large_v2_source_inventory.md`;
-  - extracted sequences: `results/scared_long_sequences/`;
+  - extracted sequences: `dataset/SCARED/curated/long_sequences/`;
   - source: SCARED `test_dataset_8.zip` and `test_dataset_9.zip`;
   - streams: `8` keyframe video streams;
   - frames per stream: `130`;
@@ -251,10 +251,10 @@
   - image shape: `1024x1280`;
   - layout: SCARED `rgb.mp4` vertical stereo stack split into top-left and bottom-right images.
 - Generated frozen predictions for the long SCARED streams:
-  - S2M2-L@736 output: `results/scared_long_predictions/s2m2_l736/`;
+  - S2M2-L@736 output: `dataset/SCARED/curated/long_predictions/s2m2_l736/`;
   - S2M2 frames: `1,040`;
   - S2M2 peak VRAM: `1,672 MB`;
-  - StereoAnyVideo@384x640 output: `results/scared_long_predictions/stereoanyvideo_384x640/`;
+  - StereoAnyVideo@384x640 output: `dataset/SCARED/curated/long_predictions/stereoanyvideo_384x640/`;
   - StereoAnyVideo frames: `1,040`;
   - StereoAnyVideo chunking: `64` frames with overlap `4`;
   - all dense disparity arrays are stored in original image disparity coordinates and ignored by Git.
@@ -272,7 +272,7 @@
   - before training on all `large_v2` samples as teacher supervision, inspect per-sequence montages and consider sequence filtering, teacher confidence masks, or GT/calibration validation.
 
 - Built S2M2-S@512 multi-teacher cache and first slow training run:
-  - S2M2-S@512 predictions: `results/scared_long_predictions/s2m2_s512/`;
+  - S2M2-S@512 predictions: `dataset/SCARED/curated/long_predictions/s2m2_s512/`;
   - frames: `1,040`;
   - peak S2M2-S inference VRAM: `372 MB`;
   - compressed sample cache: `results/temporal_refinement_cache/large_v2_s2m2s512/`;

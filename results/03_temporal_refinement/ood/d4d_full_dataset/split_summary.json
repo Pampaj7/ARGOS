@@ -4,6 +4,7 @@
     "leave_one_specimen_out/hold_specimen_1/split_metadata.json",
     "leave_one_specimen_out/hold_specimen_2/split_metadata.json",
     "leave_one_specimen_out/hold_specimen_3/split_metadata.json",
+    "leave_one_specimen_out/hold_specimen_4/split_metadata.json",
     "few_shot/1session_seed0/split_metadata.json",
     "few_shot/1session_seed1/split_metadata.json",
     "few_shot/1session_seed2/split_metadata.json",
@@ -21,5 +22,5 @@
     "few_shot/frac50pct/split_metadata.json",
     "specimen_disjoint/split_metadata.json"
   ],
-  "usable_anchors": 166
+  "usable_anchors": 210
 }

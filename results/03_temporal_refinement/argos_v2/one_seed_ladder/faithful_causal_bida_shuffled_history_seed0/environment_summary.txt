@@ -1,0 +1,2 @@
+git_commit=b1b80a41d185775cb75e56ad3d707ed41e727790
+python=3.10.20 | packaged by conda-forge | (main, Jun 11 2026, 03:31:56) [GCC 14.3.0]

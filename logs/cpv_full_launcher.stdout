@@ -1,0 +1,72 @@
+CPV_FULL_START Sat Jul  4 19:09:30 CEST 2026 host=n-62-12-83 gpu=1
+CPV_TRAIN_EXIT=0 Sat Jul  4 19:35:00 CEST 2026
+{
+  "checkpoint": "results/03_temporal_refinement/training/counterfactual_proposal_verifier_refiner/checkpoints/best_pareto.pt",
+  "selected_all": {
+    "frames": 502,
+    "raw_mae": 11.323126086082116,
+    "refined_mae": 9.297657423285374,
+    "oracle_mae": 6.806202574317674,
+    "oracle_gap_recovered_pct": 44.84177466192105,
+    "raw_bad3": 51.298808374141814,
+    "refined_bad3": 49.887422292512085,
+    "new_bad3_frame_mean_pct": 3.8732272771665737,
+    "new_bad3_pixel_weighted_pct": 0.5261825490587171,
+    "modified_pct": 40.79544671144493
+  },
+  "selected_pathological": {
+    "frames": 151,
+    "raw_mae": 20.13213161443243,
+    "refined_mae": 17.981170572192465,
+    "oracle_mae": 15.54995183281551,
+    "oracle_gap_recovered_pct": 46.941873622447744,
+    "raw_bad3": 83.68583471977743,
+    "refined_bad3": 79.72543802859381,
+    "new_bad3_frame_mean_pct": 5.048219161443354,
+    "new_bad3_pixel_weighted_pct": 0.9494868661526317,
+    "modified_pct": 60.05642131954604
+  },
+  "selected_clean": {
+    "frames": 351,
+    "raw_mae": 7.533496927162181,
+    "refined_mae": 5.562015014496285,
+    "oracle_mae": 3.0446466255052136,
+    "oracle_gap_recovered_pct": 43.919529059326486,
+    "raw_bad3": 37.36592809439545,
+    "refined_bad3": 37.0511249245681,
+    "new_bad3_frame_mean_pct": 3.3677464380617477,
+    "new_bad3_pixel_weighted_pct": 0.5159306250227532,
+    "modified_pct": 32.509386409954146
+  },
+  "full_gt_val": {
+    "raw_mae": 5.199558143106941,
+    "refined_mae": 5.103511854668092,
+    "raw_bad3": 39.44632910431906,
+    "refined_bad3": 39.24518317507723,
+    "new_bad3_from_raw_good_pct": 0.9369366303625453,
+    "modified_pct": 30.962228617756168,
+    "detector_auc": NaN,
+    "detector_ap": NaN
+  },
+  "full_gt_test": {
+    "raw_mae": 4.669023756877508,
+    "refined_mae": 4.593905481431312,
+    "raw_bad3": 34.09395508626508,
+    "refined_bad3": 34.16209710676412,
+    "new_bad3_from_raw_good_pct": 1.3127092059472047,
+    "modified_pct": 32.72680442103987,
+    "detector_auc": NaN,
+    "detector_ap": NaN
+  }
+}
+CPV_EVAL_EXIT=0 Sat Jul  4 19:37:17 CEST 2026
+{
+  "model": "counterfactual_proposal_verifier_refiner",
+  "params": 4707790,
+  "batch": 16,
+  "ms_per_frame_fp32": 7.4994,
+  "peak_vram_mb": 4464.5,
+  "identity_or_loaded_delta_px": 0.45977675914764404
+}
+CPV_BENCH_EXIT=0 Sat Jul  4 19:37:27 CEST 2026
+CPV_FULL_DONE train=0 eval=0 bench=0 Sat Jul  4 19:37:27 CEST 2026

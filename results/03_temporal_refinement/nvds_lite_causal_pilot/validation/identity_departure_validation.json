@@ -1,0 +1,53 @@
+{
+  "config": "A",
+  "steps": 300,
+  "clip_len": 8,
+  "loss_terms_last": {
+    "spatial": 7.334686756134033,
+    "tgm": 0.9795981645584106,
+    "warp": 4.046855926513672,
+    "safe": 0.1734754890203476,
+    "sparse": 0.46776336431503296
+  },
+  "val_geometric": {
+    "refined_mae": 5.080851466880461,
+    "raw_mae": 4.925787490570342,
+    "delta_mae": -0.15506397631011862,
+    "refined_bad1": 70.88497089534243,
+    "refined_bad3": 39.25930247878613,
+    "refined_bad5": 27.43750270406719,
+    "new_bad3_pct_of_rawgood": 10.015210394413947,
+    "harmful_rate": 0.5103633610334817,
+    "beneficial_rate": 0.4770269858809939,
+    "modified_pixel_ratio": 0.6453664281623368,
+    "boundary_mae": 6.231871055344773
+  },
+  "val_temporal": {
+    "tgm_error": 0.9648641038446198,
+    "terr_jitter": 0.9075460785728907,
+    "boundary_tgm": 1.392508072650876,
+    "hf_error_energy": 1.4035218503088973,
+    "signflip_rate": 0.05205189518310637,
+    "isolated_rate": 0.1212981308784388,
+    "mc_inconsistency": 9.757965954510626
+  },
+  "modified_pixel_ratio": 0.6453664281623368,
+  "gate_mean": 0.5725982189178467,
+  "gate_std": 0.23348911106586456,
+  "gate_percentiles": {
+    "p1": 0.16342037916183472,
+    "p5": 0.19180597364902496,
+    "p50": 0.5770329833030701,
+    "p95": 0.9388842582702637,
+    "p99": 0.976601243019104
+  },
+  "residual_abs_mean": 0.651544451713562,
+  "residual_abs_percentiles": {
+    "p50": 0.29701587557792664,
+    "p95": 2.4368934631347656,
+    "p99": 2.829021692276001,
+    "p100": 2.996279001235962
+  },
+  "departed_from_identity": true,
+  "not_saturated": true
+}

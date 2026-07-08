@@ -1,0 +1,10 @@
+{
+  "config": "A",
+  "steps": 300,
+  "batch": 4,
+  "train_step_time_s_mean": 1.217380635049194,
+  "train_step_time_s_median": 1.1069890540093184,
+  "validation_time_s": 98.80000128783286,
+  "peak_vram_mb": 8810.43115234375,
+  "device": "cuda"
+}

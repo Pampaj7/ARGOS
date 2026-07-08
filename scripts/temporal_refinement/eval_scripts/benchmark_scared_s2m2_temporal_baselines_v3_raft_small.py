@@ -38,9 +38,9 @@ from video_qualitative import colorize_scalar, make_board, write_mp4  # noqa: E4
 
 
 DEFAULT_OUTPUT_DIR = Path("results/03_temporal_refinement/scared_s2m2_temporal_baselines_v3_raft_small")
-DEFAULT_FULL_FLOW_CACHE = Path("results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft")
-DEFAULT_SMALL6_FLOW_CACHE = Path("results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft_small_6")
-DEFAULT_SMALL12_FLOW_CACHE = Path("results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft_small_12")
+DEFAULT_FULL_FLOW_CACHE = Path("dataset/SCARED/legacy/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft")
+DEFAULT_SMALL6_FLOW_CACHE = Path("dataset/SCARED/legacy/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft_small_6")
+DEFAULT_SMALL12_FLOW_CACHE = Path("dataset/SCARED/legacy/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft_small_12")
 DEFAULT_PREVIOUS_BENCHMARK_DIR = Path("results/03_temporal_refinement/scared_s2m2_temporal_baselines_v2_no_raft_adaptive")
 
 

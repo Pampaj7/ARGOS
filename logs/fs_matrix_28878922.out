@@ -1,0 +1,120 @@
+[ok] v3_2c__zero_shot__none__seed0
+[FAIL] v3_2c__calibration_only__1session_seed0__seed0: UnboundLocalError: local variable 'loss' referenced before assignment
+[ok] v3_2c__calibration_only__1session_seed2__seed2
+[FAIL] v3_2c__calibration_only__2session_seed0__seed0: UnboundLocalError: local variable 'loss' referenced before assignment
+[ok] v3_2c__calibration_only__2session_seed1__seed1
+[ok] v3_2c__calibration_only__2session_seed2__seed2
+[ok] v3_2c__calibration_only__4session_seed0__seed0
+[ok] v3_2c__calibration_only__4session_seed1__seed1
+[ok] v3_2c__calibration_only__4session_seed2__seed2
+[ok] v3_2c__calibration_only__8session_seed0__seed0
+[ok] v3_2c__calibration_only__8session_seed1__seed1
+[ok] v3_2c__calibration_only__8session_seed2__seed2
+[FAIL] v3_2c__head_only__1session_seed0__seed0: UnboundLocalError: local variable 'loss' referenced before assignment
+[ok] v3_2c__head_only__1session_seed2__seed2
+[FAIL] v3_2c__head_only__2session_seed0__seed0: UnboundLocalError: local variable 'loss' referenced before assignment
+[ok] v3_2c__head_only__2session_seed1__seed1
+[ok] v3_2c__head_only__2session_seed2__seed2
+[ok] v3_2c__head_only__4session_seed0__seed0
+[ok] v3_2c__head_only__4session_seed1__seed1
+[ok] v3_2c__head_only__4session_seed2__seed2
+[ok] v3_2c__head_only__8session_seed0__seed0
+[ok] v3_2c__head_only__8session_seed1__seed1
+[ok] v3_2c__head_only__8session_seed2__seed2
+[ok] v3_2c__full__1session_seed0__seed0
+[ok] v3_2c__full__1session_seed2__seed2
+[ok] v3_2c__full__2session_seed0__seed0
+[ok] v3_2c__full__2session_seed1__seed1
+[ok] v3_2c__full__2session_seed2__seed2
+[ok] v3_2c__full__4session_seed0__seed0
+[ok] v3_2c__full__4session_seed1__seed1
+[ok] v3_2c__full__4session_seed2__seed2
+[ok] v3_2c__full__8session_seed0__seed0
+[ok] v3_2c__full__8session_seed1__seed1
+[ok] v3_2c__full__8session_seed2__seed2
+[ok] v3_2c__scratch__4session_seed0__seed0
+[ok] v3_2c__scratch__4session_seed1__seed1
+[ok] v3_2c__scratch__4session_seed2__seed2
+[ok] v3_2c__scratch__8session_seed0__seed0
+[ok] v3_2c__scratch__8session_seed1__seed1
+[ok] v3_2c__scratch__8session_seed2__seed2
+[ok] EGBM-v3-CARE-S__calibration_only__1session_seed0__seed0
+[ok] EGBM-v3-CARE-S__calibration_only__1session_seed2__seed2
+[ok] EGBM-v3-CARE-S__calibration_only__2session_seed0__seed0
+[ok] EGBM-v3-CARE-S__calibration_only__2session_seed1__seed1
+[ok] EGBM-v3-CARE-S__calibration_only__2session_seed2__seed2
+[ok] EGBM-v3-CARE-S__calibration_only__4session_seed0__seed0
+[ok] EGBM-v3-CARE-S__calibration_only__4session_seed1__seed1
+[ok] EGBM-v3-CARE-S__calibration_only__4session_seed2__seed2
+[ok] EGBM-v3-CARE-S__calibration_only__8session_seed0__seed0
+[ok] EGBM-v3-CARE-S__calibration_only__8session_seed1__seed1
+[ok] EGBM-v3-CARE-S__calibration_only__8session_seed2__seed2
+[ok] EGBM-v3-CARE-S__head_only__1session_seed0__seed0
+[ok] EGBM-v3-CARE-S__head_only__1session_seed2__seed2
+[ok] EGBM-v3-CARE-S__head_only__2session_seed0__seed0
+[ok] EGBM-v3-CARE-S__head_only__2session_seed1__seed1
+[ok] EGBM-v3-CARE-S__head_only__2session_seed2__seed2
+[ok] EGBM-v3-CARE-S__head_only__4session_seed0__seed0
+[ok] EGBM-v3-CARE-S__head_only__4session_seed1__seed1
+[ok] EGBM-v3-CARE-S__head_only__4session_seed2__seed2
+[ok] EGBM-v3-CARE-S__head_only__8session_seed0__seed0
+[ok] EGBM-v3-CARE-S__head_only__8session_seed1__seed1
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 28878922: <fs_matrix> in cluster <dcc> Exited
+
+Job <fs_matrix> was submitted from host <hpclogin9.hpccluster.dtu.dk> by user <leopam> in cluster <dcc> at Mon Jul  6 14:23:10 2026
+Job was executed on host(s) <4*n-62-12-85>, in queue <p1>, as user <leopam> in cluster <dcc> at Mon Jul  6 14:23:30 2026
+</zhome/1e/4/234278> was used as the home directory.
+</dtu/p1/leopam/ARGOS> was used as the working directory.
+Started at Mon Jul  6 14:23:30 2026
+Terminated at Mon Jul  6 14:38:23 2026
+Results reported at Mon Jul  6 14:38:23 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+#BSUB -J fs_matrix
+#BSUB -q p1
+#BSUB -gpu "num=1:mode=shared"
+#BSUB -n 4
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=32GB]"
+#BSUB -W 4:00
+#BSUB -o logs/fs_matrix_%J.out
+#BSUB -e logs/fs_matrix_%J.err
+source /dtu/p1/leopam/ARGOS/.miniconda/etc/profile.d/conda.sh
+conda activate argos
+cd /dtu/p1/leopam/ARGOS
+export PYTHONPATH="$(pwd)"
+python scripts/temporal_refinement/adaptation/run_d4d_few_shot_matrix.py
+
+------------------------------------------------------------
+
+TERM_OWNER: job killed by owner.
+Exited with exit code 130.
+
+Resource usage summary:
+
+    CPU time :                                   861.00 sec.
+    Max Memory :                                 1331 MB
+    Average Memory :                             1135.00 MB
+    Total Requested Memory :                     131072.00 MB
+    Delta Memory :                               129741.00 MB
+    Max Swap :                                   -
+    Max Processes :                              5
+    Max Threads :                                12
+    Run time :                                   893 sec.
+    Turnaround time :                            913 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <logs/fs_matrix_28878922.err> for stderr output of this job.
+

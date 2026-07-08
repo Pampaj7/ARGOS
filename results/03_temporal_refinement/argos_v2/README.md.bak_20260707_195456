@@ -1,0 +1,38 @@
+# ARGOS v2
+
+ARGOS v2 treats the old temporal-refinement sprint as closed evidence, not as the current framing.
+
+Current task: close the corrected causal NVDS-lite pilot and decide whether it demonstrates genuine causal temporal-history use. NVDS-lite is now a baseline in the SOTA ladder, not the final candidate architecture.
+
+## Context Files
+
+- `sota_context_extracted.md`: extracted guidance from `SOTA/ARGOS (5).pdf`.
+- `nvds_lite_audit.md`: code/run/cache audit before the final NVDS-lite matrix.
+- `next_step_causal_bida_plan.md`: to be written after the NVDS-lite matrix and OOD checks complete.
+
+## Active NVDS-Lite Matrix
+
+Output root:
+
+```text
+results/03_temporal_refinement/nvds_lite_causal_pilot/runs_argos_v2
+```
+
+Detached local jobs on node `n-62-12-83`:
+
+```text
+PID 1304710: configs A/B/C, seeds 0/1/2, CUDA_VISIBLE_DEVICES=0
+PID 1304766: configs D/E/F, seeds 0/1/2, CUDA_VISIBLE_DEVICES=1
+```
+
+Logs:
+
+```text
+logs/argos_v2_nvds_matrix_g0.local.out
+logs/argos_v2_nvds_matrix_g0.local.err
+logs/argos_v2_nvds_matrix_g1.local.out
+logs/argos_v2_nvds_matrix_g1.local.err
+```
+
+Both jobs loaded the 7.9 GB aux cache and started GPU training.
+

@@ -1,0 +1,48 @@
+{
+  "synthetic": {
+    "sequence_continuity_no_reset_at_8": true,
+    "chunked_preserved_state_matches_full": true,
+    "incorrect_reset_negative_control_differs": true,
+    "future_perturbation_causal": true,
+    "frames": 16,
+    "temporal_pairs": 15,
+    "flow_direction_improves_translation": true,
+    "warped_validity_nontrivial": true,
+    "finite_outputs": true
+  },
+  "tiny_scared": {
+    "sequence": "dataset_1_keyframe_1",
+    "raw_16": {
+      "raw_mae": 1.011030673980713,
+      "refined_mae": 1.011030673980713,
+      "temporal_pairs": 15
+    },
+    "faithful_causal_bida_full_16": {
+      "refined_mae": 1.011030673980713,
+      "modified_pixel_ratio": 0.0,
+      "temporal_pairs": 15
+    },
+    "faithful_causal_bida_state_reset_16": {
+      "refined_mae": 1.011030673980713,
+      "modified_pixel_ratio": 0.0,
+      "temporal_pairs": 15
+    },
+    "current_only_8": {
+      "refined_mae": 1.069632649421692,
+      "modified_pixel_ratio": 0.0,
+      "temporal_pairs": 7
+    },
+    "aligned_local_safe_backward_8": {
+      "loss": 1.069632649421692,
+      "finite": true,
+      "missing_grad": [],
+      "params": 272290
+    }
+  },
+  "commands": [
+    "python -m py_compile causal_bida + evaluator files",
+    "python scripts/temporal_refinement/causal_bida/tests/test_shapes.py",
+    "python scripts/temporal_refinement/causal_bida/tests/test_aligned_local.py",
+    "python scripts/temporal_refinement/eval_scripts/evaluate_argos_v2_streaming.py --self-test"
+  ]
+}

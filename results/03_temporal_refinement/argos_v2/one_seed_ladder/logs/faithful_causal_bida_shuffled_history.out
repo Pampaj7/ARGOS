@@ -1,0 +1,16 @@
+{
+  "config": "faithful_causal_bida_shuffled_history",
+  "params": 489185,
+  "val": {
+    "raw_mae": 5.974122554063797,
+    "refined_mae": 5.962222039699554,
+    "delta_mae": 0.011900514364242554,
+    "raw_bad3": 44.61984872817993,
+    "refined_bad3": 43.98696708679199,
+    "new_bad3": 2.010247878730297,
+    "modified_pixel_ratio": 0.9655681401491165,
+    "split": "val",
+    "sequences": 4
+  },
+  "out": "results/03_temporal_refinement/argos_v2/one_seed_ladder/faithful_causal_bida_shuffled_history_seed0"
+}

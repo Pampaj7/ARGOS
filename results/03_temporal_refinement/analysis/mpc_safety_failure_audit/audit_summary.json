@@ -1,0 +1,73 @@
+{
+  "checkpoint": "results/03_temporal_refinement/training/magnitude_proposal_critic_refiner/checkpoints/best_pareto.pt",
+  "selected_current": {
+    "frames": 502,
+    "raw_mae": 11.323126086082116,
+    "refined_mae": 9.17877375076254,
+    "oracle_mae": 6.806202574317674,
+    "oracle_gap_recovered_pct": 47.47373582338855,
+    "raw_bad3": 51.757532019180125,
+    "refined_bad3": 49.31221836451063,
+    "new_bad3_frame_mean_pct": 5.123846086924624,
+    "new_bad3_pixel_weighted_pct": 0.7090180073747897,
+    "modified_pct": 51.970625151267726
+  },
+  "new_bad3_total_pixels": 27727,
+  "top_damage_concentration": [
+    {
+      "top_applied_magnitude_pct": 0.1,
+      "pixels": 15663,
+      "new_bad3_pixels": 0,
+      "share_of_all_new_bad3_pct": 0.0,
+      "applied_abs_threshold_px": 23.871774673461914
+    },
+    {
+      "top_applied_magnitude_pct": 1,
+      "pixels": 156622,
+      "new_bad3_pixels": 5,
+      "share_of_all_new_bad3_pct": 0.018032964258664838,
+      "applied_abs_threshold_px": 23.494953155517578
+    },
+    {
+      "top_applied_magnitude_pct": 5,
+      "pixels": 783110,
+      "new_bad3_pixels": 549,
+      "share_of_all_new_bad3_pct": 1.9800194756013993,
+      "applied_abs_threshold_px": 20.885787963867188
+    },
+    {
+      "top_applied_magnitude_pct": 10,
+      "pixels": 1566220,
+      "new_bad3_pixels": 2858,
+      "share_of_all_new_bad3_pct": 10.307642370252822,
+      "applied_abs_threshold_px": 16.026065826416016
+    }
+  ],
+  "support_precision_recall": {
+    "authorized_pixels": 8033226,
+    "oracle_beneficial_pixels": 6480261,
+    "precision_pct": 65.50769267539592,
+    "recall_pct": 81.20631252352335,
+    "false_authorization_pixels": 2770845,
+    "missed_support_pixels": 1217880
+  },
+  "sign_accuracy_pct": 72.73131991026995,
+  "overshoot_harmful_pixels": 70999,
+  "undershoot_pixels": 4103598,
+  "best_posthoc": {
+    "policy": "trust_threshold",
+    "threshold": 0.9,
+    "clip_px": "none",
+    "frames": 502,
+    "raw_mae": 11.323126086082116,
+    "refined_mae": 9.345835450635963,
+    "oracle_mae": 6.806202574317674,
+    "oracle_gap_recovered_pct": 43.77516312366701,
+    "raw_bad3": 51.757532019180125,
+    "refined_bad3": 50.12093499441097,
+    "new_bad3_frame_mean_pct": 4.4666106425159455,
+    "new_bad3_pixel_weighted_pct": 0.6037405833346119,
+    "modified_pct": 21.38789590912835
+  },
+  "diagnosis": "MPC's large proposal works; safety failure is verifier/authorization, not lack of correction magnitude."
+}

@@ -1,0 +1,16 @@
+{
+  "config": "aligned_local_faithful",
+  "params": 239393,
+  "val": {
+    "raw_mae": 5.974122554063797,
+    "refined_mae": 5.968856602907181,
+    "delta_mae": 0.005265951156616211,
+    "raw_bad3": 44.61984872817993,
+    "refined_bad3": 43.95590543746948,
+    "new_bad3": 2.6996512413024902,
+    "modified_pixel_ratio": 0.5137871578335762,
+    "split": "val",
+    "sequences": 4
+  },
+  "out": "results/03_temporal_refinement/argos_v2/one_seed_ladder/aligned_local_faithful_seed0"
+}

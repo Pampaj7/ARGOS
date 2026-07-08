@@ -50,8 +50,8 @@ def main():
     import argparse
 
     p = argparse.ArgumentParser()
-    p.add_argument("--sequences-root", type=Path, default=ROOT / "results/04_dataset_derivatives/SCARED/scared_long_sequences")
-    p.add_argument("--out-root", type=Path, default=ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640")
+    p.add_argument("--sequences-root", type=Path, default=ROOT / "dataset/SCARED/curated/temporal_sequences")
+    p.add_argument("--out-root", type=Path, default=RESULTS_DIR / "03_temporal_refinement/cache/scared_long_predictions/stereoanyvideo_384x640")
     p.add_argument("--chunk-size", type=int, default=64)
     p.add_argument("--overlap", type=int, default=4)
     p.add_argument("--max-frames", type=int, default=0)

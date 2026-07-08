@@ -1,0 +1,8 @@
+config,modified_pixel_ratio,new_bad3,refined_bad3,raw_good_preservation_note
+raw_s2m2,0.0,0.0,44.61984872817993,from streaming aggregate; detailed gate stats not logged by wrapper
+current_only,0.0,0.0,44.61910891532898,from streaming aggregate; detailed gate stats not logged by wrapper
+aligned_local_faithful,0.5137871578335762,2.6996512413024902,43.95590543746948,from streaming aggregate; detailed gate stats not logged by wrapper
+faithful_causal_bida,0.9838934689760208,2.14157834649086,43.92996573448181,from streaming aggregate; detailed gate stats not logged by wrapper
+faithful_causal_bida_state_reset,0.9887241125106812,2.2576804906129837,43.917409896850586,from streaming aggregate; detailed gate stats not logged by wrapper
+faithful_causal_bida_shuffled_history,0.9655681401491165,2.010247878730297,43.98696708679199,from streaming aggregate; detailed gate stats not logged by wrapper
+safe_causal_bida,0.0,0.0,44.61983633041382,from streaming aggregate; detailed gate stats not logged by wrapper

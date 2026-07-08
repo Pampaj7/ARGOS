@@ -1,0 +1,11 @@
+conceptual_stage,source_file,symbol,input_shape,output_shape,reusable_in_argos,adaptation_required,notes
+input disparity sequence,models/core/bidastabilizer.py,"BiDAStabilizer.forward(seq1, disp)","seq1 [B,T,3,H,W], disp [B,T,1,H,W]","disp_abs [B,T,1,H,W]",yes,positive-disparity convention in ARGOS,Official negates disparity internally.
+optical-flow computation,models/core/bidastabilizer.py,compute_flow,"seq [B,T,3,H,W]","flow_forward/backward [B,T-1,2,H,W]",no,ARGOS uses cached target-to-source RAFT flow,Do not import embedded SEARAFT.
+warping,models/core/bidastabilizer.py,flow_warp,"x [B,C,H,W], flow [B,2,H,W] or [B,H,W,2]","warped [B,C,H,W]",yes,"reuse convention, add masks",output(p)=source(p+flow(p)).
+local disparity feature extraction,models/core/bidastabilizer.py,feat_extract,"[B*T,3,H,W]","[B*T,48,H,W]",yes,"causal stack [prev_warp,current,current]","Official uses [prev,current,next]."
+forward feature propagation,models/core/bidastabilizer.py,forward_resblocks,"cat local+hidden [B,96,H,W]","hidden [B,48,H,W]",yes,streaming state step,No future needed.
+backward feature propagation,models/core/bidastabilizer.py,backward_resblocks,"cat local+hidden [B,96,H,W]","hidden [B,48,H,W]",no,removed,Uses future frames; offline only.
+feature fusion,models/core/bidastabilizer.py,fusion,"cat backward+forward [B,96,H,W]","[B,48,H,W]",partial,faithful causal uses forward hidden only,Safe model keeps explicit difference ablation.
+residual prediction,models/core/bidastabilizer.py,"conv_hr, conv_last","[B,48,H,W]","[B,1,H,W]",yes,optional bounded tanh and gate,Official residual is unbounded.
+training losses,train_bidastabilizer.py; train_utils/losses.py,sequence_loss; consistency_loss,pred/GT/video,scalar losses,partial,reuse ARGOS losses instead,Official temporal loss has no surgical validity mask.
+inference sequence handling,models/core/bidastabilizer.py,forward_batch,"video [T,3,H,W], disp [T,1,H,W]","[T,1,1,H,W]",partial,true per-frame stateful step,Official chunks windows offline.

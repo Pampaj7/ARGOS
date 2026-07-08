@@ -519,37 +519,37 @@ This audit is read-only with respect to dataset files. It samples metadata and a
 ## Direct Answers
 
 1. **Is `curated/temporal_gt` usable as the official temporal GT benchmark?**
-   {'Yes' if eval_ready else 'No'}: {', '.join(r['sequence_name'] for r in eval_ready) if eval_ready else 'no evaluation-ready sequence found'}.
+   No. ARGOS v2 pruned legacy kinematic temporal GT; use raw SCARED plus explicit curated data only.
 
 2. **Which sequences are complete and evaluation-ready?**
-   Temporal GT: {', '.join(r['sequence_name'] for r in eval_ready) if eval_ready else 'none'}. Short warped GT clips marked ready in `curated_sequence_inventory.csv` can be used for auxiliary/multi-sequence checks, not as the official long benchmark.
+   Strong local fixture: `dataset/SCARED/curated/keyframes_gt_dataset8`. Full strong keyframes remain in raw SCARED.
 
 3. **Which sequences have partial GT?**
-   {', '.join(r['sequence_name'] for r in partial) if partial else 'None detected in curated/temporal_gt. Note that downstream evaluation may still filter frames by valid-pixel threshold.'}
+   Legacy temporal/warped GT folders were removed from the default dataset tree.
 
 4. **Are image and GT resolutions consistent?**
-   {'Yes for temporal_gt samples' if all(r.get('image_resolution') == r.get('gt_resolution') for r in temporal_rows if r.get('gt_resolution')) else 'Check temporal_gt_integrity.csv for mismatches'}.
+   Check raw/keyframe fixture rows in the CSV outputs; do not infer temporal-GT readiness from this audit.
 
 5. **Are calibration files available where needed?**
-   {'Yes for temporal_gt' if all(int(r.get('calibration_files', 0)) == int(r.get('left_frames', -1)) for r in temporal_rows) else 'Some temporal_gt calibration files are missing; inspect CSV'}.
+   Yes for the dataset_8 fixture when present; raw SCARED remains the source of truth for other keyframes.
 
 6. **Is `curated/consecutive32` usable for training clips?**
-   {'Yes' if consec.get('training_clip_ready') else 'No'}: it has {consec.get('left_frames', 0)} left and {consec.get('right_frames', 0)} right frames. It has no GT/calibration, so it is stereo/inference/cache material rather than geometry-evaluation material.
+   No. It was a regenerable extracted stereo cache and has been removed.
 
 7. **What is the reason for the large size difference between raw and curated?**
-   Raw keeps source zips and extracted original SCARED content; curated stores only ARGOS-ready rectified subsets/GT arrays needed for experiments. Current sizes: raw/source `{source_size.get('total_human', '')}`, raw/extracted `{extracted_size.get('total_human', '')}`, curated `{curated_size.get('total_human', '')}`.
+   Raw keeps source zips and extracted original SCARED content; curated stores ARGOS-ready train/inference data plus manifests. Current sizes: raw/source `{source_size.get('total_human', '')}`, raw/extracted `{extracted_size.get('total_human', '')}`.
 
 8. **Which raw files dominate disk usage?**
 {top_lines}
 
 9. **Which dataset paths should be used?**
-   - Temporal evaluation: `dataset/SCARED/curated/temporal_gt/test_dataset_9_keyframe_3`.
-   - Frame-wise geometry evaluation: `dataset/SCARED/curated/keyframes_gt_dataset8` and short GT clips under `dataset/SCARED/curated/warped_gt_108` when the protocol explicitly supports them.
-   - Training clips: cached prediction datasets under `results/03_temporal_refinement/cache/...`; raw stereo-only source clips can come from `dataset/SCARED/curated/consecutive32` and curated long/progressive folders after prediction cache generation.
+   - Frame-wise geometry evaluation: `dataset/SCARED/curated/keyframes_gt_dataset8` when a small dataset_8 smoke fixture is explicitly requested.
+   - Temporal evaluation: no default SCARED temporal GT after ARGOS v2 pruning; use an explicit replacement protocol such as SCARED-C corrected poses.
+   - Training clips: regenerate caches explicitly from raw or an approved replacement dataset.
    - Raw recovery/debug only: `dataset/SCARED/raw/source` and `dataset/SCARED/raw/extracted`.
 
 10. **Any action required before running S2M2-S / EMA / warped EMA / StereoAnyVideo evaluation?**
-   For the official temporal-GT sequence, no blocking dataset action was found. Use the existing evaluation scripts so masks/calibration/positive-disparity policy remain consistent. For `consecutive32`, do not report GT geometry because no GT is present in that folder.
+   Do not run the old SCARED temporal-GT protocol by default. Use raw/keyframe curated data for frame checks, or wire a replacement dataset explicitly.
 
 ## Size Summary
 

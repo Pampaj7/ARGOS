@@ -18,7 +18,7 @@ import torch
 import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[2]
-STEREO_ROOT = ROOT.parent / "stereo"
+STEREO_ROOT = ROOT / "external/frame_stereo_repos"
 sys.path.insert(0, str(ROOT / "scripts/scared"))
 
 from benchmark_s2m2_size_tradeoff import collect_samples  # noqa: E402
@@ -398,7 +398,7 @@ BUILDERS = {
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", choices=sorted(BUILDERS), required=True)
-    parser.add_argument("--scared-root", type=Path, default=ROOT / "dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8")
+    parser.add_argument("--scared-root", type=Path, default=ROOT / "dataset/SCARED/curated/geometric_gt/strong_keyframes")
     parser.add_argument("--metadata-csv", type=Path, default=None)
     parser.add_argument("--input-resolution-label", default="native curated SCARED")
     parser.add_argument("--out-dir", type=Path, required=True)

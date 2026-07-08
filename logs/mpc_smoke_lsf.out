@@ -1,0 +1,69 @@
+Job <28871063> is submitted to queue <p1i>.
+{
+  "checkpoint": "results/03_temporal_refinement/training/magnitude_proposal_critic_refiner_smoke/checkpoints/best_pareto.pt",
+  "selected_all": {
+    "frames": 502,
+    "raw_mae": 11.323126086082116,
+    "refined_mae": 11.322734393802772,
+    "oracle_mae": 6.806202574317674,
+    "oracle_gap_recovered_pct": 0.008671660662915498,
+    "raw_bad3": 51.298808374141814,
+    "refined_bad3": 51.507669302667914,
+    "new_bad3_frame_mean_pct": 0.0,
+    "new_bad3_pixel_weighted_pct": 0.0,
+    "modified_pct": 1.948012658640546
+  },
+  "selected_pathological": {
+    "frames": 151,
+    "raw_mae": 20.13213161443243,
+    "refined_mae": 20.13100020301263,
+    "oracle_mae": 15.54995183281551,
+    "oracle_gap_recovered_pct": 0.024691554537892374,
+    "raw_bad3": 83.68583471977743,
+    "refined_bad3": 83.7418377058719,
+    "new_bad3_frame_mean_pct": 0.0,
+    "new_bad3_pixel_weighted_pct": 0.0,
+    "modified_pct": 3.1990749174211137
+  },
+  "selected_clean": {
+    "frames": 351,
+    "raw_mae": 7.533496927162181,
+    "refined_mae": 7.533423461635568,
+    "oracle_mae": 3.0446466255052136,
+    "oracle_gap_recovered_pct": 0.0016366223348132035,
+    "raw_bad3": 37.36592809439545,
+    "refined_bad3": 37.64054842265708,
+    "new_bad3_frame_mean_pct": 0.0,
+    "new_bad3_pixel_weighted_pct": 0.0,
+    "modified_pct": 1.4098063877691334
+  },
+  "full_gt_val": {
+    "raw_mae": 3.262922090816738,
+    "refined_mae": 3.2629442649473086,
+    "raw_bad3": 27.73876278208096,
+    "refined_bad3": 27.766969107207686,
+    "new_bad3_from_raw_good_pct": 0.0,
+    "modified_pct": 0.24525770259917798,
+    "detector_auc": 0.7389467899237944,
+    "detector_ap": 0.5758738134678053
+  },
+  "full_gt_test": {
+    "raw_mae": 1.098189473189838,
+    "refined_mae": 1.0981714813553403,
+    "raw_bad3": 3.297976089537277,
+    "refined_bad3": 3.385692351553081,
+    "new_bad3_from_raw_good_pct": 0.0,
+    "modified_pct": 0.0,
+    "detector_auc": 0.8140561978226065,
+    "detector_ap": 0.06286019405410967
+  }
+}
+{
+  "model": "magnitude_proposal_critic_refiner",
+  "params": 4665066,
+  "batch": 4,
+  "ms_per_frame_fp32": 12.0899,
+  "peak_vram_mb": 1139.7,
+  "identity_delta_px": 0.0
+}
+SMOKE_OK

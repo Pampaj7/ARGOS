@@ -1,0 +1,32 @@
+{
+  "n_valid_pixels": 15662200,
+  "total_gap_px_sum": 102853528.0,
+  "selected_raw_mae": 12.298815727233887,
+  "selected_oracle_mae": 5.731832981109619,
+  "beneficial_px_frac(gap>0.5px)": 0.5233350359464187,
+  "gap_share_from_delta_gt_3px": 0.9536761045455933,
+  "gap_share_from_delta_gt_6px": 0.9227924942970276,
+  "gap_share_within_3px_of_boundary": 0.6058957576751709,
+  "gap_share_high_temporal_dt_gt_2px": 0.8134897947311401,
+  "counterfactual_gains": {
+    "egbm_v1": {
+      "current_recovered_frac": 0.13075345754623413,
+      "if_magnitude_fixed_recovered_frac": 0.9400825500488281,
+      "if_support_fixed_recovered_frac": 0.1823616623878479,
+      "if_sign_fixed_recovered_frac": 0.15022903680801392
+    },
+    "egbm_v2_care": {
+      "current_recovered_frac": 0.1354646384716034,
+      "if_magnitude_fixed_recovered_frac": 0.9552812576293945,
+      "if_support_fixed_recovered_frac": 0.17335106432437897,
+      "if_sign_fixed_recovered_frac": 0.15420730412006378
+    },
+    "egbm_v3_window": {
+      "current_recovered_frac": 0.13083307445049286,
+      "if_magnitude_fixed_recovered_frac": 0.9101689457893372,
+      "if_support_fixed_recovered_frac": 0.2160898745059967,
+      "if_sign_fixed_recovered_frac": 0.14645037055015564
+    }
+  },
+  "residual_scale_note": "all EGBM variants bound the additive residual to ~<=2.25px effective (scale=3 tanh, 2-step damped update); compare with gap_share_from_delta_gt_3px"
+}

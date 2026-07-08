@@ -1,0 +1,85 @@
+{
+  "device": "cuda",
+  "git_commit": "b1b80a41d185775cb75e56ad3d707ed41e727790",
+  "diagnostic_max_frames_per_sequence": 128,
+  "checkpoints": {
+    "aligned_local_faithful": {
+      "path": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/argos_v2/one_seed_ladder/aligned_local_faithful_seed0/checkpoints/best.pt",
+      "step": 600,
+      "selected_validation_metric": 5.968856602907181,
+      "training_config": {
+        "seed": 0,
+        "clip_len": 8,
+        "steps": 1200,
+        "batch_size": 1,
+        "lr": 0.0003,
+        "eval_every": 200,
+        "spatial_weight": 1.0,
+        "tgm_weight": 1.0,
+        "warp_weight": 0.2,
+        "safe_weight": 0.2,
+        "sparse_weight": 0.02,
+        "residual_bound": 3.0,
+        "selection_metric": "val_refined_mae",
+        "model": "aligned_local_faithful",
+        "mode": "full",
+        "safe_losses": false,
+        "name": "aligned_local_faithful"
+      },
+      "git_commit": "b1b80a41d185775cb75e56ad3d707ed41e727790",
+      "hidden_state_training": "zero state at every randomly sampled clip; no state carried across clips; clip_len=8; detach_state=False inside clip"
+    },
+    "faithful_causal_bida": {
+      "path": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/argos_v2/one_seed_ladder/faithful_causal_bida_seed0/checkpoints/best.pt",
+      "step": 200,
+      "selected_validation_metric": 5.959456384181976,
+      "training_config": {
+        "seed": 0,
+        "clip_len": 8,
+        "steps": 1200,
+        "batch_size": 1,
+        "lr": 0.0003,
+        "eval_every": 200,
+        "spatial_weight": 1.0,
+        "tgm_weight": 1.0,
+        "warp_weight": 0.2,
+        "safe_weight": 0.2,
+        "sparse_weight": 0.02,
+        "residual_bound": 3.0,
+        "selection_metric": "val_refined_mae",
+        "model": "faithful_causal_bida",
+        "mode": "full",
+        "safe_losses": false,
+        "name": "faithful_causal_bida"
+      },
+      "git_commit": "b1b80a41d185775cb75e56ad3d707ed41e727790",
+      "hidden_state_training": "zero state at every randomly sampled clip; no state carried across clips; clip_len=8; detach_state=False inside clip"
+    },
+    "safe_causal_bida": {
+      "path": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/argos_v2/one_seed_ladder/safe_causal_bida_seed0/checkpoints/best.pt",
+      "step": 200,
+      "selected_validation_metric": 5.974122554063797,
+      "training_config": {
+        "seed": 0,
+        "clip_len": 8,
+        "steps": 1200,
+        "batch_size": 1,
+        "lr": 0.0003,
+        "eval_every": 200,
+        "spatial_weight": 1.0,
+        "tgm_weight": 1.0,
+        "warp_weight": 0.2,
+        "safe_weight": 0.2,
+        "sparse_weight": 0.02,
+        "residual_bound": 3.0,
+        "selection_metric": "val_refined_mae",
+        "model": "safe_causal_bida",
+        "mode": "full",
+        "safe_losses": true,
+        "name": "safe_causal_bida"
+      },
+      "git_commit": "b1b80a41d185775cb75e56ad3d707ed41e727790",
+      "hidden_state_training": "zero state at every randomly sampled clip; no state carried across clips; clip_len=8; detach_state=False inside clip"
+    }
+  }
+}

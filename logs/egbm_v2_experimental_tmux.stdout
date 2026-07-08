@@ -1,0 +1,14 @@
+TRAIN_EXIT=0
+device=cuda
+egbm_root=results/03_temporal_refinement/training/egbm_v2_experimental
+best_checkpoint=results/03_temporal_refinement/training/egbm_v2_experimental/checkpoints/best.pt exists=True
+stage2_checkpoint=results/03_temporal_refinement/training/egbm_v2_experimental/checkpoints/stage2_fullgt.pt exists=True
+stage1_checkpoint=results/03_temporal_refinement/training/egbm_v2_experimental/checkpoints/stage1_detector.pt exists=True
+selected_clips=6 patho=2 clean=4
+threshold=0.5 selected_mae=10.4276 patho_new_bad3=1.708
+threshold=0.6 selected_mae=10.4320 patho_new_bad3=1.641
+threshold=0.7 selected_mae=10.4467 patho_new_bad3=1.494
+threshold=0.8 selected_mae=10.4808 patho_new_bad3=1.207
+threshold=0.9 selected_mae=10.5364 patho_new_bad3=0.672
+done decision=EGBM-v2 does not beat v1
+EVAL_EXIT=0

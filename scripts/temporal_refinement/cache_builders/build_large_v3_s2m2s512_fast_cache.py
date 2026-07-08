@@ -18,10 +18,10 @@ from scripts.temporal_refinement.build_debug_cache import colorize
 
 
 ROOT = ROOT_DIR
-SEQ_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_sequences"
-S_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_s512"
-L_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736"
-SAV_ROOT = ROOT / "results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640"
+SEQ_ROOT = DATASET_DIR / "SCARED/curated/temporal_sequences"
+S_ROOT = RESULTS_DIR / "03_temporal_refinement/cache/scared_long_predictions/s2m2_s512"
+L_ROOT = RESULTS_DIR / "03_temporal_refinement/cache/scared_long_predictions/s2m2_l736"
+SAV_ROOT = RESULTS_DIR / "03_temporal_refinement/cache/scared_long_predictions/stereoanyvideo_384x640"
 OUT = ROOT / "results/03_temporal_refinement/cache/large_v3_s2m2s512_fast"
 
 

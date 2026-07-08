@@ -1,0 +1,19 @@
+{
+  "seed": 0,
+  "clip_len": 8,
+  "steps": 1200,
+  "batch_size": 1,
+  "lr": 0.0003,
+  "eval_every": 200,
+  "spatial_weight": 1.0,
+  "tgm_weight": 1.0,
+  "warp_weight": 0.2,
+  "safe_weight": 0.2,
+  "sparse_weight": 0.02,
+  "residual_bound": 3.0,
+  "selection_metric": "val_refined_mae",
+  "model": "faithful_causal_bida",
+  "mode": "state_reset",
+  "eval_only": true,
+  "name": "faithful_causal_bida_state_reset"
+}

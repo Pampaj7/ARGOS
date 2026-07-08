@@ -1,0 +1,11 @@
+ARGOS v2 NVDS-lite pilot
+
+Node: n-62-12-83
+Python env: /dtu/p1/leopam/ARGOS/.miniconda/envs/argos
+Branch: fable-wildcard-cfr
+SOTA source: SOTA/ARGOS (5).pdf
+Aux cache: results/03_temporal_refinement/nvds_lite_causal_pilot/aux_cache (~7.9G)
+
+Final matrix output:
+results/03_temporal_refinement/nvds_lite_causal_pilot/runs_argos_v2
+

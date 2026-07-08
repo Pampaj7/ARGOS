@@ -14,7 +14,7 @@ import cv2
 
 
 RAW = DATASET_DIR / "SCARED/raw/source"
-OUT = RESULTS_DIR / "04_dataset_derivatives/SCARED/scared_long_sequences"
+OUT = DATASET_DIR / "SCARED/curated/temporal_sequences"
 SOURCE = OUT / "_source_videos"
 
 

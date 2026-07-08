@@ -270,14 +270,14 @@ PYTHONPATH="$(pwd)" \
 PYTHONPATH="$(pwd)" \
 .miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/predict_s2m2_long_sequences.py \
-  --sequences-root results/04_dataset_derivatives/SCARED/scared_long_sequences \
-  --out-root results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736
+  --sequences-root dataset/SCARED/curated/long_sequences \
+  --out-root dataset/SCARED/curated/long_predictions/s2m2_l736
 
 PYTHONPATH="$(pwd)" \
 .miniconda/envs/argos/bin/python \
   scripts/temporal_refinement/predict_stereoanyvideo_long_sequences.py \
-  --sequences-root results/04_dataset_derivatives/SCARED/scared_long_sequences \
-  --out-root results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640 \
+  --sequences-root dataset/SCARED/curated/long_sequences \
+  --out-root dataset/SCARED/curated/long_predictions/stereoanyvideo_384x640 \
   --chunk-size 64 \
   --overlap 4
 
@@ -289,9 +289,9 @@ PYTHONPATH="$(pwd)" \
 Large V2 outputs:
 
 - source inventory: `results/temporal_refinement_cache/large_v2_source_inventory.md`;
-- extracted long stereo sequences: `results/04_dataset_derivatives/SCARED/scared_long_sequences/`;
-- S2M2-L@736 predictions: `results/04_dataset_derivatives/SCARED/scared_long_predictions/s2m2_l736/`;
-- StereoAnyVideo@384x640 predictions: `results/04_dataset_derivatives/SCARED/scared_long_predictions/stereoanyvideo_384x640/`;
+- extracted long stereo sequences: `dataset/SCARED/curated/long_sequences/`;
+- S2M2-L@736 predictions: `dataset/SCARED/curated/long_predictions/s2m2_l736/`;
+- StereoAnyVideo@384x640 predictions: `dataset/SCARED/curated/long_predictions/stereoanyvideo_384x640/`;
 - cache: `results/temporal_refinement_cache/large_v2/`.
 
 Large V2 currently contains `1,008` 5-frame samples from `8` SCARED test keyframe video streams. Each sample stores full-resolution RGB, S2M2-L@736 disparity window, StereoAnyVideo teacher window, center-frame fields, and metadata in original image disparity coordinates. Payload arrays and extracted frames are ignored by Git.

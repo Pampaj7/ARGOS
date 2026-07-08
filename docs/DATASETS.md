@@ -9,7 +9,7 @@ ARGOS uses surgical stereo datasets with ground-truth disparity, depth, camera c
 | SERV-CT | available under `dataset/SERVCT/` | disparity + depth from CT/RGB reference | current benchmark and S2M2 fine-tuning |
 | SCARED | raw archives and curated clips under `dataset/SCARED/` | stereo + depth/geometry data for full dataset; current temporal clip has no GT | temporal/video-stereo comparison and planned large surgical training |
 | StereoMIS | downloaded and inventoried under `dataset/StereoMIS/` | stereo video, calibration, masks, pose/kinematics; no dense depth/disparity GT found | high-value temporal surgical-video domain expansion |
-| D4D / Dresden Dataset | loader cloned; metadata downloaded; `specimen_1.tar.gz` download running under `dataset/D4D/` | rectified stereo, stereo depth maps, structured-light point clouds, masks, camera calibration | high-priority geometry + temporal surgical validation |
+| D4D / Dresden Dataset | 4/6 specimens extracted + converted (specimen_5 blocked on OPARA outage); 362 anchors, curated-pose GT under `dataset/D4D/processed/keyframe_stereo_gt_curated/` | Zivid structured-light depth/disparity at ~2 keyframes/clip (sparse, not dense) | high-priority geometry + temporal surgical validation |
 | EndoSLAM | queued | pose/geometry depending on sequence | support data, possible pseudo-labeling/validation |
 
 ## Local Dataset Layout
@@ -93,12 +93,16 @@ StereoMIS:
 
 D4D / Dresden Dataset:
 
-- candidate dataset DOI: `https://doi.org/10.25532/OPARA-1033`.
+- candidate dataset DOI: `https://doi.org/10.25532/OPARA-1033`. Data descriptor: Docea et al.,
+  "The Dresden Dataset for 4D Reconstruction of Non-Rigid Abdominal Surgical Scenes"
+  (arXiv:2603.02985).
 - loader repository cloned at `external/d4d/`; commit `70d6b94ff6de0511a77889597397b23e893559b0`.
 - public loader documentation describes porcine cadaver abdominal scenes captured with da Vinci Xi stereo endoscope and Zivid structured-light camera.
 - expected clip-level data includes rectified left/right images, left masks, stereo depth maps in metres, structured-light point clouds, Zivid masks, curated camera poses, and camera info.
+- per the paper: **6 specimens** (`specimen_0`-`specimen_5`), 150 raw clips pre-filter, **98 curated clips** retained (49 single + 39 incremental + 10 moved-camera). `specimen_0` has 0 retained clips (fully discarded) — no core archive exists for it, only `specimen_0_ambiguous.tar.gz` (not fetched). Abstract's "98 curated recordings" means clips, not session folders.
 - OPARA payload is about 447 GB total; core non-ambiguous specimens are about 422 GB.
-- `specimen_1.tar.gz` is the first staged download, about 33.32 GB.
+- download status: `specimen_1.tar.gz` (33.32 GB), `specimen_2.tar.gz` (75GB), `specimen_3.tar.gz` (83GB), `specimen_4.tar.gz` (137GB) all staged, extracted, and converted (362 anchors total). `specimen_5.tar.gz` unavailable — every download attempt (including OPARA's REST content endpoint, tested against a known-good specimen_1 UUID too) returns a server-side error rather than the ~95GB file, so this is an OPARA-side outage, not a bad link — retry later.
+- processed keyframe GT lives at `dataset/D4D/processed/keyframe_stereo_gt_curated/` — 362 anchors, 239 usable, projected using the official `curated_camera_pose_{start,end}.txt` (not the raw Polaris tf chain — that "nominal" variant was tried, found strictly worse, and retired; regenerable on demand via `d4d_keyframe_gt.py --pose-source nominal` if ever needed for paper comparison). Full detail in that dir's `DATASET_CARD.md`.
 - first use should be subset-first conversion because the full payload is large.
 - split by specimen/session/clip; avoid frame-level leakage.
 - likely high-value for ARGOS metric validation, but reports must distinguish stereo-derived depth from structured-light/reference geometry.

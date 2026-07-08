@@ -1,0 +1,5 @@
+specimen,fx,baseline_mm,convention,matches_specimen_1_fx
+specimen_1,798.32,4.235,curated_pose,True
+specimen_2,834.34,3.965,curated_pose,False
+specimen_3,834.88,4.44,curated_pose,False
+specimen_4,765.62,4.086,curated_pose,False

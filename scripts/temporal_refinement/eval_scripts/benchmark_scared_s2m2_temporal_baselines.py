@@ -39,7 +39,7 @@ DEFAULT_S2M2_CACHE = Path(
 DEFAULT_SAV_CACHE = Path(
     "results/03_temporal_refinement/evaluation/gt_temporal_test_dataset_9_keyframe_3/predictions/StereoAnyVideo_384x640"
 )
-DEFAULT_FLOW_CACHE = Path("results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft")
+DEFAULT_FLOW_CACHE = Path("dataset/SCARED/legacy/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft")
 DEFAULT_OUTPUT_DIR = Path("results/03_temporal_refinement/scared_s2m2_temporal_baselines_v2_no_raft_adaptive")
 
 SUMMARY_COLUMNS = [

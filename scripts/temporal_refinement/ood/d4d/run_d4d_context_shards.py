@@ -52,7 +52,7 @@ def session_frames(specimen: str, session: str):
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", type=Path,
-                    default=ROOT / "dataset/D4D/processed/keyframe_stereo_gt/manifests/valid_and_warning_manifest.csv")
+                    default=ROOT / "dataset/D4D/processed/keyframe_stereo_gt_curated/manifests/valid_and_warning_manifest.csv")
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--limit", type=int, default=0, help="smoke: first N anchors")
     ap.add_argument("--device", default="cuda")

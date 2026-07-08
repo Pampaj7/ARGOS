@@ -1,0 +1,30 @@
+{
+  "full_vs_reset": {
+    "mean": 0.011862535086725407,
+    "median": 0.011789354176709795,
+    "p90": 0.01247681111127276,
+    "p95": 0.01261390622268238,
+    "p99": 0.012723582311810078,
+    "max": 0.012751001334092004
+  },
+  "full_vs_shuffled_existing": {
+    "mean": 0.019808640778527013,
+    "median": 0.020847386320396216,
+    "p90": 0.02299459634976675,
+    "p95": 0.023250494680331617,
+    "p99": 0.023455213344783513,
+    "max": 0.02350639301089649
+  },
+  "full_vs_zero_state": {
+    "mean": 0.011862535086725407,
+    "median": 0.011789354176709795,
+    "p90": 0.01247681111127276,
+    "p95": 0.01261390622268238,
+    "p99": 0.012723582311810078,
+    "max": 0.012751001334092004
+  },
+  "classification": "TEMPORAL_SMOOTHING_WITHOUT_STATE_USE",
+  "note": "See CSV for per-pixel diff percentiles; classification finalized in markdown report.",
+  "diagnostic_max_frames_per_sequence": 128,
+  "interpretation": "Persistent state changes output by only about 0.012 px mean vs reset/zero-state; gains are dominated by aligned local evidence."
+}

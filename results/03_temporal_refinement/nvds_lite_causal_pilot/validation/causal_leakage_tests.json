@@ -1,0 +1,47 @@
+{
+  "causal_leakage": {
+    "nvds_lite__full_history": {
+      "max_abs_diff_at_le_t": 0.0,
+      "causal": true
+    },
+    "nvds_lite__current_frame_only": {
+      "max_abs_diff_at_le_t": 0.0,
+      "causal": true
+    },
+    "nvds_lite__shuffled_history": {
+      "max_abs_diff_at_le_t": 0.0,
+      "causal": true
+    },
+    "concat_baseline__full_history": {
+      "max_abs_diff_at_le_t": 0.0,
+      "causal": true
+    },
+    "concat_baseline__current_frame_only": {
+      "max_abs_diff_at_le_t": 0.0,
+      "causal": true
+    },
+    "concat_baseline__shuffled_history": {
+      "max_abs_diff_at_le_t": 0.0,
+      "causal": true
+    }
+  },
+  "gradient_graph": {
+    "loss_terms": {
+      "spatial": 8.631972312927246,
+      "tgm": 1.657184362411499,
+      "warp": 8.318492889404297,
+      "safe": 0.0,
+      "sparse": 0.0
+    },
+    "all_terms_finite": true,
+    "spatial_tgm_warp_positive": true,
+    "safe_sparse_near_zero_at_init_ok": true,
+    "all_refiner_params_have_finite_grad": true,
+    "params_missing_grad": [],
+    "cached_inputs_non_differentiable": true,
+    "raft_s2m2_in_graph": false,
+    "note": "flow/rgb/raw are cached numpy -> tensors with requires_grad=False; RAFT/S2M2 are never instantiated in the training process, so they cannot be in the autograd graph."
+  },
+  "all_causal": true,
+  "grad_pass": true
+}

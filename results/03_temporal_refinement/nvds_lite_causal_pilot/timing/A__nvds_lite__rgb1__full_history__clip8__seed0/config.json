@@ -1,0 +1,39 @@
+{
+  "run_id": "A__nvds_lite__rgb1__full_history__clip8__seed0",
+  "letter": "A",
+  "model": "nvds_lite",
+  "use_rgb": true,
+  "temporal_mode": "full_history",
+  "lam_tgm": 1.0,
+  "lam_warp": 1.0,
+  "lam_safe": 0.2,
+  "lam_sparse": 0.02,
+  "clip_len": 8,
+  "params": 1184354,
+  "steps": 100,
+  "seed": 0,
+  "wall_time_s": 251.0,
+  "eval_time_s": 135.7,
+  "test_geometric": {
+    "refined_mae": 5.2145,
+    "raw_mae": 5.2153,
+    "delta_mae": 0.0008,
+    "refined_bad1": 73.4754,
+    "refined_bad3": 41.5491,
+    "refined_bad5": 26.5172,
+    "new_bad3_pct_of_rawgood": 0.0009,
+    "harmful_rate": 0.1303,
+    "beneficial_rate": 0.3259,
+    "modified_pixel_ratio": 0.0034,
+    "boundary_mae": 6.4852
+  },
+  "test_temporal": {
+    "tgm_error": 1.721,
+    "terr_jitter": 1.6049,
+    "boundary_tgm": 2.1806,
+    "hf_error_energy": 2.703,
+    "signflip_rate": 0.0,
+    "isolated_rate": 0.2773,
+    "mc_inconsistency": 10.8495
+  }
+}

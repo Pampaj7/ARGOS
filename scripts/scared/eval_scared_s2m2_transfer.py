@@ -5,6 +5,9 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from convert_scared_keyframes import scatter_min_depth
+
 import cv2
 import numpy as np
 import tifffile
@@ -65,16 +68,15 @@ def rectify_sample(left: np.ndarray, right: np.ndarray, xyz: np.ndarray, calib_p
     map2x, map2y = cv2.initUndistortRectifyMap(calib["M2"], calib["D2"], r2, p2, (w, h), cv2.CV_32FC1)
     left_r = cv2.remap(left, map1x, map1y, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
     right_r = cv2.remap(right, map2x, map2y, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
-    z = xyz[..., 2].astype(np.float32)
-    valid = (np.isfinite(xyz).all(axis=-1) & (z > 0)).astype(np.uint8)
-    z_clean = np.where(valid > 0, z, 0).astype(np.float32)
-    z_r = cv2.remap(z_clean, map1x, map1y, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
-    valid_r = cv2.remap(valid, map1x, map1y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(bool)
+
+    # Rotate raw 3D points by R1 and re-project through P1/P2 with a z-buffer scatter (official
+    # scared_toolkit convention) instead of cv2.remap-ing the Z-channel like an image.
+    pts_rot = (xyz.reshape(-1, 3) @ r1.T).reshape(h, w, 3)
+    depth_r, disp_r = scatter_min_depth(pts_rot, p1, p2, (h, w))
+    valid_r = depth_r > 0
     baseline_mm = float(abs(p2[0, 3] / p2[0, 0]))
     fx = float(p1[0, 0])
-    disp_r = fx * baseline_mm / np.maximum(z_r, 1e-6)
-    valid_r &= z_r > 0
-    return left_r, right_r, disp_r.astype(np.float32), z_r.astype(np.float32), valid_r, fx, baseline_mm
+    return left_r, right_r, disp_r.astype(np.float32), depth_r.astype(np.float32), valid_r, fx, baseline_mm
 
 
 def load_scared_gt(keyframe_dir: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -179,7 +181,7 @@ def write_csv(path, rows):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scared_root", type=Path, default=Path("dataset/SCARED/curated/keyframes_gt_dataset8/dataset_8"))
+    parser.add_argument("--scared_root", type=Path, default=Path("dataset/SCARED/curated/geometric_gt/strong_keyframes/dataset_8"))
     parser.add_argument("--s2m2_src", type=Path, default=Path("../../external/frame_stereo_repos/s2m2/src"))
     parser.add_argument("--weights_dir", type=Path, default=Path("../../external/frame_stereo_repos/s2m2/weights/pretrain_weights"))
     parser.add_argument("--finetuned_checkpoint", type=Path, required=True)

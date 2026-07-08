@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from scripts.argos_paths import DATASET_DIR, RESULTS_DIR, FRAME_STEREO_REPOS_DIR
+from scripts.scared.convert_scared_keyframes import scatter_min_depth
 
 import cv2
 import numpy as np
@@ -57,22 +58,30 @@ def rectify_sample(left: np.ndarray, right: np.ndarray, xyz: np.ndarray, calib_p
     left_r = cv2.remap(left, map1x, map1y, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
     right_r = cv2.remap(right, map2x, map2y, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
 
-    z = xyz[..., 2].astype(np.float32)
-    valid = (np.isfinite(xyz).all(axis=-1) & (z > 0)).astype(np.uint8)
-    z_clean = np.where(valid > 0, z, 0).astype(np.float32)
-    z_r = cv2.remap(z_clean, map1x, map1y, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
-    valid_r = cv2.remap(valid, map1x, map1y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(bool)
-    valid_r &= z_r > 0
+    # Rotate the raw (unrectified-frame) 3D points by R1 and re-project through P1/P2 with a
+    # z-buffer scatter, matching the official scared_toolkit convention. Do NOT cv2.remap the
+    # Z-channel as if it were an image: that resamples depth values at warped pixel locations
+    # instead of re-deriving depth in the rotated frame, which inflates valid coverage and is
+    # wrong at depth discontinuities (tool/tissue edges).
+    pts_rot = (xyz.reshape(-1, 3) @ r1.T).reshape(h, w, 3)
+    depth_r, disp_r = scatter_min_depth(pts_rot, p1, p2, (h, w))
+    valid_r = depth_r > 0
 
     fx = float(p1[0, 0])
     baseline_mm = float(abs(p2[0, 3] / p2[0, 0]))
-    disp_r = fx * baseline_mm / np.maximum(z_r, 1e-6)
-    return left_r, right_r, disp_r.astype(np.float32), z_r.astype(np.float32), valid_r, fx, baseline_mm
+    return left_r, right_r, disp_r.astype(np.float32), depth_r.astype(np.float32), valid_r, fx, baseline_mm
 
 
 def collect_samples(scared_root: Path):
+    # scared_root is either a single dataset_N dir (keyframe_* directly inside) or the
+    # strong_keyframes/ root (dataset_*/keyframe_* inside) — support both so a caller can
+    # point at all 9 datasets / 45 keyframes or a single one.
+    keyframe_dirs = sorted(scared_root.glob("keyframe_*"))
+    if not keyframe_dirs:
+        keyframe_dirs = sorted(scared_root.glob("dataset_*/keyframe_*"),
+                                key=lambda p: (int(p.parent.name.split("_")[1]), int(p.name.split("_")[1])))
     samples = []
-    for keyframe_dir in sorted(scared_root.glob("keyframe_*")):
+    for keyframe_dir in keyframe_dirs:
         required = [
             keyframe_dir / "Left_Image.png",
             keyframe_dir / "Right_Image.png",
@@ -84,9 +93,10 @@ def collect_samples(scared_root: Path):
             right = read_rgb(required[1])
             xyz = tifffile.imread(required[2]).astype(np.float32)
             left_r, right_r, gt_disp, gt_depth, valid, fx, baseline_mm = rectify_sample(left, right, xyz, required[3])
+            frame_name = keyframe_dir.name if keyframe_dir.parent == scared_root else f"{keyframe_dir.parent.name}_{keyframe_dir.name}"
             samples.append(
                 {
-                    "frame": keyframe_dir.name,
+                    "frame": frame_name,
                     "left": left_r,
                     "right": right_r,
                     "gt_disp": gt_disp,
@@ -327,7 +337,7 @@ def write_report(out_dir: Path, summary_rows, failures, dataset_note):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scared_root", type=Path, default=DATASET_DIR / "SCARED/curated/keyframes_gt_dataset8/dataset_8")
+    parser.add_argument("--scared_root", type=Path, default=DATASET_DIR / "SCARED/curated/geometric_gt/strong_keyframes/dataset_8")
     parser.add_argument("--s2m2_src", type=Path, default=FRAME_STEREO_REPOS_DIR / "s2m2/src")
     parser.add_argument("--weights_dir", type=Path, default=FRAME_STEREO_REPOS_DIR / "s2m2/weights/pretrain_weights")
     parser.add_argument("--out_dir", type=Path, default=RESULTS_DIR / "01_frame_stereo/SCARED/s2m2_size_tradeoff")

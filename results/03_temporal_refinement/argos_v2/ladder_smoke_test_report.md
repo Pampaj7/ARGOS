@@ -1,0 +1,40 @@
+# ARGOS v2 Ladder Smoke Test Report
+
+{
+  "all_required_passed": true,
+  "rows": [
+    {
+      "config": "current_only",
+      "status": "PASS",
+      "params": 522082,
+      "refined_mae": 6.666698932647705,
+      "new_bad3": 7.146297454833984,
+      "modified": 0.9993230104446411
+    },
+    {
+      "config": "aligned_local_faithful",
+      "status": "PASS",
+      "params": 239393,
+      "refined_mae": 6.380590915679932,
+      "new_bad3": 27.467266082763672,
+      "modified": 1.0
+    },
+    {
+      "config": "faithful_causal_bida",
+      "status": "PASS",
+      "params": 489185,
+      "refined_mae": 6.666598796844482,
+      "new_bad3": 19.05791473388672,
+      "modified": 1.0
+    },
+    {
+      "config": "safe_causal_bida",
+      "status": "PASS",
+      "params": 522082,
+      "refined_mae": 7.47880220413208,
+      "new_bad3": 0.2234623283147812,
+      "modified": 0.10335175693035126
+    }
+  ],
+  "note": "CPU smoke was used only because login node has no GPU; full launch script uses p1i/H100."
+}

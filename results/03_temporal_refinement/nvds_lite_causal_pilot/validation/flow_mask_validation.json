@@ -1,0 +1,65 @@
+{
+  "flow_convention_in_code": "warp_disp(x, flow) = x[p + flow(p)] (backward grid-sample)",
+  "cache_flow_stored": "flow_fwd = RAFT(img[t-1] -> img[t]) (forward, t-1->t)",
+  "seq": "dataset_1_keyframe_1",
+  "n_pairs": 24,
+  "photometric_error_masked": {
+    "no_warp": {
+      "mean": 0.02201587213979413,
+      "median": 0.02284412831068039
+    },
+    "fwd_flow": {
+      "mean": 0.030338636560675997,
+      "median": 0.03235934302210808
+    },
+    "bwd_flow": {
+      "mean": 0.010731097970468303,
+      "median": 0.011326899752020836
+    }
+  },
+  "disparity_mc_inconsistency_px": {
+    "no_warp": {
+      "mean": 0.28332321842511493,
+      "median": 0.24170063436031342
+    },
+    "fwd_flow": {
+      "mean": 1.3229908297459285,
+      "median": 1.38197523355484
+    },
+    "bwd_flow": {
+      "mean": 1.2591123630603154,
+      "median": 1.2970003485679626
+    }
+  },
+  "warp_support_fraction": {
+    "fwd_flow": {
+      "mean": 0.9038335164388022,
+      "median": 0.90252685546875
+    },
+    "bwd_flow": {
+      "mean": 0.9019744873046874,
+      "median": 0.898736572265625
+    }
+  },
+  "fb_consistency_px": {
+    "mean": 0.038523157282421984,
+    "median": 0.039555713534355164
+  },
+  "nan_inf_in_warped_disp": 0,
+  "contact_sheet_layout": "columns: prev | current | warp(prev, fwd_flow) | warp(prev, bwd_flow)",
+  "decision": {
+    "photometric": {
+      "no_warp": 0.02201587213979413,
+      "fwd_flow": 0.030338636560675997,
+      "bwd_flow": 0.010731097970468303
+    },
+    "disparity_mc": {
+      "no_warp": 0.28332321842511493,
+      "fwd_flow": 1.3229908297459285,
+      "bwd_flow": 1.2591123630603154
+    },
+    "chosen_direction": "bwd_flow",
+    "warp_helps_vs_nowarp": true,
+    "note": "warp_disp needs flow(t->t-1) to pull frame t-1 into frame t. RAFT(t-1->t) is 'fwd_flow'; RAFT(t->t-1) is 'bwd_flow'. The direction with LOWER masked photometric error is the correct one to feed warp_disp for the warp loss."
+  }
+}

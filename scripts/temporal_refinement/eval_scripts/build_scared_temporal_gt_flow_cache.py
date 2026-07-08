@@ -36,7 +36,7 @@ from flow_cache import (
 
 DEFAULT_SEQUENCE_DIR = Path("dataset/SCARED/curated/temporal_gt/test_dataset_9_keyframe_3")
 DEFAULT_OUTPUT_DIR = Path(
-    "results/04_dataset_derivatives/SCARED/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft"
+    "dataset/SCARED/legacy/temporal_gt_flow_cache/test_dataset_9_keyframe_3/raft"
 )
 DEFAULT_FULL_CHECKPOINT = Path("external/frame_stereo_repos/RAFT/checkpoints/raft-things.pth")
 DEFAULT_SMALL_CHECKPOINT = Path("external/frame_stereo_repos/RAFT/checkpoints/raft-small.pth")
