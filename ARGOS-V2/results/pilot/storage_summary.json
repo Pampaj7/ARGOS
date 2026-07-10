@@ -1,0 +1,52 @@
+{
+  "pilot_total_bytes": 987610397,
+  "pilot_total_frames": 12630,
+  "bytes_per_frame_per_backbone": 78195.59754552653,
+  "per_job": {
+    "S2M2-S/dataset_3_keyframe_1": {
+      "bytes": 26110754,
+      "frames": 329
+    },
+    "S2M2-S/dataset_7_keyframe_4": {
+      "bytes": 171411267,
+      "frames": 2197
+    },
+    "RAFT-Stereo/dataset_3_keyframe_1": {
+      "bytes": 26110784,
+      "frames": 329
+    },
+    "RAFT-Stereo/dataset_7_keyframe_4": {
+      "bytes": 171411300,
+      "frames": 2197
+    },
+    "StereoAnywhere/dataset_3_keyframe_1": {
+      "bytes": 26110802,
+      "frames": 329
+    },
+    "StereoAnywhere/dataset_7_keyframe_4": {
+      "bytes": 171411316,
+      "frames": 2197
+    },
+    "CREStereo/dataset_3_keyframe_1": {
+      "bytes": 26110763,
+      "frames": 329
+    },
+    "CREStereo/dataset_7_keyframe_4": {
+      "bytes": 171411277,
+      "frames": 2197
+    },
+    "Fast-FoundationStereo/dataset_3_keyframe_1": {
+      "bytes": 26110810,
+      "frames": 329
+    },
+    "Fast-FoundationStereo/dataset_7_keyframe_4": {
+      "bytes": 171411324,
+      "frames": 2197
+    }
+  },
+  "full_17_sequence_total_frames_single_backbone": 16921,
+  "projected_full_cache_bytes_5_backbones": 6615738530.339272,
+  "projected_full_cache_gb_5_backbones": 6.6157385303392715,
+  "promotion_size_threshold_gb": 15.0,
+  "promotion_size_pass": true
+}

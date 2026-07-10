@@ -1,0 +1,62 @@
+{
+  "S2M2-S/dataset_3_keyframe_1": {
+    "n_reads": 500,
+    "total_s": 0.02305189101025462,
+    "ms_per_read": 0.04610378202050924,
+    "reads_per_s": 21690.194517125525
+  },
+  "S2M2-S/dataset_7_keyframe_4": {
+    "n_reads": 500,
+    "total_s": 0.08146846201270819,
+    "ms_per_read": 0.16293692402541637,
+    "reads_per_s": 6137.344288173815
+  },
+  "RAFT-Stereo/dataset_3_keyframe_1": {
+    "n_reads": 500,
+    "total_s": 0.024802011903375387,
+    "ms_per_read": 0.049604023806750774,
+    "reads_per_s": 20159.654867835678
+  },
+  "RAFT-Stereo/dataset_7_keyframe_4": {
+    "n_reads": 500,
+    "total_s": 0.08527243696153164,
+    "ms_per_read": 0.17054487392306328,
+    "reads_per_s": 5863.559408130455
+  },
+  "StereoAnywhere/dataset_3_keyframe_1": {
+    "n_reads": 500,
+    "total_s": 0.024516466073691845,
+    "ms_per_read": 0.04903293214738369,
+    "reads_per_s": 20394.456464365412
+  },
+  "StereoAnywhere/dataset_7_keyframe_4": {
+    "n_reads": 500,
+    "total_s": 0.07985712680965662,
+    "ms_per_read": 0.15971425361931324,
+    "reads_per_s": 6261.181937985003
+  },
+  "CREStereo/dataset_3_keyframe_1": {
+    "n_reads": 500,
+    "total_s": 0.02418679418042302,
+    "ms_per_read": 0.04837358836084604,
+    "reads_per_s": 20672.437871270424
+  },
+  "CREStereo/dataset_7_keyframe_4": {
+    "n_reads": 500,
+    "total_s": 0.08148809103295207,
+    "ms_per_read": 0.16297618206590414,
+    "reads_per_s": 6135.865911962651
+  },
+  "Fast-FoundationStereo/dataset_3_keyframe_1": {
+    "n_reads": 500,
+    "total_s": 0.023691595066338778,
+    "ms_per_read": 0.047383190132677555,
+    "reads_per_s": 21104.530893760053
+  },
+  "Fast-FoundationStereo/dataset_7_keyframe_4": {
+    "n_reads": 500,
+    "total_s": 0.07888921396806836,
+    "ms_per_read": 0.15777842793613672,
+    "reads_per_s": 6338.002051869636
+  }
+}

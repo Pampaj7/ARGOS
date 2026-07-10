@@ -1,0 +1,92 @@
+{
+  "description": "Deterministic native-resolution validation subset, fixed before inspecting any comparative backbone results. Identical frame list reused for all 5 backbones.",
+  "frames_per_sequence": 3,
+  "total_frames": 51,
+  "sequences": {
+    "dataset_1_keyframe_2": [
+      "000001",
+      "000140",
+      "000280"
+    ],
+    "dataset_1_keyframe_3": [
+      "000001",
+      "000236",
+      "000471"
+    ],
+    "dataset_2_keyframe_2": [
+      "000001",
+      "000517",
+      "001033"
+    ],
+    "dataset_2_keyframe_3": [
+      "000001",
+      "000551",
+      "001102"
+    ],
+    "dataset_2_keyframe_4": [
+      "000001",
+      "001057",
+      "002114"
+    ],
+    "dataset_3_keyframe_1": [
+      "000001",
+      "000165",
+      "000329"
+    ],
+    "dataset_3_keyframe_2": [
+      "000001",
+      "000799",
+      "001597"
+    ],
+    "dataset_3_keyframe_3": [
+      "000001",
+      "000224",
+      "000448"
+    ],
+    "dataset_3_keyframe_4": [
+      "000001",
+      "000417",
+      "000834"
+    ],
+    "dataset_6_keyframe_1": [
+      "000001",
+      "000319",
+      "000637"
+    ],
+    "dataset_6_keyframe_2": [
+      "000001",
+      "000544",
+      "001087"
+    ],
+    "dataset_6_keyframe_3": [
+      "000001",
+      "000787",
+      "001573"
+    ],
+    "dataset_6_keyframe_4": [
+      "000001",
+      "000680",
+      "001360"
+    ],
+    "dataset_7_keyframe_1": [
+      "000001",
+      "000324",
+      "000647"
+    ],
+    "dataset_7_keyframe_2": [
+      "000001",
+      "000314",
+      "000628"
+    ],
+    "dataset_7_keyframe_3": [
+      "000001",
+      "000292",
+      "000584"
+    ],
+    "dataset_7_keyframe_4": [
+      "000001",
+      "001099",
+      "002197"
+    ]
+  }
+}

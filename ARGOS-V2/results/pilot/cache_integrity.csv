@@ -1,0 +1,11 @@
+backbone,sequence,cache_dir,expected_frames,cached_frames,status,reason
+S2M2-S,dataset_3_keyframe_1,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/S2M2-S/dataset_3_keyframe_1,329,329,pass,
+S2M2-S,dataset_7_keyframe_4,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/S2M2-S/dataset_7_keyframe_4,2197,2197,pass,
+RAFT-Stereo,dataset_3_keyframe_1,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/RAFT-Stereo/dataset_3_keyframe_1,329,329,pass,
+RAFT-Stereo,dataset_7_keyframe_4,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/RAFT-Stereo/dataset_7_keyframe_4,2197,2197,pass,
+StereoAnywhere,dataset_3_keyframe_1,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/StereoAnywhere/dataset_3_keyframe_1,329,329,pass,
+StereoAnywhere,dataset_7_keyframe_4,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/StereoAnywhere/dataset_7_keyframe_4,2197,2197,pass,
+CREStereo,dataset_3_keyframe_1,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/CREStereo/dataset_3_keyframe_1,329,329,pass,
+CREStereo,dataset_7_keyframe_4,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/CREStereo/dataset_7_keyframe_4,2197,2197,pass,
+Fast-FoundationStereo,dataset_3_keyframe_1,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/Fast-FoundationStereo/dataset_3_keyframe_1,329,329,pass,
+Fast-FoundationStereo,dataset_7_keyframe_4,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/Fast-FoundationStereo/dataset_7_keyframe_4,2197,2197,pass,
