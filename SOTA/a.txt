@@ -1,0 +1,329 @@
+Perfetto: questi tre paper chiariscono molto bene cosa esiste già e, soprattutto, cosa manca ancora.
+
+Confronto diretto
+
+Metodo	Plugin su backbone congelato	Causale/streaming	Memoria lunga	Backbone-agnostic reale	Safety sui frame puliti	Chirurgico
+EndoStreamDepth	No	Sì	Sì, Mamba gerarchico	No	No esplicita	Sì
+BiDAStabilizer	Sì	No, bidirezionale	Sì, propagazione globale	Parziale	No	No
+PPMStereo	No	Apparentemente no	Sì, memoria selettiva	No	No esplicita	No
+ARGOS v2 desiderato	Sì	Sì	Sì, selettiva	Sì, train multi-backbone/unseen test	Sì	Sì
+
+⸻
+
+1. EndoStreamDepth
+
+È importante perché dimostra che, in chirurgia, un modello streaming serio può usare memoria gerarchica multi-scala, non soltanto un’unica GRU.
+
+La struttura è:
+
+DepthAnythingV2 / ViT-L encoder
+        ↓
+DPT decoder multi-scale
+        ↓
+Mamba temporale a quattro livelli
+        ↓
+hidden state propagato frame per frame
+
+Ogni livello del decoder mantiene uno stato temporale distinto, quindi combina:
+
+* struttura globale alle scale basse;
+* dettagli e bordi alle scale più alte;
+* memoria arbitrariamente lunga;
+* inferenza sequenziale reale.
+
+È strettamente causale: ogni frame usa il proprio input e gli hidden state precedenti.  
+
+Cosa prendiamo
+
+* memoria multi-scala;
+* stato causale persistente;
+* augmentation endoscopiche EST:
+    * rotazioni;
+    * blur e defocus;
+    * gamma e luminosità;
+    * fog/smoke-like corruption;
+* supervisioni su geometria, bordi e scale multiple.
+
+Cosa non risolve
+
+Non è un refiner:
+
+* modifica l’intero backbone monoculare;
+* usa feature interne DepthAnything/DPT;
+* non è trasferibile a S2M2, RAFT, FoundationStereo;
+* non testa unseen backbone;
+* non possiede un gate identity-preserving;
+* non distingue esplicitamente una prediction già corretta da una da modificare.
+
+Inoltre, la sua loss temporale è piuttosto semplice:
+
+\left|\bar D_{t+1}-\bar D_t\right|,
+
+senza compensazione del moto. In una scena chirurgica con movimento reale o deformazione può premiare eccessivamente la staticità. Il paper stesso mostra piccoli trade-off tra metriche quando aggiunge regolarizzazione temporale.  
+
+Quindi: ottimo riferimento per streaming gerarchico chirurgico, non precedente diretto del nostro plugin.
+
+⸻
+
+2. BiDAStabilizer
+
+Questo rimane il precedente più vicino a ARGOS v2.
+
+Pipeline:
+
+frozen image stereo backbone
+        ↓
+raw disparities
+        ↓
+optical-flow alignment di t-1 e t+1 verso t
+        ↓
+local disparity feature
+        ↓
+forward state + backward state
+        ↓
+fusion
+        ↓
+residual disparity
+
+Il backbone stereo rimane congelato e il plugin corregge la disparity senza riaddestrare il matcher.  
+
+È esattamente l’idea plug-and-play che ci interessa.
+
+Punti forti
+
+* lavora sugli output di matcher esistenti;
+* allinea temporalmente le disparity prima di aggregarle;
+* separa evidenza locale e propagazione globale;
+* usa un output residuale;
+* ha dimostrato miglioramenti OOD tra dataset;
+* è molto leggero rispetto ai full video-stereo model.
+
+Limiti decisivi
+
+È non causale due volte:
+
+1. usa la disparity futura d_{t+1};
+2. usa una propagazione backward dall’ultima frame verso la prima.
+
+Quindi richiede una sequenza o finestra già disponibile.  
+
+Inoltre:
+
+* residuale non limitato;
+* nessun gate esplicito;
+* nessuna penalizzazione specifica sui pixel raw già corretti;
+* dipendenza da RAFT optical flow;
+* dimostrato su RAFT-Stereo e IGEV-Stereo, ma non risulta un unico modello addestrato multi-backbone e testato su un backbone mai osservato;
+* l’OOD è principalmente cross-dataset, non il doppio shift backbone + dominio chirurgico.
+
+La formazione usa spatial L1 e consistenza temporale tra output allineati, con peso temporale 0.2.  
+
+Quindi BiDAStabilizer dimostra:
+
+alignment + propagation funzionano.
+
+Ma non dimostra:
+
+causalità + safety + unseen backbone + surgical OOD.
+
+⸻
+
+3. PPMStereo
+
+Architetturalmente è il paper più sofisticato dei tre, ma non è un plugin.
+
+PPMStereo parte da DynamicStereo e lavora su:
+
+* feature stereo;
+* cost volume;
+* context features;
+* GRU iterativa;
+* memoria interna delle cost features.
+
+La grande idea è la memoria Pick-and-Play.
+
+Pick
+
+Per il frame corrente valuta tutti i frame candidati con:
+
+* confidence;
+* similarity;
+* redundancy.
+
+Poi seleziona solo i top-K, con K=5.
+
+Play
+
+I frame selezionati non vengono trattati allo stesso modo: ricevono pesi adattivi, positional encoding e vengono letti con attention per produrre una cost feature aggregata.  
+
+Gli ablation sono molto chiari:
+
+* tenere più memoria non basta;
+* random memory è peggio;
+* latest-only è limitato;
+* il guadagno viene dalla selezione della memoria;
+* oltre K=5 i benefici saturano per ridondanza.  
+
+Questa è probabilmente l’idea più utile da incorporare.
+
+Però non è il nostro modello
+
+PPMStereo:
+
+* sostituisce il matcher frame-wise;
+* usa feature e cost volume del proprio backbone;
+* dipende da DynamicStereo/RAFT-style GRU;
+* non riceve semplicemente una disparity arbitraria;
+* non è backbone-agnostic;
+* costruisce una memoria sull’intera sequenza T, quindi nella formulazione presentata non è un puro sistema causale streaming;
+* usa supervisione della confidence derivata direttamente dall’errore rispetto alla GT;
+* non introduce una protezione esplicita della raw prediction.
+
+Il limite dichiarato dagli stessi autori è molto interessante:
+
+il metodo non riesce a distinguere proattivamente regioni statiche e dinamiche.
+
+Questo è esattamente il problema chirurgico: capire se una differenza temporale è flicker oppure movimento/deformazione reale.
+
+⸻
+
+Il vero spazio di ARGOS v2
+
+Dopo questi paper, eviterei di progettare semplicemente:
+
+ConvGRU più grande
+
+o:
+
+Mamba sullo stack delle disparity
+
+La sintesi forte è invece:
+
+Safe Causal Pick-and-Play Stereo Refiner
+
+A. Evidence encoder universale
+
+Input comuni a qualunque backbone:
+
+left RGB
+right RGB
+raw disparity
+stereo photometric residual
+raw disparity gradient
+previous refined disparity aligned
+alignment residual
+previous reliability
+
+Nessuna feature proprietaria del matcher.
+
+B. Local alignment da BiDAStabilizer
+
+Allinea il passato al frame corrente prima della fusione:
+
+d_ref_{t-k} → warp verso t
+
+con support mask, flow consistency e occlusion mask.
+
+C. Memoria causale Pick-and-Play
+
+Solo frame passati:
+
+memory = {t-1, t-2, ..., t-M}
+
+Ogni memoria riceve uno score basato su:
+
+* qualità stimata;
+* somiglianza col frame corrente;
+* ridondanza;
+* validità del warp;
+* fotometric residual;
+* età;
+* confidence storica.
+
+Si prendono i top-K, probabilmente K=3 o 5, e si aggregano con pesi adattivi.
+
+Questa è la versione causale e plug-and-play dell’intuizione PPMStereo.
+
+D. Stato gerarchico da EndoStreamDepth
+
+Due o tre scale, non quattro Mamba enormi:
+
+1/4 → bordi e correzioni locali
+1/8 → forma e deformazione
+1/16 → contesto globale e memoria lunga
+
+Potremmo usare Mamba, GRU o un ibrido; il contributo non deve necessariamente essere “usiamo Mamba”, perché EndoStreamDepth l’ha già fatto in chirurgia.
+
+E. Output safe
+
+Non un residuo libero:
+
+d_t^{ref}
+=
+d_t^{raw}
++
+g_t\,c_t\,\tau_t\,\tanh(\Delta d_t).
+
+Dove:
+
+* g_t: probabilità che la raw sia errata;
+* c_t: affidabilità della memoria selezionata;
+* \tau_t: massimo aggiornamento locale;
+* \Delta d_t: proposta.
+
+Inizializzazione:
+
+gate ≈ 0
+residual ≈ 0
+refined = raw
+
+Questo è ciò che manca a tutti e tre i paper.
+
+⸻
+
+La novelty non è “memoria temporale”
+
+Dopo PPMStereo non possiamo dire:
+
+introduciamo una memoria selettiva per stereo video.
+
+È già stato fatto molto bene.
+
+Non possiamo dire:
+
+introduciamo Mamba gerarchico per depth chirurgica streaming.
+
+EndoStreamDepth lo ha già fatto.
+
+Non possiamo dire:
+
+introduciamo un plugin per stabilizzare matcher stereo.
+
+BiDAStabilizer lo ha già fatto.
+
+La claim deve essere l’intersezione ancora scoperta:
+
+A causal, safe and backbone-agnostic temporal stereo refiner trained across heterogeneous frozen stereo predictors, using reliability-aware selective memory, and evaluated for unseen-backbone and surgical cross-domain generalization.
+
+La differenza chiave
+
+Aspetto	Paper esistenti	ARGOS v2
+Plugin stereo	BiDAStabilizer	Sì
+Causale chirurgico	EndoStreamDepth, ma monoculare/end-to-end	Sì, stereo plugin
+Memoria selettiva	PPMStereo, ma cost-volume-specific	Sì, su segnali universali
+Multi-backbone training	Non dimostrato	Contributo centrale
+Unseen-backbone test	Non dimostrato	Contributo centrale
+Safety sui frame puliti	Non esplicita	Contributo centrale
+OOD chirurgico geometrico	Non dimostrato	SERV-CT + D4D
+In-vivo unlabeled	Non centrale	StereoMIS
+
+Verdetto
+
+Questi paper non ammazzano ARGOS v2. Al contrario, delimitano finalmente un gap credibile:
+
+* BiDAStabilizer ci dà il paradigma plugin e alignment;
+* PPMStereo ci dice che la memoria deve essere selezionata, non accumulata;
+* EndoStreamDepth dimostra che streaming gerarchico e augmentations chirurgiche funzionano;
+* nessuno dei tre affronta il problema che abbiamo già osservato: un refiner che, davanti a una predizione OOD già buona, deve riconoscerlo e restare identità.
+
+Quello è probabilmente il cuore scientifico vero di ARGOS v2.

@@ -63,6 +63,11 @@ results/dataset_audits/
 /external/d4d/
 /external/lietorch/
 /external/surgical_mono_repos/
+/external/RAFT/
+/external/SEA-RAFT/
+/external/PPMStereo/
+/external/EndoStreamDepth/
+/external/bidavideo/
 
 # Python/runtime
 __pycache__/
