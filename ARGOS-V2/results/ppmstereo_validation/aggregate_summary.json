@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "namespace": "cache-grid-from-cached-predictions",
+  "primary_coverage_threshold": 0.5,
+  "decision": "NO-GO",
+  "decision_scope": "Do not add PPMStereo-style long memory to the first ARGOS v2 refiner; retain causal BiDA t-1 and prioritize selector safety.",
+  "oracle_horizon": {
+    "raw_epe": 0.6438354525,
+    "t1_oracle_epe": 0.5749473521,
+    "multi_memory_oracle_epe": 0.4767199978,
+    "incremental_gain_beyond_t1": 0.0982273542,
+    "incremental_gain_age_2": 0.0349073533,
+    "incremental_gain_age_4": 0.0311648518,
+    "incremental_gain_age_8": 0.0321551491,
+    "unaligned_multi_oracle_epe": 0.4185569461,
+    "interpretation": "Long memory contains additional candidates, but the unaligned oracle is even lower and therefore demonstrates that oracle candidate richness alone does not validate geometric usability."
+  },
+  "seen_backbones": {
+    "raw_epe": 0.6438354515,
+    "existing_learned_t1_epe": 0.6197145499,
+    "learned_long_memory_epe": 0.6295112556,
+    "multi_memory_oracle_epe": 0.4767199857,
+    "raw_to_long_memory_gain": 0.0143241959,
+    "additional_gain_over_t1": -0.0097967057,
+    "multi_oracle_recovery": 0.0857143642,
+    "per_backbone": {
+      "S2M2-S": {"raw": 0.6961123448, "t1": 0.6770213788, "long_memory": 0.6791307420, "oracle": 0.5722000162},
+      "RAFT-Stereo": {"raw": 0.6174398498, "t1": 0.5906970785, "long_memory": 0.6042036819, "oracle": 0.4110994939},
+      "StereoAnywhere": {"raw": 0.6179541600, "t1": 0.5914251925, "long_memory": 0.6051993430, "oracle": 0.4468604470}
+    }
+  },
+  "unseen_fast_foundation_stereo": {
+    "raw_epe": 0.6451481092,
+    "existing_learned_t1_epe": 0.6233175720,
+    "learned_long_memory_epe": 0.6357763894,
+    "multi_memory_oracle_epe": 0.5283356635,
+    "raw_to_long_memory_gain": 0.0093717198,
+    "additional_gain_over_t1": -0.0124588174,
+    "multi_oracle_recovery": 0.0802287785
+  },
+  "deterministic_controls": {
+    "unaligned_latest_epe": 0.6408443315,
+    "unaligned_ppm_topk_k3_epe": 0.6359819017,
+    "bida_uniform_all_epe": 0.6677281285,
+    "bida_recent_k3_epe": 0.6475068297,
+    "bida_faithful_score_k3_epe": 0.6437803287,
+    "bida_argos_score_k3_epe": 0.6438074014,
+    "interpretation": "Neither faithful-formula adaptation nor universal deterministic scoring extracts the oracle ceiling safely."
+  },
+  "runtime": {
+    "sea_raft_four_age_latency_ms": 10.2,
+    "learned_model_latency_ms": 0.39,
+    "learned_model_parameters": 43412,
+    "oracle_run_peak_gpu_memory_mb": 1046.43
+  },
+  "not_run_after_no_go": [
+    "CREStereo secondary unseen evaluation",
+    "K=5 because only four exact candidate ages exist",
+    "native-grid-from-cached-predictions",
+    "true native stereo inference"
+  ]
+}

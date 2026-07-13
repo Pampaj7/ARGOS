@@ -1,0 +1,34 @@
+{
+  "mode": "train",
+  "output": "results/ppmstereo_validation/learned_selector",
+  "checkpoint": null,
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": null,
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "ages": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "coverage_threshold": 0.5,
+  "max_train_samples_per_sequence": 256,
+  "max_validation_samples_per_sequence": 300,
+  "epochs": 4,
+  "steps": 0,
+  "batch_size": 16,
+  "workers": 32,
+  "learning_rate": 0.002,
+  "seed": 20260713,
+  "device": "cuda:0",
+  "resume": true
+}

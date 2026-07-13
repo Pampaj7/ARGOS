@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "finite": true,
+  "initial_gate_mean": 0.00897216796875,
+  "final_gate_mean": 0.033777872721354164,
+  "final_gradient_norm": 0.19541347528306338,
+  "max_update_px": 3.0,
+  "initial_loss": 0.2439387787420016,
+  "final_loss": 0.22724185411173564,
+  "loss_reduction_ratio": 0.06844719284228773
+}

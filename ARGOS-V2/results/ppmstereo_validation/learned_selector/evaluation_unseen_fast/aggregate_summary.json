@@ -1,0 +1,13 @@
+{
+  "backbones": [
+    "Fast-FoundationStereo"
+  ],
+  "raw_epe": 0.6451481091842951,
+  "learned_epe": 0.6357763893529234,
+  "multi_oracle_epe": 0.5283356634707773,
+  "oracle_recovery": 0.08022877848440797,
+  "additional_gain_beyond_existing_t1_model": "compare against baseline_summary.json",
+  "flow_latency_ms": 10.416124249674533,
+  "model_latency_ms": 0.527147870679858,
+  "parameter_count": 43412
+}

@@ -1,0 +1,38 @@
+{
+  "mode": "oracle",
+  "output": "results/ppmstereo_validation",
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "ages": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "thresholds": [
+    0.05,
+    0.25,
+    0.5,
+    0.9
+  ],
+  "primary_coverage_threshold": 0.5,
+  "frames": 300,
+  "start": 0,
+  "flow_model": "SEA-RAFT",
+  "flow_cache_policy": "RAM only; no dense cache written",
+  "primary_unseen_backbone": "Fast-FoundationStereo (not accessed)",
+  "promotion_thresholds": {
+    "aggregate_min_gain_px": 0.01,
+    "per_group_min_gain_px": 0.005
+  },
+  "command": "scripts/run_ppmstereo_validation.py --mode oracle --output results/ppmstereo_validation --backbones S2M2-S RAFT-Stereo StereoAnywhere --sequences dataset_7_keyframe_1 dataset_7_keyframe_2 dataset_7_keyframe_3 dataset_7_keyframe_4 --frames 300 --ages 1 2 4 8 --thresholds 0.05 0.25 0.50 0.90 --batch-size 32 --device cuda:0 --resume"
+}

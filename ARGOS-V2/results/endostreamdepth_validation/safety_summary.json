@@ -1,0 +1,11 @@
+{
+  "status": "not_promoted_not_run",
+  "reason": "The mandatory state-usage gate failed before full seen safety and unseen evaluation.",
+  "available_bounds": {
+    "structural_update_bound_px": 3.0,
+    "overfit_smoke_max_update_px": 0.416015625,
+    "E5_training_max_update_px_final_epoch": 0.2265625
+  },
+  "not_claimed": ["new-Bad3", "false-update rate", "clean degradation", "frame-tail degradation"],
+  "interpretation": "Absence of a full safety table is a deliberate PONYTAIL stage-gate stop, not evidence that E5 is safe."
+}

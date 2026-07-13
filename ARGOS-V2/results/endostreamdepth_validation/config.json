@@ -1,0 +1,21 @@
+{
+  "project": "ARGOS v2",
+  "variants": ["E2", "E3", "E4", "E5"],
+  "training_backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+  "primary_unseen_backbone": "Fast-FoundationStereo",
+  "clip_length": 8,
+  "burn_in": 1,
+  "detach_interval": 0,
+  "loss_frames": "all frames after burn-in",
+  "epochs": 4,
+  "batch_size": 4,
+  "learning_rate": 0.002,
+  "feature_channels": 32,
+  "state_channels": 16,
+  "tau_px": 3.0,
+  "coverage_threshold": 0.5,
+  "evaluation_thresholds": [0.05, 0.25, 0.5, 0.9],
+  "seed": 20260713,
+  "checkpoint_selection": "lowest held-out seen validation EPE",
+  "unseen_policy": "not touched because the state-usage promotion gate failed"
+}

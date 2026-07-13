@@ -1,0 +1,24 @@
+{
+  "stage": "frozen representation ranking only",
+  "bounded_refiner_executed": false,
+  "reason": "No DINO representation passed Stage A relative to P0, so applying disparity corrections would violate the required stage order.",
+  "available_abstention_safety": {
+    "P0_raw_null_accuracy": 0.6929024583663759,
+    "P0_raw_null_selection_rate": 0.9538725878932065,
+    "P0_selected_regret": 0.10650531947612762,
+    "P6_raw_null_accuracy": 0.6867565424266455,
+    "P6_raw_null_selection_rate": 0.9275046259582342,
+    "P6_selected_regret": 0.11690661311149597
+  },
+  "geometric_safety_metrics": {
+    "false_update_rate": null,
+    "clean_pixel_degradation": null,
+    "new_Bad3": null,
+    "mean_clean_update_magnitude": null,
+    "frames_worsened": null,
+    "worst_case_frame_degradation": null,
+    "p95_frame_degradation": null,
+    "catastrophic_tail_degradation": null
+  },
+  "interpretation": "Null values mean not executed, not zero degradation. The validated learned BiDA t-1 A2 remains the retained bounded refiner."
+}

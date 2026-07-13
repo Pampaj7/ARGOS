@@ -1,0 +1,14 @@
+{
+  "device": "NVIDIA H100 PCIe",
+  "variant": "E5",
+  "state_model_latency_ms_per_frame_batch1": 8.6965113948,
+  "parameter_count": 79678,
+  "trainable_parameter_count": 79678,
+  "state_memory_bytes_batch1": 135360,
+  "state_memory_mb_batch1": 0.1290893555,
+  "state_shapes": {"s4": [1, 16, 36, 45], "s8": [1, 16, 18, 22], "s16": [1, 16, 9, 11]},
+  "parameter_count_by_variant": {"E2": 38900, "E3": 41492, "E4": 79540, "E5": 79678},
+  "measurement": "200 no-grad warm synthetic 144x180 batch-1 forwards after 20 warmups; state reinitialized per call; excludes SEA-RAFT and I/O",
+  "sea_raft_reference_ms_per_pair": 2.6604915025,
+  "sea_raft_reference_source": "results/learned_t1_refiner/aggregate_summary.json"
+}

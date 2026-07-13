@@ -1,0 +1,40 @@
+{
+  "checkpoint": "ladder/E5/checkpoints/best_validation.pt",
+  "coverage_threshold": 0.5,
+  "clip_length": 8,
+  "clips_per_stream": 4,
+  "streams": [
+    {
+      "backbone": "S2M2-S",
+      "sequence": "dataset_7_keyframe_1",
+      "true_epe": 0.1613589383,
+      "zero_epe": 0.1613581568,
+      "shuffled_epe": 0.1613589256,
+      "true_vs_zero_output_difference_px": 0.0000018061,
+      "true_vs_shuffled_output_difference_px": 0.0000013188,
+      "true_vs_wrong_sequence_output_difference_px": 0.0000007159
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "sequence": "dataset_7_keyframe_2",
+      "true_epe": 0.1632582792,
+      "zero_epe": 0.1632578029,
+      "shuffled_epe": 0.1632582903,
+      "true_vs_zero_output_difference_px": 0.0000016913,
+      "true_vs_shuffled_output_difference_px": 0.0000012198,
+      "true_vs_wrong_sequence_output_difference_px": 0.0000006583
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "sequence": "dataset_7_keyframe_4",
+      "true_epe": 0.2069971928,
+      "zero_epe": 0.2069971758,
+      "shuffled_epe": 0.2069971992,
+      "true_vs_zero_output_difference_px": 0.0000017134,
+      "true_vs_shuffled_output_difference_px": 0.0000012486,
+      "true_vs_wrong_sequence_output_difference_px": 0.0000006788
+    }
+  ],
+  "decision": "FAIL",
+  "reason": "True history is not better than zero state and changes predictions only at approximately 1e-6 px on every tested backbone."
+}

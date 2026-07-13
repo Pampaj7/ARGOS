@@ -582,6 +582,27 @@ Then select top-K memories, initially:
 K = 3 or 5
 ```
 
+The validated BiDA probe changes the immediate order of work: alignment is a
+GO as a universal evidence source, but direct t-1 replacement, fixed blending,
+and hand-designed FB/photometric gates are NO-GO. First train and validate a
+learned t-1 selector with an identity-preserving bounded residual. Use raw and
+aligned disparity, signed/absolute disagreement, warp support, FB confidence,
+photometric residual, flow magnitude, and RGB features. Supervise with the
+per-pixel memory-vs-raw error target (hard margin or clipped continuous gain), and
+report win/loss advantage distributions plus clean-pixel safety. Defer t-2/t-4/t-8
+and PPMStereo-style multi-memory selection until this t-1 experiment captures a
+substantial fraction of the oracle gain.
+
+The first learned t-1 experiment has now been validated. A 39k-parameter
+disparity/validity-only CNN improves all three seen backbones and untouched
+Fast-FoundationStereo, recovering 32-41% and 49% of oracle gain respectively at
+cache coverage 0.50. It is not promoted as the safe refiner: selector AUROC is
+only about 0.55, recall is 1-2% at the nominal 0.5 gate, and clean-pixel
+degradation remains about 29-30%. FB, photometric, and RGB additions did not beat
+the minimal disparity evidence ablation, and the initial safety losses did not
+control false updates. Continue t-1 selector calibration/safety work before any
+longer-memory component.
+
 The memory should include:
 
 - short-term high-resolution evidence;

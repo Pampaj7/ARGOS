@@ -1,0 +1,110 @@
+{
+  "cache/0.05/S2M2-S": {
+    "new_bad3": 0.0004582827402718437,
+    "false_update_rate": 0.3643438422945848,
+    "clean_degradation_ratio": 0.29383342339243823,
+    "clean_update_mean": 0.056500274541549135,
+    "frames_worsened_ratio": 0.15625,
+    "worst_frame_degradation": 0.03563570976257324,
+    "p95_frame_degradation": 0.013911444693803782
+  },
+  "cache/0.25/S2M2-S": {
+    "new_bad3": 0.00018835036865558587,
+    "false_update_rate": 0.33995197071200206,
+    "clean_degradation_ratio": 0.2819483357780338,
+    "clean_update_mean": 0.052563157761567704,
+    "frames_worsened_ratio": 0.14453125,
+    "worst_frame_degradation": 0.039327144622802734,
+    "p95_frame_degradation": 0.010077207535505292
+  },
+  "cache/0.5/S2M2-S": {
+    "new_bad3": 0.00018985499297536525,
+    "false_update_rate": 0.3159446479385444,
+    "clean_degradation_ratio": 0.2626988441451811,
+    "clean_update_mean": 0.05013921741509374,
+    "frames_worsened_ratio": 0.205078125,
+    "worst_frame_degradation": 0.09265650808811188,
+    "p95_frame_degradation": 0.023368579894304266
+  },
+  "cache/0.9/S2M2-S": {
+    "new_bad3": 0.004136072125662236,
+    "false_update_rate": 0.2010120106761566,
+    "clean_degradation_ratio": 0.3157250889679715,
+    "clean_update_mean": 0.06005020845721615,
+    "frames_worsened_ratio": 0.023809523809523808,
+    "worst_frame_degradation": 0.06069135665893555,
+    "p95_frame_degradation": -0.00710959099233151
+  },
+  "cache/0.05/RAFT-Stereo": {
+    "new_bad3": 0.0006384063734236281,
+    "false_update_rate": 0.3693112893587353,
+    "clean_degradation_ratio": 0.30627309849718165,
+    "clean_update_mean": 0.058471444868937114,
+    "frames_worsened_ratio": 0.146484375,
+    "worst_frame_degradation": 0.03070312738418579,
+    "p95_frame_degradation": 0.011968144774436943
+  },
+  "cache/0.25/RAFT-Stereo": {
+    "new_bad3": 0.0004208271647714745,
+    "false_update_rate": 0.345295349220894,
+    "clean_degradation_ratio": 0.2921334964071351,
+    "clean_update_mean": 0.05438412290702642,
+    "frames_worsened_ratio": 0.119140625,
+    "worst_frame_degradation": 0.039032623171806335,
+    "p95_frame_degradation": 0.006683650612831115
+  },
+  "cache/0.5/RAFT-Stereo": {
+    "new_bad3": 0.0004900363946800863,
+    "false_update_rate": 0.32623579252769414,
+    "clean_degradation_ratio": 0.2639010384785787,
+    "clean_update_mean": 0.05227417915119671,
+    "frames_worsened_ratio": 0.158203125,
+    "worst_frame_degradation": 0.09265568852424622,
+    "p95_frame_degradation": 0.011571725085377689
+  },
+  "cache/0.9/RAFT-Stereo": {
+    "new_bad3": 0.01030403844376675,
+    "false_update_rate": 0.28429634881247784,
+    "clean_degradation_ratio": 0.2916814368427272,
+    "clean_update_mean": 0.0873121744732453,
+    "frames_worsened_ratio": 0.11904761904761904,
+    "worst_frame_degradation": 1.2979707717895508,
+    "p95_frame_degradation": 0.028067493438720573
+  },
+  "cache/0.05/StereoAnywhere": {
+    "new_bad3": 0.0006411413531964006,
+    "false_update_rate": 0.36809592883760595,
+    "clean_degradation_ratio": 0.3083086317856134,
+    "clean_update_mean": 0.05669332027199529,
+    "frames_worsened_ratio": 0.1640625,
+    "worst_frame_degradation": 0.026996314525604248,
+    "p95_frame_degradation": 0.01279780939221382
+  },
+  "cache/0.25/StereoAnywhere": {
+    "new_bad3": 0.00032271289861006153,
+    "false_update_rate": 0.3441821701300596,
+    "clean_degradation_ratio": 0.29558664790087247,
+    "clean_update_mean": 0.05277495228748455,
+    "frames_worsened_ratio": 0.14453125,
+    "worst_frame_degradation": 0.02647210657596588,
+    "p95_frame_degradation": 0.007926447689533222
+  },
+  "cache/0.5/StereoAnywhere": {
+    "new_bad3": 0.0003130508067389638,
+    "false_update_rate": 0.3225938240248762,
+    "clean_degradation_ratio": 0.26934287673555163,
+    "clean_update_mean": 0.05041938217433547,
+    "frames_worsened_ratio": 0.1953125,
+    "worst_frame_degradation": 0.0958642065525055,
+    "p95_frame_degradation": 0.01598156467080116
+  },
+  "cache/0.9/StereoAnywhere": {
+    "new_bad3": 0.007932141219624026,
+    "false_update_rate": 0.21842747232126103,
+    "clean_degradation_ratio": 0.2251829611559392,
+    "clean_update_mean": 0.07141349917692352,
+    "frames_worsened_ratio": 0.07142857142857142,
+    "worst_frame_degradation": 0.24022340774536133,
+    "p95_frame_degradation": 0.013584768772125198
+  }
+}

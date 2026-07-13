@@ -1,0 +1,35 @@
+{
+  "mode": "ranking",
+  "output": "results/dinov3_feature_validation",
+  "device": "cuda:0",
+  "resolutions": [
+    "256x320",
+    "320x400"
+  ],
+  "layers": [
+    5,
+    11,
+    17,
+    23
+  ],
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "samples_per_sequence": 24,
+  "coverage_threshold": 0.5,
+  "useful_margin": 0.05,
+  "seed": 20260713,
+  "train_samples_per_sequence": 16,
+  "validation_samples_per_sequence": 24,
+  "epochs": 5,
+  "batch_size": 32,
+  "learning_rate": 0.002
+}

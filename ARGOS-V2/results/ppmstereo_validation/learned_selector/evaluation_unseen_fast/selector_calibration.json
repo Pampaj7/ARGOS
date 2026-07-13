@@ -1,0 +1,23 @@
+{
+  "mean_memory_mass": 0.718665352,
+  "raw_abstain_argmax_ratio": 0.5598828228431127,
+  "age_statistics": {
+    "1": {
+      "mean_play_weight": 0.1850377095984856,
+      "argmax_selection_ratio": 0.058190572870711686
+    },
+    "2": {
+      "mean_play_weight": 0.17617302098678234,
+      "argmax_selection_ratio": 0.03612097709330595
+    },
+    "4": {
+      "mean_play_weight": 0.17173032160377188,
+      "argmax_selection_ratio": 0.0392763851963508
+    },
+    "8": {
+      "mean_play_weight": 0.18572429945182725,
+      "argmax_selection_ratio": 0.3065292419965188
+    }
+  },
+  "effective_memory_horizon": 3.771017243859075
+}

@@ -1,0 +1,18 @@
+{
+  "primary_coverage_threshold": 0.5,
+  "seen_learned_long_memory": {
+    "clean_degradation_ratio": 0.3650296285,
+    "false_update_rate": 0.4218520201,
+    "frames_worsened_ratio": 0.3871175523,
+    "worst_frame_degradation": 0.1230451465,
+    "p95_frame_degradation": 0.0424151301
+  },
+  "unseen_fast_foundation_stereo": {
+    "clean_degradation_ratio": 0.3568047144,
+    "false_update_rate": 0.4166210939,
+    "frames_worsened_ratio": 0.4096618357,
+    "worst_frame_degradation": 0.0841044486,
+    "p95_frame_degradation": 0.0399682373
+  },
+  "conclusion": "Safety is materially worse than required for promotion and does not improve upon the validated t-1 selector."
+}

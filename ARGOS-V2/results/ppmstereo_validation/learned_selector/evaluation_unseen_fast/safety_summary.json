@@ -1,0 +1,58 @@
+[
+  {
+    "backbone": "Fast-FoundationStereo",
+    "sequence": "dataset_7_keyframe_1",
+    "frames": 292,
+    "valid_count": 1172157,
+    "raw_epe": 0.18182342550307445,
+    "learned_epe": 0.1629753579249731,
+    "oracle_epe": 0.1202984150677835,
+    "clean_degradation_ratio": 0.2576644119120949,
+    "false_update_rate": 0.547591490545546,
+    "frames_worsened_ratio": 0.2876712328767123,
+    "worst_frame_degradation": 0.028948351740837097,
+    "p95_frame_degradation": 0.016060539335012423
+  },
+  {
+    "backbone": "Fast-FoundationStereo",
+    "sequence": "dataset_7_keyframe_2",
+    "frames": 292,
+    "valid_count": 193159,
+    "raw_epe": 0.18672729940075092,
+    "learned_epe": 0.18388279937907978,
+    "oracle_epe": 0.10670677784223533,
+    "clean_degradation_ratio": 0.581460168081476,
+    "false_update_rate": 0.3370213758094088,
+    "frames_worsened_ratio": 0.14726027397260275,
+    "worst_frame_degradation": null,
+    "p95_frame_degradation": null
+  },
+  {
+    "backbone": "Fast-FoundationStereo",
+    "sequence": "dataset_7_keyframe_3",
+    "frames": 292,
+    "valid_count": 1895156,
+    "raw_epe": 1.3260915735811087,
+    "learned_epe": 1.3104524625772067,
+    "oracle_epe": 1.1503687270987375,
+    "clean_degradation_ratio": 0.43177854352302564,
+    "false_update_rate": 0.49341980626920107,
+    "frames_worsened_ratio": 0.3595890410958904,
+    "worst_frame_degradation": 0.05964171886444092,
+    "p95_frame_degradation": 0.039639863371849056
+  },
+  {
+    "backbone": "Fast-FoundationStereo",
+    "sequence": "dataset_7_keyframe_4",
+    "frames": 292,
+    "valid_count": 1558556,
+    "raw_epe": 0.22241275943382122,
+    "learned_epe": 0.22698000623535153,
+    "oracle_epe": 0.1310932404603247,
+    "clean_degradation_ratio": 0.3237153005207152,
+    "false_update_rate": 0.23836952938708586,
+    "frames_worsened_ratio": 0.6575342465753424,
+    "worst_frame_degradation": 0.08410444855690002,
+    "p95_frame_degradation": 0.0478864349424839
+  }
+]

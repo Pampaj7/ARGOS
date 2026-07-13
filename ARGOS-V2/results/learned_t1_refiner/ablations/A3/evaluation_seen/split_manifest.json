@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "seed": 20260713,
+  "split_unit": "complete SCARED-C sequence",
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "training_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "primary_unseen_backbone": "Fast-FoundationStereo",
+  "primary_cache_coverage_threshold": 0.5,
+  "evaluation_coverage_thresholds": [
+    0.05,
+    0.25,
+    0.5,
+    0.9
+  ],
+  "frame_stride": 1,
+  "causal_pair": "t-1 -> t; no future frame",
+  "balance_policy": "equal record count per seen backbone",
+  "selection_policy": "All dataset_7 keyframes are held out together; Fast-FoundationStereo is excluded from training, validation selection, architecture selection, and tuning.",
+  "actual_train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "actual_training_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "mode": "train"
+}

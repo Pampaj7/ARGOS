@@ -1,0 +1,17 @@
+{
+  "seen": {
+    "mean_memory_mass": 0.718498483,
+    "raw_abstain_argmax_ratio": 0.5570654497,
+    "effective_memory_horizon": 3.7995105759,
+    "age_mean_play_weights": {"1": 0.1819813107, "2": 0.1750722826, "4": 0.1734356022, "8": 0.1880092875},
+    "age_argmax_ratios": {"1": 0.0533418081, "2": 0.0390927382, "4": 0.0454668452, "8": 0.3050331588}
+  },
+  "unseen_fast_foundation_stereo": {
+    "mean_memory_mass": 0.718665352,
+    "raw_abstain_argmax_ratio": 0.5598828228,
+    "effective_memory_horizon": 3.7710172439,
+    "age_mean_play_weights": {"1": 0.1850377096, "2": 0.1761730210, "4": 0.1717303216, "8": 0.1857242995},
+    "age_argmax_ratios": {"1": 0.0581905729, "2": 0.0361209771, "4": 0.0392763852, "8": 0.3065292420}
+  },
+  "interpretation": "Weights remain close to uniform while argmax decisions over-select age 8; the selector does not learn a safe calibrated abstention policy."
+}

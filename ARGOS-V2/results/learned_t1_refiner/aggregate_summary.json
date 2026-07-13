@@ -1,0 +1,41 @@
+{
+  "decision": "NO-GO for promotion as the safe ARGOS v2 refiner; GO for learned bounded t-1 residual generalization",
+  "selected_variant": "A2",
+  "selected_checkpoint": "ablations/A2/checkpoints/best_validation.pt",
+  "primary_coverage_threshold": 0.5,
+  "seen_weighted": {
+    "raw_epe": 0.6144268287,
+    "learned_epe": 0.5908682246,
+    "oracle_epe": 0.5475746994,
+    "oracle_recovery": 0.3523987092,
+    "new_bad3": 0.0004258270,
+    "false_update_rate": 0.2852461918,
+    "clean_degradation_ratio": 0.3005565320,
+    "frames_worsened_ratio": 0.3048780488
+  },
+  "unseen_fast_foundation_stereo": {
+    "raw_epe": 0.6141761487,
+    "learned_epe": 0.5929277531,
+    "oracle_epe": 0.5711172576,
+    "oracle_recovery": 0.4934728934,
+    "new_bad3": 0.0003559865,
+    "false_update_rate": 0.2820093983,
+    "clean_degradation_ratio": 0.2906035195,
+    "frames_worsened_ratio": 0.2711069418
+  },
+  "runtime": {
+    "parameter_count": 39299,
+    "seen_sea_raft_ms_per_pair": 2.6604915025,
+    "seen_refiner_ms_per_pair": 0.1850310319,
+    "seen_total_ms_per_pair": 2.8455225344,
+    "peak_gpu_memory_mb": 1036.3974609375
+  },
+  "ablation_oracle_recovery": {
+    "A2": 0.4005779385,
+    "A3": 0.2753376744,
+    "A4": 0.3370540040,
+    "A5": 0.0496679024,
+    "A6": 0.0592559249,
+    "A7": 0.1599670532
+  }
+}

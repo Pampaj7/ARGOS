@@ -1,0 +1,28 @@
+{
+  "hardware": "NVIDIA H100 PCIe 80GB",
+  "DINO_model": "ViT-L/16 LVD-1689M, frozen, BF16 autocast",
+  "parameter_count": 303154176,
+  "input_resolutions": {
+    "256x320": {
+      "patch_grid": [16, 20],
+      "latency_ms_per_frame": 28.716581407934427,
+      "peak_gpu_memory_bytes": 1316864000,
+      "fp16_single_layer_bytes_per_frame": 655360,
+      "fp16_four_layer_bytes_per_frame": 2621440
+    },
+    "320x400": {
+      "patch_grid": [20, 25],
+      "latency_ms_per_frame": 28.741564601659775,
+      "peak_gpu_memory_bytes": 1407862784,
+      "fp16_single_layer_bytes_per_frame": 1024000,
+      "fp16_four_layer_bytes_per_frame": 4096000
+    }
+  },
+  "selected_probe_resolution": "256x320",
+  "selection_reason": "320x400 improved non-parametric AP by only 0.00093 while increasing four-layer feature storage by 56.25%; top-1 accuracy was slightly worse.",
+  "SEA_RAFT_reference_ms_per_four_ages": 10.371361754289252,
+  "warp_evidence_reference_ms_per_four_ages": 1.5354487445890121,
+  "persistent_DINO_feature_cache_built": false,
+  "persistent_cache_bytes": 0,
+  "note": "The P0-P6 run used transient in-memory fixed 16-channel projections and discarded them after evaluation."
+}

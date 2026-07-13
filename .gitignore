@@ -1,5 +1,6 @@
 # Large data and model artifacts
 data/
+!ARGOS-V2/model_design/data/
 datasets/
 argos_data/
 dataset/*
@@ -68,6 +69,7 @@ results/dataset_audits/
 /external/PPMStereo/
 /external/EndoStreamDepth/
 /external/bidavideo/
+/external/dinov3/
 
 # Python/runtime
 __pycache__/

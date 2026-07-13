@@ -9,6 +9,7 @@ Cloned/audited for ARGOS v2 external-component audit. Do not modify these reposi
 | EndoStreamDepth | `external/EndoStreamDepth` | `5abe89d9c0e09f64fdc5276d21bb5a34aa815cc6` | `main` | Apache-2.0 | PyTorch, mamba-ssm/xLSTM stack, DINO/DepthAnything/DPT-related deps | Training/inference checkpoints configured through project configs; no checkpoints copied | No |
 | SEA-RAFT | `external/SEA-RAFT` | `9137517ba24e628442aec097d3afe71d03503b75` | `main` | BSD-3-Clause | PyTorch, torchvision, numpy, scipy, OpenCV, h5py, tqdm, einops | Requires `.pth` checkpoint, e.g. `models/Tartan-C-T-TSKH-spring540x960-M.pth` | No |
 | RAFT | `external/RAFT` | `2888e15a51fa41140771d3f498ed8023cff098d1` | `master` | BSD-3-Clause | PyTorch, torchvision, numpy, scipy, OpenCV; optional alt CUDA corr | Requires `.pth` checkpoint from `download_models.sh` | No |
+| DINOv3 | `external/dinov3` | `346f38fee679c56a6888f91c51670fae61d364e0` | `main` | DINOv3 License (custom, non-commercial/gated — not MIT/Apache) | PyTorch, torchvision, torchmetrics, omegaconf, submitit, ftfy, regex, scikit-learn, termcolor | ViT-L/16 LVD-1689M downloaded (`external/dinov3/checkpoints/dinov3_vitl16_pretrain_lvd1689m-8aa4cbdd.pth`, sha256 `8aa4cbdd...`, verified loadable); other variants not fetched | No |
 
 ## Notes
 

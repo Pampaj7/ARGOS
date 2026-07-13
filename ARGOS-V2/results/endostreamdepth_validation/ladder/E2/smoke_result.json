@@ -1,0 +1,16 @@
+{
+  "passed": false,
+  "finite": true,
+  "initial_loss": 0.3058326840400696,
+  "final_loss": 0.20810129560339144,
+  "loss_reduction_ratio": 0.31955835179432157,
+  "initial_geometry_loss": 0.23442204296588898,
+  "final_geometry_loss": 0.16310062460028207,
+  "geometry_loss_reduction_ratio": 0.3042436515920347,
+  "history_output_difference_px": 8.513346756444662e-07,
+  "initial_state_injection": 0.0,
+  "final_state_injection": 0.0021233458537608385,
+  "state_norm": 0.47735774708099854,
+  "gradient_norm": 0.05652944639754983,
+  "max_update_px": 0.10693359375
+}

@@ -1,0 +1,39 @@
+{
+  "mode": "evaluate",
+  "output": "ARGOS-V2/results/learned_t1_refiner/ablations/A5/evaluation_seen",
+  "variant": "A7",
+  "checkpoint": "ARGOS-V2/results/learned_t1_refiner/ablations/A5/checkpoints/best_validation.pt",
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": null,
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "coverage_threshold": 0.5,
+  "thresholds": [
+    0.05,
+    0.25,
+    0.5,
+    0.9
+  ],
+  "frame_stride": 1,
+  "max_train_pairs_per_sequence": 256,
+  "max_validation_pairs_per_sequence": 128,
+  "epochs": 5,
+  "steps": 0,
+  "batch_size": 32,
+  "workers": 24,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "tau_px": 3.0,
+  "seed": 20260713,
+  "device": "cuda:0",
+  "resume": true,
+  "contact_sheets": 4
+}

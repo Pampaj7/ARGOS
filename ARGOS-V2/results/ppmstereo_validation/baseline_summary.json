@@ -1,0 +1,107 @@
+{
+  "stage": "unaligned versus BiDA plus fixed/deterministic top-K",
+  "namespace": "cache-grid-from-cached-predictions",
+  "primary_coverage_threshold": 0.5,
+  "summaries": {
+    "A0_raw": {
+      "epe": 0.6441636152150308,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.0,
+      "worst_frame_degradation": 0.0,
+      "clean_degradation_ratio": 0.0,
+      "false_update_rate": 0.0,
+      "delta_epe_vs_raw": 0.0
+    },
+    "A2_existing_learned_t1": {
+      "epe": 0.620615305445049,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.2662671232876712,
+      "worst_frame_degradation": 0.1531466841697693,
+      "clean_degradation_ratio": 0.4519597592353697,
+      "false_update_rate": 0.29511692989853533,
+      "delta_epe_vs_raw": -0.0235483097699819
+    },
+    "A3_unaligned_latest": {
+      "epe": 0.6409337145989009,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.4092465753424658,
+      "worst_frame_degradation": 8.87170124053955,
+      "clean_degradation_ratio": 0.4649886983828299,
+      "false_update_rate": 0.4978842559600369,
+      "delta_epe_vs_raw": -0.0032299006161299326
+    },
+    "A4_unaligned_ppm_topk_k3": {
+      "epe": 0.6383081460749869,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.4503424657534247,
+      "worst_frame_degradation": 3.8201918601989746,
+      "clean_degradation_ratio": 0.5208970236045045,
+      "false_update_rate": 0.6478519404842681,
+      "delta_epe_vs_raw": -0.0058554691400439784
+    },
+    "A4_control_unaligned_uniform_all": {
+      "epe": 0.6745667666296786,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.5545804794520548,
+      "worst_frame_degradation": 3.5071282386779785,
+      "clean_degradation_ratio": 0.5834061678411818,
+      "false_update_rate": 0.7491768886161931,
+      "delta_epe_vs_raw": 0.030403151414647778
+    },
+    "A5_bida_aligned_uniform_all": {
+      "epe": 0.6688491905336491,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.45291095890410965,
+      "worst_frame_degradation": 4.334568023681641,
+      "clean_degradation_ratio": 0.5208850957513514,
+      "false_update_rate": 0.6834776265227731,
+      "delta_epe_vs_raw": 0.024685575318618258
+    },
+    "A6_bida_aligned_recent_k3": {
+      "epe": 0.648691890286928,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.3944777397260274,
+      "worst_frame_degradation": 4.780491352081299,
+      "clean_degradation_ratio": 0.47891878376264996,
+      "false_update_rate": 0.595766757290143,
+      "delta_epe_vs_raw": 0.004528275071897125
+    },
+    "A7_bida_faithful_score_k3": {
+      "epe": 0.645414940000248,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.38827054794520544,
+      "worst_frame_degradation": 4.139805793762207,
+      "clean_degradation_ratio": 0.47538652366385153,
+      "false_update_rate": 0.5871624697650789,
+      "delta_epe_vs_raw": 0.0012513247852171672
+    },
+    "A7_argos_deterministic_k3": {
+      "epe": 0.6454152023902189,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.38848458904109584,
+      "worst_frame_degradation": 4.067812442779541,
+      "clean_degradation_ratio": 0.4752665069410053,
+      "false_update_rate": 0.5868322580906855,
+      "delta_epe_vs_raw": 0.0012515871751880292
+    },
+    "oracle_t1": {
+      "epe": 0.5815411854135337,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.0,
+      "worst_frame_degradation": 0.0,
+      "clean_degradation_ratio": 0.0,
+      "false_update_rate": 0.2535340656934902,
+      "delta_epe_vs_raw": -0.06262242980149713
+    },
+    "oracle_multi": {
+      "epe": 0.4896239261963833,
+      "backbones_improved_vs_raw": null,
+      "frames_worsened_ratio": 0.0,
+      "worst_frame_degradation": -0.007148087024688721,
+      "clean_degradation_ratio": 0.0,
+      "false_update_rate": 0.4578799163021744,
+      "delta_epe_vs_raw": -0.15453968901864756
+    }
+  },
+  "k_policy": "K=1 and K=3 evaluated; K=5 unavailable because exact age set contains four candidates"
+}

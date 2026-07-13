@@ -1,0 +1,83 @@
+{
+  "rows": [
+    {
+      "mode": "true",
+      "epe": 0.14856820233496087,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 0.0,
+      "mean_state_rms": 0.3300742672290653
+    },
+    {
+      "mode": "zero",
+      "epe": 0.14856726096027972,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 1.800282267261366e-06,
+      "mean_state_rms": 0.17885810905136168
+    },
+    {
+      "mode": "stale",
+      "epe": 0.14856769850782384,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 9.434395886742664e-07,
+      "mean_state_rms": 0.25912927160970867
+    },
+    {
+      "mode": "shuffled",
+      "epe": 0.14856815888689867,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 1.3111231613738283e-06,
+      "mean_state_rms": 0.33006954519078135
+    },
+    {
+      "mode": "wrong_sequence",
+      "epe": 0.14856861074674563,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 8.279892105278464e-07,
+      "mean_state_rms": 0.3882733224891126
+    },
+    {
+      "mode": "reset_at_max_change",
+      "epe": 0.1485679459062016,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 4.7379716050510723e-07,
+      "mean_state_rms": 0.2927865197416395
+    },
+    {
+      "mode": "horizon_1",
+      "epe": 0.14856726096027972,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 1.800282267261366e-06,
+      "mean_state_rms": 0.17885810905136168
+    },
+    {
+      "mode": "horizon_2",
+      "epe": 0.14856751159596407,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 1.31064141228876e-06,
+      "mean_state_rms": 0.22472526459023356
+    },
+    {
+      "mode": "horizon_4",
+      "epe": 0.14856784895738825,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 6.579325786404411e-07,
+      "mean_state_rms": 0.27999892458319664
+    },
+    {
+      "mode": "horizon_8",
+      "epe": 0.14856820233496087,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 0.0,
+      "mean_state_rms": 0.3300742672290653
+    },
+    {
+      "mode": "horizon_16",
+      "epe": 0.14856820233496087,
+      "valid_count": 358220,
+      "mean_output_difference_from_true_px": 0.0,
+      "mean_state_rms": 0.3300742672290653
+    }
+  ],
+  "checkpoint": "results/endostreamdepth_validation/ladder/E5/checkpoints/best_validation.pt",
+  "interpretation_rule": "promotion requires true history to differ from and outperform zero/shuffled history"
+}

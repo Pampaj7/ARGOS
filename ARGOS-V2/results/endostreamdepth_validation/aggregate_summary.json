@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "project": "ARGOS v2",
+  "namespace": "cache-grid-from-cached-predictions",
+  "primary_coverage_threshold": 0.5,
+  "decision": "NO-GO",
+  "decision_scope": "Do not add the tested generic ConvGRU latent-state adaptation E2-E5 to the first ARGOS v2 refiner.",
+  "important_limitation": "This is not a NO-GO for the original EndoStreamDepth Mamba/xLSTM operator, which was reference-only because its CUDA/Triton dependencies are unavailable in the validated ARGOS environment.",
+  "overfit_smoke": {
+    "passed": true,
+    "total_loss_reduction_ratio": 0.1326060677,
+    "geometry_loss_reduction_ratio": 0.3464908234,
+    "history_output_difference_px": 0.0012277832,
+    "max_update_px": 0.416015625
+  },
+  "single_backbone_pipeline": {
+    "backbone": "S2M2-S",
+    "raw_epe": 1.0107737396,
+    "best_E3_epe": 1.0046171108,
+    "gain_px": 0.0061566289
+  },
+  "three_backbone_ladder": {
+    "common_note": "E3-E5 share the BiDA common mask; E2 has no BiDA and its training validation mask is therefore not numerically identical.",
+    "E2_state_without_BiDA": {"raw_epe": 0.9046978802, "best_epe": 0.9027811294, "gain_px": 0.0019167508, "best_epoch": 0},
+    "E3_single_scale_with_BiDA": {"raw_epe": 0.9042814235, "best_epe": 0.9019591718, "gain_px": 0.0023222518, "best_epoch": 0},
+    "E4_multi_scale_with_BiDA": {"raw_epe": 0.9042814235, "best_epe": 0.9016117492, "gain_px": 0.0026696744, "best_epoch": 0},
+    "E5_multi_scale_with_reset": {"raw_epe": 0.9042814235, "best_epe": 0.9015891831, "gain_px": 0.0026922404, "best_epoch": 0}
+  },
+  "state_usage_gate": {
+    "status": "failed",
+    "representative_three_backbone_result": "Across S2M2-S, RAFT-Stereo and StereoAnywhere, true-vs-zero output differences are only 1.69e-6 to 1.81e-6 px; zero-state is equal or slightly better in EPE.",
+    "shuffled_history_difference_px_range": [0.0000012198, 0.0000013189],
+    "wrong_sequence_difference_px_range": [0.0000006583, 0.0000007159],
+    "conclusion": "The hidden state has non-zero norm but the bounded correction path effectively ignores history. The small validation gain is a current-frame/BiDA CNN gain, not latent long-range memory."
+  },
+  "validated_references": {
+    "learned_BiDA_t1": "results/learned_t1_refiner/aggregate_summary.json",
+    "PPMStereo_explicit_memory": "results/ppmstereo_validation/aggregate_summary.json",
+    "comparison": "The validated t-1 model remains the reference. PPMStereo and this state adapter are both NO-GO for different measured reasons: unsafe selection versus latent-state non-use."
+  },
+  "stopped_after_gate": [
+    "full seen-backbone safety evaluation",
+    "Fast-FoundationStereo unseen evaluation",
+    "CREStereo secondary unseen evaluation",
+    "original Mamba/xLSTM E6 build or environment mutation",
+    "native-grid-from-cached-predictions evaluation",
+    "true native stereo inference"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "mode": "train",
+  "output": "results/endostreamdepth_validation/ladder/E3",
+  "variant": "E3",
+  "checkpoint": null,
+  "a2_checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/learned_t1_refiner/ablations/A2/checkpoints/best_validation.pt",
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": null,
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "coverage_threshold": 0.5,
+  "thresholds": [
+    0.05,
+    0.25,
+    0.5,
+    0.9
+  ],
+  "clip_length": 8,
+  "burn_in": 1,
+  "detach_interval": 0,
+  "max_train_clips_per_sequence": 8,
+  "max_validation_clips_per_sequence": 8,
+  "epochs": 4,
+  "steps": 0,
+  "batch_size": 4,
+  "workers": 12,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "feature_channels": 32,
+  "state_channels": 16,
+  "tau_px": 3.0,
+  "seed": 20260713,
+  "device": "cuda:1",
+  "resume": false,
+  "max_diagnostic_clips": 8
+}
