@@ -1,0 +1,75 @@
+{
+  "stage": "sweep",
+  "sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_2_keyframe_4",
+    "dataset_6_keyframe_4"
+  ],
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "ages": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "thresholds": [
+    0.05,
+    0.25,
+    0.5,
+    0.9
+  ],
+  "primary_coverage_threshold": 0.5,
+  "bound_px": 3.0,
+  "gates": {
+    "stage1_min_gain_px": 0.005,
+    "stage1_max_false_update_rate": 0.2,
+    "stage1_max_clean1_degradation": 0.15,
+    "stage2_min_gain_px": 0.005,
+    "stage2_min_positive_backbones": 2
+  },
+  "configs": [
+    "n3_s0.25_d0.5_k0",
+    "n3_s0.25_d0.5_k1",
+    "n3_s0.25_d1_k0",
+    "n3_s0.25_d1_k1",
+    "n3_s0.25_d2_k0",
+    "n3_s0.25_d2_k1",
+    "n3_s0.5_d0.5_k0",
+    "n3_s0.5_d0.5_k1",
+    "n3_s0.5_d1_k0",
+    "n3_s0.5_d1_k1",
+    "n3_s0.5_d2_k0",
+    "n3_s0.5_d2_k1",
+    "n3_s1_d0.5_k0",
+    "n3_s1_d0.5_k1",
+    "n3_s1_d1_k0",
+    "n3_s1_d1_k1",
+    "n3_s1_d2_k0",
+    "n3_s1_d2_k1",
+    "n4_s0.25_d0.5_k0",
+    "n4_s0.25_d0.5_k1",
+    "n4_s0.25_d1_k0",
+    "n4_s0.25_d1_k1",
+    "n4_s0.25_d2_k0",
+    "n4_s0.25_d2_k1",
+    "n4_s0.5_d0.5_k0",
+    "n4_s0.5_d0.5_k1",
+    "n4_s0.5_d1_k0",
+    "n4_s0.5_d1_k1",
+    "n4_s0.5_d2_k0",
+    "n4_s0.5_d2_k1",
+    "n4_s1_d0.5_k0",
+    "n4_s1_d0.5_k1",
+    "n4_s1_d1_k0",
+    "n4_s1_d1_k1",
+    "n4_s1_d2_k0",
+    "n4_s1_d2_k1"
+  ],
+  "flow_model": "SEA-RAFT",
+  "namespace": "cache-grid-from-cached-predictions",
+  "command": "scripts/run_consensus_validation.py --stage sweep --frames 300"
+}
