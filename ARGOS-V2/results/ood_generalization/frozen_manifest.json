@@ -1,0 +1,30 @@
+{
+  "detector": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/checkpoints/best_validation.pt",
+    "sha256": "78b1bb6cf809dc76448222e41e3bcfafb754bc9b7b6629edcdfa2e1a33444e67"
+  },
+  "a2": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/learned_t1_refiner/ablations/A2/checkpoints/best_validation.pt",
+    "sha256": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea"
+  },
+  "modes": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/operating_modes.json",
+    "sha256": "791f27d21e3f9fa63fe267d5742c4fb85226f49e6027b285aeb90754fbe10b69"
+  },
+  "bidavideo_source": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+    "sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+  },
+  "a2_source": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/learned_t1_refiner.py",
+    "sha256": "6b0b8de0616506058e889c05c5a35af7ec40cc6464fc3ae38357f19ad6dc6bde"
+  },
+  "detector_source": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_error_detector.py",
+    "sha256": "fd0fc03be3b3b02d61d047ba415e09e3e09aa1601f043ef6ce004b9cc1b9829f"
+  },
+  "abstention_source": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/abstention.py",
+    "sha256": "ff8af2cbf28a9b85cd83c5d449473f52734c531a5710993408fd3b01a1f1a9f6"
+  }
+}

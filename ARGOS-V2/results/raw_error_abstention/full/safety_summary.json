@@ -1,0 +1,43 @@
+{
+  "coverage_threshold": 0.5,
+  "definitions": {
+    "false_update_rate": "clean pixels (raw error <= 0.5) updated by > 0.05 / all clean pixels",
+    "clean_pixel_degradation": "clean pixels worsened by > 0.02 / all clean pixels"
+  },
+  "original_a2": {
+    "epe": 0.918975,
+    "false_update_rate": 0.350716,
+    "clean_pixel_degradation": 0.131480,
+    "frames_worsened": 0.0385,
+    "worst_frame_degradation": 0.02293
+  },
+  "ultra_safe": {
+    "epe": 0.943572,
+    "false_update_rate": 0.001792,
+    "clean_pixel_degradation": 0.001294,
+    "intervention_coverage": 0.015897,
+    "frames_worsened": 0.0542,
+    "worst_frame_degradation": 0.04213
+  },
+  "balanced": {
+    "epe": 0.934660,
+    "false_update_rate": 0.019234,
+    "clean_pixel_degradation": 0.009714,
+    "intervention_coverage": 0.056225,
+    "intervention_precision": 0.762800,
+    "mean_update_magnitude_on_clean_pixels": 0.006756,
+    "new_bad3": 0.000356,
+    "frames_worsened": 0.0333,
+    "clean_frame_degradation": 0.0561,
+    "worst_frame_degradation": 0.04010,
+    "max_sequence_p95_degradation": 0.00158,
+    "max_sequence_catastrophic_tail_p99": 0.01332
+  },
+  "fast_foundation_stereo_balanced": {
+    "epe": 0.952309,
+    "raw_epe": 0.975741,
+    "false_update_rate": 0.018779,
+    "clean_pixel_degradation": 0.009097,
+    "intervention_coverage": 0.056364
+  }
+}

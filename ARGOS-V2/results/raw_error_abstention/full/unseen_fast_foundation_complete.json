@@ -1,0 +1,21 @@
+{
+  "backbone": "Fast-FoundationStereo",
+  "sequences": [
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "checkpoint": "results/raw_error_abstention/full/checkpoints/best_validation.pt",
+  "operating_modes_source": "results/raw_error_abstention/full/operating_modes.json",
+  "epe": 0.9523085809256692,
+  "raw_epe": 0.9757408121148207,
+  "epe_gain": 0.023432231189151498,
+  "false_update_rate": 0.018779311074462186,
+  "clean_pixel_degradation": 0.009096858580669234,
+  "intervention_coverage": 0.05636432433171731,
+  "runtime": {
+    "total_evaluation_seconds": 16.82769477693364,
+    "detector_parameters": 1107,
+    "a2_parameters": 39299
+  },
+  "tuning_after_unseen": false
+}

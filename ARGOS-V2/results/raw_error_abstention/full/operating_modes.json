@@ -1,0 +1,27 @@
+{
+  "temperature": 0.7403659224510193,
+  "modes": {
+    "ultra_safe": {
+      "name": "ultra_safe",
+      "probability_threshold": 0.95,
+      "error_threshold_px": 0.25,
+      "uncertainty_threshold_px": 2.0,
+      "maximum_update_px": 3.0
+    },
+    "balanced": {
+      "name": "balanced",
+      "probability_threshold": 0.5,
+      "error_threshold_px": 0.25,
+      "uncertainty_threshold_px": 2.0,
+      "maximum_update_px": 3.0
+    },
+    "high_coverage": {
+      "name": "high_coverage",
+      "probability_threshold": 0.5,
+      "error_threshold_px": 0.25,
+      "uncertainty_threshold_px": 2.0,
+      "maximum_update_px": 3.0
+    }
+  },
+  "provenance": "dataset_7_keyframe_1/2 only"
+}

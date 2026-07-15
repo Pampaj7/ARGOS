@@ -1,0 +1,44 @@
+{
+  "study": "ARGOS v2 frozen OOD generalization",
+  "training_or_parameter_updates": false,
+  "operating_mode": "balanced",
+  "gt_coverage_threshold": 0.5,
+  "cache_grid": [144, 180],
+  "changed_pixel_threshold_cache_px": 0.05,
+  "helpful_intervention_margin_cache_px": 0.02,
+  "datasets": {
+    "CREStereo": {
+      "backbone": "CREStereo",
+      "sequences": ["dataset_7_keyframe_3", "dataset_7_keyframe_4"],
+      "transitions": 320,
+      "grid": "cache-grid"
+    },
+    "SERV-CT": {
+      "backbone": "S2M2-S",
+      "sequences": 2,
+      "transitions": 14,
+      "continuity": "weak_sparse",
+      "grid": "cache-grid"
+    },
+    "SCARED structured-light": {
+      "backbone": "S2M2-S",
+      "anchors": 45,
+      "protocol": "static-repeat preservation",
+      "grids": ["cache-grid", "native-grid-from-cache-grid-correction"]
+    },
+    "D4D": {
+      "backbone": "S2M2-S",
+      "windows": 156,
+      "transitions": 468,
+      "gt": "final anchor only",
+      "grids": ["cache-grid", "native-grid-from-cache-grid-correction"]
+    },
+    "StereoMIS": {
+      "backbone": "S2M2-S",
+      "sequences": {"P1": 18420, "P2_8": 9156, "P3": 10665},
+      "transitions": 38238,
+      "gt": false,
+      "grid": "cache-grid"
+    }
+  }
+}

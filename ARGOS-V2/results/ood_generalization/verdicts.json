@@ -1,0 +1,37 @@
+{
+  "CREStereo": {
+    "verdict": "GO",
+    "scope": "second-unseen-backbone transfer on held-out SCARED-C",
+    "reason": "EPE, Bad3, boundary EPE, and temporal error improve; false-update is 2.08%, clean degradation 1.00%, and both sequences improve."
+  },
+  "SERV-CT": {
+    "verdict": "NO-GO",
+    "scope": "weak-sparse cross-dataset replay",
+    "reason": "EPE worsens by 0.0561 px, false-update is 38.41%, clean degradation 22.69%, and 64.29% of evaluated frames worsen."
+  },
+  "SCARED_structured_light_keyframes": {
+    "verdict": "GO-preservation-only",
+    "scope": "static-repeat direct-GT preservation, not temporal improvement",
+    "reason": "The native-grid EPE change is -0.0106 px (raw minus refined), with 0.71% false-update and 0.68% clean degradation. The 15.58 px native-grid maximum update and 62.22% tiny frame-level worsening require an explicit tail warning."
+  },
+  "D4D_structured_light_anchors": {
+    "verdict": "NO-GO",
+    "scope": "native-grid-from-cache-grid-correction geometry",
+    "reason": "Mean EPE improves by 0.0494 px, but Bad3 worsens, false-update is 29.15%, clean degradation 17.95%, worst-frame degradation 2.55 px, and specimen_2/specimen_3 do not improve."
+  },
+  "D4D_temporal_sequences": {
+    "verdict": "NO-GO",
+    "scope": "four-frame no-reference windows plus final-anchor GT",
+    "reason": "Motion-compensated temporal error improves by 0.1068 px, but intervention coverage is 42.20% and the corresponding anchor geometry fails safety. This is temporal smoothing without safe geometric transfer."
+  },
+  "StereoMIS": {
+    "verdict": "NO-GO",
+    "scope": "no-reference temporal validation only",
+    "reason": "Across 38,238 transitions, intervention is sparse and bounded, but aggregate temporal error worsens by 0.00149 px; P2_8 and P3 worsen and only P1 improves slightly. No geometric claim is possible without GT."
+  },
+  "overall": {
+    "verdict": "NO-GO for broad OOD robustness",
+    "paper_recommendation": "GO for reporting the completed controlled experiments; NO-GO for claiming general cross-dataset safety or deployment readiness.",
+    "reason": "Backbone transfer succeeds within SCARED, but cross-dataset calibration fails on SERV-CT and D4D, and no-reference StereoMIS temporal consistency is not improved."
+  }
+}

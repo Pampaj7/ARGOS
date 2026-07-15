@@ -1,0 +1,20 @@
+{
+  "dataset": "StereoMIS",
+  "protocol": "rectified no-GT continuous video; no-reference temporal metrics only",
+  "frames": 9155,
+  "authorization_ratio": 0.028420477216479337,
+  "catastrophic_update_gt3": 0.0,
+  "intervention_coverage_all": 0.024103323589643212,
+  "max_update_abs": 2.9245872497558594,
+  "mean_update_abs": 0.010596867571941143,
+  "p95_update_abs": 0.017861557085980553,
+  "raw_mc_temporal_error": 0.02276575581228095,
+  "raw_temporal_variance": 0.006312505939820977,
+  "refined_mc_temporal_error": 0.02507825892465418,
+  "refined_temporal_variance": 0.007898106489291491,
+  "runtime_ms": 22.282367255152135,
+  "stereo_runtime_ms": 84.35778127889623,
+  "support_ratio": 0.9852613848601924,
+  "temporal_delta": 0.0023125031453831157,
+  "temporal_worsened_ratio": 0.0193765188445053
+}

@@ -1,0 +1,8 @@
+{
+  "samples": 3600,
+  "sea_raft_latency_ms_per_sample": 10.747226602009809,
+  "quality_model_latency_ms_per_batch": 4.325935097618236,
+  "quality_model_latency_ms_per_sample": 0.2703709436011397,
+  "peak_gpu_memory_gib_total_pipeline": 2.1005334854125977,
+  "parameter_count": 1155
+}

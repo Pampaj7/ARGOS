@@ -1,0 +1,42 @@
+{
+  "mode": "train",
+  "output": "results/quality_prediction/pilot/q0_3_patch16",
+  "checkpoint": null,
+  "architecture": "q0_3",
+  "channels": 24,
+  "target_mode": "absolute",
+  "patch_size": 16,
+  "ranking_weight": 0.5,
+  "advantage_weight": 0.0,
+  "uncertainty_weight": 0.0,
+  "indifference_margin": 0.1,
+  "coverage_threshold": 0.5,
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": [
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "max_train_samples_per_sequence": 48,
+  "max_validation_samples_per_sequence": 24,
+  "epochs": 3,
+  "steps": 0,
+  "batch_size": 16,
+  "workers": 8,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "seed": 20260713,
+  "device": "cuda:1",
+  "resume": false,
+  "evaluation_sample_pixels": 256
+}

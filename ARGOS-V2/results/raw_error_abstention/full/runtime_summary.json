@@ -1,0 +1,13 @@
+{
+  "detector_parameters": 1107,
+  "detector_receptive_field_cache_pixels": 1,
+  "detector_latency_ms_per_frame_batch16_h100": 0.0450,
+  "detector_peak_allocated_mb_batch16_including_inputs": 104.88,
+  "frozen_a2_parameters": 39299,
+  "sea_raft_latency_ms_per_frame_validated_reference": 5.7801,
+  "bida_evidence_latency_ms_per_frame_validated_reference": 7.5396,
+  "seen_evaluation_seconds_including_metrics": 60.70,
+  "unseen_evaluation_seconds_including_metrics": 16.83,
+  "note": "SEA-RAFT/BiDA reference timing comes from results/bidavideo_validation at the same 144x180 cache grid."
+}
+

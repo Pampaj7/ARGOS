@@ -1,0 +1,40 @@
+{
+  "mode": "evaluate",
+  "output": "results/quality_prediction",
+  "checkpoint": "results/quality_prediction/checkpoints/best_validation.pt",
+  "architecture": "q0_1",
+  "channels": 24,
+  "trainable_uncertainty": true,
+  "target_mode": "uncertainty",
+  "patch_size": 1,
+  "ranking_weight": 0.5,
+  "advantage_weight": 0.0,
+  "uncertainty_weight": 1.0,
+  "indifference_margin": 0.1,
+  "hard_negative_weight": 0.0,
+  "coverage_threshold": 0.5,
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": null,
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "max_train_samples_per_sequence": 256,
+  "max_validation_samples_per_sequence": 300,
+  "epochs": 6,
+  "steps": 0,
+  "batch_size": 16,
+  "workers": 16,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "seed": 20260713,
+  "device": "cuda:0",
+  "resume": true,
+  "evaluation_sample_pixels": 256
+}

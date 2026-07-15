@@ -1,0 +1,45 @@
+{
+  "detector": {
+    "auroc": 0.8730440358626026,
+    "average_precision": 0.4030574054060783,
+    "brier": 0.02600531466305256,
+    "ece": 0.00506065097583222,
+    "raw_error_mae": 0.13728609681129456,
+    "pearson": 0.4555808280398528,
+    "spearman": 0.3109501513058441,
+    "uncertainty_error_correlation": 0.3869344135959016,
+    "temperature": 0.7403659224510193
+  },
+  "balanced_seen": {
+    "epe": 0.934659526895616,
+    "raw_epe": 0.9616051806244463,
+    "false_update_rate": 0.01923392544286942,
+    "clean_pixel_degradation": 0.00971446635356628,
+    "intervention_coverage": 0.05622460677037979
+  },
+  "seen_backbones_improved": 3,
+  "promotion": "GO",
+  "unseen_evaluated": true,
+  "reason": "Frozen one-shot unseen result; no post-unseen tuning.",
+  "unseen": {
+    "backbone": "Fast-FoundationStereo",
+    "sequences": [
+      "dataset_7_keyframe_3",
+      "dataset_7_keyframe_4"
+    ],
+    "checkpoint": "results/raw_error_abstention/full/checkpoints/best_validation.pt",
+    "operating_modes_source": "results/raw_error_abstention/full/operating_modes.json",
+    "epe": 0.9523085809256692,
+    "raw_epe": 0.9757408121148207,
+    "epe_gain": 0.023432231189151498,
+    "false_update_rate": 0.018779311074462186,
+    "clean_pixel_degradation": 0.009096858580669234,
+    "intervention_coverage": 0.05636432433171731,
+    "runtime": {
+      "total_evaluation_seconds": 16.82769477693364,
+      "detector_parameters": 1107,
+      "a2_parameters": 39299
+    },
+    "tuning_after_unseen": false
+  }
+}
