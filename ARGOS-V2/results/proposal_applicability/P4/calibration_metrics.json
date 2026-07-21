@@ -1,0 +1,19 @@
+{
+  "variant": "P4",
+  "epsilon_px": 0.1,
+  "sample_count": 1503684,
+  "helpful_prevalence": 0.033871478315922764,
+  "proposal_predictor": {
+    "auroc": 0.9779459209505927,
+    "average_precision": 0.5670792337092457
+  },
+  "raw_error_detector_proxy": {
+    "auroc": 0.9206576741309557,
+    "average_precision": 0.41433608321067433
+  },
+  "utility_mae": 0.04558844491839409,
+  "utility_pearson": 0.32172398874407204,
+  "utility_spearman": -0.008176930625247339,
+  "uncertainty_error_correlation": 0.6440319150734612,
+  "three_class_macro_f1": 0.6410401901020076
+}

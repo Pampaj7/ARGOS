@@ -1,0 +1,46 @@
+{
+  "balanced": {
+    "D4D_a2_epe": 0.8472868204116821,
+    "D4D_clean_degradation": 0.0004623208506703652,
+    "D4D_epe_gain": -0.00020170211791992188,
+    "D4D_false_update_rate": 0.0004623208506703652,
+    "D4D_intervention_coverage": 0.00044777790216052836,
+    "D4D_intervention_precision": 0.0,
+    "D4D_raw_epe": 0.882704496383667,
+    "D4D_refined_epe": 0.8829061985015869,
+    "D4D_retained_a2_gain": -0.005694956328570707,
+    "SCARED-C_a2_epe": 0.18235889077186584,
+    "SCARED-C_clean_degradation": 0.001191050641554248,
+    "SCARED-C_epe_gain": 0.0029768645763397217,
+    "SCARED-C_false_update_rate": 0.002225658554357938,
+    "SCARED-C_intervention_coverage": 0.00886489448580952,
+    "SCARED-C_intervention_precision": 0.7584396099024756,
+    "SCARED-C_raw_epe": 0.19187043607234955,
+    "SCARED-C_refined_epe": 0.18889357149600983,
+    "SCARED-C_retained_a2_gain": 0.3129738104899038,
+    "error_threshold_px": 0.25,
+    "probability_threshold": 0.5,
+    "uncertainty_threshold_px": 2.0
+  },
+  "candidate": "results/multidomain_raw_error/M1/D1",
+  "checkpoint_validation_loss": 0.5656104325782507,
+  "eligible": false,
+  "fold": "m1",
+  "modes": {
+    "balanced": {
+      "error_threshold_px": 0.25,
+      "maximum_update_px": 3.0,
+      "name": "balanced",
+      "probability_threshold": 0.5,
+      "uncertainty_threshold_px": 2.0
+    },
+    "ultra_safe": {
+      "error_threshold_px": 0.25,
+      "maximum_update_px": 3.0,
+      "name": "ultra_safe",
+      "probability_threshold": 0.5,
+      "uncertainty_threshold_px": 0.25
+    }
+  },
+  "temperature": 2.8643381595611572
+}

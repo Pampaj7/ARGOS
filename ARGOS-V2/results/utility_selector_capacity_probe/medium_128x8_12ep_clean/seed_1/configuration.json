@@ -1,0 +1,58 @@
+{
+  "mode": "train",
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/utility_selector_capacity_probe/medium_128x8_12ep_clean/seed_1",
+  "checkpoint": null,
+  "seed": 1,
+  "device": "cuda:0",
+  "workers": 20,
+  "preload_workers": 0,
+  "batch_size": 64,
+  "epochs": 12,
+  "steps": 0,
+  "channels": 128,
+  "blocks": 8,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "coverage_threshold": 0.5,
+  "epsilon": 0.1,
+  "regional_target_kernel": 1,
+  "selective_target_coverage": 0.02,
+  "selective_coverage_weight": 32.0,
+  "selective_risk_weight": 10.0,
+  "objective": "legacy",
+  "crop_height": 96,
+  "crop_width": 120,
+  "validation_pair_cap": 0,
+  "resume": true,
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "stereo_photometric": false,
+  "stereo_photometric_kernel": 21,
+  "sampler": "hierarchical_dataset",
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "test_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "strict_dataset_id_disjoint": true
+}

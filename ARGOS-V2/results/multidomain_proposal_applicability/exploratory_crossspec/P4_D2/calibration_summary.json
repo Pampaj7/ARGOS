@@ -1,0 +1,32 @@
+{
+  "a2_checkpoint": "results/multidomain_a2_proposal_v2/M1/frozen/checkpoints/best_validation.pt",
+  "a2_sha256": "20c6c50898e1ae45c0aeedffd2118599cd12dfa4a3b29acddb9ec731d59fde9c",
+  "bida_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+  "bida_source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+  "checkpoint": "results/multidomain_proposal_applicability/exploratory_crossspec/P4_D2/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "333f8ae0dba35a530d7cdc5aef08e43e1e1cd35c5643bbe092bafcd48b64b8b7",
+  "eligible": true,
+  "final_only_not_loaded": [
+    "D4D/specimen_3",
+    "SERV-CT",
+    "StereoMIS",
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "reason": "selected only on SCARED-C validation in an exploratory cross-specimen control; final-only data not loaded",
+  "sea_raft": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+  "sea_raft_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+  "selected": {
+    "SCARED-C_clean_degradation": 0.0007251078932002309,
+    "SCARED-C_coverage": 0.01632807310539497,
+    "SCARED-C_false_update_rate": 0.006654717163892906,
+    "SCARED-C_gain": 0.01575484871864319,
+    "SCARED-C_harmful_acceptance": 0.044135450790485684,
+    "SCARED-C_output_epe": 0.17048023641109467,
+    "SCARED-C_precision": 0.7127011821677823,
+    "SCARED-C_raw_epe": 0.18623508512973785,
+    "require_helpful_class": false,
+    "uncertainty_threshold_px": 1.0,
+    "utility_margin_px": 0.0
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "candidates": [
+    {
+      "name": "D1",
+      "path": "results/multidomain_a2_proposal_v2/M1/D1/checkpoints/best_validation.pt",
+      "score": 0.8184833196226038,
+      "eligible": true,
+      "scared": {
+        "raw_epe": 0.7109291618472483,
+        "refined_epe": 0.7051928487507404,
+        "oracle_epe": 0.6312407986169651,
+        "gain": 0.005736313096507906,
+        "oracle_gain": 0.07968836323028317,
+        "oracle_recovery": 0.07198432574064957,
+        "false_update_rate": 0.1427721613119149,
+        "valid_pixels": 10640211,
+        "per_backbone": {
+          "S2M2-S": {
+            "raw_epe": 0.7588056050833868,
+            "refined_epe": 0.752683161223636,
+            "gain": 0.00612244385975078,
+            "valid_pixels": 3546737
+          },
+          "RAFT-Stereo": {
+            "raw_epe": 0.6832824316834178,
+            "refined_epe": 0.6757194018921336,
+            "gain": 0.007563029791284139,
+            "valid_pixels": 3546737
+          },
+          "StereoAnywhere": {
+            "raw_epe": 0.6906994338487096,
+            "refined_epe": 0.687175994564183,
+            "gain": 0.0035234392845266004,
+            "valid_pixels": 3546737
+          }
+        }
+      },
+      "d4d": {
+        "raw_epe": 0.8827044944887024,
+        "refined_epe": 0.5693756414396585,
+        "oracle_epe": 0.8358148685644499,
+        "gain": 0.3133288530490439,
+        "oracle_gain": 0.0468896259242525,
+        "oracle_recovery": 6.682263866962997,
+        "false_update_rate": 1.0,
+        "valid_pixels": 8933,
+        "per_backbone": {
+          "S2M2-S": {
+            "raw_epe": 0.8827044996131138,
+            "refined_epe": 0.5693756275610442,
+            "gain": 0.3133288720520696,
+            "valid_pixels": 8933
+          }
+        }
+      }
+    },
+    {
+      "name": "D2",
+      "path": "results/multidomain_a2_proposal_v2/M1/D2/checkpoints/best_validation.pt",
+      "score": 0.8052144926040574,
+      "eligible": true,
+      "scared": {
+        "raw_epe": 0.7109291618472483,
+        "refined_epe": 0.7018758395980318,
+        "oracle_epe": 0.6312407986169651,
+        "gain": 0.009053322249216511,
+        "oracle_gain": 0.07968836323028317,
+        "oracle_recovery": 0.113609087729086,
+        "false_update_rate": 0.10382690377653284,
+        "valid_pixels": 10640211,
+        "per_backbone": {
+          "S2M2-S": {
+            "raw_epe": 0.7588056050833868,
+            "refined_epe": 0.7480320156623207,
+            "gain": 0.010773589421066085,
+            "valid_pixels": 3546737
+          },
+          "RAFT-Stereo": {
+            "raw_epe": 0.6832824316834178,
+            "refined_epe": 0.6731403159132973,
+            "gain": 0.010142115770120532,
+            "valid_pixels": 3546737
+          },
+          "StereoAnywhere": {
+            "raw_epe": 0.6906994338487096,
+            "refined_epe": 0.6844551991503737,
+            "gain": 0.0062442346983359555,
+            "valid_pixels": 3546737
+          }
+        }
+      },
+      "d4d": {
+        "raw_epe": 0.8827044944887024,
+        "refined_epe": 0.5500692027847938,
+        "oracle_epe": 0.8358148685644499,
+        "gain": 0.3326352917039086,
+        "oracle_gain": 0.0468896259242525,
+        "oracle_recovery": 7.094006086575778,
+        "false_update_rate": 0.9953767914932964,
+        "valid_pixels": 8933,
+        "per_backbone": {
+          "S2M2-S": {
+            "raw_epe": 0.8827044996131138,
+            "refined_epe": 0.550069204706448,
+            "gain": 0.33263529490666577,
+            "valid_pixels": 8933
+          }
+        }
+      }
+    }
+  ],
+  "selection_domains": [
+    "SCARED-C validation",
+    "D4D specimen-2"
+  ],
+  "unseen_not_loaded": [
+    "SERV-CT",
+    "StereoMIS",
+    "Fast-FoundationStereo",
+    "CREStereo",
+    "D4D/specimen-3"
+  ],
+  "status": "frozen before final-only data",
+  "selected": {
+    "name": "D2",
+    "path": "results/multidomain_a2_proposal_v2/M1/D2/checkpoints/best_validation.pt",
+    "score": 0.8052144926040574,
+    "eligible": true,
+    "scared": {
+      "raw_epe": 0.7109291618472483,
+      "refined_epe": 0.7018758395980318,
+      "oracle_epe": 0.6312407986169651,
+      "gain": 0.009053322249216511,
+      "oracle_gain": 0.07968836323028317,
+      "oracle_recovery": 0.113609087729086,
+      "false_update_rate": 0.10382690377653284,
+      "valid_pixels": 10640211,
+      "per_backbone": {
+        "S2M2-S": {
+          "raw_epe": 0.7588056050833868,
+          "refined_epe": 0.7480320156623207,
+          "gain": 0.010773589421066085,
+          "valid_pixels": 3546737
+        },
+        "RAFT-Stereo": {
+          "raw_epe": 0.6832824316834178,
+          "refined_epe": 0.6731403159132973,
+          "gain": 0.010142115770120532,
+          "valid_pixels": 3546737
+        },
+        "StereoAnywhere": {
+          "raw_epe": 0.6906994338487096,
+          "refined_epe": 0.6844551991503737,
+          "gain": 0.0062442346983359555,
+          "valid_pixels": 3546737
+        }
+      }
+    },
+    "d4d": {
+      "raw_epe": 0.8827044944887024,
+      "refined_epe": 0.5500692027847938,
+      "oracle_epe": 0.8358148685644499,
+      "gain": 0.3326352917039086,
+      "oracle_gain": 0.0468896259242525,
+      "oracle_recovery": 7.094006086575778,
+      "false_update_rate": 0.9953767914932964,
+      "valid_pixels": 8933,
+      "per_backbone": {
+        "S2M2-S": {
+          "raw_epe": 0.8827044996131138,
+          "refined_epe": 0.550069204706448,
+          "gain": 0.33263529490666577,
+          "valid_pixels": 8933
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "a2": {
+      "path": "results/multidomain_a2_proposal_v2/M1/frozen/checkpoints/best_validation.pt",
+      "sha256": "20c6c50898e1ae45c0aeedffd2118599cd12dfa4a3b29acddb9ec731d59fde9c"
+    },
+    "sea_raft": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    "bida": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+      "sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+    }
+  }
+}

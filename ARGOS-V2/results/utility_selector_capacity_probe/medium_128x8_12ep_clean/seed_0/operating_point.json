@@ -1,0 +1,28 @@
+{
+  "balanced": {
+    "probability_threshold": 0.5,
+    "utility_threshold_px": 0.0,
+    "harm_threshold_px": 0.1,
+    "coverage": 0.0027584072764252096,
+    "precision": 0.8154497124877943,
+    "harmful_acceptance": 0.12607138982315286,
+    "harm_cost_fraction": 0.04089879185471923,
+    "net_utility": 0.003304482204839587,
+    "mean_selected_utility": 1.1979674100875854,
+    "clean_selection": 0.05847889768905284
+  },
+  "calibration_constraint_feasible": true,
+  "constraint": "harm_cost_fraction <= 0.25 and coverage >= 0.002",
+  "selected_only_on": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/utility_selector_capacity_probe/medium_128x8_12ep_clean/seed_0/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "6d73cde46b50beab08dac70ca6d4d50603835a8e031b0abf4f7418c0372d0dcc",
+  "frozen_hashes": {
+    "sea_raft_checkpoint": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "bida_source": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+    "cache_contract": "positive-left disparity [T,144,180], float16; valid mask; frame IDs verified by loader"
+  }
+}

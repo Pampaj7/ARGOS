@@ -1,0 +1,18 @@
+{
+  "scope": "dual-stage authorization task only",
+  "tracked_diff_note": "All task files are new/untracked in the current dirty worktree, so plain git diff --stat does not enumerate them until staged.",
+  "source_files_added": 4,
+  "source_lines_added": 1074,
+  "source_files": {
+    "model_design/DUAL_STAGE_AUTHORIZATION_AUDIT.md": 136,
+    "model_design/models/dual_stage_authorization.py": 114,
+    "model_design/tests/test_dual_stage_authorization.py": 209,
+    "scripts/run_dual_stage_authorization.py": 615
+  },
+  "result_directory": "results/dual_stage_authorization",
+  "result_files": 22,
+  "dense_prediction_caches_added": 0,
+  "checkpoints_added": 0,
+  "existing_validated_files_modified": 0,
+  "unrelated_dirty_changes_preserved": true
+}

@@ -1,0 +1,101 @@
+{
+  "overall": {
+    "valid_pixels": 9661747,
+    "backbone_count": 3,
+    "sequence_count": 2,
+    "raw_epe": 0.15909501388026567,
+    "lrc_mean": 0.05939902545195109,
+    "lrc_raw_error_pearson": 0.24415723167007122,
+    "lrc_raw_bad1_auroc": 0.6333285105053902,
+    "lrc_difference_utility_pearson": 0.22708823906254091,
+    "lrc_memory_better_auroc": 0.40768148210674,
+    "sequence_bootstrap": {
+      "raw_epe": {
+        "sequence_mean": 0.1657005399465561,
+        "sequence_std": 0.007830689350763947,
+        "ci95": [
+          0.15786985059579214,
+          0.17353122929732004
+        ],
+        "independent_sequence_count": 2
+      },
+      "lrc_mean": {
+        "sequence_mean": 0.06372078942755859,
+        "sequence_std": 0.005121866241097454,
+        "ci95": [
+          0.05859892318646113,
+          0.06884265566865604
+        ],
+        "independent_sequence_count": 2
+      },
+      "lrc_raw_error_pearson": {
+        "sequence_mean": 0.20747207978649057,
+        "sequence_std": 0.04349081352215879,
+        "ci95": [
+          0.16398126626433177,
+          0.25096289330864935
+        ],
+        "independent_sequence_count": 2
+      },
+      "lrc_raw_bad1_auroc": {
+        "sequence_mean": 0.7260240074912246,
+        "sequence_std": 0.10989762561634131,
+        "ci95": [
+          0.6161263818748833,
+          0.835921633107566
+        ],
+        "independent_sequence_count": 2
+      },
+      "lrc_difference_utility_pearson": {
+        "sequence_mean": 0.24200075130496967,
+        "sequence_std": 0.0176766490902127,
+        "ci95": [
+          0.224324102214757,
+          0.2596774003951824
+        ],
+        "independent_sequence_count": 2
+      },
+      "lrc_memory_better_auroc": {
+        "sequence_mean": 0.44009053392012343,
+        "sequence_std": 0.03841749552819121,
+        "ci95": [
+          0.40167303839193225,
+          0.47850802944831466
+        ],
+        "independent_sequence_count": 2
+      }
+    }
+  },
+  "per_backbone": {
+    "RAFT-Stereo": {
+      "sequence_count": 2,
+      "valid_pixels": 3220687,
+      "raw_epe": 0.14296248176193074,
+      "lrc_mean": 0.03470359246290173,
+      "lrc_raw_error_pearson": 0.27596732749190733,
+      "lrc_raw_bad1_auroc": 0.6517329362153813,
+      "lrc_difference_utility_pearson": 0.1690250943217778,
+      "lrc_memory_better_auroc": 0.27444817021649043
+    },
+    "S2M2-S": {
+      "sequence_count": 2,
+      "valid_pixels": 3220324,
+      "raw_epe": 0.1730553390394794,
+      "lrc_mean": 0.09910219601993644,
+      "lrc_raw_error_pearson": 0.2057331840084338,
+      "lrc_raw_bad1_auroc": 0.612722978343941,
+      "lrc_difference_utility_pearson": 0.3043988007122279,
+      "lrc_memory_better_auroc": 0.5380711333160577
+    },
+    "StereoAnywhere": {
+      "sequence_count": 2,
+      "valid_pixels": 3220736,
+      "raw_epe": 0.1612687612201855,
+      "lrc_mean": 0.0443959910309447,
+      "lrc_raw_error_pearson": 0.2507667522205829,
+      "lrc_raw_bad1_auroc": 0.6355272610784433,
+      "lrc_difference_utility_pearson": 0.20784982843581692,
+      "lrc_memory_better_auroc": 0.4105397953714339
+    }
+  }
+}

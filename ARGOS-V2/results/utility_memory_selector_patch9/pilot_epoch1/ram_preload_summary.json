@@ -1,0 +1,14 @@
+{
+  "train": {
+    "enabled": true,
+    "frames": 12865,
+    "bytes": 3668068800,
+    "workers": 32
+  },
+  "validation": {
+    "enabled": true,
+    "frames": 1275,
+    "bytes": 363528000,
+    "workers": 32
+  }
+}

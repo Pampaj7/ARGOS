@@ -1,0 +1,158 @@
+{
+  "config": {
+    "cres_max_pairs": 160,
+    "d4d_max_windows": 156,
+    "device": "cuda:0",
+    "output": "results/calibration_shift_audit",
+    "reference_max_pairs": 160,
+    "sample_pixels_per_frame": 128,
+    "seed": 20260715,
+    "smoke": false,
+    "stereomis_samples_per_sequence": 128
+  },
+  "dataset_statistics": [
+    {
+      "authorized_pixels": 3023437.0,
+      "clean_degradation_ratio": 0.010705161373779186,
+      "clean_degradations": 66205.0,
+      "clean_pixels": 6184400.0,
+      "dataset": "SCARED-C-heldout",
+      "elapsed_s": 114.6568666473031,
+      "eligible_authorization_rate": 0.12470492554092584,
+      "eligible_pixels": 24244728.0,
+      "false_update_rate_among_gt_updates": 0.29377831799159043,
+      "false_updates": 118915.0,
+      "frames": 960.0,
+      "gt_authorized_pixels": 445721.0,
+      "gt_changed_pixels": 404778.0,
+      "gt_pixels": 7200261.0,
+      "incorrect_authorization_rate_gt": 0.3984532925305292,
+      "incorrect_authorizations": 177599.0,
+      "raw_wrong_pixels": 1015861.0,
+      "ultra_authorization_rate": 0.03775212491556927,
+      "ultra_authorized_pixels": 915290.0
+    },
+    {
+      "authorized_pixels": 1229918.0,
+      "clean_degradation_ratio": 0.01114755856233489,
+      "clean_degradations": 22871.0,
+      "clean_pixels": 2051660.0,
+      "dataset": "CREStereo",
+      "elapsed_s": 38.61408343911171,
+      "eligible_authorization_rate": 0.15218789008480524,
+      "eligible_pixels": 8081576.0,
+      "false_update_rate_among_gt_updates": 0.27296940826962723,
+      "false_updates": 42634.0,
+      "frames": 320.0,
+      "gt_authorized_pixels": 170013.0,
+      "gt_changed_pixels": 156186.0,
+      "gt_pixels": 2400087.0,
+      "incorrect_authorization_rate_gt": 0.3433737420079641,
+      "incorrect_authorizations": 58378.0,
+      "raw_wrong_pixels": 348427.0,
+      "ultra_authorization_rate": 0.055559583922739825,
+      "ultra_authorized_pixels": 449009.0
+    },
+    {
+      "authorized_pixels": 126379.0,
+      "clean_degradation_ratio": 0.25822321916646246,
+      "clean_degradations": 27398.0,
+      "clean_pixels": 106102.0,
+      "dataset": "SERV-CT",
+      "elapsed_s": 0.6556765781715512,
+      "eligible_authorization_rate": 0.48268868663180853,
+      "eligible_pixels": 261823.0,
+      "false_update_rate_among_gt_updates": 0.39225689698323163,
+      "false_updates": 40750.0,
+      "frames": 14.0,
+      "gt_authorized_pixels": 126379.0,
+      "gt_changed_pixels": 103886.0,
+      "gt_pixels": 261823.0,
+      "incorrect_authorization_rate_gt": 0.6415543721662618,
+      "incorrect_authorizations": 81079.0,
+      "raw_wrong_pixels": 155721.0,
+      "ultra_authorization_rate": 0.43322015254580387,
+      "ultra_authorized_pixels": 113427.0
+    },
+    {
+      "authorized_pixels": 6843191.0,
+      "clean_degradation_ratio": 0.20885547201336674,
+      "clean_degradations": 1500.0,
+      "clean_pixels": 7182.0,
+      "dataset": "D4D",
+      "elapsed_s": 23.531171530019492,
+      "eligible_authorization_rate": 0.5802296196960879,
+      "eligible_pixels": 11793936.0,
+      "false_update_rate_among_gt_updates": 0.15716350787022165,
+      "false_updates": 1957.0,
+      "frames": 468.0,
+      "gt_authorized_pixels": 16739.0,
+      "gt_changed_pixels": 12452.0,
+      "gt_pixels": 32175.0,
+      "incorrect_authorization_rate_gt": 0.41047852320927175,
+      "incorrect_authorizations": 6871.0,
+      "raw_wrong_pixels": 24993.0,
+      "ultra_authorization_rate": 0.2845352052105421,
+      "ultra_authorized_pixels": 3355790.0
+    },
+    {
+      "authorized_pixels": 354979.0,
+      "clean_degradation_ratio": 0.0,
+      "clean_degradations": 0.0,
+      "clean_pixels": 0.0,
+      "dataset": "StereoMIS",
+      "elapsed_s": 88.10904812114313,
+      "eligible_authorization_rate": 0.03613072973124272,
+      "eligible_pixels": 9824850.0,
+      "false_update_rate_among_gt_updates": 0.0,
+      "false_updates": 0.0,
+      "frames": 384.0,
+      "gt_authorized_pixels": 0.0,
+      "gt_changed_pixels": 0.0,
+      "incorrect_authorization_rate_gt": 0.0,
+      "incorrect_authorizations": 0.0,
+      "ultra_authorization_rate": 0.011273556339282533,
+      "ultra_authorized_pixels": 110761.0
+    }
+  ],
+  "decision": "B \u2014 feature-space support detector is sufficient",
+  "decision_evidence": {
+    "cres_feature_overlap": 0.9283203125,
+    "d4d_ultra_authorization_rate": 0.2845352052105421,
+    "ood_feature_overlap": 0.039101166009562954,
+    "ood_incorrect_authorization_rate": 0.6145278721055353,
+    "rationale": "Failed OOD domains are separated from SCARED-C/CRES in the frozen penultimate feature space.",
+    "serv_ultra_authorization_rate": 0.43322015254580387
+  },
+  "frozen": {
+    "a2": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/learned_t1_refiner/ablations/A2/checkpoints/best_validation.pt",
+      "sha256": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea"
+    },
+    "a2_source": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/learned_t1_refiner.py",
+      "sha256": "6b0b8de0616506058e889c05c5a35af7ec40cc6464fc3ae38357f19ad6dc6bde"
+    },
+    "abstention_source": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/abstention.py",
+      "sha256": "ff8af2cbf28a9b85cd83c5d449473f52734c531a5710993408fd3b01a1f1a9f6"
+    },
+    "bidavideo_source": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+      "sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+    },
+    "detector": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/checkpoints/best_validation.pt",
+      "sha256": "78b1bb6cf809dc76448222e41e3bcfafb754bc9b7b6629edcdfa2e1a33444e67"
+    },
+    "detector_source": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_error_detector.py",
+      "sha256": "fd0fc03be3b3b02d61d047ba415e09e3e09aa1601f043ef6ce004b9cc1b9829f"
+    },
+    "modes": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/operating_modes.json",
+      "sha256": "791f27d21e3f9fa63fe267d5742c4fb85226f49e6027b285aeb90754fbe10b69"
+    }
+  },
+  "sample_pixels": 262468
+}

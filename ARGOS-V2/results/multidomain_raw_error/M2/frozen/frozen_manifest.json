@@ -1,0 +1,35 @@
+{
+  "artifacts": {
+    "a2": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/learned_t1_refiner/ablations/A2/checkpoints/best_validation.pt",
+      "sha256": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea"
+    },
+    "bida_source": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+      "sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+    },
+    "detector": {
+      "path": "results/multidomain_raw_error/M2/frozen/checkpoints/best_validation.pt",
+      "sha256": "c01b021c0ed31927db9dbefa6e09773a5524b4ce01a20b4a19cb89ab9ee034e5"
+    },
+    "modes": {
+      "path": "results/multidomain_raw_error/M2/frozen/operating_modes.json",
+      "sha256": "de896ca18cbf9ccb1d1aa89d7b1d28bccfd259b09c38ffee30b7fea37fa86326"
+    },
+    "sea_raft": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    "split": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/split_manifest.json",
+      "sha256": "18dfe0c7148b1858df0fd2ac337931900d75853dd9041f6165ac5f1eabfdd429"
+    }
+  },
+  "fold": "m2",
+  "forbidden_not_loaded": [
+    "D4D",
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "status": "frozen before unseen-domain/backbone loading"
+}

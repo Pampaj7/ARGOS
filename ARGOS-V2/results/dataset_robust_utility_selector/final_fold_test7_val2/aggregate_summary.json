@@ -1,0 +1,63 @@
+{
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "seed_count": 3,
+  "metrics": {
+    "raw_epe": {
+      "mean": 0.5336854771427203,
+      "sample_std": 0.0
+    },
+    "selector_epe": {
+      "mean": 0.5217950091013382,
+      "sample_std": 0.003057428715116389
+    },
+    "gain": {
+      "mean": 0.011890468041381977,
+      "sample_std": 0.003057428715116389
+    },
+    "oracle_gain": {
+      "mean": 0.05232582964108873,
+      "sample_std": 0.0
+    },
+    "oracle_recovery": {
+      "mean": 0.2272389778230103,
+      "sample_std": 0.058430582679487045
+    },
+    "false_update_rate": {
+      "mean": 0.005966565821820022,
+      "sample_std": 0.008524082546300963
+    },
+    "clean_pixel_degradation": {
+      "mean": 0.0028855514938678547,
+      "sample_std": 0.00370351957887631
+    },
+    "intervention_coverage": {
+      "mean": 0.009660809126366866,
+      "sample_std": 0.010722775441603228
+    },
+    "intervention_precision": {
+      "mean": 0.3941151001033265,
+      "sample_std": 0.14035312459583926
+    },
+    "frames_worsened_fraction": {
+      "mean": 0.08997896347293938,
+      "sample_std": 0.05485221736556959
+    },
+    "worst_frame_degradation": {
+      "mean": 0.44511667887369794,
+      "sample_std": 0.2559083865190589
+    }
+  },
+  "all_seeds_promoted": false,
+  "verdict": "NO-GO for promotion: positive geometry gain, but every seed recovers less than 50% of the raw-or-memory oracle gain.",
+  "final_test_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "statistical_caveat": "Bootstrap units are complete test sequences; backbone results on the same video are repeated measurements, not independent units."
+}

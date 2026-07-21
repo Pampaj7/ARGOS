@@ -63,6 +63,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mode", choices=("smoke", "train", "evaluate", "unseen"), required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path)
+    parser.add_argument("--a2-checkpoint", type=Path, default=A2_CHECKPOINT)
+    parser.add_argument(
+        "--unseen-backbone",
+        choices=(PRIMARY_UNSEEN_BACKBONE, "CREStereo"),
+        default=PRIMARY_UNSEEN_BACKBONE,
+    )
     parser.add_argument("--architecture", choices=ARCHITECTURES, default="s2")
     parser.add_argument("--loss-mode", choices=("a0", "a1", "a2", "a3", "a4"), default="a4")
     parser.add_argument("--channels", type=int, default=24)
@@ -78,6 +84,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-validation-pairs", type=int, default=160)
     parser.add_argument("--learning-rate", type=float, default=2e-3)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
+    parser.add_argument("--scheduler", choices=("none", "onecycle"), default="none")
     parser.add_argument("--seed", type=int, default=20260714)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--resume", action=argparse.BooleanOptionalAction, default=True)
@@ -134,8 +141,11 @@ def to_device(batch: dict, device: torch.device) -> dict:
     return {k: v.to(device, non_blocking=True) if torch.is_tensor(v) else v for k, v in batch.items()}
 
 
-def load_a2(device: torch.device) -> LearnedT1Refiner:
-    payload = torch.load(A2_CHECKPOINT, map_location="cpu", weights_only=False)
+def load_a2(
+    device: torch.device,
+    checkpoint: Path = A2_CHECKPOINT,
+) -> LearnedT1Refiner:
+    payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
     model = LearnedT1Refiner("A2", tau_px=float(payload.get("tau_px", 3.0)))
     model.load_state_dict(payload["model"], strict=True)
     model.to(device).eval().requires_grad_(False)
@@ -246,8 +256,19 @@ def train(args) -> None:
     val_set = RawErrorDataset(train_backbones, list(CALIBRATION_SEQUENCES), coverage_threshold=args.coverage_threshold,
         max_pairs_per_sequence=val_pairs, random_clip_start=False, seed=args.seed)
     model = RawErrorDetector(args.architecture, channels=args.channels).to(device)
-    a2 = load_a2(device); adapter = BiDAFlowInferenceAdapter("sea_raft", device=device)
+    a2 = load_a2(device, args.a2_checkpoint); adapter = BiDAFlowInferenceAdapter("sea_raft", device=device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay)
+    scheduler = None
+    if args.scheduler == "onecycle":
+        if smoke:
+            raise ValueError("onecycle is reserved for fixed-length full training")
+        steps_per_epoch = math.ceil(len(train_set) / args.batch_size)
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(
+            optimizer,
+            max_lr=args.learning_rate,
+            epochs=epochs,
+            steps_per_epoch=steps_per_epoch,
+        )
     history_path = args.output / "training_history.csv"; history = []
     if args.resume and history_path.exists() and not smoke:
         with history_path.open(newline="") as handle:
@@ -257,6 +278,8 @@ def train(args) -> None:
     if args.resume and last_path.exists() and not smoke:
         state = torch.load(last_path, map_location="cpu", weights_only=False)
         model.load_state_dict(state["model"]); optimizer.load_state_dict(state["optimizer"])
+        if scheduler is not None:
+            scheduler.load_state_dict(state["scheduler"])
         start_epoch = int(state["epoch"]); best = float(state["best_validation_loss"])
     initial = None; global_step = 0
     for epoch in range(start_epoch, epochs):
@@ -272,17 +295,20 @@ def train(args) -> None:
             if initial is None: initial = float(losses["total"].detach())
             optimizer.zero_grad(set_to_none=True); losses["total"].backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0); optimizer.step()
+            if scheduler is not None: scheduler.step()
             for key, value in losses.items(): sums[key] += float(value.detach())
             batches += 1; global_step += 1
             if args.steps and global_step >= args.steps: break
         metrics = validate(model, a2, adapter, loader(val_set, args, False), device, args)
-        row = {"epoch": epoch + 1, **{f"train_{k}": v / max(batches, 1) for k, v in sums.items()}, **metrics}
+        row = {"epoch": epoch + 1, "learning_rate": optimizer.param_groups[0]["lr"],
+            **{f"train_{k}": v / max(batches, 1) for k, v in sums.items()}, **metrics}
         history.append(row); write_csv(history_path, history)
         score = metrics["loss_total"]
-        payload = {"model": model.state_dict(), "optimizer": optimizer.state_dict(), "epoch": epoch + 1,
+        payload = {"model": model.state_dict(), "optimizer": optimizer.state_dict(),
+            "scheduler": scheduler.state_dict() if scheduler is not None else None, "epoch": epoch + 1,
             "best_validation_loss": min(best, score), "architecture": args.architecture,
             "channels": args.channels, "config": vars(args), "split_manifest": manifest,
-            "a2_checkpoint": str(A2_CHECKPOINT), "loss_config": asdict(loss_config(args))}
+            "a2_checkpoint": str(args.a2_checkpoint), "loss_config": asdict(loss_config(args))}
         atomic_checkpoint(last_path, payload)
         if score < best:
             best = score; payload["best_validation_loss"] = best
@@ -404,7 +430,11 @@ def boundary_mask_tensor(gt: torch.Tensor) -> torch.Tensor:
 
 @torch.no_grad()
 def evaluate_seen(model, a2, adapter, dataset, modes, temperature, device, args) -> tuple[list[dict], dict]:
-    rows = []; model.eval(); start = time.perf_counter()
+    rows = []; model.eval()
+    if device.type == "cuda":
+        torch.cuda.reset_peak_memory_stats(device)
+        torch.cuda.synchronize(device)
+    start = time.perf_counter()
     for cpu in loader(dataset, args, False):
         batch = to_device(cpu, device); evidence, _ = build_evidence(adapter, batch)
         inp, proposal = detector_evidence(a2, batch, evidence); detector = model(inp)
@@ -434,7 +464,13 @@ def evaluate_seen(model, a2, adapter, dataset, modes, temperature, device, args)
                             batch["gt"][index:index+1], common[index:index+1], boundary[index:index+1],
                             updates[method][index:index+1])}
                     rows.append(row)
-    runtime = {"total_evaluation_seconds": time.perf_counter()-start,
+    if device.type == "cuda":
+        torch.cuda.synchronize(device)
+    elapsed = time.perf_counter() - start
+    runtime = {"total_evaluation_seconds": elapsed,
+        "evaluated_frames": len(dataset),
+        "wall_ms_per_frame": 1000.0 * elapsed / max(len(dataset), 1),
+        "peak_gpu_memory_mb": torch.cuda.max_memory_allocated(device) / 2**20 if device.type == "cuda" else 0.0,
         "detector_parameters": sum(p.numel() for p in model.parameters()),
         "a2_parameters": sum(p.numel() for p in a2.parameters())}
     return rows, runtime
@@ -519,7 +555,7 @@ def evaluate(args) -> None:
             setattr(args, name, frozen_config[name])
     model=RawErrorDetector(args.architecture,channels=args.channels).to(device)
     model.load_state_dict(state["model"]); model.eval()
-    a2=load_a2(device); adapter=BiDAFlowInferenceAdapter("sea_raft",device=device)
+    a2=load_a2(device,args.a2_checkpoint); adapter=BiDAFlowInferenceAdapter("sea_raft",device=device)
     calibration=RawErrorDataset(SEEN_BACKBONES,CALIBRATION_SEQUENCES,coverage_threshold=args.coverage_threshold,
         max_pairs_per_sequence=args.max_validation_pairs,random_clip_start=False,seed=args.seed)
     samples=collect_samples(model,a2,adapter,calibration,device,args)
@@ -584,7 +620,8 @@ def evaluate(args) -> None:
 
 def evaluate_unseen_once(args) -> None:
     """Apply already-frozen settings once; no calibration or selection is possible here."""
-    completion = args.output / "unseen_fast_foundation_complete.json"
+    slug = "fast_foundation" if args.unseen_backbone == PRIMARY_UNSEEN_BACKBONE else "crestereo"
+    completion = args.output / f"unseen_{slug}_complete.json"
     if completion.exists():
         raise RuntimeError(f"one-shot unseen evaluation already completed: {completion}")
     seen_summary = json.loads((args.output / "aggregate_summary.json").read_text())
@@ -598,24 +635,24 @@ def evaluate_unseen_once(args) -> None:
     state = torch.load(checkpoint, map_location="cpu", weights_only=False)
     model = RawErrorDetector(state["architecture"], channels=int(state["channels"])).to(device)
     model.load_state_dict(state["model"]); model.eval()
-    a2 = load_a2(device); adapter = BiDAFlowInferenceAdapter("sea_raft", device=device)
+    a2 = load_a2(device, args.a2_checkpoint); adapter = BiDAFlowInferenceAdapter("sea_raft", device=device)
     dataset = TemporalPairDataset(
-        [PRIMARY_UNSEEN_BACKBONE], list(TEST_SEQUENCES),
+        [args.unseen_backbone], list(TEST_SEQUENCES),
         coverage_threshold=float(state["config"]["coverage_threshold"]),
         max_pairs_per_sequence=args.max_validation_pairs,
         random_clip_start=False, seed=args.seed,
     )
     rows, runtime = evaluate_seen(model, a2, adapter, dataset, modes, temperature, device, args)
     sequences = aggregate_rows(rows)
-    write_csv(args.output / "unseen_frame_metrics.csv", rows)
-    write_csv(args.output / "unseen_sequence_metrics.csv", sequences)
+    write_csv(args.output / f"unseen_{slug}_frame_metrics.csv", rows)
+    write_csv(args.output / f"unseen_{slug}_sequence_metrics.csv", sequences)
     primary = [r for r in sequences if r["coverage_threshold"] == .5 and r["method"] == "authorized_balanced"]
     total = sum(r["valid_count"] for r in primary)
     weighted = lambda metric: sum(r[metric] * r["valid_count"] for r in primary) / max(total, 1)
     clean_total = sum(r["clean_count"] for r in primary)
     safety = lambda metric: sum(r[metric] * r["clean_count"] for r in primary) / max(clean_total, 1)
     result = {
-        "backbone": PRIMARY_UNSEEN_BACKBONE,
+        "backbone": args.unseen_backbone,
         "sequences": list(TEST_SEQUENCES),
         "checkpoint": str(checkpoint),
         "operating_modes_source": str(args.output / "operating_modes.json"),

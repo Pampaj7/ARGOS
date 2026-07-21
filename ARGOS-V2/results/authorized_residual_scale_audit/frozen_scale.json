@@ -1,0 +1,189 @@
+{
+  "selected_only_on": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "coverage_threshold": 0.5,
+  "policy": "raw_error",
+  "scales": [
+    0.0,
+    0.05,
+    0.1,
+    0.2,
+    0.35,
+    0.5,
+    0.65,
+    0.8,
+    1.0
+  ],
+  "selection": {
+    "selection_rule": "maximize worst seen-backbone EPE gain subject to all-backbone clean degradation <=3% and false update <=5%; tie-break smaller scale",
+    "candidates": [
+      {
+        "scale": 0.0,
+        "minimum_backbone_gain": 0.0,
+        "mean_backbone_gain": 0.0,
+        "maximum_clean_degradation": 0.0,
+        "maximum_false_update_rate": 0.0,
+        "all_seen_backbones_present": true,
+        "eligible": false
+      },
+      {
+        "scale": 0.05,
+        "minimum_backbone_gain": 0.00020940180219258808,
+        "mean_backbone_gain": 0.00022131555300936948,
+        "maximum_clean_degradation": 0.00011500007624314446,
+        "maximum_false_update_rate": 0.00028432339292158644,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 0.1,
+        "minimum_backbone_gain": 0.00040891788596675305,
+        "mean_backbone_gain": 0.00043152183131641336,
+        "maximum_clean_degradation": 0.0007490888944235764,
+        "maximum_false_update_rate": 0.002267915868231515,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 0.2,
+        "minimum_backbone_gain": 0.0007756153067373095,
+        "mean_backbone_gain": 0.0008163053293321713,
+        "maximum_clean_degradation": 0.0018060094846471721,
+        "maximum_false_update_rate": 0.0047791744392316725,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 0.35,
+        "minimum_backbone_gain": 0.0012436634102542254,
+        "mean_backbone_gain": 0.0013041021927296208,
+        "maximum_clean_degradation": 0.002674863651843305,
+        "maximum_false_update_rate": 0.005850708298812132,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 0.5,
+        "minimum_backbone_gain": 0.0016249579900553812,
+        "mean_backbone_gain": 0.001694008876113003,
+        "maximum_clean_degradation": 0.0032149192585100056,
+        "maximum_false_update_rate": 0.006171882544894505,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 0.65,
+        "minimum_backbone_gain": 0.0019384488418099366,
+        "mean_backbone_gain": 0.0020036185673072693,
+        "maximum_clean_degradation": 0.003646010704537484,
+        "maximum_false_update_rate": 0.00631197932285922,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 0.8,
+        "minimum_backbone_gain": 0.0021592874065720635,
+        "mean_backbone_gain": 0.002246258949978708,
+        "maximum_clean_degradation": 0.004024684988741429,
+        "maximum_false_update_rate": 0.006388222467329813,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      },
+      {
+        "scale": 1.0,
+        "minimum_backbone_gain": 0.0023135591155452884,
+        "mean_backbone_gain": 0.002481497726673628,
+        "maximum_clean_degradation": 0.004438939407031651,
+        "maximum_false_update_rate": 0.006446675544757267,
+        "all_seen_backbones_present": true,
+        "eligible": true
+      }
+    ],
+    "selected": {
+      "scale": 1.0,
+      "minimum_backbone_gain": 0.0023135591155452884,
+      "mean_backbone_gain": 0.002481497726673628,
+      "maximum_clean_degradation": 0.004438939407031651,
+      "maximum_false_update_rate": 0.006446675544757267,
+      "all_seen_backbones_present": true,
+      "eligible": true
+    },
+    "constraints_feasible": true
+  },
+  "frozen_artifacts": {
+    "a2": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/learned_t1_refiner/ablations/A2/checkpoints/best_validation.pt",
+      "sha256": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea"
+    },
+    "sea_raft": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    "raw_error_detector": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/checkpoints/best_validation.pt",
+      "sha256": "78b1bb6cf809dc76448222e41e3bcfafb754bc9b7b6629edcdfa2e1a33444e67"
+    },
+    "operating_modes": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_error_abstention/full/operating_modes.json",
+      "sha256": "791f27d21e3f9fa63fe267d5742c4fb85226f49e6027b285aeb90754fbe10b69"
+    }
+  },
+  "test_opened": true,
+  "final_seen_selected_scale": 1.0,
+  "final_seen_backbone_metrics": [
+    {
+      "scale": 1.0,
+      "backbone": "RAFT-Stereo",
+      "valid_count": 12649892,
+      "epe": 0.6883551175001195,
+      "raw_epe": 0.7040312111765531,
+      "bad1": 0.10196782727316396,
+      "bad3": 0.04989813349736871,
+      "boundary_epe": 1.6239745774139345,
+      "new_bad3": 0.0005117466247709983,
+      "false_update_rate": 0.025403446782961563,
+      "clean_pixel_degradation": 0.016422001346839826,
+      "intervention_coverage": 0.06848769934162284,
+      "intervention_precision": 0.6226922141959234,
+      "mean_update_magnitude_clean": 0.009922227004753061,
+      "gain": 0.015676093676433633
+    },
+    {
+      "scale": 1.0,
+      "backbone": "S2M2-S",
+      "valid_count": 12649892,
+      "epe": 0.7589241432385075,
+      "raw_epe": 0.7714315698439189,
+      "bad1": 0.11116110723313775,
+      "bad3": 0.05299144059047678,
+      "boundary_epe": 1.8340099068153124,
+      "new_bad3": 0.00019032491130189987,
+      "false_update_rate": 0.023087958846360092,
+      "clean_pixel_degradation": 0.014219960686498287,
+      "intervention_coverage": 0.06450711199747793,
+      "intervention_precision": 0.6574783489397341,
+      "mean_update_magnitude_clean": 0.0074203320633594114,
+      "gain": 0.012507426605411376
+    },
+    {
+      "scale": 1.0,
+      "backbone": "StereoAnywhere",
+      "valid_count": 12649892,
+      "epe": 0.6798377449586916,
+      "raw_epe": 0.6962635625789957,
+      "bad1": 0.09927294256516735,
+      "bad3": 0.04915172398720944,
+      "boundary_epe": 1.5491765896866636,
+      "new_bad3": 0.0002712798168620838,
+      "false_update_rate": 0.023912410397363318,
+      "clean_pixel_degradation": 0.015278037361943482,
+      "intervention_coverage": 0.06708879411776796,
+      "intervention_precision": 0.6377996386975097,
+      "mean_update_magnitude_clean": 0.00801281590974714,
+      "gain": 0.01642581762030404
+    }
+  ],
+  "final_seen_all_backbones_improve": true
+}

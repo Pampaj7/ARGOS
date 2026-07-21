@@ -1,0 +1,50 @@
+{
+  "calibration_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "causal_context": "t-1 -> t only; SEA-RAFT/BiDA/A2 frozen",
+  "d4d_backbones": [
+    "S2M2-S"
+  ],
+  "d4d_calibration": [
+    "specimen_2"
+  ],
+  "d4d_final_only": [
+    "specimen_3"
+  ],
+  "d4d_train": [
+    "specimen_1"
+  ],
+  "final_seen_sequences": [
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "forbidden_before_freeze": [
+    "D4D/specimen_3",
+    "SERV-CT",
+    "StereoMIS",
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "scared_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ]
+}

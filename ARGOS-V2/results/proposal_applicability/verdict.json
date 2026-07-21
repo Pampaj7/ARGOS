@@ -1,0 +1,13 @@
+{
+  "decision": "NO-GO",
+  "scope": "promotion of proposal applicability authorization",
+  "positive_findings": [
+    "P4 helpfulness AP exceeds the raw-error proxy on calibration and final seen",
+    "P4 improves all three seen backbones",
+    "P4 lowers false updates and clean degradation",
+    "rejection is bit-exact raw and acceptance is exact frozen A2"
+  ],
+  "failed_gate": "retains only 49.98% of existing authorized-A2 gain; required >=70%",
+  "additional_negative": "calibrated update-magnitude baseline achieves more EPE gain with comparable safety",
+  "unseen_policy": "Fast-FoundationStereo, CREStereo and OOD datasets were not loaded"
+}

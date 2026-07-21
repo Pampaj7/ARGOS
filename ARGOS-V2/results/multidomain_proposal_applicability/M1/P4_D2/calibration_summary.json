@@ -1,0 +1,40 @@
+{
+  "a2_checkpoint": "results/multidomain_a2_proposal_v2/M1/frozen/checkpoints/best_validation.pt",
+  "a2_sha256": "20c6c50898e1ae45c0aeedffd2118599cd12dfa4a3b29acddb9ec731d59fde9c",
+  "bida_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+  "bida_source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+  "checkpoint": "results/multidomain_proposal_applicability/M1/P4_D2/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "1b02e045ffb6319b8196f1383eea490320b6b59d29d0ddd1c50182647c607852",
+  "eligible": true,
+  "final_only_not_loaded": [
+    "D4D/specimen_3",
+    "SERV-CT",
+    "StereoMIS",
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "reason": "selected only on SCARED-C validation plus D4D specimen_2; final-only data not loaded",
+  "sea_raft": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+  "sea_raft_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+  "selected": {
+    "D4D_clean_degradation": 0.05640314378178456,
+    "D4D_coverage": 0.06571140714205755,
+    "D4D_false_update_rate": 0.0638002773925104,
+    "D4D_gain": 0.02777343988418579,
+    "D4D_harmful_acceptance": 0.21294718909710392,
+    "D4D_output_epe": 0.8549310564994812,
+    "D4D_precision": 0.7632027257240205,
+    "D4D_raw_epe": 0.882704496383667,
+    "SCARED-C_clean_degradation": 0.0007056745158280303,
+    "SCARED-C_coverage": 0.014572531987970807,
+    "SCARED-C_false_update_rate": 0.007146320882105291,
+    "SCARED-C_gain": 0.005523204803466797,
+    "SCARED-C_harmful_acceptance": 0.04685910351293662,
+    "SCARED-C_output_epe": 0.18071188032627106,
+    "SCARED-C_precision": 0.665443156655828,
+    "SCARED-C_raw_epe": 0.18623508512973785,
+    "require_helpful_class": false,
+    "uncertainty_threshold_px": 0.5,
+    "utility_margin_px": 0.0
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "checkpoint_sha256": "7c0fb2306f51d8f35c66863e2fc3bb12fe6f5624c58e47e2bef236883f939f67",
+  "overall": {
+    "clean_pixel_degradation": 0.033114679543118544,
+    "effective_temporal_fraction": 0.8399177826077083,
+    "frames_worsened_fraction": 0.2894762041558939,
+    "fused_bad1": 0.06892997990110275,
+    "fused_bad3": 0.034036320236702555,
+    "fused_epe": 0.5025463801800929,
+    "gain": 0.030619796602990634,
+    "harmful_update_rate": 0.006710454508170117,
+    "memory_epe": 0.5311788876797916,
+    "oracle_epe": 0.48083666013873494,
+    "oracle_gain": 0.052329516644348595,
+    "oracle_recovery": 0.5851343288930888,
+    "raw_bad1": 0.07320290767265211,
+    "raw_bad3": 0.03589200065010991,
+    "raw_epe": 0.5331661767830835,
+    "worst_frame_degradation": 1.0436286926269531
+  },
+  "phase": 1,
+  "seen_promotion_passed": true,
+  "units": "cache-grid disparity pixels at width 180"
+}

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#BSUB -J argos_utility_capacity
+#BSUB -q p1
+#BSUB -gpu "num=2:mode=shared"
+#BSUB -n 48
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=128GB]"
+#BSUB -W 24:00
+#BSUB -o results/utility_selector_capacity_probe/medium_128x8_12ep_clean/lsf_%J.out
+#BSUB -e results/utility_selector_capacity_probe/medium_128x8_12ep_clean/lsf_%J.err
+
+# Capacity-only diagnostic: this is the frozen strict protocol used for the
+# 64x4 baseline, with only channels/blocks changed to 128x8.  Seed 0 and seed
+# 1 run concurrently on the allocated H100s; seed 2 runs after both finish.
+set -euo pipefail
+
+ROOT=/dtu/p1/leopam/ARGOS/ARGOS-V2
+PYTHON=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
+OUT=$ROOT/results/utility_selector_capacity_probe/medium_128x8_12ep_clean
+cd "$ROOT"
+mkdir -p "$OUT"
+
+COMMON=(
+  scripts/run_utility_memory_selector.py --mode train
+  --workers 20 --preload-workers 0 --batch-size 64 --epochs 12
+  --channels 128 --blocks 8 --learning-rate 0.002 --weight-decay 0.0001
+  --objective legacy --coverage-threshold 0.50 --epsilon 0.10
+  --crop-height 96 --crop-width 120 --sampler hierarchical_dataset
+  --train-sequences dataset_1_keyframe_2 dataset_1_keyframe_3
+    dataset_3_keyframe_1 dataset_3_keyframe_2 dataset_3_keyframe_3 dataset_3_keyframe_4
+    dataset_6_keyframe_1 dataset_6_keyframe_2 dataset_6_keyframe_3 dataset_6_keyframe_4
+  --validation-sequences dataset_2_keyframe_2 dataset_2_keyframe_3 dataset_2_keyframe_4
+  --test-sequences dataset_7_keyframe_1 dataset_7_keyframe_2 dataset_7_keyframe_3 dataset_7_keyframe_4
+  --strict-dataset-id-disjoint
+)
+
+run_seed() {
+  local seed=$1 gpu=$2
+  mkdir -p "$OUT/seed_${seed}"
+  CUDA_VISIBLE_DEVICES="$gpu" PYTHONPATH="$ROOT" "$PYTHON" "${COMMON[@]}" \
+    --output "$OUT/seed_${seed}" --device cuda:0 --seed "$seed" \
+    >"$OUT/seed_${seed}/train.log" 2>&1
+}
+
+run_seed 0 0 &
+PID0=$!
+run_seed 1 1 &
+PID1=$!
+wait "$PID0"
+wait "$PID1"
+run_seed 2 0

@@ -1,0 +1,18 @@
+{
+  "bank_size": 4096,
+  "calibration_feature_pixels_frame": 16,
+  "calibration_score_pixels_frame": 64,
+  "d4d_windows": 156,
+  "device": "cuda:0",
+  "fit_pixels_per_group": 512,
+  "fit_pixels_per_status_frame": 16,
+  "knn_k": 5,
+  "max_calibration_pairs": 160,
+  "max_test_pairs": 160,
+  "max_train_pairs": 32,
+  "output": "results/support_guard_validation",
+  "seed": 20260715,
+  "smoke": false,
+  "static_limit": 0,
+  "stereomis_samples_per_sequence": 128
+}

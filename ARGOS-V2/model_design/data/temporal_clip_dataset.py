@@ -43,6 +43,7 @@ class TemporalClipDataset(Dataset):
         max_clips_per_sequence: int | None = None,
         random_clip_selection: bool = False,
         seed: int = 20260713,
+        include_right_rgb: bool = False,
     ) -> None:
         if clip_length < 2:
             raise ValueError("clip_length must be >=2")
@@ -53,6 +54,7 @@ class TemporalClipDataset(Dataset):
         self.max_clips_per_sequence = max_clips_per_sequence
         self.random_clip_selection = bool(random_clip_selection)
         self.seed = int(seed)
+        self.include_right_rgb = bool(include_right_rgb)
         self.pairs = TemporalPairDataset(
             backbones,
             sequences,
@@ -60,7 +62,7 @@ class TemporalClipDataset(Dataset):
             frame_stride=frame_stride,
             max_pairs_per_sequence=None,
             random_clip_start=False,
-            seed=seed,
+            seed=seed, include_right_rgb=include_right_rgb,
         )
         self.records = self._build_records()
         counts = {
@@ -126,6 +128,7 @@ class TemporalClipDataset(Dataset):
             "clip_stride": self.clip_stride,
             "max_clips_per_sequence": self.max_clips_per_sequence,
             "random_clip_selection": self.random_clip_selection,
+            "include_right_rgb": self.include_right_rgb,
             "seed": self.seed,
             "clip_count": len(self),
             "pair_contract": self.pairs.describe(),

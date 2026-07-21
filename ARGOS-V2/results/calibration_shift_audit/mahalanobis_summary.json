@@ -1,0 +1,50 @@
+{
+  "datasets": {
+    "CREStereo": {
+      "feature_overlap_ref_nn95": 0.9283203125,
+      "mahalanobis_mean": 21.25291586079487,
+      "mahalanobis_median": 6.163199153363031,
+      "mahalanobis_p95": 83.09748664976351,
+      "n": 40960,
+      "nn_distance_mean": 0.2644067713973982,
+      "nn_distance_median": 0.18395305424928665
+    },
+    "D4D": {
+      "feature_overlap_ref_nn95": 0.07820233201912591,
+      "mahalanobis_mean": 168.81124003486812,
+      "mahalanobis_median": 86.79099595919288,
+      "mahalanobis_p95": 428.7902933200689,
+      "n": 47684,
+      "nn_distance_mean": 1.6341405702485639,
+      "nn_distance_median": 1.3652355074882507
+    },
+    "SCARED-C-heldout": {
+      "feature_overlap_ref_nn95": 1.0,
+      "mahalanobis_mean": 22.37150186193536,
+      "mahalanobis_median": 6.338334882438058,
+      "mahalanobis_p95": 80.27757295969194,
+      "n": 122880,
+      "nn_distance_mean": 6.492613548448751e-09,
+      "nn_distance_median": 0.0
+    },
+    "SERV-CT": {
+      "feature_overlap_ref_nn95": 0.0,
+      "mahalanobis_mean": 581.8346024500378,
+      "mahalanobis_median": 585.8997804215645,
+      "mahalanobis_p95": 911.3217050696319,
+      "n": 1792,
+      "nn_distance_mean": 3.130148273360516,
+      "nn_distance_median": 3.0356870889663696
+    },
+    "StereoMIS": {
+      "feature_overlap_ref_nn95": 0.42779541015625,
+      "mahalanobis_mean": 66.2707283143511,
+      "mahalanobis_median": 21.788362409191695,
+      "mahalanobis_p95": 104.5240233614854,
+      "n": 49152,
+      "nn_distance_mean": 0.8528902121338433,
+      "nn_distance_median": 0.7140191197395325
+    }
+  },
+  "reference_nn_distance_p95": 0.6192106872797005
+}

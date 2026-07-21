@@ -1,0 +1,98 @@
+{
+  "candidates": [
+    {
+      "balanced": {
+        "D4D_a2_epe": 0.5500692129135132,
+        "D4D_clean_degradation": 0.0,
+        "D4D_epe_gain": 0.0,
+        "D4D_false_update_rate": 0.0,
+        "D4D_intervention_coverage": 0.0,
+        "D4D_intervention_precision": 0.0,
+        "D4D_raw_epe": 0.882704496383667,
+        "D4D_refined_epe": 0.882704496383667,
+        "D4D_retained_a2_gain": 0.0,
+        "SCARED-C_a2_epe": 0.17545701563358307,
+        "SCARED-C_clean_degradation": 0.0005701468336687002,
+        "SCARED-C_epe_gain": 0.0015029609203338623,
+        "SCARED-C_false_update_rate": 0.0019176402039735062,
+        "SCARED-C_intervention_coverage": 0.004920581717967339,
+        "SCARED-C_intervention_precision": 0.8744424922286795,
+        "SCARED-C_raw_epe": 0.19187043607234955,
+        "SCARED-C_refined_epe": 0.19036747515201569,
+        "SCARED-C_retained_a2_gain": 0.09156902584326991,
+        "error_threshold_px": 0.25,
+        "probability_threshold": 0.5,
+        "uncertainty_threshold_px": 2.0
+      },
+      "candidate": "results/multidomain_a2_authorization_v1/M1/D1",
+      "checkpoint_validation_loss": 0.6218457089892278,
+      "eligible": false,
+      "fold": "m1",
+      "modes": {
+        "balanced": {
+          "error_threshold_px": 0.25,
+          "maximum_update_px": 3.0,
+          "name": "balanced",
+          "probability_threshold": 0.5,
+          "uncertainty_threshold_px": 2.0
+        },
+        "ultra_safe": {
+          "error_threshold_px": 0.25,
+          "maximum_update_px": 3.0,
+          "name": "ultra_safe",
+          "probability_threshold": 0.5,
+          "uncertainty_threshold_px": 0.25
+        }
+      },
+      "temperature": 3.112983226776123
+    },
+    {
+      "balanced": {
+        "D4D_a2_epe": 0.5500692129135132,
+        "D4D_clean_degradation": 0.0,
+        "D4D_epe_gain": 0.0,
+        "D4D_false_update_rate": 0.0,
+        "D4D_intervention_coverage": 0.0,
+        "D4D_intervention_precision": 0.0,
+        "D4D_raw_epe": 0.882704496383667,
+        "D4D_refined_epe": 0.882704496383667,
+        "D4D_retained_a2_gain": 0.0,
+        "SCARED-C_a2_epe": 0.17545701563358307,
+        "SCARED-C_clean_degradation": 0.000284378115817681,
+        "SCARED-C_epe_gain": 0.004917368292808533,
+        "SCARED-C_false_update_rate": 0.0006341145272022616,
+        "SCARED-C_intervention_coverage": 0.0058802248344732005,
+        "SCARED-C_intervention_precision": 0.947523184799819,
+        "SCARED-C_raw_epe": 0.19187043607234955,
+        "SCARED-C_refined_epe": 0.18695306777954102,
+        "SCARED-C_retained_a2_gain": 0.2995943661562653,
+        "error_threshold_px": 0.25,
+        "probability_threshold": 0.5,
+        "uncertainty_threshold_px": 2.0
+      },
+      "candidate": "results/multidomain_a2_authorization_v1/M1/D2",
+      "checkpoint_validation_loss": 0.6312989155839508,
+      "eligible": false,
+      "fold": "m1",
+      "modes": {
+        "balanced": {
+          "error_threshold_px": 0.25,
+          "maximum_update_px": 3.0,
+          "name": "balanced",
+          "probability_threshold": 0.5,
+          "uncertainty_threshold_px": 2.0
+        },
+        "ultra_safe": {
+          "error_threshold_px": 0.25,
+          "maximum_update_px": 3.0,
+          "name": "ultra_safe",
+          "probability_threshold": 0.5,
+          "uncertainty_threshold_px": 0.25
+        }
+      },
+      "temperature": 2.2388033866882324
+    }
+  ],
+  "selected": "results/multidomain_a2_authorization_v1/M1/D2",
+  "selection_used_unseen": false
+}

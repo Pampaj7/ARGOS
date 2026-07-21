@@ -1,0 +1,20 @@
+{
+  "modes": {
+    "balanced": {
+      "error_threshold_px": 0.25,
+      "maximum_update_px": 3.0,
+      "name": "balanced",
+      "probability_threshold": 0.5,
+      "uncertainty_threshold_px": 2.0
+    },
+    "ultra_safe": {
+      "error_threshold_px": 0.25,
+      "maximum_update_px": 3.0,
+      "name": "ultra_safe",
+      "probability_threshold": 0.5,
+      "uncertainty_threshold_px": 0.25
+    }
+  },
+  "provenance": "SCARED-C calibration + added-domain calibration only",
+  "temperature": 2.8643381595611572
+}

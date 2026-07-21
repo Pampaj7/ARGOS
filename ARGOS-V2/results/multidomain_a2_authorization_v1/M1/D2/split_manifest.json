@@ -1,0 +1,94 @@
+{
+  "added_domain": {
+    "backbones": [
+      "S2M2-S"
+    ],
+    "calibration": [
+      "specimen_2"
+    ],
+    "domain": "D4D",
+    "final_test": [
+      "specimen_3"
+    ],
+    "supervision": "Zivid anchor only",
+    "train": [
+      "specimen_1"
+    ]
+  },
+  "causal_pair": "t-1 -> t",
+  "fold": "M1",
+  "forbidden_before_freeze": [
+    "SERV-CT",
+    "Fast-FoundationStereo",
+    "CREStereo",
+    "D4D/specimen_3"
+  ],
+  "fully_unseen_domain": "SERV-CT",
+  "primary_coverage": 0.5,
+  "ratio_ladder": {
+    "D1": 0.25,
+    "D2": 0.5
+  },
+  "record_hashes": {
+    "added_calibration": "62ab17df93734247053d0ee8d774bddfc87251dc4e8c09bd09306a16bbf87752",
+    "added_train": "c3f46bf7a1c2285e1b36645b187c684ed4529774bda37b0530fdba783b4c12a1",
+    "scared_calibration": "0ab88b6dfdea18b0d76d4122dd69e0bdc907fce4dcaefba42754a7f5de2407bc",
+    "scared_train": "19375c32555492753dbdb8ca8f5639900fdce1fa4d264ec380e1ea2261ba0181"
+  },
+  "sample_counts": {
+    "added_calibration": 33,
+    "added_train": 72,
+    "scared_calibration": 960,
+    "scared_train": 9984
+  },
+  "sampling": {
+    "D4D": 0.5,
+    "SCARED-C": 0.5,
+    "domain_counts": {
+      "D4D": 2048,
+      "SCARED-C": 2048
+    },
+    "pixel_strata": [
+      "clean<=0.5",
+      "moderate(0.5,3]",
+      "large>3"
+    ],
+    "samples_per_epoch": 4096
+  },
+  "scared_c": {
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
+    "calibration": [
+      "dataset_7_keyframe_1",
+      "dataset_7_keyframe_2"
+    ],
+    "final_test": [
+      "dataset_7_keyframe_3",
+      "dataset_7_keyframe_4"
+    ],
+    "supervision": "corrected temporal pseudo-GT",
+    "train": [
+      "dataset_1_keyframe_2",
+      "dataset_1_keyframe_3",
+      "dataset_2_keyframe_2",
+      "dataset_2_keyframe_3",
+      "dataset_2_keyframe_4",
+      "dataset_3_keyframe_1",
+      "dataset_3_keyframe_2",
+      "dataset_3_keyframe_3",
+      "dataset_3_keyframe_4",
+      "dataset_6_keyframe_1",
+      "dataset_6_keyframe_2",
+      "dataset_6_keyframe_3",
+      "dataset_6_keyframe_4"
+    ]
+  },
+  "seed": 20260715,
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ]
+}

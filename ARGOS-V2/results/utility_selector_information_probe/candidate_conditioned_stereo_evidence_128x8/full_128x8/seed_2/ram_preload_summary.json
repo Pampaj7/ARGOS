@@ -1,0 +1,12 @@
+{
+  "train": {
+    "enabled": false,
+    "frames": 0,
+    "bytes": 0
+  },
+  "validation": {
+    "enabled": false,
+    "frames": 0,
+    "bytes": 0
+  }
+}

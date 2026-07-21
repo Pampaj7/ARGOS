@@ -1,0 +1,22 @@
+{
+  "metric_namespace": "cache-grid-from-cached-predictions",
+  "units": "pixels at cache width 180",
+  "coverage_threshold": 0.5,
+  "backbone": "RAFT-Stereo",
+  "sequence": "dataset_7_keyframe_2",
+  "right_reference_backbone": "_rightref_RAFT-Stereo",
+  "frames": 346,
+  "valid_pixels": 252046,
+  "raw_epe": 0.14550116658210754,
+  "lrc_mean": 0.0434248112142086,
+  "lrc_raw_error_pearson": 0.1379425401139812,
+  "lrc_raw_bad1_auroc": 0.8400374321076484,
+  "lrc_mean_raw_clean": 0.04090483486652374,
+  "lrc_mean_raw_bad1": 0.40096741914749146,
+  "interpretation": "AUROC > .5 means larger LRC residual correlates with raw Bad1; this is a frozen confidence diagnostic, not a selector result.",
+  "memory_pair_valid_pixels": 250855,
+  "lrc_difference_utility_pearson": -0.02500887342235519,
+  "lrc_memory_better_auroc": 0.24700055644461752,
+  "memory_better_fraction_margin_0p10": 0.10217854936118474,
+  "lrc_difference_sign_convention": "positive means memory has lower LRC residual than raw"
+}

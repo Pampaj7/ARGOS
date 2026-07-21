@@ -1,0 +1,23 @@
+{
+  "overall": "NO-GO",
+  "scientific_interpretation": "P4 is useful as a conditional veto and preserves 99.31% of C0 gain, but the frozen C2 policy misses the strict final safety thresholds.",
+  "policies": {
+    "C0_raw_error": "validated baseline",
+    "C1_magnitude_veto": "NO-GO: final gain retention 54.49% and negligible complementary harmful recall on validation",
+    "C2_p4_utility_veto": "NO-GO for promotion; positive conditional signal with near-complete gain retention",
+    "C3_combined": "NOT RUN: predeclared complementarity criterion failed"
+  },
+  "promotion_gates": {
+    "gain_retained_at_least_80pct": true,
+    "false_update_below_1_25pct": false,
+    "clean_degradation_below_0_60pct": false,
+    "intervention_precision_above_80pct": false,
+    "meaningful_coverage": true,
+    "all_seen_backbones_improve": true,
+    "no_catastrophic_frame": true
+  },
+  "unseen_backbones": "NOT EVALUATED",
+  "ood_diagnostics": "NOT EVALUATED",
+  "no_post_test_tuning": true
+}
+

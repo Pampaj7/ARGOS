@@ -1,0 +1,39 @@
+{
+  "eligible_quantiles": [
+    0.5,
+    0.75,
+    0.9,
+    0.95
+  ],
+  "rule": "gain_retained>=0.70; safety strictly improves; >=25% authorized updates retained; then minimum harmful acceptance",
+  "selected": {
+    "authorized_updates_retained": 0.37526917739388427,
+    "backbone": "aggregate",
+    "base_authorized": 20897.0,
+    "base_clean_degradation": 0.0004588392883687463,
+    "base_clean_harmful": 2207.0,
+    "base_coverage": 0.002172905099355012,
+    "base_epe": 0.1584932969471917,
+    "base_error_sum": 1524242.5577116013,
+    "base_gain": 0.00038810288957169536,
+    "base_harmful": 7004.0,
+    "base_harmful_acceptance": 0.33516772742498924,
+    "gain_retained": 0.7275091132967648,
+    "harmful_updates_removed": 0.7824100513992005,
+    "quantile": 0.95,
+    "raw_clean": 4809963.0,
+    "raw_epe": 0.1588813998367634,
+    "raw_error_sum": 1527974.9738607407,
+    "sequence": "aggregate",
+    "valid_pixels": 9617079.0,
+    "veto_authorized": 7842.0,
+    "veto_clean_degradation": 8.108170478650252e-05,
+    "veto_clean_harmful": 390.0,
+    "veto_coverage": 0.0008154243091899318,
+    "veto_epe": 0.15859905144770317,
+    "veto_error_sum": 1525259.6070976257,
+    "veto_gain": 0.0002823483890602163,
+    "veto_harmful": 1524.0,
+    "veto_harmful_acceptance": 0.1943381790359602
+  }
+}

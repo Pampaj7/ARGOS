@@ -1,0 +1,11 @@
+{
+  "scope": "SCARED-C calibration only: dataset_7_keyframe_1/2, seen backbones only, strict common GT/raw/BiDA/LRC support, coverage threshold 0.50",
+  "policy": "frozen utility-selector authorization AND frame-relative raw-LRC quantile; one-way veto only",
+  "predeclared_quantiles": [0.5, 0.75, 0.9, 0.95],
+  "seed_0": {"q95_gain_retained": 0.7275091133, "q95_authorized_updates_retained": 0.3752691774, "q95_harmful_acceptance": 0.1943381790},
+  "seed_1": {"q95_gain_retained": 0.5307265431, "q95_authorized_updates_retained": 0.1801629238, "q95_harmful_acceptance": 0.1911279482},
+  "seed_2": {"q95_gain_retained": 0.1969849390, "q95_authorized_updates_retained": 0.0684701072, "q95_harmful_acceptance": 0.1582226402},
+  "q95_gain_retained_mean": 0.4850735318,
+  "q95_gain_retained_std": 0.2681923246,
+  "verdict": "NO-GO: no preregistered threshold simultaneously preserved at least 70% of gain, improved safety, and retained non-collapsed authorization across all three frozen selector seeds. Final-seen, unseen, and OOD evaluation were intentionally not opened."
+}

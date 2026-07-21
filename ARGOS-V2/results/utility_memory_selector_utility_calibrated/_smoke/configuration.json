@@ -1,0 +1,27 @@
+{
+  "mode": "smoke",
+  "output": "results/utility_memory_selector_utility_calibrated/_smoke",
+  "checkpoint": null,
+  "seed": 20260719,
+  "device": "cuda:0",
+  "workers": 8,
+  "preload_workers": 16,
+  "batch_size": 16,
+  "epochs": 12,
+  "steps": 0,
+  "channels": 64,
+  "blocks": 4,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "coverage_threshold": 0.5,
+  "epsilon": 0.1,
+  "objective": "utility_calibrated",
+  "crop_height": 96,
+  "crop_width": 120,
+  "validation_pair_cap": 0,
+  "resume": true,
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ]
+}

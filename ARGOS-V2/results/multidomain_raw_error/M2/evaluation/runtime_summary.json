@@ -1,0 +1,8 @@
+{
+  "detector_latency_ms_mean": 0.10484284123506497,
+  "detector_latency_ms_p95": 0.0821025314508006,
+  "detector_parameters": 1107,
+  "peak_gpu_bytes": 603971072,
+  "total_argos_latency_ms_mean": 3.3380372578182094,
+  "total_argos_latency_ms_p95": 3.001300588948652
+}

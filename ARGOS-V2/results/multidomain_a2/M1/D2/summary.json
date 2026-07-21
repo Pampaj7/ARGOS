@@ -1,0 +1,59 @@
+{
+  "best_validation_score": 0.7941323471545066,
+  "validation": {
+    "scared": {
+      "raw_epe": 0.7109291618472483,
+      "refined_epe": 0.7133875260358356,
+      "oracle_epe": 0.6312407986169651,
+      "gain": -0.0024583641885872476,
+      "oracle_gain": 0.07968836323028317,
+      "oracle_recovery": -0.030849726220164353,
+      "false_update_rate": 0.2750258290840551,
+      "valid_pixels": 10640211,
+      "per_backbone": {
+        "S2M2-S": {
+          "raw_epe": 0.7588056050833868,
+          "refined_epe": 0.7628533882446589,
+          "gain": -0.004047783161272119,
+          "valid_pixels": 3546737
+        },
+        "RAFT-Stereo": {
+          "raw_epe": 0.6832824316834178,
+          "refined_epe": 0.6824593277241415,
+          "gain": 0.0008231039592763472,
+          "valid_pixels": 3546737
+        },
+        "StereoAnywhere": {
+          "raw_epe": 0.6906994338487096,
+          "refined_epe": 0.6948498756540827,
+          "gain": -0.004150441805373131,
+          "valid_pixels": 3546737
+        }
+      }
+    },
+    "d4d": {
+      "raw_epe": 0.8827044944887024,
+      "refined_epe": 0.5162115332982341,
+      "oracle_epe": 0.8358148685644499,
+      "gain": 0.36649296119046826,
+      "oracle_gain": 0.0468896259242525,
+      "oracle_recovery": 7.8160777350307,
+      "false_update_rate": 1.0,
+      "valid_pixels": 8933,
+      "per_backbone": {
+        "S2M2-S": {
+          "raw_epe": 0.8827044996131138,
+          "refined_epe": 0.5162115561445683,
+          "gain": 0.36649294346854544,
+          "valid_pixels": 8933
+        }
+      }
+    }
+  },
+  "a2_parameters": 39299,
+  "sea_raft_frozen": true,
+  "smoke": false,
+  "initial_loss": 0.7775110704824328,
+  "final_loss": 0.6883335534948856,
+  "finite": true
+}

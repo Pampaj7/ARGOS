@@ -1,0 +1,18 @@
+{
+  "a2_checkpoint": "results/multidomain_a2_proposal_v2/M1/frozen/checkpoints/best_validation.pt",
+  "batch_size": 16,
+  "coverage_threshold": 0.5,
+  "d4d_fraction": 0.5,
+  "device": "cuda:0",
+  "epochs": 5,
+  "epsilon": 0.1,
+  "max_train_pairs": 256,
+  "max_validation_pairs": 160,
+  "output": "results/multidomain_proposal_applicability/M1/P4_D2",
+  "resume": true,
+  "samples_per_epoch": 4096,
+  "seed": 20260719,
+  "stage": "train",
+  "training_pixels_per_batch": 32768,
+  "workers": 32
+}

@@ -1,0 +1,22 @@
+{
+  "datasets_opened_after_freeze": [
+    "SCARED-C-final",
+    "D4D-final-specimen3"
+  ],
+  "finalized_from_existing_frame_csv": true,
+  "frozen_manifest_sha256": "40ffe7e2c13752709a81a6bbe3bf1d80c00fce1e47fe6c17cb8e9eb3fec038c0",
+  "gates": {
+    "all_seen_backbones_nonnegative_gain": true,
+    "d4d_nonnegative_gain": true,
+    "d4d_nonzero_coverage": true,
+    "d4d_safe": false,
+    "seen_safe": true
+  },
+  "unseen_not_loaded": [
+    "Fast-FoundationStereo",
+    "CREStereo",
+    "SERV-CT",
+    "StereoMIS"
+  ],
+  "verdict": "NO-GO"
+}

@@ -1,0 +1,28 @@
+{
+  "utility_mae": 0.0892755314707756,
+  "utility_pearson": 0.5875703861716316,
+  "utility_spearman": 0.11830095684157874,
+  "uncertainty_error_correlation": 0.8341607824052414,
+  "proposal_decision": {
+    "intervention_coverage": 0.03450571695963542,
+    "intervention_precision": 0.8455064046815348,
+    "intervention_recall": 0.26501693317747727,
+    "false_update_rate": 0.011753244312525842,
+    "clean_pixel_degradation": 0.003996357688562972,
+    "harmful_proposal_acceptance_rate": 0.10176182900241589,
+    "epe_gain": 0.016385208815336227,
+    "retained_existing_authorized_gain": 0.4955883623853795,
+    "selected_candidate_regret": 0.05603181570768356
+  },
+  "raw_error_detector_decision": {
+    "intervention_coverage": 0.062360127766927086,
+    "intervention_precision": 0.7064720035887606,
+    "intervention_recall": 0.4001912779120214,
+    "false_update_rate": 0.019733834818023863,
+    "clean_pixel_degradation": 0.009897532709872434,
+    "harmful_proposal_acceptance_rate": 0.295091626892935,
+    "epe_gain": 0.03306213393807411,
+    "retained_existing_authorized_gain": 1.0,
+    "selected_candidate_regret": 0.03935487940907478
+  }
+}

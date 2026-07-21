@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#BSUB -J argos_v2_information_probe
+#BSUB -q p1
+#BSUB -gpu "num=2:mode=shared"
+#BSUB -n 48
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=192GB]"
+#BSUB -W 12:00
+#BSUB -o results/utility_selector_information_probe/candidate_conditioned_stereo_evidence_128x8/full_128x8/lsf_%J.out
+#BSUB -e results/utility_selector_information_probe/candidate_conditioned_stereo_evidence_128x8/full_128x8/lsf_%J.err
+
+# Persistent scheduler entrypoint for the frozen 128x8 information probe.
+# The invoked launcher trains seeds 0/1 concurrently, then seed 2; all
+# calibration precedes the sole dataset-7 evaluation stage.
+set -euo pipefail
+cd /dtu/p1/leopam/ARGOS/ARGOS-V2
+exec bash scripts/launch_utility_selector_information_probe.sh

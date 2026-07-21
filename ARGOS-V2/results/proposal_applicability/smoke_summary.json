@@ -1,0 +1,8 @@
+{
+  "initial_loss": 0.29400500655174255,
+  "final_loss": 0.0953913430372874,
+  "loss_reduction_fraction": 0.6755451747026652,
+  "utility_correlation": 0.3001208874573953,
+  "finite": true,
+  "passed": true
+}

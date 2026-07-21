@@ -1,0 +1,33 @@
+Source/audit additions for this experiment:
+model_design/DUAL_STAGE_AUTHORIZATION_AUDIT.md
+model_design/models/dual_stage_authorization.py
+model_design/tests/test_dual_stage_authorization.py
+scripts/run_dual_stage_authorization.py
+
+Derived compact outputs:
+results/dual_stage_authorization/DUAL_STAGE_AUTHORIZATION_AUDIT.md
+results/dual_stage_authorization/README.md
+results/dual_stage_authorization/aggregate_summary.json
+results/dual_stage_authorization/conditional_error_analysis.csv
+results/dual_stage_authorization/conditional_policy_metrics.csv
+results/dual_stage_authorization/config.json
+results/dual_stage_authorization/files_changed.txt
+results/dual_stage_authorization/frame_metrics.csv
+results/dual_stage_authorization/frozen_manifest.json
+results/dual_stage_authorization/git_diff_summary.json
+results/dual_stage_authorization/per_backbone.csv
+results/dual_stage_authorization/policy_comparison_validation.csv
+results/dual_stage_authorization/risk_gain_coverage.csv
+results/dual_stage_authorization/run.log
+results/dual_stage_authorization/runtime_summary.json
+results/dual_stage_authorization/safety_summary.json
+results/dual_stage_authorization/sequence_metrics.csv
+results/dual_stage_authorization/smoke_summary.json
+results/dual_stage_authorization/split_manifest.json
+results/dual_stage_authorization/threshold_selection.csv
+results/dual_stage_authorization/verdicts.json
+results/dual_stage_authorization/veto_overlap.json
+
+No pre-existing validated implementation, cache, checkpoint, or result was modified.
+Unrelated pre-existing dirty-worktree deletions and additions were preserved.
+

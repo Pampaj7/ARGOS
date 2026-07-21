@@ -1,0 +1,10 @@
+{
+  "raw": "current cached disparity",
+  "aligned_memory": "canonical causal BiDA t-1 warp",
+  "oracle_raw_memory": "per-pixel min absolute error between raw and aligned memory",
+  "photometric selection": "choose aligned memory only when its current-frame stereo reprojection cost is lower by the frozen margin",
+  "ternary census": "ordinal local left-versus-candidate-warped-right cost; census windows touching invalid right reconstruction are excluded",
+  "common_mask": "GT coverage & raw valid & aligned-memory valid & BiDA support & raw right support & memory right support; census additionally requires both full census windows",
+  "false_update_rate": "changed pixels with raw EPE <=0.5 px, divided by raw-clean pixels",
+  "clean_pixel_degradation": "raw-clean changed pixels whose EPE rises by >0.02 px, divided by raw-clean pixels"
+}

@@ -1,0 +1,236 @@
+{
+  "architecture": {
+    "detector": "S1 unchanged",
+    "frozen": [
+      "SEA-RAFT",
+      "BiDA",
+      "A2",
+      "disparity caches"
+    ],
+    "trainable_parameters": 1107
+  },
+  "capacity_control_executed": false,
+  "folds": {
+    "M1": {
+      "eligible_calibration_point": false,
+      "primary_metrics": {
+        "CREStereo": {
+          "clean_degradation": 0.0022854719726269766,
+          "epe": 1.0862108662807404,
+          "false_update_rate": 0.008899157022013935,
+          "intervention_coverage": 0.02517913971272648,
+          "intervention_precision": 0.8633670902832936,
+          "p95_frame_degradation": -0.0018262170546222466,
+          "raw_epe": 1.100315462075034,
+          "worst_frame_degradation": 0.002913806587457657
+        },
+        "D4D-heldout-specimen3": {
+          "clean_degradation": 0.0,
+          "epe": 7.335184571385204,
+          "false_update_rate": 0.0,
+          "intervention_coverage": 0.0307315233785822,
+          "intervention_precision": 0.06134969325153374,
+          "p95_frame_degradation": 0.3625984191894531,
+          "raw_epe": 7.300629587509693,
+          "worst_frame_degradation": 0.6975945234298706
+        },
+        "Fast-FoundationStereo": {
+          "clean_degradation": 0.0018973727644146217,
+          "epe": 0.9656148668285925,
+          "false_update_rate": 0.007946546945843463,
+          "intervention_coverage": 0.02186425297135681,
+          "intervention_precision": 0.8523896638463297,
+          "p95_frame_degradation": -0.000706628407351672,
+          "raw_epe": 0.9757408121148207,
+          "worst_frame_degradation": 0.0018342382973060012
+        },
+        "SCARED-C-test": {
+          "clean_degradation": 0.0031139717207127305,
+          "epe": 0.9490894231185485,
+          "false_update_rate": 0.008831759342278981,
+          "intervention_coverage": 0.02326934385297391,
+          "intervention_precision": 0.8176609269151571,
+          "p95_frame_degradation": -0.000531352117832289,
+          "raw_epe": 0.9616051806244463,
+          "worst_frame_degradation": 0.04007312282919884
+        },
+        "SERV-CT-unseen": {
+          "clean_degradation": 0.4052751233409114,
+          "epe": 1.4140387738084126,
+          "false_update_rate": 0.49081664418387466,
+          "intervention_coverage": 0.5102354262659606,
+          "intervention_precision": 0.24299877197711683,
+          "p95_frame_degradation": 0.7904228210449219,
+          "raw_epe": 1.0462838139683222,
+          "worst_frame_degradation": 0.7904717922210693
+        }
+      },
+      "runtime": {
+        "detector_latency_ms_mean": 0.1292013428189798,
+        "detector_latency_ms_p95": 0.2000213135033846,
+        "detector_parameters": 1107,
+        "peak_gpu_bytes": 603971072,
+        "total_argos_latency_ms_mean": 4.016543624544085,
+        "total_argos_latency_ms_p95": 6.901189195923507
+      },
+      "selected_ratio": "D1",
+      "temperature": 2.8643381595611572,
+      "verdicts": {
+        "CREStereo": {
+          "epe_gain": 0.014104595794293573,
+          "m0_gain_retention": 0.3732125297622769,
+          "reason": "gain +0.0141px; false update 0.9%; clean degradation 0.2%.",
+          "verdict": "GO"
+        },
+        "D4D-heldout-specimen3": {
+          "epe_gain": -0.034554983875510814,
+          "m0_gain_retention": null,
+          "reason": "gain -0.0346px; false update 0.0%; clean degradation 0.0%.",
+          "verdict": "NO-GO"
+        },
+        "Fast-FoundationStereo": {
+          "epe_gain": 0.010125945286228122,
+          "m0_gain_retention": 0.43213747783933465,
+          "reason": "gain +0.0101px; false update 0.8%; clean degradation 0.2%.",
+          "verdict": "GO"
+        },
+        "SCARED-C-test": {
+          "epe_gain": 0.01251575750589784,
+          "m0_gain_retention": 0.4644814941901634,
+          "reason": "M0 gain retention 46.4%; false update 0.9%; clean degradation 0.3%.",
+          "verdict": "NO-GO"
+        },
+        "SERV-CT-unseen": {
+          "epe_gain": -0.36775495984009043,
+          "m0_gain_retention": null,
+          "reason": "gain -0.3678px; false update 49.1%; clean degradation 40.5%; coverage 51.0%.",
+          "verdict": "NO-GO"
+        },
+        "overall": {
+          "reason": "Multi-domain exposure must improve the fully unseen domain with nonzero coverage while preserving every required seen/backbone safety check.",
+          "scientific_hypothesis_supported": false,
+          "verdict": "NO-GO"
+        }
+      }
+    },
+    "M2": {
+      "eligible_calibration_point": false,
+      "primary_metrics": {
+        "CREStereo": {
+          "clean_degradation": 0.0014885543622100207,
+          "epe": 1.0751993514878784,
+          "false_update_rate": 0.0019881510292909872,
+          "intervention_coverage": 0.02077887338849256,
+          "intervention_precision": 0.9120731487237071,
+          "p95_frame_degradation": -0.00012131001203670155,
+          "raw_epe": 1.100315462075034,
+          "worst_frame_degradation": 0.0018709326395764947
+        },
+        "D4D-unseen": {
+          "clean_degradation": 0.01611900072561418,
+          "epe": 2.900131561002652,
+          "false_update_rate": 0.017984865761376593,
+          "intervention_coverage": 0.03311918615658408,
+          "intervention_precision": 0.5655487804878049,
+          "p95_frame_degradation": 0.05918492376804352,
+          "raw_epe": 2.9055136114215587,
+          "worst_frame_degradation": 0.22682368755340576
+        },
+        "Fast-FoundationStereo": {
+          "clean_degradation": 0.0014422352181761256,
+          "epe": 0.958053195711064,
+          "false_update_rate": 0.0019133170733592823,
+          "intervention_coverage": 0.01973724231088771,
+          "intervention_precision": 0.8689915771252454,
+          "p95_frame_degradation": 0.0,
+          "raw_epe": 0.9757408121148207,
+          "worst_frame_degradation": 0.002597270766273141
+        },
+        "SCARED-C-test": {
+          "clean_degradation": 0.0020016541660973566,
+          "epe": 0.9420834644178204,
+          "false_update_rate": 0.0024841597022177628,
+          "intervention_coverage": 0.019684188568001703,
+          "intervention_precision": 0.8419541243623484,
+          "p95_frame_degradation": 2.277609601151167e-05,
+          "raw_epe": 0.9616051806244463,
+          "worst_frame_degradation": 0.04449927806854248
+        },
+        "SERV-CT-seen-calibration": {
+          "clean_degradation": 0.012263288051763271,
+          "epe": 1.0170588342752787,
+          "false_update_rate": 0.016328466411463804,
+          "intervention_coverage": 0.023541198981513568,
+          "intervention_precision": 0.4096,
+          "p95_frame_degradation": 0.003499810746870935,
+          "raw_epe": 1.015624048948367,
+          "worst_frame_degradation": 0.0035691186785697937
+        }
+      },
+      "runtime": {
+        "detector_latency_ms_mean": 0.10484284123506497,
+        "detector_latency_ms_p95": 0.0821025314508006,
+        "detector_parameters": 1107,
+        "peak_gpu_bytes": 603971072,
+        "total_argos_latency_ms_mean": 3.3380372578182094,
+        "total_argos_latency_ms_p95": 3.001300588948652
+      },
+      "selected_ratio": "D1",
+      "temperature": 1.424507975578308,
+      "verdicts": {
+        "CREStereo": {
+          "epe_gain": 0.02511611058715557,
+          "m0_gain_retention": 0.6645810561841,
+          "reason": "gain +0.0251px; false update 0.2%; clean degradation 0.1%.",
+          "verdict": "GO"
+        },
+        "D4D-unseen": {
+          "epe_gain": 0.005382050418906825,
+          "m0_gain_retention": 0.14374198416933584,
+          "reason": "gain +0.0054px; false update 1.8%; clean degradation 1.6%.",
+          "verdict": "GO"
+        },
+        "Fast-FoundationStereo": {
+          "epe_gain": 0.017687616403756712,
+          "m0_gain_retention": 0.7548413235162006,
+          "reason": "gain +0.0177px; false update 0.2%; clean degradation 0.1%.",
+          "verdict": "GO"
+        },
+        "SCARED-C-test": {
+          "epe_gain": 0.019521716206625905,
+          "m0_gain_retention": 0.7244847871602684,
+          "reason": "M0 gain retention 72.4%; false update 0.2%; clean degradation 0.2%.",
+          "verdict": "GO"
+        },
+        "SERV-CT-seen-calibration": {
+          "epe_gain": -0.0014347853269116584,
+          "m0_gain_retention": null,
+          "reason": "gain -0.0014px; false update 1.6%; clean degradation 1.2%; coverage 2.4%.",
+          "verdict": "NO-GO"
+        },
+        "overall": {
+          "reason": "Multi-domain exposure must improve the fully unseen domain with nonzero coverage while preserving every required seen/backbone safety check.",
+          "scientific_hypothesis_supported": true,
+          "verdict": "NO-GO"
+        }
+      }
+    }
+  },
+  "m3_executed": false,
+  "project": "ARGOS v2",
+  "reason": "M1 worsens fully unseen SERV-CT severely; M2 learns conservative abstention but has no eligible calibration point and does not safely improve its added SERV-CT domain.",
+  "supervision": {
+    "D4D": {
+      "calibration_specimen_2": 33,
+      "m1_test_specimen_3": 51,
+      "source": "curated Zivid anchor only",
+      "train_specimen_1": 72
+    },
+    "SCARED-C": "dense corrected temporal pseudo-GT",
+    "SERV-CT": {
+      "pairs_per_experiment": 7,
+      "source": "CT-derived weak replay"
+    }
+  },
+  "verdict": "NO-GO"
+}

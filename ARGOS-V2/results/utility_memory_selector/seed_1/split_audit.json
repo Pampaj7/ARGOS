@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "split_unit": "complete sequence",
+  "seed": 1,
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "final_seen_test_sequences": [
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "seen_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "pairs_per_backbone": {
+    "train": 12852,
+    "validation": 1273,
+    "test": 2779
+  },
+  "causal_context": "current t and past t-1 only; no future frames or sequence crossing",
+  "historical_reuse_note": "dataset_7 was used in historical A2 studies; keyframes 3/4 are nevertheless excluded from all selector decisions in this experiment."
+}

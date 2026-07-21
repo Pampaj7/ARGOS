@@ -1,0 +1,97 @@
+{
+  "bank_size": 4096,
+  "cuda_peak_allocated_bytes": 452462592,
+  "frozen_baseline_runtime": {
+    "datasets": {
+      "crestereo": {
+        "frames": 320,
+        "runtime_ms": {
+          "mean": 20.49828473100206,
+          "median": 18.78342288546264,
+          "p95": 20.166500960476696
+        }
+      },
+      "d4d_anchors": {
+        "frames": 156,
+        "runtime_ms": {
+          "mean": 27.543336508246377,
+          "median": 28.48992613144219,
+          "p95": 32.17516595032066
+        }
+      },
+      "d4d_temporal": {
+        "frames": 468,
+        "runtime_ms": {
+          "mean": 27.747232502756212,
+          "median": 27.046758448705077,
+          "p95": 31.75570943858474
+        }
+      },
+      "scared_structured_light": {
+        "frames": 45,
+        "runtime_ms": {
+          "mean": 32.55278883087966,
+          "median": 28.077670838683844,
+          "p95": 32.448863331228495
+        },
+        "stereo_runtime_ms": {
+          "mean": 137.32162424259715,
+          "median": 126.24690216034651,
+          "p95": 135.317359585315
+        }
+      },
+      "servct": {
+        "frames": 14,
+        "runtime_ms": {
+          "mean": 54.2021178241287,
+          "median": 18.37196503765881,
+          "p95": 195.9895495558156
+        }
+      },
+      "stereomis": {
+        "frames": 38238,
+        "runtime_ms": {
+          "mean": 22.016340408159916,
+          "median": 20.258645992726088,
+          "p95": 26.9133104942739
+        },
+        "stereo_runtime_ms": {
+          "mean": 83.67899261977432,
+          "median": 69.88076493144035,
+          "p95": 115.30049634166062
+        }
+      }
+    },
+    "measurement": "CUDA max_memory_allocated; one warm frozen inference; process-local allocation",
+    "refiner_peak_bytes": 98530816,
+    "refiner_peak_mib": 93.96630859375,
+    "runtime_note": "latencies observed under shared-GPU contention",
+    "s2m2_plus_refiner_peak_bytes": 450230784,
+    "s2m2_plus_refiner_peak_mib": 429.37353515625
+  },
+  "knn_bank_size_benchmark": [
+    {
+      "bank_memory_bytes": 24576,
+      "bank_size": 256,
+      "feature_vectors": 2048,
+      "latency_ms": 0.7913103327155113
+    },
+    {
+      "bank_memory_bytes": 98304,
+      "bank_size": 1024,
+      "feature_vectors": 2048,
+      "latency_ms": 0.3712829202413559
+    },
+    {
+      "bank_memory_bytes": 393216,
+      "bank_size": 4096,
+      "feature_vectors": 2048,
+      "latency_ms": 0.4269457422196865
+    }
+  ],
+  "knn_k": 5,
+  "reference_memory_bytes": 395712,
+  "support_score_latency_ms_mean": 1.8135429066716517,
+  "support_score_latency_ms_median": 0.5768099799752235,
+  "support_score_latency_ms_p95": 4.608390014618635
+}

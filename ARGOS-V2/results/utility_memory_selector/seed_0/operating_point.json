@@ -1,0 +1,23 @@
+{
+  "balanced": {
+    "probability_threshold": 0.5,
+    "utility_threshold_px": 0.0,
+    "harm_threshold_px": 0.05,
+    "coverage": 0.002311429318794635,
+    "precision": 0.5879003558718862,
+    "harmful_acceptance": 0.3231316725978648,
+    "net_utility": 0.00044127547880634665,
+    "clean_selection": 0.08896797153024912
+  },
+  "selected_only_on": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "checkpoint": "results/utility_memory_selector/seed_0/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "6d1cc5b71f6589e148f3d28f065091aaa191556f32c3fe6bf014633a2dc9e5cc",
+  "frozen_hashes": {
+    "sea_raft_checkpoint": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "bida_source": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+    "cache_contract": "positive-left disparity [T,144,180], float16; valid mask; frame IDs verified by loader"
+  }
+}

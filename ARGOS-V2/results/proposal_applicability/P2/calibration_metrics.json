@@ -1,0 +1,18 @@
+{
+  "variant": "P2",
+  "epsilon_px": 0.1,
+  "sample_count": 1503684,
+  "helpful_prevalence": 0.033871478315922764,
+  "proposal_predictor": {
+    "auroc": 0.8061676337922951,
+    "average_precision": 0.4669354028843557
+  },
+  "raw_error_detector_proxy": {
+    "auroc": 0.9206576741309557,
+    "average_precision": 0.41433608321067433
+  },
+  "utility_mae": 0.04797275736927986,
+  "utility_pearson": 0.4185659003471983,
+  "utility_spearman": 0.019834656012933473,
+  "uncertainty_error_correlation": null
+}

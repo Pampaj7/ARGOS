@@ -1,0 +1,31 @@
+{
+  "selected_c1": {
+    "name": "C1_pixel_max_2.0",
+    "maximum_update_px": 2.0,
+    "patch_mean_maximum_update_px": null,
+    "patch_kernel": 5,
+    "harmful_probability_threshold": null,
+    "predicted_utility_ceiling_px": null,
+    "uncertainty_floor_px": null,
+    "require_harmful_class": false,
+    "p4_logic": "any"
+  },
+  "selected_c2": {
+    "name": "C2_utility_0.0",
+    "maximum_update_px": null,
+    "patch_mean_maximum_update_px": null,
+    "patch_kernel": 5,
+    "harmful_probability_threshold": null,
+    "predicted_utility_ceiling_px": 0.0,
+    "uncertainty_floor_px": null,
+    "require_harmful_class": false,
+    "p4_logic": "any"
+  },
+  "correct_harmful_overlap": 0,
+  "c1_unique_correct_harmful": 34,
+  "c2_unique_correct_harmful": 3287,
+  "c1_unique_helpful_rejected": 12,
+  "veto_jaccard": 0.0,
+  "c1_unique_harmful_recall": 0.004217838977794318,
+  "c3_justified": false
+}

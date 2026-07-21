@@ -1,0 +1,62 @@
+{
+  "CREStereo": {
+    "authorization_retention": 0.3034795815656003,
+    "gain_retained": 0.17982694696707266,
+    "reason": "in-support transfer or safety lost",
+    "support_acceptance": 0.6567217829789636,
+    "verdict": "NO-GO"
+  },
+  "D4D": {
+    "authorization_retention": 0.0,
+    "gain_retained": null,
+    "reason": "anchor safety restored",
+    "support_acceptance": 0.0,
+    "verdict": "GO"
+  },
+  "Fast-FoundationStereo": {
+    "authorization_retention": 0.3412892945703781,
+    "gain_retained": 0.25238419641003224,
+    "reason": "in-support transfer or safety lost",
+    "support_acceptance": 0.6629659858423654,
+    "verdict": "NO-GO"
+  },
+  "SCARED-C-calibration": {
+    "authorization_retention": 0.9807269893006448,
+    "gain_retained": null,
+    "reason": "no dense GT",
+    "support_acceptance": 0.9801265211575558,
+    "verdict": "DIAGNOSTIC"
+  },
+  "SCARED-C-test": {
+    "authorization_retention": 0.36397021006225694,
+    "gain_retained": 0.20785953281947653,
+    "reason": "in-support transfer or safety lost",
+    "support_acceptance": 0.6598443174945084,
+    "verdict": "NO-GO"
+  },
+  "SCARED-structured-light": {
+    "authorization_retention": 0.9021610842049571,
+    "gain_retained": null,
+    "reason": "approximately identity preserving",
+    "support_acceptance": 0.9555202672725679,
+    "verdict": "GO"
+  },
+  "SERV-CT": {
+    "authorization_retention": 0.0,
+    "gain_retained": null,
+    "reason": "cross-domain failure suppressed",
+    "support_acceptance": 0.0,
+    "verdict": "GO"
+  },
+  "StereoMIS": {
+    "authorization_retention": 0.5421926367475259,
+    "gain_retained": null,
+    "reason": "no dense GT",
+    "support_acceptance": 0.9145721308722271,
+    "verdict": "DIAGNOSTIC"
+  },
+  "overall": {
+    "all_required_pass": false,
+    "verdict": "NO-GO"
+  }
+}

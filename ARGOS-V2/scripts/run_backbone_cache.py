@@ -57,15 +57,35 @@ def checkpoint_sha256_short(path: Path, n_bytes: int = 8_000_000) -> str:
         return "unavailable"
 
 
+def cache_key(backbone: str, *, smoke: bool, right_reference: bool) -> str:
+    """Return an isolated cache namespace without touching canonical left caches."""
+    value = f"_rightref_{backbone}" if right_reference else backbone
+    return f"_smoke_{value}" if smoke else value
+
+
+def right_reference_flip_swap(left: np.ndarray, right: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Prepare a positive-disparity stereo pair referenced to original right x.
+
+    Black-box stereo models in ARGOS predict positive disparity for their first
+    image.  Feeding ``flip(right), flip(left)`` preserves the physical
+    disparity magnitude while making the original right view the reference.
+    The output must be horizontally unflipped by the consumer.
+    """
+    if left.shape != right.shape:
+        raise ValueError(f"left/right shape mismatch for right-reference inference: {left.shape} vs {right.shape}")
+    return np.ascontiguousarray(right[:, ::-1]), np.ascontiguousarray(left[:, ::-1])
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backbone", required=True)
     ap.add_argument("--sequence", required=True)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--max-frames", type=int, default=0, help="smoke-test cap; writes to a separate _smoke backbone namespace, never touches the real cache")
+    ap.add_argument("--right-reference", action="store_true", help="infer positive right-reference disparity via flip(right), flip(left); writes an isolated _rightref_ namespace")
     args = ap.parse_args()
 
-    backbone_key = f"_smoke_{args.backbone}" if args.max_frames else args.backbone
+    backbone_key = cache_key(args.backbone, smoke=bool(args.max_frames), right_reference=args.right_reference)
     info = load_sequence_info(args.sequence)
     if args.max_frames:
         info.frame_ids = info.frame_ids[: args.max_frames]
@@ -93,6 +113,8 @@ def main() -> int:
         left, right = load_frame_lr(info, frame_id)
         if native_shape is None:
             native_shape = left.shape[:2]  # (H, W)
+        if args.right_reference:
+            left, right = right_reference_flip_swap(left, right)
         pred, ms = predict(left, right)
         runtimes_s.append(ms / 1000.0)
         disp_c, valid_c, disp_fp32 = resize_pred_to_cache(pred, native_w=left.shape[1])
@@ -130,7 +152,11 @@ def main() -> int:
         "disparity_dtype": "float16",
         "mask_dtype": "uint8",
         "disparity_units": "pixels_at_cache_resolution",
-        "disparity_convention": "positive_left_disparity",
+        "disparity_convention": ("positive_right_reference_disparity" if args.right_reference
+                                 else "positive_left_disparity"),
+        "reference_view": "right" if args.right_reference else "left",
+        "input_transform": "horizontal_flip(right), horizontal_flip(left)" if args.right_reference else "identity(left), identity(right)",
+        "right_reference_unflip_required": bool(args.right_reference),
         "resize_interpolation": "INTER_AREA (disparity), INTER_NEAREST (validity)",
         "disparity_scale_formula": "d_cache = resize(d_source, (144,180)) * (180.0 / source_width)",
         "invalid_value_policy": "invalid native pixels (non-finite or <=0) are zeroed before resize to avoid blending into valid neighbors",

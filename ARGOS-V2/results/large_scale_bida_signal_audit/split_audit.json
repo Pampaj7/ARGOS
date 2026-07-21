@@ -1,0 +1,1688 @@
+{
+  "schema_version": 1,
+  "accepted_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4",
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "independent_sequence_count": 17,
+  "pairs_per_backbone": 16904,
+  "shards": [
+    {
+      "schema_version": 1,
+      "quality_gate_source": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/curated/manifests/quality_gate.csv",
+      "accepted_sequences": [
+        "dataset_1_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_2_keyframe_2",
+        "dataset_2_keyframe_3",
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_1",
+        "dataset_3_keyframe_2",
+        "dataset_3_keyframe_3",
+        "dataset_3_keyframe_4",
+        "dataset_6_keyframe_1",
+        "dataset_6_keyframe_2",
+        "dataset_6_keyframe_3",
+        "dataset_6_keyframe_4",
+        "dataset_7_keyframe_1",
+        "dataset_7_keyframe_2",
+        "dataset_7_keyframe_3",
+        "dataset_7_keyframe_4"
+      ],
+      "rejected_sequences": [
+        "dataset_1_keyframe_1",
+        "dataset_2_keyframe_1"
+      ],
+      "evaluated_sequences": [
+        "dataset_7_keyframe_4",
+        "dataset_6_keyframe_3",
+        "dataset_2_keyframe_3",
+        "dataset_6_keyframe_2",
+        "dataset_3_keyframe_4",
+        "dataset_7_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_3_keyframe_3"
+      ],
+      "independent_sequence_count": 8,
+      "backbones": [
+        "S2M2-S",
+        "RAFT-Stereo",
+        "StereoAnywhere"
+      ],
+      "role": "seen",
+      "pairs_per_backbone": 8332,
+      "inventory": [
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_7_keyframe_4",
+          "frame_count": 2197,
+          "causal_pair_count": 2196,
+          "shape": [
+            2197,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "1d8b3bdb4d1f628436fac2000d0f8837e88b3ab2d3c42d09687ac87567cba247"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_6_keyframe_3",
+          "frame_count": 1573,
+          "causal_pair_count": 1572,
+          "shape": [
+            1573,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "785d8d9288bf9ab50cac11b4a9021f4e489d3b86ce44cfc4e79af940011233f6"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_2_keyframe_3",
+          "frame_count": 1102,
+          "causal_pair_count": 1101,
+          "shape": [
+            1102,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "40585e64320a3335243b62c855f7cb9753037991588a3cf33f924f661b831fd9"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_6_keyframe_2",
+          "frame_count": 1087,
+          "causal_pair_count": 1086,
+          "shape": [
+            1087,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "19d2b8545a5f6350c7d3f3af773e85cfd0affc1028749f3e3d21e3c13564c51a"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_3_keyframe_4",
+          "frame_count": 834,
+          "causal_pair_count": 833,
+          "shape": [
+            834,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "7c2a031d4f6c663baa0b4185d460400907e54dc4bad0373eb67a88bb5b165969"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_7_keyframe_2",
+          "frame_count": 628,
+          "causal_pair_count": 627,
+          "shape": [
+            628,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "0456c0806264c4978e91ac8f344d5d0f619f692df8b2d415389fd9b10d80bc17"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_1_keyframe_3",
+          "frame_count": 471,
+          "causal_pair_count": 470,
+          "shape": [
+            471,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "217fc80683e0c7a7c6242386a9c10144fac5d3c74423780e542eb1f04adc5fd5"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_3_keyframe_3",
+          "frame_count": 448,
+          "causal_pair_count": 447,
+          "shape": [
+            448,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "de5371f8160ecbf2e5612675cc4c753091b9f80ff540f113230582ab342f5750"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_7_keyframe_4",
+          "frame_count": 2197,
+          "causal_pair_count": 2196,
+          "shape": [
+            2197,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "1d8b3bdb4d1f628436fac2000d0f8837e88b3ab2d3c42d09687ac87567cba247"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_6_keyframe_3",
+          "frame_count": 1573,
+          "causal_pair_count": 1572,
+          "shape": [
+            1573,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "785d8d9288bf9ab50cac11b4a9021f4e489d3b86ce44cfc4e79af940011233f6"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_2_keyframe_3",
+          "frame_count": 1102,
+          "causal_pair_count": 1101,
+          "shape": [
+            1102,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "40585e64320a3335243b62c855f7cb9753037991588a3cf33f924f661b831fd9"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_6_keyframe_2",
+          "frame_count": 1087,
+          "causal_pair_count": 1086,
+          "shape": [
+            1087,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "19d2b8545a5f6350c7d3f3af773e85cfd0affc1028749f3e3d21e3c13564c51a"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_3_keyframe_4",
+          "frame_count": 834,
+          "causal_pair_count": 833,
+          "shape": [
+            834,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "7c2a031d4f6c663baa0b4185d460400907e54dc4bad0373eb67a88bb5b165969"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_7_keyframe_2",
+          "frame_count": 628,
+          "causal_pair_count": 627,
+          "shape": [
+            628,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "0456c0806264c4978e91ac8f344d5d0f619f692df8b2d415389fd9b10d80bc17"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_1_keyframe_3",
+          "frame_count": 471,
+          "causal_pair_count": 470,
+          "shape": [
+            471,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "217fc80683e0c7a7c6242386a9c10144fac5d3c74423780e542eb1f04adc5fd5"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_3_keyframe_3",
+          "frame_count": 448,
+          "causal_pair_count": 447,
+          "shape": [
+            448,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "de5371f8160ecbf2e5612675cc4c753091b9f80ff540f113230582ab342f5750"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_7_keyframe_4",
+          "frame_count": 2197,
+          "causal_pair_count": 2196,
+          "shape": [
+            2197,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "1d8b3bdb4d1f628436fac2000d0f8837e88b3ab2d3c42d09687ac87567cba247"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_6_keyframe_3",
+          "frame_count": 1573,
+          "causal_pair_count": 1572,
+          "shape": [
+            1573,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "785d8d9288bf9ab50cac11b4a9021f4e489d3b86ce44cfc4e79af940011233f6"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_2_keyframe_3",
+          "frame_count": 1102,
+          "causal_pair_count": 1101,
+          "shape": [
+            1102,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "40585e64320a3335243b62c855f7cb9753037991588a3cf33f924f661b831fd9"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_6_keyframe_2",
+          "frame_count": 1087,
+          "causal_pair_count": 1086,
+          "shape": [
+            1087,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "19d2b8545a5f6350c7d3f3af773e85cfd0affc1028749f3e3d21e3c13564c51a"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_3_keyframe_4",
+          "frame_count": 834,
+          "causal_pair_count": 833,
+          "shape": [
+            834,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "7c2a031d4f6c663baa0b4185d460400907e54dc4bad0373eb67a88bb5b165969"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_7_keyframe_2",
+          "frame_count": 628,
+          "causal_pair_count": 627,
+          "shape": [
+            628,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "0456c0806264c4978e91ac8f344d5d0f619f692df8b2d415389fd9b10d80bc17"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_1_keyframe_3",
+          "frame_count": 471,
+          "causal_pair_count": 470,
+          "shape": [
+            471,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "217fc80683e0c7a7c6242386a9c10144fac5d3c74423780e542eb1f04adc5fd5"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_3_keyframe_3",
+          "frame_count": 448,
+          "causal_pair_count": 447,
+          "shape": [
+            448,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "de5371f8160ecbf2e5612675cc4c753091b9f80ff540f113230582ab342f5750"
+        }
+      ],
+      "canonical_bida_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "sea_raft_checkpoint": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sea_raft_checkpoint_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    {
+      "schema_version": 1,
+      "quality_gate_source": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/curated/manifests/quality_gate.csv",
+      "accepted_sequences": [
+        "dataset_1_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_2_keyframe_2",
+        "dataset_2_keyframe_3",
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_1",
+        "dataset_3_keyframe_2",
+        "dataset_3_keyframe_3",
+        "dataset_3_keyframe_4",
+        "dataset_6_keyframe_1",
+        "dataset_6_keyframe_2",
+        "dataset_6_keyframe_3",
+        "dataset_6_keyframe_4",
+        "dataset_7_keyframe_1",
+        "dataset_7_keyframe_2",
+        "dataset_7_keyframe_3",
+        "dataset_7_keyframe_4"
+      ],
+      "rejected_sequences": [
+        "dataset_1_keyframe_1",
+        "dataset_2_keyframe_1"
+      ],
+      "evaluated_sequences": [
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_2",
+        "dataset_6_keyframe_4",
+        "dataset_2_keyframe_2",
+        "dataset_7_keyframe_1",
+        "dataset_6_keyframe_1",
+        "dataset_7_keyframe_3",
+        "dataset_3_keyframe_1",
+        "dataset_1_keyframe_2"
+      ],
+      "independent_sequence_count": 9,
+      "backbones": [
+        "S2M2-S",
+        "RAFT-Stereo",
+        "StereoAnywhere"
+      ],
+      "role": "seen",
+      "pairs_per_backbone": 8572,
+      "inventory": [
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_2_keyframe_4",
+          "frame_count": 2114,
+          "causal_pair_count": 2113,
+          "shape": [
+            2114,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "4520ce6980988b298e6611cb5662984a8e37548b5bee721b27d861633fc0ab35"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_3_keyframe_2",
+          "frame_count": 1597,
+          "causal_pair_count": 1596,
+          "shape": [
+            1597,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "bbb4b2caec255327d2061ff3ac9c17bbb6917a0194ea8372f993e519a66c6d08"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_6_keyframe_4",
+          "frame_count": 1360,
+          "causal_pair_count": 1359,
+          "shape": [
+            1360,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "beb68f0a08cd997344f299611efda475f3ba7a625463607c714e661866e1519d"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_2_keyframe_2",
+          "frame_count": 1033,
+          "causal_pair_count": 1032,
+          "shape": [
+            1033,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "a1c16d4051d7078064389549acb50eef3855cdd2eb3491c2a84cc8d8f53bace2"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_7_keyframe_1",
+          "frame_count": 647,
+          "causal_pair_count": 646,
+          "shape": [
+            647,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "eb165347bfa2834f132b4117ab919a886a1bb077e27d2d9da11895abe8822f32"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_6_keyframe_1",
+          "frame_count": 637,
+          "causal_pair_count": 636,
+          "shape": [
+            637,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "390f76da0854e60a695433b2b5cde2166d34180a1374f0d114a095eb575af9b3"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_7_keyframe_3",
+          "frame_count": 584,
+          "causal_pair_count": 583,
+          "shape": [
+            584,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "190070a2861c376d77fdefdac7a2bc5c4e7b0a16aabc053952c156825ae489d8"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_3_keyframe_1",
+          "frame_count": 329,
+          "causal_pair_count": 328,
+          "shape": [
+            329,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "feaee5bb9b6da213bf4e9f4ee2deb3096291ca6d48bbbb4ecf891ab218cdef89"
+        },
+        {
+          "role": "seen",
+          "backbone": "S2M2-S",
+          "sequence": "dataset_1_keyframe_2",
+          "frame_count": 280,
+          "causal_pair_count": 279,
+          "shape": [
+            280,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "e011060666ead390c066443896932b845a5fd59117ed716f1b48ae7cfc8c0e1b"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_2_keyframe_4",
+          "frame_count": 2114,
+          "causal_pair_count": 2113,
+          "shape": [
+            2114,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "4520ce6980988b298e6611cb5662984a8e37548b5bee721b27d861633fc0ab35"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_3_keyframe_2",
+          "frame_count": 1597,
+          "causal_pair_count": 1596,
+          "shape": [
+            1597,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "bbb4b2caec255327d2061ff3ac9c17bbb6917a0194ea8372f993e519a66c6d08"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_6_keyframe_4",
+          "frame_count": 1360,
+          "causal_pair_count": 1359,
+          "shape": [
+            1360,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "beb68f0a08cd997344f299611efda475f3ba7a625463607c714e661866e1519d"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_2_keyframe_2",
+          "frame_count": 1033,
+          "causal_pair_count": 1032,
+          "shape": [
+            1033,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "a1c16d4051d7078064389549acb50eef3855cdd2eb3491c2a84cc8d8f53bace2"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_7_keyframe_1",
+          "frame_count": 647,
+          "causal_pair_count": 646,
+          "shape": [
+            647,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "eb165347bfa2834f132b4117ab919a886a1bb077e27d2d9da11895abe8822f32"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_6_keyframe_1",
+          "frame_count": 637,
+          "causal_pair_count": 636,
+          "shape": [
+            637,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "390f76da0854e60a695433b2b5cde2166d34180a1374f0d114a095eb575af9b3"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_7_keyframe_3",
+          "frame_count": 584,
+          "causal_pair_count": 583,
+          "shape": [
+            584,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "190070a2861c376d77fdefdac7a2bc5c4e7b0a16aabc053952c156825ae489d8"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_3_keyframe_1",
+          "frame_count": 329,
+          "causal_pair_count": 328,
+          "shape": [
+            329,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "feaee5bb9b6da213bf4e9f4ee2deb3096291ca6d48bbbb4ecf891ab218cdef89"
+        },
+        {
+          "role": "seen",
+          "backbone": "RAFT-Stereo",
+          "sequence": "dataset_1_keyframe_2",
+          "frame_count": 280,
+          "causal_pair_count": 279,
+          "shape": [
+            280,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "e011060666ead390c066443896932b845a5fd59117ed716f1b48ae7cfc8c0e1b"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_2_keyframe_4",
+          "frame_count": 2114,
+          "causal_pair_count": 2113,
+          "shape": [
+            2114,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "4520ce6980988b298e6611cb5662984a8e37548b5bee721b27d861633fc0ab35"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_3_keyframe_2",
+          "frame_count": 1597,
+          "causal_pair_count": 1596,
+          "shape": [
+            1597,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "bbb4b2caec255327d2061ff3ac9c17bbb6917a0194ea8372f993e519a66c6d08"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_6_keyframe_4",
+          "frame_count": 1360,
+          "causal_pair_count": 1359,
+          "shape": [
+            1360,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "beb68f0a08cd997344f299611efda475f3ba7a625463607c714e661866e1519d"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_2_keyframe_2",
+          "frame_count": 1033,
+          "causal_pair_count": 1032,
+          "shape": [
+            1033,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "a1c16d4051d7078064389549acb50eef3855cdd2eb3491c2a84cc8d8f53bace2"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_7_keyframe_1",
+          "frame_count": 647,
+          "causal_pair_count": 646,
+          "shape": [
+            647,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "eb165347bfa2834f132b4117ab919a886a1bb077e27d2d9da11895abe8822f32"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_6_keyframe_1",
+          "frame_count": 637,
+          "causal_pair_count": 636,
+          "shape": [
+            637,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "390f76da0854e60a695433b2b5cde2166d34180a1374f0d114a095eb575af9b3"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_7_keyframe_3",
+          "frame_count": 584,
+          "causal_pair_count": 583,
+          "shape": [
+            584,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "190070a2861c376d77fdefdac7a2bc5c4e7b0a16aabc053952c156825ae489d8"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_3_keyframe_1",
+          "frame_count": 329,
+          "causal_pair_count": 328,
+          "shape": [
+            329,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "feaee5bb9b6da213bf4e9f4ee2deb3096291ca6d48bbbb4ecf891ab218cdef89"
+        },
+        {
+          "role": "seen",
+          "backbone": "StereoAnywhere",
+          "sequence": "dataset_1_keyframe_2",
+          "frame_count": 280,
+          "causal_pair_count": 279,
+          "shape": [
+            280,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "e011060666ead390c066443896932b845a5fd59117ed716f1b48ae7cfc8c0e1b"
+        }
+      ],
+      "canonical_bida_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "sea_raft_checkpoint": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sea_raft_checkpoint_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    {
+      "schema_version": 1,
+      "quality_gate_source": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/curated/manifests/quality_gate.csv",
+      "accepted_sequences": [
+        "dataset_1_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_2_keyframe_2",
+        "dataset_2_keyframe_3",
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_1",
+        "dataset_3_keyframe_2",
+        "dataset_3_keyframe_3",
+        "dataset_3_keyframe_4",
+        "dataset_6_keyframe_1",
+        "dataset_6_keyframe_2",
+        "dataset_6_keyframe_3",
+        "dataset_6_keyframe_4",
+        "dataset_7_keyframe_1",
+        "dataset_7_keyframe_2",
+        "dataset_7_keyframe_3",
+        "dataset_7_keyframe_4"
+      ],
+      "rejected_sequences": [
+        "dataset_1_keyframe_1",
+        "dataset_2_keyframe_1"
+      ],
+      "evaluated_sequences": [
+        "dataset_1_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_2_keyframe_2",
+        "dataset_2_keyframe_3",
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_1",
+        "dataset_3_keyframe_2",
+        "dataset_3_keyframe_3",
+        "dataset_3_keyframe_4",
+        "dataset_6_keyframe_1",
+        "dataset_6_keyframe_2",
+        "dataset_6_keyframe_3",
+        "dataset_6_keyframe_4",
+        "dataset_7_keyframe_1",
+        "dataset_7_keyframe_2",
+        "dataset_7_keyframe_3",
+        "dataset_7_keyframe_4"
+      ],
+      "independent_sequence_count": 17,
+      "backbones": [
+        "Fast-FoundationStereo"
+      ],
+      "role": "unseen",
+      "pairs_per_backbone": 16904,
+      "inventory": [
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_1_keyframe_2",
+          "frame_count": 280,
+          "causal_pair_count": 279,
+          "shape": [
+            280,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "e011060666ead390c066443896932b845a5fd59117ed716f1b48ae7cfc8c0e1b"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_1_keyframe_3",
+          "frame_count": 471,
+          "causal_pair_count": 470,
+          "shape": [
+            471,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "217fc80683e0c7a7c6242386a9c10144fac5d3c74423780e542eb1f04adc5fd5"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_2_keyframe_2",
+          "frame_count": 1033,
+          "causal_pair_count": 1032,
+          "shape": [
+            1033,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "a1c16d4051d7078064389549acb50eef3855cdd2eb3491c2a84cc8d8f53bace2"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_2_keyframe_3",
+          "frame_count": 1102,
+          "causal_pair_count": 1101,
+          "shape": [
+            1102,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "40585e64320a3335243b62c855f7cb9753037991588a3cf33f924f661b831fd9"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_2_keyframe_4",
+          "frame_count": 2114,
+          "causal_pair_count": 2113,
+          "shape": [
+            2114,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "4520ce6980988b298e6611cb5662984a8e37548b5bee721b27d861633fc0ab35"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_3_keyframe_1",
+          "frame_count": 329,
+          "causal_pair_count": 328,
+          "shape": [
+            329,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "feaee5bb9b6da213bf4e9f4ee2deb3096291ca6d48bbbb4ecf891ab218cdef89"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_3_keyframe_2",
+          "frame_count": 1597,
+          "causal_pair_count": 1596,
+          "shape": [
+            1597,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "bbb4b2caec255327d2061ff3ac9c17bbb6917a0194ea8372f993e519a66c6d08"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_3_keyframe_3",
+          "frame_count": 448,
+          "causal_pair_count": 447,
+          "shape": [
+            448,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "de5371f8160ecbf2e5612675cc4c753091b9f80ff540f113230582ab342f5750"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_3_keyframe_4",
+          "frame_count": 834,
+          "causal_pair_count": 833,
+          "shape": [
+            834,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "7c2a031d4f6c663baa0b4185d460400907e54dc4bad0373eb67a88bb5b165969"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_6_keyframe_1",
+          "frame_count": 637,
+          "causal_pair_count": 636,
+          "shape": [
+            637,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "390f76da0854e60a695433b2b5cde2166d34180a1374f0d114a095eb575af9b3"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_6_keyframe_2",
+          "frame_count": 1087,
+          "causal_pair_count": 1086,
+          "shape": [
+            1087,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "19d2b8545a5f6350c7d3f3af773e85cfd0affc1028749f3e3d21e3c13564c51a"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_6_keyframe_3",
+          "frame_count": 1573,
+          "causal_pair_count": 1572,
+          "shape": [
+            1573,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "785d8d9288bf9ab50cac11b4a9021f4e489d3b86ce44cfc4e79af940011233f6"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_6_keyframe_4",
+          "frame_count": 1360,
+          "causal_pair_count": 1359,
+          "shape": [
+            1360,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "beb68f0a08cd997344f299611efda475f3ba7a625463607c714e661866e1519d"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_7_keyframe_1",
+          "frame_count": 647,
+          "causal_pair_count": 646,
+          "shape": [
+            647,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "eb165347bfa2834f132b4117ab919a886a1bb077e27d2d9da11895abe8822f32"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_7_keyframe_2",
+          "frame_count": 628,
+          "causal_pair_count": 627,
+          "shape": [
+            628,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "0456c0806264c4978e91ac8f344d5d0f619f692df8b2d415389fd9b10d80bc17"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_7_keyframe_3",
+          "frame_count": 584,
+          "causal_pair_count": 583,
+          "shape": [
+            584,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "190070a2861c376d77fdefdac7a2bc5c4e7b0a16aabc053952c156825ae489d8"
+        },
+        {
+          "role": "unseen",
+          "backbone": "Fast-FoundationStereo",
+          "sequence": "dataset_7_keyframe_4",
+          "frame_count": 2197,
+          "causal_pair_count": 2196,
+          "shape": [
+            2197,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "1d8b3bdb4d1f628436fac2000d0f8837e88b3ab2d3c42d09687ac87567cba247"
+        }
+      ],
+      "canonical_bida_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "sea_raft_checkpoint": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sea_raft_checkpoint_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    {
+      "schema_version": 1,
+      "quality_gate_source": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/curated/manifests/quality_gate.csv",
+      "accepted_sequences": [
+        "dataset_1_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_2_keyframe_2",
+        "dataset_2_keyframe_3",
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_1",
+        "dataset_3_keyframe_2",
+        "dataset_3_keyframe_3",
+        "dataset_3_keyframe_4",
+        "dataset_6_keyframe_1",
+        "dataset_6_keyframe_2",
+        "dataset_6_keyframe_3",
+        "dataset_6_keyframe_4",
+        "dataset_7_keyframe_1",
+        "dataset_7_keyframe_2",
+        "dataset_7_keyframe_3",
+        "dataset_7_keyframe_4"
+      ],
+      "rejected_sequences": [
+        "dataset_1_keyframe_1",
+        "dataset_2_keyframe_1"
+      ],
+      "evaluated_sequences": [
+        "dataset_1_keyframe_2",
+        "dataset_1_keyframe_3",
+        "dataset_2_keyframe_2",
+        "dataset_2_keyframe_3",
+        "dataset_2_keyframe_4",
+        "dataset_3_keyframe_1",
+        "dataset_3_keyframe_2",
+        "dataset_3_keyframe_3",
+        "dataset_3_keyframe_4",
+        "dataset_6_keyframe_1",
+        "dataset_6_keyframe_2",
+        "dataset_6_keyframe_3",
+        "dataset_6_keyframe_4",
+        "dataset_7_keyframe_1",
+        "dataset_7_keyframe_2",
+        "dataset_7_keyframe_3",
+        "dataset_7_keyframe_4"
+      ],
+      "independent_sequence_count": 17,
+      "backbones": [
+        "CREStereo"
+      ],
+      "role": "unseen",
+      "pairs_per_backbone": 16904,
+      "inventory": [
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_1_keyframe_2",
+          "frame_count": 280,
+          "causal_pair_count": 279,
+          "shape": [
+            280,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "e011060666ead390c066443896932b845a5fd59117ed716f1b48ae7cfc8c0e1b"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_1_keyframe_3",
+          "frame_count": 471,
+          "causal_pair_count": 470,
+          "shape": [
+            471,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "217fc80683e0c7a7c6242386a9c10144fac5d3c74423780e542eb1f04adc5fd5"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_2_keyframe_2",
+          "frame_count": 1033,
+          "causal_pair_count": 1032,
+          "shape": [
+            1033,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "a1c16d4051d7078064389549acb50eef3855cdd2eb3491c2a84cc8d8f53bace2"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_2_keyframe_3",
+          "frame_count": 1102,
+          "causal_pair_count": 1101,
+          "shape": [
+            1102,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "40585e64320a3335243b62c855f7cb9753037991588a3cf33f924f661b831fd9"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_2_keyframe_4",
+          "frame_count": 2114,
+          "causal_pair_count": 2113,
+          "shape": [
+            2114,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "4520ce6980988b298e6611cb5662984a8e37548b5bee721b27d861633fc0ab35"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_3_keyframe_1",
+          "frame_count": 329,
+          "causal_pair_count": 328,
+          "shape": [
+            329,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "feaee5bb9b6da213bf4e9f4ee2deb3096291ca6d48bbbb4ecf891ab218cdef89"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_3_keyframe_2",
+          "frame_count": 1597,
+          "causal_pair_count": 1596,
+          "shape": [
+            1597,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "bbb4b2caec255327d2061ff3ac9c17bbb6917a0194ea8372f993e519a66c6d08"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_3_keyframe_3",
+          "frame_count": 448,
+          "causal_pair_count": 447,
+          "shape": [
+            448,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "de5371f8160ecbf2e5612675cc4c753091b9f80ff540f113230582ab342f5750"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_3_keyframe_4",
+          "frame_count": 834,
+          "causal_pair_count": 833,
+          "shape": [
+            834,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "7c2a031d4f6c663baa0b4185d460400907e54dc4bad0373eb67a88bb5b165969"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_6_keyframe_1",
+          "frame_count": 637,
+          "causal_pair_count": 636,
+          "shape": [
+            637,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "390f76da0854e60a695433b2b5cde2166d34180a1374f0d114a095eb575af9b3"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_6_keyframe_2",
+          "frame_count": 1087,
+          "causal_pair_count": 1086,
+          "shape": [
+            1087,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "19d2b8545a5f6350c7d3f3af773e85cfd0affc1028749f3e3d21e3c13564c51a"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_6_keyframe_3",
+          "frame_count": 1573,
+          "causal_pair_count": 1572,
+          "shape": [
+            1573,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "785d8d9288bf9ab50cac11b4a9021f4e489d3b86ce44cfc4e79af940011233f6"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_6_keyframe_4",
+          "frame_count": 1360,
+          "causal_pair_count": 1359,
+          "shape": [
+            1360,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "beb68f0a08cd997344f299611efda475f3ba7a625463607c714e661866e1519d"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_7_keyframe_1",
+          "frame_count": 647,
+          "causal_pair_count": 646,
+          "shape": [
+            647,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "eb165347bfa2834f132b4117ab919a886a1bb077e27d2d9da11895abe8822f32"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_7_keyframe_2",
+          "frame_count": 628,
+          "causal_pair_count": 627,
+          "shape": [
+            628,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "0456c0806264c4978e91ac8f344d5d0f619f692df8b2d415389fd9b10d80bc17"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_7_keyframe_3",
+          "frame_count": 584,
+          "causal_pair_count": 583,
+          "shape": [
+            584,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "190070a2861c376d77fdefdac7a2bc5c4e7b0a16aabc053952c156825ae489d8"
+        },
+        {
+          "role": "unseen",
+          "backbone": "CREStereo",
+          "sequence": "dataset_7_keyframe_4",
+          "frame_count": 2197,
+          "causal_pair_count": 2196,
+          "shape": [
+            2197,
+            144,
+            180
+          ],
+          "disparity_dtype": "float16",
+          "valid_dtype": "uint8",
+          "complete_flag": true,
+          "metadata_completion_status": true,
+          "frame_ids_sha256": "1d8b3bdb4d1f628436fac2000d0f8837e88b3ab2d3c42d09687ac87567cba247"
+        }
+      ],
+      "canonical_bida_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "sea_raft_checkpoint": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sea_raft_checkpoint_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    }
+  ],
+  "no_training": true,
+  "learned_components_used": []
+}

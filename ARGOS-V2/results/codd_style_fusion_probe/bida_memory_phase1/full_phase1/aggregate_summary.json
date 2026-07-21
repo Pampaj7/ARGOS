@@ -1,0 +1,47 @@
+{
+  "metrics": {
+    "clean_pixel_degradation": {
+      "mean": 0.03407809920105622,
+      "sample_std": 0.0027653306833170356
+    },
+    "effective_temporal_fraction": {
+      "mean": 0.795292807461606,
+      "sample_std": 0.044548363687703194
+    },
+    "frames_worsened_fraction": {
+      "mean": 0.2742187749369594,
+      "sample_std": 0.013463895558123874
+    },
+    "fused_epe": {
+      "mean": 0.5035708854577761,
+      "sample_std": 0.001758830827441637
+    },
+    "gain": {
+      "mean": 0.02959529132530747,
+      "sample_std": 0.001758830827441637
+    },
+    "harmful_update_rate": {
+      "mean": 0.006582037650699833,
+      "sample_std": 0.0007420272442105483
+    },
+    "oracle_gain": {
+      "mean": 0.052329516644348595,
+      "sample_std": 0.0
+    },
+    "oracle_recovery": {
+      "mean": 0.5655563670967647,
+      "sample_std": 0.03361068361084478
+    },
+    "raw_epe": {
+      "mean": 0.5331661767830835,
+      "sample_std": 0.0
+    },
+    "worst_frame_degradation": {
+      "mean": 0.6807256539662679,
+      "sample_std": 0.32660361160187346
+    }
+  },
+  "seed_count": 3,
+  "seen_promotion_passed": true,
+  "verdict": "GO"
+}

@@ -1,0 +1,61 @@
+{
+  "architecture": "unchanged LearnedT1Refiner A2",
+  "sota": "causal BiDA t-1 only",
+  "scared_train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "scared_validation_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "d4d_train_specimens": [
+    "specimen_1"
+  ],
+  "d4d_validation_specimens": [
+    "specimen_2"
+  ],
+  "d4d_backbones": [
+    "S2M2-S"
+  ],
+  "scared_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "forbidden_before_freeze": [
+    "SERV-CT",
+    "StereoMIS",
+    "Fast-FoundationStereo",
+    "CREStereo",
+    "D4D/specimen_3"
+  ],
+  "sampling": {
+    "SCARED-C": 0.75,
+    "D4D": 0.25,
+    "samples_per_epoch": 4096,
+    "domain_counts": {
+      "SCARED-C": 3072,
+      "D4D": 1024
+    }
+  },
+  "source_counts": {
+    "scared_train": 9984,
+    "d4d_train": 72,
+    "scared_validation": 1920,
+    "d4d_validation": 33
+  }
+}

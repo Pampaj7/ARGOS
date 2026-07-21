@@ -73,6 +73,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workers", type=int, default=min(32, os.cpu_count() or 8))
     parser.add_argument("--learning-rate", type=float, default=2e-3)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
+    parser.add_argument("--scheduler", choices=("none", "onecycle"), default="none")
     parser.add_argument("--tau-px", type=float, default=3.0)
     parser.add_argument("--seed", type=int, default=20260713)
     parser.add_argument("--device", default="cuda:0")
@@ -272,6 +273,17 @@ def train(args: argparse.Namespace, *, smoke: bool = False) -> int:
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay
     )
+    target_epochs = args.epochs if not smoke else max(args.epochs, 1_000_000)
+    scheduler = None
+    if args.scheduler == "onecycle":
+        if smoke:
+            raise ValueError("onecycle is reserved for fixed-length full training")
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(
+            optimizer,
+            max_lr=args.learning_rate,
+            epochs=target_epochs,
+            steps_per_epoch=len(train_loader),
+        )
     scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
     config = loss_config(args.variant)
     start_epoch = 0
@@ -283,6 +295,8 @@ def train(args: argparse.Namespace, *, smoke: bool = False) -> int:
         state = torch.load(final_path, map_location=device, weights_only=False)
         model.load_state_dict(state["model"])
         optimizer.load_state_dict(state["optimizer"])
+        if scheduler is not None:
+            scheduler.load_state_dict(state["scheduler"])
         start_epoch = int(state["epoch"]) + 1
         best_epe = float(state["best_validation_epe"])
     elif not args.resume:
@@ -293,7 +307,6 @@ def train(args: argparse.Namespace, *, smoke: bool = False) -> int:
     print(f"DATA train_pairs={len(train_dataset)} validation_pairs={len(validation_dataset)}", file=log)
     initial_gate = None
     global_step = 0
-    target_epochs = args.epochs if not smoke else max(args.epochs, 1_000_000)
     for epoch in range(start_epoch, target_epochs):
         model.train()
         sums: defaultdict[str, float] = defaultdict(float)
@@ -325,6 +338,8 @@ def train(args: argparse.Namespace, *, smoke: bool = False) -> int:
             gradient_norm = float(torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0))
             scaler.step(optimizer)
             scaler.update()
+            if scheduler is not None:
+                scheduler.step()
             gate_mean = float((output.g_error * output.c_memory).detach().mean())
             if initial_gate is None:
                 initial_gate = gate_mean
@@ -345,6 +360,7 @@ def train(args: argparse.Namespace, *, smoke: bool = False) -> int:
         row = {
             "epoch": epoch,
             "global_step": global_step,
+            "learning_rate": optimizer.param_groups[0]["lr"],
             **{name: value / max(batches, 1) for name, value in sums.items() if name != "update_abs_max"},
             "update_abs_max": sums["update_abs_max"],
             "validation_raw_epe": raw_epe,
@@ -356,6 +372,7 @@ def train(args: argparse.Namespace, *, smoke: bool = False) -> int:
         payload = {
             "model": model.state_dict(),
             "optimizer": optimizer.state_dict(),
+            "scheduler": scheduler.state_dict() if scheduler is not None else None,
             "epoch": epoch,
             "best_validation_epe": min(best_epe, refined_epe),
             "variant": args.variant,

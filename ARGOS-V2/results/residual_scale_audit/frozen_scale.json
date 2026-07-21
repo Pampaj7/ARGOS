@@ -1,0 +1,170 @@
+{
+  "selected_only_on": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "coverage_threshold": 0.5,
+  "scales": [
+    0.0,
+    0.05,
+    0.1,
+    0.2,
+    0.35,
+    0.5,
+    0.65,
+    0.8,
+    1.0
+  ],
+  "selection": {
+    "selection_rule": "maximize worst seen-backbone EPE gain subject to all-backbone clean degradation <=3% and false update <=5%; tie-break smaller scale",
+    "candidates": [
+      {
+        "scale": 0.0,
+        "minimum_backbone_gain": 0.0,
+        "mean_backbone_gain": 0.0,
+        "maximum_clean_degradation": 0.0,
+        "maximum_false_update_rate": 0.0,
+        "eligible": false
+      },
+      {
+        "scale": 0.05,
+        "minimum_backbone_gain": 0.0008405977793624897,
+        "mean_backbone_gain": 0.0009079631019763001,
+        "maximum_clean_degradation": 0.00011595311554902688,
+        "maximum_false_update_rate": 0.0002887709096823711,
+        "eligible": true
+      },
+      {
+        "scale": 0.1,
+        "minimum_backbone_gain": 0.0016442203978935255,
+        "mean_backbone_gain": 0.0017754448117797879,
+        "maximum_clean_degradation": 0.000785939747584363,
+        "maximum_false_update_rate": 0.0023883165005413264,
+        "eligible": true
+      },
+      {
+        "scale": 0.2,
+        "minimum_backbone_gain": 0.00313609253590863,
+        "mean_backbone_gain": 0.0033855782678488453,
+        "maximum_clean_degradation": 0.003376300580972761,
+        "maximum_false_update_rate": 0.00909803089372214,
+        "eligible": true
+      },
+      {
+        "scale": 0.35,
+        "minimum_backbone_gain": 0.005076528853952933,
+        "mean_backbone_gain": 0.0054859786659309795,
+        "maximum_clean_degradation": 0.009990075684028078,
+        "maximum_false_update_rate": 0.023482253137405394,
+        "eligible": true
+      },
+      {
+        "scale": 0.5,
+        "minimum_backbone_gain": 0.006659920287527321,
+        "mean_backbone_gain": 0.007214968961987478,
+        "maximum_clean_degradation": 0.019705993727730648,
+        "maximum_false_update_rate": 0.043567238829108616,
+        "eligible": true
+      },
+      {
+        "scale": 0.65,
+        "minimum_backbone_gain": 0.00789643765237788,
+        "mean_backbone_gain": 0.008585027028002104,
+        "maximum_clean_degradation": 0.03255232821148832,
+        "maximum_false_update_rate": 0.07105892832636132,
+        "eligible": false
+      },
+      {
+        "scale": 0.8,
+        "minimum_backbone_gain": 0.00879584215297502,
+        "mean_backbone_gain": 0.009608716481252277,
+        "maximum_clean_degradation": 0.05014035092177962,
+        "maximum_false_update_rate": 0.11595661002648179,
+        "eligible": false
+      },
+      {
+        "scale": 1.0,
+        "minimum_backbone_gain": 0.009487907394814948,
+        "mean_backbone_gain": 0.0104494716314698,
+        "maximum_clean_degradation": 0.09263319677339013,
+        "maximum_false_update_rate": 0.23851365260573654,
+        "eligible": false
+      }
+    ],
+    "selected": {
+      "scale": 0.5,
+      "minimum_backbone_gain": 0.006659920287527321,
+      "mean_backbone_gain": 0.007214968961987478,
+      "maximum_clean_degradation": 0.019705993727730648,
+      "maximum_false_update_rate": 0.043567238829108616,
+      "eligible": true
+    },
+    "constraints_feasible": true
+  },
+  "frozen_artifacts": {
+    "a2": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/learned_t1_refiner/ablations/A2/checkpoints/best_validation.pt",
+      "sha256": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea"
+    },
+    "sea_raft": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    }
+  },
+  "test_opened": true,
+  "final_seen_selected_scale": 0.5,
+  "final_seen_backbone_metrics": [
+    {
+      "scale": 0.5,
+      "backbone": "RAFT-Stereo",
+      "valid_count": 6324946,
+      "epe": 0.6911621026550973,
+      "raw_epe": 0.7040312111765531,
+      "bad1": 0.10164655950246154,
+      "bad3": 0.05068565014963653,
+      "boundary_epe": 1.641005114419204,
+      "new_bad3": 0.00037538673879165097,
+      "false_update_rate": 0.1305956452708025,
+      "clean_pixel_degradation": 0.06409255178527706,
+      "intervention_coverage": 0.1855732839458234,
+      "intervention_precision": 0.5886224978920602,
+      "mean_update_magnitude_clean": 0.02918349797555392,
+      "gain": 0.012869108521455841
+    },
+    {
+      "scale": 0.5,
+      "backbone": "S2M2-S",
+      "valid_count": 6324946,
+      "epe": 0.7621061280632787,
+      "raw_epe": 0.7714315698439189,
+      "bad1": 0.11183589563851892,
+      "bad3": 0.05360109012989835,
+      "boundary_epe": 1.8484741776664755,
+      "new_bad3": 0.00030086024888059334,
+      "false_update_rate": 0.1255198450561928,
+      "clean_pixel_degradation": 0.06041593219564022,
+      "intervention_coverage": 0.1822078797194474,
+      "intervention_precision": 0.5887386373883319,
+      "mean_update_magnitude_clean": 0.027418219410445477,
+      "gain": 0.009325441780640209
+    },
+    {
+      "scale": 0.5,
+      "backbone": "StereoAnywhere",
+      "valid_count": 6324946,
+      "epe": 0.6840761748435977,
+      "raw_epe": 0.6962635625789957,
+      "bad1": 0.09907278274674575,
+      "bad3": 0.05005686996191365,
+      "boundary_epe": 1.5644054277595822,
+      "new_bad3": 0.00027150057122219946,
+      "false_update_rate": 0.12886243128044297,
+      "clean_pixel_degradation": 0.061363457653184406,
+      "intervention_coverage": 0.1812431283998314,
+      "intervention_precision": 0.5944725788650841,
+      "mean_update_magnitude_clean": 0.027914687218444388,
+      "gain": 0.012187387735397959
+    }
+  ],
+  "final_seen_all_backbones_improve": true
+}

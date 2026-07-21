@@ -1,0 +1,44 @@
+{
+  "seed": 20260715,
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "calibration_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "final_seen_sequences": [
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "training_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "causal_pair": "t-1 -> t",
+  "primary_coverage_threshold": 0.5,
+  "evaluation_coverage_thresholds": [
+    0.05,
+    0.25,
+    0.5,
+    0.9
+  ],
+  "unseen_and_ood_policy": "not loaded before frozen seen promotion"
+}

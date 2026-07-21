@@ -1,0 +1,15 @@
+{
+  "frames": 960,
+  "total_seconds": 69.41354971798137,
+  "wall_ms_per_frame_including_io_and_metrics": 72.30578095623059,
+  "p4_latency_ms_per_frame": 0.131855834236679,
+  "cascade_logic_ms_per_frame_all_policies": 0.045070724930459015,
+  "cascade_logic_selected_estimated_ms_per_frame": 0.011267681232614754,
+  "p4_parameters": 15533,
+  "raw_error_detector_parameters": 1107,
+  "a2_parameters": 39299,
+  "sea_raft_parameters": 8883460,
+  "proposal_and_authorizers_parameters": 55939,
+  "trainable_parameters": 0,
+  "peak_gpu_memory_bytes": 625241088
+}

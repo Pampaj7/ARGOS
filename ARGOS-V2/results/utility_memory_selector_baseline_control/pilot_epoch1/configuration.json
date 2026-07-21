@@ -1,0 +1,33 @@
+{
+  "mode": "train",
+  "output": "results/utility_memory_selector_baseline_control/pilot_epoch1",
+  "checkpoint": null,
+  "seed": 0,
+  "device": "cuda:0",
+  "workers": 32,
+  "preload_workers": 32,
+  "batch_size": 64,
+  "epochs": 1,
+  "steps": 0,
+  "channels": 64,
+  "blocks": 4,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "coverage_threshold": 0.5,
+  "epsilon": 0.1,
+  "regional_target_kernel": 1,
+  "selective_target_coverage": 0.02,
+  "selective_coverage_weight": 32.0,
+  "selective_risk_weight": 10.0,
+  "objective": "legacy",
+  "crop_height": 96,
+  "crop_width": 120,
+  "validation_pair_cap": 0,
+  "resume": false,
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "stereo_photometric": false,
+  "stereo_photometric_kernel": 21
+}

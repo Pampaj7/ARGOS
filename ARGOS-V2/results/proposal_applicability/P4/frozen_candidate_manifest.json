@@ -1,0 +1,54 @@
+{
+  "checkpoint": "results/proposal_applicability/P4/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "c4d7d732b44ede1bb831b7789d6791907412b99345105f998c49c1cecde5bd2b",
+  "variant": "P4",
+  "channels": 24,
+  "epsilon_px": 0.1,
+  "operating_points": {
+    "balanced": {
+      "utility_margin_px": 0.0,
+      "uncertainty_threshold_px": 2.0,
+      "require_helpful_class": true,
+      "intervention_coverage": 0.012928913255710642,
+      "intervention_precision": 0.6842240625482229,
+      "intervention_recall": 0.2611717584229954,
+      "false_update_rate": 0.0061596717066719694,
+      "clean_pixel_degradation": 0.003502231220962491,
+      "harmful_proposal_acceptance_rate": 0.10161687546846558,
+      "epe_gain": 0.002835951978340745,
+      "retained_existing_authorized_gain": 0.9005529604343834,
+      "selected_candidate_regret": 0.023068655282258987
+    },
+    "safe": {
+      "utility_margin_px": 0.25,
+      "uncertainty_threshold_px": 0.1,
+      "require_helpful_class": true,
+      "intervention_coverage": 0.0018747289989120054,
+      "intervention_precision": 0.7254345512593118,
+      "intervention_recall": 0.04015157464855101,
+      "false_update_rate": 0.0008489625413530279,
+      "clean_pixel_degradation": 0.0004700234872683431,
+      "harmful_proposal_acceptance_rate": 0.013684548666880823,
+      "epe_gain": 0.00036601838655769825,
+      "retained_existing_authorized_gain": 0.11622867527566694,
+      "selected_candidate_regret": 0.025538597255945206
+    },
+    "matched_baselines": {
+      "random_probability": 0.056820938490990666,
+      "update_magnitude_threshold_px": 0.3282773196697235,
+      "calibration_intervention_coverage": 0.012928913255710642,
+      "calibration_nontrivial_update_prevalence": 0.22753783374698408
+    }
+  },
+  "selected_on": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "frozen_dependency_hashes": {
+    "a2": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea",
+    "raw_error_detector": "78b1bb6cf809dc76448222e41e3bcfafb754bc9b7b6629edcdfa2e1a33444e67",
+    "sea_raft": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "bida_source": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+  },
+  "unseen_loaded": false
+}

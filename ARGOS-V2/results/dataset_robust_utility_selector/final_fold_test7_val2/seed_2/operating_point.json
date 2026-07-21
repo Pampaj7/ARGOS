@@ -1,0 +1,28 @@
+{
+  "balanced": {
+    "probability_threshold": 0.5,
+    "utility_threshold_px": 0.0,
+    "harm_threshold_px": 0.5,
+    "coverage": 0.008846236376679263,
+    "precision": 0.7828072668222876,
+    "harmful_acceptance": 0.15003890524036673,
+    "harm_cost_fraction": 0.07391436468945613,
+    "net_utility": 0.004156119655817747,
+    "mean_selected_utility": 0.4698176681995392,
+    "clean_selection": 0.06715382793734564
+  },
+  "calibration_constraint_feasible": true,
+  "constraint": "harm_cost_fraction <= 0.25 and coverage >= 0.002",
+  "selected_only_on": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "checkpoint": "results/dataset_robust_utility_selector/final_fold_test7_val2/seed_2/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "81753518553b19fbe1dc62c2a63c2901f52d1aa22d66843c09ea6bb812cdab4a",
+  "frozen_hashes": {
+    "sea_raft_checkpoint": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "bida_source": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+    "cache_contract": "positive-left disparity [T,144,180], float16; valid mask; frame IDs verified by loader"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "protocol": {
+    "split": "13 non-dataset-7 training sequences",
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
+    "pairs_per_sequence_backbone": 32,
+    "pair_count": 1248,
+    "coverage_threshold": 0.5,
+    "paired_mask": "coverage>0.5 & raw_valid & aligned_validity & warp_support",
+    "epsilon_ladder": [
+      0.05,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "cache_grid": [
+      144,
+      180
+    ],
+    "units": "pixels at width 180"
+  },
+  "overall": {
+    "backbone": "ALL",
+    "sequence": "ALL",
+    "valid_count": 8948529,
+    "utility_mean": 0.019044745683626428,
+    "utility_std": 0.09503055733667726,
+    "mean_positive_utility": 0.1625002055440521,
+    "mean_harm_magnitude": 0.1372168526342093,
+    "raw_wrong_a2_harmful_fraction": 0.013990519076181597,
+    "raw_clean_a2_helpful_fraction": 0.05926860559700513,
+    "helpful_fraction_eps_0.05": 0.22662316901470622,
+    "harmful_fraction_eps_0.05": 0.12958733217493065,
+    "indifferent_fraction_eps_0.05": 0.6437894988103632,
+    "helpful_fraction_eps_0.1": 0.08464933175050335,
+    "harmful_fraction_eps_0.1": 0.019332339426960565,
+    "indifferent_fraction_eps_0.1": 0.8960183288225361,
+    "helpful_fraction_eps_0.25": 0.02019303954873477,
+    "harmful_fraction_eps_0.25": 0.0024363780907454176,
+    "indifferent_fraction_eps_0.25": 0.9773705823605198,
+    "helpful_fraction_eps_0.5": 0.005245331383515659,
+    "harmful_fraction_eps_0.5": 0.0004514708506839504,
+    "indifferent_fraction_eps_0.5": 0.9943031977658003,
+    "pearson_utility_vs_raw_error": 0.5279347438520853,
+    "pearson_utility_vs_abs_update": 0.6115887826297666,
+    "pearson_utility_vs_abs_disagreement": 0.26486097210130305,
+    "pearson_utility_vs_flow_magnitude": 0.12405481150620346,
+    "pearson_utility_vs_photometric_residual": 0.003534505269094047,
+    "pearson_utility_vs_fb_error": 0.06246147888027605,
+    "pearson_utility_vs_fb_confidence": -0.0656154207817286
+  },
+  "rank_correlations": [
+    {
+      "feature": "raw_error",
+      "pearson": 0.5002482518965542,
+      "spearman": 0.3413938759316176,
+      "sample_count": 581568
+    },
+    {
+      "feature": "abs_update",
+      "pearson": 0.6140542380162741,
+      "spearman": 0.2383796501246089,
+      "sample_count": 581568
+    },
+    {
+      "feature": "abs_disagreement",
+      "pearson": 0.2300113009113647,
+      "spearman": 0.12653126436252937,
+      "sample_count": 581568
+    },
+    {
+      "feature": "flow_magnitude",
+      "pearson": 0.18762840135400255,
+      "spearman": 0.06242325944033113,
+      "sample_count": 581568
+    },
+    {
+      "feature": "photometric_residual",
+      "pearson": 0.024174222231731855,
+      "spearman": 0.029637473087076295,
+      "sample_count": 581568
+    },
+    {
+      "feature": "fb_error",
+      "pearson": 0.059921186557827896,
+      "spearman": 0.004940445124100951,
+      "sample_count": 581568
+    },
+    {
+      "feature": "fb_confidence",
+      "pearson": -0.059033564869445304,
+      "spearman": -0.003399472262875794,
+      "sample_count": 581568
+    }
+  ],
+  "conclusion": "proposal utility is not equivalent to raw error if correlation is materially below one and both raw-wrong/A2-harmful and raw-clean/A2-helpful cases have nonzero support"
+}

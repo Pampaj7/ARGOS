@@ -1,0 +1,29 @@
+{
+  "policy_selection": {
+    "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "sequences": ["dataset_7_keyframe_1", "dataset_7_keyframe_2"],
+    "opened": true
+  },
+  "final_seen": {
+    "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "sequences": ["dataset_7_keyframe_3", "dataset_7_keyframe_4"],
+    "opened_after_policy_freeze": true,
+    "frames": 960
+  },
+  "unseen_backbones": {
+    "backbones": ["Fast-FoundationStereo", "CREStereo"],
+    "opened": false,
+    "reason": "final seen promotion gate failed"
+  },
+  "ood": {
+    "datasets": ["SERV-CT", "D4D", "SCARED structured-light", "StereoMIS"],
+    "opened": false,
+    "reason": "unseen evaluation was blocked by final seen promotion failure"
+  },
+  "seed": 20260716,
+  "coverage_threshold_primary": 0.5,
+  "coverage_threshold_sensitivity": [0.05, 0.25, 0.5, 0.9],
+  "grid": "cache-grid-from-cached-predictions",
+  "disparity_units": "pixels at cache width 180"
+}
+

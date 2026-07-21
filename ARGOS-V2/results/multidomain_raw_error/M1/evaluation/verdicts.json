@@ -1,0 +1,37 @@
+{
+  "CREStereo": {
+    "epe_gain": 0.014104595794293573,
+    "m0_gain_retention": 0.3732125297622769,
+    "reason": "gain +0.0141px; false update 0.9%; clean degradation 0.2%.",
+    "verdict": "GO"
+  },
+  "D4D-heldout-specimen3": {
+    "epe_gain": -0.034554983875510814,
+    "m0_gain_retention": null,
+    "reason": "gain -0.0346px; false update 0.0%; clean degradation 0.0%.",
+    "verdict": "NO-GO"
+  },
+  "Fast-FoundationStereo": {
+    "epe_gain": 0.010125945286228122,
+    "m0_gain_retention": 0.43213747783933465,
+    "reason": "gain +0.0101px; false update 0.8%; clean degradation 0.2%.",
+    "verdict": "GO"
+  },
+  "SCARED-C-test": {
+    "epe_gain": 0.01251575750589784,
+    "m0_gain_retention": 0.4644814941901634,
+    "reason": "M0 gain retention 46.4%; false update 0.9%; clean degradation 0.3%.",
+    "verdict": "NO-GO"
+  },
+  "SERV-CT-unseen": {
+    "epe_gain": -0.36775495984009043,
+    "m0_gain_retention": null,
+    "reason": "gain -0.3678px; false update 49.1%; clean degradation 40.5%; coverage 51.0%.",
+    "verdict": "NO-GO"
+  },
+  "overall": {
+    "reason": "Multi-domain exposure must improve the fully unseen domain with nonzero coverage while preserving every required seen/backbone safety check.",
+    "scientific_hypothesis_supported": false,
+    "verdict": "NO-GO"
+  }
+}

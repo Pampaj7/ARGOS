@@ -1,0 +1,12 @@
+{
+  "completed_datasets": [
+    "SCARED-C-test",
+    "Fast-FoundationStereo",
+    "CREStereo",
+    "D4D-heldout-specimen3",
+    "SERV-CT-unseen"
+  ],
+  "fold": "m1",
+  "frozen_manifest_sha256": "925b662b6db35045812c2e2a2434805fe5adb16a63c22b5f1f082d3f11283b89",
+  "no_post_unseen_tuning": true
+}

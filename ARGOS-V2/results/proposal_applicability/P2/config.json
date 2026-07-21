@@ -1,0 +1,23 @@
+{
+  "mode": "train",
+  "output": "results/proposal_applicability/P2",
+  "checkpoint": null,
+  "variant": "P2",
+  "channels": 24,
+  "epsilon": 0.1,
+  "coverage_threshold": 0.5,
+  "epochs": 5,
+  "steps": 0,
+  "batch_size": 16,
+  "workers": 32,
+  "max_train_pairs": 256,
+  "max_validation_pairs": 160,
+  "sample_pixels_per_frame": 2048,
+  "training_pixels_per_batch": 32768,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "seed": 20260715,
+  "device": "cuda:0",
+  "resume": true,
+  "backbones": []
+}

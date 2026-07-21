@@ -1,0 +1,7 @@
+{
+  "lrc": "abs(d_left(x) - d_right(x-d_left(x))) after flip-swap right-reference inference and horizontal unflip",
+  "valid": "GT-valid & current left prediction-valid & right-reference sampled-valid & in-bounds right support",
+  "raw_bad1_auroc": "threshold-free ability of LRC residual to identify raw error > 1 cache-grid pixel",
+  "lrc_difference": "LRC(raw) - LRC(aligned t-1 memory); positive values favor memory under stereo consistency",
+  "lrc_memory_better_auroc": "threshold-free ability of LRC difference to identify true raw-minus-memory utility > .10 px"
+}

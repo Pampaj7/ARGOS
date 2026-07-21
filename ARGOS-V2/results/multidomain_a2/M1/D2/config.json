@@ -1,0 +1,17 @@
+{
+  "stage": "train",
+  "output": "results/multidomain_a2/M1/D2",
+  "d4d_fraction": 0.5,
+  "epochs": 5,
+  "smoke_epochs": 3,
+  "samples_per_epoch": 4096,
+  "max_train_pairs": 256,
+  "max_validation_pairs": 160,
+  "batch_size": 16,
+  "workers": 32,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "seed": 20260719,
+  "device": "cuda:0",
+  "variant": "A2"
+}

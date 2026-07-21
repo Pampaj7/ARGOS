@@ -1,0 +1,35 @@
+{
+  "grid": "cache grid 144x180",
+  "disparity_units": "positive left disparity, pixels at cache width 180",
+  "gt_resize": "resize(disparity * valid) / resize(valid), then multiply by 180/native_width",
+  "primary_gt_coverage_threshold": 0.5,
+  "flow": "SEA-RAFT first-image to second-image; current->past for target-to-source warp",
+  "warp": "source sampled at integer target grid + target-to-source flow; bilinear, zeros, align_corners=True",
+  "common_mask": "GT coverage > 0.50 & current prediction valid & sampled past valid & in-bounds warp support",
+  "occlusion": "out-of-bounds and invalid sampled-source pixels are excluded; FB-inconsistent but sampleable pixels are a reported region",
+  "raw_error": "abs(raw_t - GT_t)",
+  "memory_error": "abs(warp(disparity_t-1, flow_t->t-1) - GT_t)",
+  "oracle_error": "min(raw_error, memory_error) per pixel",
+  "ties": "exact float32 equality after error computation",
+  "boundary": "Sobel GT disparity magnitude >1 cache px or GT-valid boundary, dilated by 3x3",
+  "motion_bins": {
+    "low": "flow magnitude <1 cache px",
+    "high": "flow magnitude >=1 cache px"
+  },
+  "raw_error_bins": [
+    "<=1 px",
+    ">1 and <=3 px",
+    ">3 px"
+  ],
+  "gt_disparity_bins": [
+    "[0,2) px",
+    "[2,4) px",
+    "[4,8) px",
+    "[8,inf) px"
+  ],
+  "stereo_confidence_bins": "not evaluated: canonical caches expose only prediction-valid masks, not backbone-independent confidence",
+  "temporal_difference": "abs(raw_t - aligned_raw_t-1), reported separately from accuracy",
+  "gt_relative_temporal_error_consistency": "abs(raw_error - memory_error); lower is not interpreted as higher accuracy",
+  "aggregation": "pixel-pooled geometry plus equal-sequence mean/std and sequence-unit bootstrap confidence intervals",
+  "bootstrap": "10,000 deterministic resamples of complete sequences with replacement"
+}

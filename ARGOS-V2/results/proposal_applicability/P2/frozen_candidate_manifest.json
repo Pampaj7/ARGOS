@@ -1,0 +1,52 @@
+{
+  "checkpoint": "results/proposal_applicability/P2/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "22d665a1fcb813a8b7c2f3d0d91052be9d830316971fe5429fb3a8ac0842bdc0",
+  "variant": "P2",
+  "channels": 24,
+  "epsilon_px": 0.1,
+  "operating_points": {
+    "balanced": {
+      "utility_margin_px": 0.05,
+      "uncertainty_threshold_px": 999.0,
+      "require_helpful_class": false,
+      "intervention_coverage": 0.05927641711955437,
+      "intervention_precision": 0.3885654022640324,
+      "intervention_recall": 0.6800047121652399,
+      "false_update_rate": 0.04493591410529361,
+      "clean_pixel_degradation": 0.024005267600502287,
+      "harmful_proposal_acceptance_rate": 0.5509155155798265,
+      "epe_gain": 0.004207259509712458,
+      "retained_existing_authorized_gain": 1.336009930959426,
+      "selected_candidate_regret": 0.021697357296943665
+    },
+    "safe": {
+      "utility_margin_px": 0.25,
+      "uncertainty_threshold_px": 999.0,
+      "require_helpful_class": false,
+      "intervention_coverage": 0.012809207253651698,
+      "intervention_precision": 0.6578059290794871,
+      "intervention_recall": 0.24876305662451897,
+      "false_update_rate": 0.005872512386787612,
+      "clean_pixel_degradation": 0.0038714360608138082,
+      "harmful_proposal_acceptance_rate": 0.11735731877074633,
+      "epe_gain": 0.003371113445609808,
+      "retained_existing_authorized_gain": 1.0704928068564432,
+      "selected_candidate_regret": 0.02253350429236889
+    },
+    "matched_baselines": {
+      "random_probability": 0.05927641711955437,
+      "update_magnitude_threshold_px": 0.11580894887447357
+    }
+  },
+  "selected_on": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "frozen_dependency_hashes": {
+    "a2": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea",
+    "raw_error_detector": "78b1bb6cf809dc76448222e41e3bcfafb754bc9b7b6629edcdfa2e1a33444e67",
+    "sea_raft": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "bida_source": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+  },
+  "unseen_loaded": false
+}

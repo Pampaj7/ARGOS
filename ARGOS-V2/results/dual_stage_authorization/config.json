@@ -1,0 +1,21 @@
+{
+  "experiment": "ARGOS v2 dual-stage authorization",
+  "training": false,
+  "output": "results/dual_stage_authorization",
+  "batch_size": 16,
+  "workers": 32,
+  "max_pairs_per_sequence": 160,
+  "sample_pixels_per_frame_for_conditional_audit": 2048,
+  "coverage_threshold_primary": 0.5,
+  "coverage_threshold_sensitivity": [0.05, 0.25, 0.5, 0.9],
+  "conditional_utility_epsilon_px": 0.1,
+  "material_update_epsilon_px": 0.05,
+  "device": "cuda:0",
+  "seed": 20260716,
+  "selected_policy": "C2_utility_0.0",
+  "selected_policy_rule": "veto an existing Raw Error authorization when frozen P4 predicted utility <= 0 cache px",
+  "c3_justified": false,
+  "final_promotion_passed": false,
+  "unseen_evaluation_run": false,
+  "ood_evaluation_run": false
+}

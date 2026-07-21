@@ -1,0 +1,26 @@
+{
+  "project": "ARGOS v2",
+  "experiment": "M1 detector-only multi-domain exposure with backbone-balanced D4D",
+  "status": "stopped_before_unseen_evaluation",
+  "reason": "Neither validation-only candidate met the predeclared seen-domain promotion constraints.",
+  "selection_domains": ["SCARED-C held-out", "D4D specimen_2 curated Zivid anchors"],
+  "not_loaded_for_selection_or_final_evaluation": ["SERV-CT", "Fast-FoundationStereo", "CREStereo", "D4D specimen_3 labels"],
+  "candidates": {
+    "D1_75_scared_25_d4d": {
+      "eligible": false,
+      "scared_epe_gain_px": 0.0028047562,
+      "scared_intervention_coverage": 0.0125066171,
+      "d4d_epe_gain_px": -0.1335978508,
+      "d4d_intervention_coverage": 0.0674652039
+    },
+    "D2_50_scared_50_d4d": {
+      "eligible": false,
+      "scared_epe_gain_px": 0.0000179410,
+      "scared_intervention_coverage": 0.0000325866,
+      "d4d_epe_gain_px": 0.0000143051,
+      "d4d_intervention_coverage": 0.0001119445
+    }
+  },
+  "verdict": "NO-GO",
+  "interpretation": "Detector-only domain exposure does not create a meaningful safe authorization policy when the frozen bounded A2 proposal is not itself useful for the added D4D backbone/domain cases."
+}

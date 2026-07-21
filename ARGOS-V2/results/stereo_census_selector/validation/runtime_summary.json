@@ -1,0 +1,12 @@
+{
+  "elapsed_s": 129.13272920699092,
+  "right_rgb_ram_bytes": 98988480,
+  "left_gt_preload": {
+    "enabled": true,
+    "frames": 1275,
+    "bytes": 363528000,
+    "workers": 32
+  },
+  "batch_size": 16,
+  "workers": 32
+}

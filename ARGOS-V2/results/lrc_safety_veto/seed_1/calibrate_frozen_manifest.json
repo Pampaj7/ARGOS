@@ -1,0 +1,30 @@
+{
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "bida_source_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+  "clean_error_px": 0.1,
+  "coverage_threshold": 0.5,
+  "harm_margin_px": 0.1,
+  "lrc_source_sha256": "06eed2e949961c728d6a67301cf97e4b6a5362d660e2c9fe5b9c758756f268c6",
+  "no_ood_or_unseen_data_used": true,
+  "selector_checkpoint": "results/utility_memory_selector/seed_1/checkpoints/best_validation.pt",
+  "selector_checkpoint_sha256": "174024bf6f0eac5dc3e5e38ab96f5f163b157ac3f2e598af228597d010615518",
+  "selector_policy": {
+    "clean_selection": 0.07381099444101297,
+    "coverage": 0.005326980878474752,
+    "harm_threshold_px": 0.05,
+    "harmful_acceptance": 0.30080296479308216,
+    "net_utility": 0.0007623487617820501,
+    "precision": 0.6253860407659049,
+    "probability_threshold": 0.5,
+    "utility_threshold_px": 0.1
+  },
+  "sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "veto_source_sha256": "80b02c8f413f3e0bcb3b18d5fbc58f81251a5e74fe28fff8abf8d508e0b97972"
+}

@@ -1,0 +1,34 @@
+{
+  "seed": 0,
+  "training_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "calibration_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "seen_test_sequences": [
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "unseen_policy": "Fast-FoundationStereo and CREStereo rejected before loading",
+  "causal_pair": "t-1 -> t",
+  "primary_coverage": 0.5
+}

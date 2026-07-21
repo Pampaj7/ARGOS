@@ -1,0 +1,52 @@
+{
+  "checkpoint": "results/proposal_applicability/P3/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "6d5a28e4fd4110109a8295e71749c5725051e64873781672e86fb1bf12494987",
+  "variant": "P3",
+  "channels": 24,
+  "epsilon_px": 0.1,
+  "operating_points": {
+    "balanced": {
+      "utility_margin_px": 0.1,
+      "uncertainty_threshold_px": 2.0,
+      "require_helpful_class": false,
+      "intervention_coverage": 0.036596784962798036,
+      "intervention_precision": 0.4857350536071234,
+      "intervention_recall": 0.5248174035969528,
+      "false_update_rate": 0.025489039970074245,
+      "clean_pixel_degradation": 0.01630133233580814,
+      "harmful_proposal_acceptance_rate": 0.4749759074847414,
+      "epe_gain": 0.00341551355086267,
+      "retained_existing_authorized_gain": 1.0845920040693866,
+      "selected_candidate_regret": 0.02248910441994667
+    },
+    "safe": {
+      "utility_margin_px": 0.25,
+      "uncertainty_threshold_px": 0.1,
+      "require_helpful_class": false,
+      "intervention_coverage": 0.0010334618177755433,
+      "intervention_precision": 0.88996138996139,
+      "intervention_recall": 0.02715385219508364,
+      "false_update_rate": 0.0002002466928007142,
+      "clean_pixel_degradation": 9.10844331836582e-05,
+      "harmful_proposal_acceptance_rate": 0.002591283863368669,
+      "epe_gain": 0.000362141290679574,
+      "retained_existing_authorized_gain": 0.11499750838793439,
+      "selected_candidate_regret": 0.025542473420500755
+    },
+    "matched_baselines": {
+      "random_probability": 0.036596784962798036,
+      "update_magnitude_threshold_px": 0.16242724657058716
+    }
+  },
+  "selected_on": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "frozen_dependency_hashes": {
+    "a2": "6cd29277397001333ef3ce630b2f3bc04ec393cdc72e65aa5eb087afd3b389ea",
+    "raw_error_detector": "78b1bb6cf809dc76448222e41e3bcfafb754bc9b7b6629edcdfa2e1a33444e67",
+    "sea_raft": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "bida_source": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+  },
+  "unseen_loaded": false
+}

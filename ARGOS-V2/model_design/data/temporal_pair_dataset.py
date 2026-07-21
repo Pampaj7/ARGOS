@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Sequence
@@ -116,6 +117,7 @@ class TemporalPairDataset(Dataset):
         max_pairs_per_sequence: int | None = None,
         random_clip_start: bool = False,
         seed: int = 20260713,
+        include_right_rgb: bool = False,
     ) -> None:
         if not 0 <= coverage_threshold <= 1:
             raise ValueError("coverage_threshold must be in [0,1]")
@@ -128,7 +130,10 @@ class TemporalPairDataset(Dataset):
         self.max_pairs_per_sequence = max_pairs_per_sequence
         self.random_clip_start = random_clip_start
         self.seed = seed
+        self.include_right_rgb = bool(include_right_rgb)
         self._handles: dict[tuple[str, str], tuple] = {}
+        self._frame_data: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
+        self._right_frame_data: dict[str, np.ndarray] = {}
         self._infos = {sequence: load_sequence_info(sequence) for sequence in self.sequences}
         self.records = self._build_records()
         counts = {backbone: sum(r.backbone == backbone for r in self.records) for backbone in self.backbones}
@@ -183,6 +188,60 @@ class TemporalPairDataset(Dataset):
         resized = cv2.resize(rgb, (CACHE_WIDTH, CACHE_HEIGHT), interpolation=cv2.INTER_AREA)
         return torch.from_numpy(np.ascontiguousarray(resized)).permute(2, 0, 1).float()
 
+    def preload_frame_data(self, workers: int) -> dict:
+        """Load universal RGB/GT frame data once into parent-process RAM.
+
+        Stereo cache arrays remain mmap-backed.  Calling this before creating
+        forked persistent DataLoader workers avoids rereading the same RGB and
+        GT once per backbone and epoch.  No disk cache is written.
+        """
+        if workers < 1:
+            return {"enabled":False,"frames":0,"bytes":0}
+        include_right = getattr(self, "include_right_rgb", False)
+        if not hasattr(self, "_right_frame_data"):
+            self._right_frame_data = {}
+        cv2.setNumThreads(0)
+        tasks=[]
+        for sequence in self.sequences:
+            info=self._infos[sequence]
+            tasks.extend((sequence,index,frame_id,info) for index,frame_id in enumerate(info.frame_ids))
+
+        def load(task):
+            sequence,index,frame_id,info=task
+            rgb=read_rgb(info.seq_dir/"left"/f"{frame_id}.png")
+            rgb=cv2.resize(rgb,(CACHE_WIDTH,CACHE_HEIGHT),interpolation=cv2.INTER_AREA)
+            rgb=np.ascontiguousarray(rgb).transpose(2,0,1)
+            right = None
+            if include_right:
+                right=read_rgb(info.seq_dir/"right"/f"{frame_id}.png")
+                right=cv2.resize(right,(CACHE_WIDTH,CACHE_HEIGHT),interpolation=cv2.INTER_AREA)
+                right=np.ascontiguousarray(right).transpose(2,0,1)
+            gt_native,valid_native=load_frame_gt(info,frame_id)
+            gt,coverage=resize_gt_to_cache_masked(gt_native,valid_native)
+            return sequence,index,rgb,right,gt[None],coverage[None]
+
+        allocated={}
+        for sequence in self.sequences:
+            length=len(self._infos[sequence].frame_ids)
+            allocated[sequence]=(
+                np.empty((length,3,CACHE_HEIGHT,CACHE_WIDTH),dtype=np.uint8),
+                np.empty((length,1,CACHE_HEIGHT,CACHE_WIDTH),dtype=np.float32),
+                np.empty((length,1,CACHE_HEIGHT,CACHE_WIDTH),dtype=np.float32),
+            )
+            if include_right:
+                self._right_frame_data[sequence]=np.empty((length,3,CACHE_HEIGHT,CACHE_WIDTH),dtype=np.uint8)
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            for sequence,index,rgb,right,gt,coverage in pool.map(load,tasks):
+                allocated[sequence][0][index]=rgb
+                allocated[sequence][1][index]=gt
+                allocated[sequence][2][index]=coverage
+                if right is not None:
+                    self._right_frame_data[sequence][index]=right
+        self._frame_data=allocated
+        total=sum(array.nbytes for arrays in allocated.values() for array in arrays)
+        total += sum(array.nbytes for array in self._right_frame_data.values())
+        return {"enabled":True,"frames":len(tasks),"bytes":int(total),"workers":workers}
+
     def __getitem__(self, index: int) -> dict:
         record = self.records[index]
         disparities, validity, _frame_ids, _metadata = self._cache(record.backbone, record.sequence)
@@ -191,22 +250,39 @@ class TemporalPairDataset(Dataset):
         raw_valid = np.asarray(validity[record.current_index], dtype=np.uint8) > 0
         past_valid = np.asarray(validity[record.past_index], dtype=np.uint8) > 0
 
-        info = self._infos[record.sequence]
-        current_rgb = read_rgb(info.seq_dir / "left" / f"{record.current_frame_id}.png")
-        past_rgb = read_rgb(info.seq_dir / "left" / f"{record.past_frame_id}.png")
-        gt_native, gt_valid_native = load_frame_gt(info, record.current_frame_id)
-        gt, coverage = resize_gt_to_cache_masked(gt_native, gt_valid_native)
+        if record.sequence in self._frame_data:
+            rgbs,gts,coverages=self._frame_data[record.sequence]
+            current_rgb=torch.from_numpy(rgbs[record.current_index]).float()
+            past_rgb=torch.from_numpy(rgbs[record.past_index]).float()
+            current_right_rgb=(torch.from_numpy(self._right_frame_data[record.sequence][record.current_index]).float()
+                               if self.include_right_rgb else None)
+            gt=np.asarray(gts[record.current_index,0],dtype=np.float32)
+            coverage=np.asarray(coverages[record.current_index,0],dtype=np.float32)
+            past_gt=np.asarray(gts[record.past_index,0],dtype=np.float32)
+            past_coverage=np.asarray(coverages[record.past_index,0],dtype=np.float32)
+        else:
+            info = self._infos[record.sequence]
+            current_rgb = self._rgb_cache(read_rgb(info.seq_dir / "left" / f"{record.current_frame_id}.png"))
+            past_rgb = self._rgb_cache(read_rgb(info.seq_dir / "left" / f"{record.past_frame_id}.png"))
+            current_right_rgb=(self._rgb_cache(read_rgb(info.seq_dir / "right" / f"{record.current_frame_id}.png"))
+                               if self.include_right_rgb else None)
+            gt_native, gt_valid_native = load_frame_gt(info, record.current_frame_id)
+            gt, coverage = resize_gt_to_cache_masked(gt_native, gt_valid_native)
+            past_gt_native, past_valid_native = load_frame_gt(info, record.past_frame_id)
+            past_gt, past_coverage = resize_gt_to_cache_masked(past_gt_native, past_valid_native)
         gt_valid = coverage > self.coverage_threshold
 
-        return {
+        item = {
             "raw": torch.from_numpy(raw.copy())[None],
             "past": torch.from_numpy(past.copy())[None],
             "raw_valid": torch.from_numpy(raw_valid.copy())[None],
             "past_valid": torch.from_numpy(past_valid.copy())[None],
-            "current_rgb": self._rgb_cache(current_rgb),
-            "past_rgb": self._rgb_cache(past_rgb),
+            "current_rgb": current_rgb,
+            "past_rgb": past_rgb,
             "gt": torch.from_numpy(np.ascontiguousarray(gt))[None],
             "gt_coverage": torch.from_numpy(np.ascontiguousarray(coverage))[None],
+            "past_gt": torch.from_numpy(np.ascontiguousarray(past_gt))[None],
+            "past_gt_coverage": torch.from_numpy(np.ascontiguousarray(past_coverage))[None],
             "gt_valid": torch.from_numpy(np.ascontiguousarray(gt_valid))[None],
             "backbone": record.backbone,
             "sequence": record.sequence,
@@ -215,6 +291,9 @@ class TemporalPairDataset(Dataset):
             "past_index": record.past_index,
             "current_index": record.current_index,
         }
+        if current_right_rgb is not None:
+            item["current_right_rgb"] = current_right_rgb
+        return item
 
     def describe(self) -> dict:
         return {
@@ -224,6 +303,7 @@ class TemporalPairDataset(Dataset):
             "frame_stride": self.frame_stride,
             "max_pairs_per_sequence": self.max_pairs_per_sequence,
             "random_clip_start": self.random_clip_start,
+            "include_right_rgb": self.include_right_rgb,
             "seed": self.seed,
             "pair_count": len(self),
             "records": [asdict(record) for record in self.records[:3]],

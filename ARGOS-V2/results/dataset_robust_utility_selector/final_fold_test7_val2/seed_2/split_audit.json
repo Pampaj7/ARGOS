@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "split_unit": "complete sequence",
+  "seed": 2,
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "final_seen_test_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "seen_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "unseen_backbones": [
+    "Fast-FoundationStereo",
+    "CREStereo"
+  ],
+  "pairs_per_backbone": {
+    "train": 8606,
+    "validation": 4246,
+    "test": 4052
+  },
+  "dataset_ids": {
+    "train": [
+      "dataset_1",
+      "dataset_3",
+      "dataset_6"
+    ],
+    "validation": [
+      "dataset_2"
+    ],
+    "test": [
+      "dataset_7"
+    ]
+  },
+  "strict_dataset_id_disjoint": true,
+  "training_sampler": "hierarchical_dataset",
+  "causal_context": "current t and past t-1 only; no future frames or sequence crossing",
+  "historical_reuse_note": "dataset_7 keyframe groups are used only by the explicit split above; sequence and optional dataset-ID disjointness are checked before training."
+}

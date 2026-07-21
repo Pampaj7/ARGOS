@@ -1,0 +1,1 @@
+{"validated_at": "2026-07-19T12:44:43.885944+00:00", "checks": {"files_exist": true, "shape": [416, 144, 180], "shape_ok": true, "valid_shape_ok": true, "dtype_ok": true, "frame_ids_exact": true, "finite": true, "positive_where_valid": true, "passed": true}}

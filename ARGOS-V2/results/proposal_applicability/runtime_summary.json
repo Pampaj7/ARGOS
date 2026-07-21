@@ -1,0 +1,8 @@
+{
+  "frames": 960,
+  "total_seconds": 51.32366562495008,
+  "detector_latency_ms_per_frame": 0.1547914905434785,
+  "detector_parameters": 15533,
+  "a2_parameters": 39299,
+  "peak_gpu_memory_bytes": 627281408
+}

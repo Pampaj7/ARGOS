@@ -1,0 +1,186 @@
+{
+  "eligible": true,
+  "selection_split": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2"
+  ],
+  "constraint": "gain>0; false-update<=2%; clean-degradation<=1%; coverage>=0.2%",
+  "selected": {
+    "cost": "ternary_census",
+    "local_kernel": 5,
+    "minimum_improvement": 0.02,
+    "method": "photometric_ternary_census_k5_m0.02",
+    "validation_gain": 0.0002439568727160002,
+    "validation_oracle_recovery": 0.010497569673908313,
+    "validation_false_update_rate": 0.010248697542146266,
+    "validation_clean_pixel_degradation": 0.004614754486822957,
+    "validation_coverage": 0.011399961640088604
+  },
+  "candidates": [
+    {
+      "cost": "ternary_census",
+      "local_kernel": 5,
+      "minimum_improvement": 0.0,
+      "method": "photometric_ternary_census_k5_m0",
+      "validation_gain": 0.0006230063865155788,
+      "validation_oracle_recovery": 0.02680823408222106,
+      "validation_false_update_rate": 0.045539679919421844,
+      "validation_clean_pixel_degradation": 0.020806337376279346,
+      "validation_coverage": 0.04830978868806272
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 5,
+      "minimum_improvement": 0.01,
+      "method": "photometric_ternary_census_k5_m0.01",
+      "validation_gain": 0.0006230063865155788,
+      "validation_oracle_recovery": 0.02680823408222106,
+      "validation_false_update_rate": 0.045539679919421844,
+      "validation_clean_pixel_degradation": 0.020806337376279346,
+      "validation_coverage": 0.04830978868806272
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 5,
+      "minimum_improvement": 0.02,
+      "method": "photometric_ternary_census_k5_m0.02",
+      "validation_gain": 0.0002439568727160002,
+      "validation_oracle_recovery": 0.010497569673908313,
+      "validation_false_update_rate": 0.010248697542146266,
+      "validation_clean_pixel_degradation": 0.004614754486822957,
+      "validation_coverage": 0.011399961640088604
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 5,
+      "minimum_improvement": 0.05,
+      "method": "photometric_ternary_census_k5_m0.05",
+      "validation_gain": 9.5247285234773e-05,
+      "validation_oracle_recovery": 0.0040985318506137364,
+      "validation_false_update_rate": 0.002044040739807261,
+      "validation_clean_pixel_degradation": 0.0009241406493756351,
+      "validation_coverage": 0.0025018883709799823
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 5,
+      "minimum_improvement": 0.1,
+      "method": "photometric_ternary_census_k5_m0.1",
+      "validation_gain": 1.9164317198866465e-05,
+      "validation_oracle_recovery": 0.0008246488521033807,
+      "validation_false_update_rate": 9.337250087080516e-05,
+      "validation_clean_pixel_degradation": 5.1477162310181465e-05,
+      "validation_coverage": 0.00017449669919149512
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 7,
+      "minimum_improvement": 0.0,
+      "method": "photometric_ternary_census_k7_m0",
+      "validation_gain": 0.0008040892344270412,
+      "validation_oracle_recovery": 0.03460030729392052,
+      "validation_false_update_rate": 0.06754888613096045,
+      "validation_clean_pixel_degradation": 0.031093549769229963,
+      "validation_coverage": 0.07087533689450616
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 7,
+      "minimum_improvement": 0.01,
+      "method": "photometric_ternary_census_k7_m0.01",
+      "validation_gain": 0.0008040892344270412,
+      "validation_oracle_recovery": 0.03460030729392052,
+      "validation_false_update_rate": 0.06754888613096045,
+      "validation_clean_pixel_degradation": 0.031093549769229963,
+      "validation_coverage": 0.07087533689450616
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 7,
+      "minimum_improvement": 0.02,
+      "method": "photometric_ternary_census_k7_m0.02",
+      "validation_gain": 0.00040731308975594516,
+      "validation_oracle_recovery": 0.017526858297554623,
+      "validation_false_update_rate": 0.02008264323586973,
+      "validation_clean_pixel_degradation": 0.009051676811642359,
+      "validation_coverage": 0.02175797664365876
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 7,
+      "minimum_improvement": 0.05,
+      "method": "photometric_ternary_census_k7_m0.05",
+      "validation_gain": 8.233876329460932e-05,
+      "validation_oracle_recovery": 0.003543072572318295,
+      "validation_false_update_rate": 0.0011048149997920824,
+      "validation_clean_pixel_degradation": 0.0005050227257996584,
+      "validation_coverage": 0.0014490356907620671
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 7,
+      "minimum_improvement": 0.1,
+      "method": "photometric_ternary_census_k7_m0.1",
+      "validation_gain": 2.0669446985116524e-05,
+      "validation_oracle_recovery": 0.0008894152373399563,
+      "validation_false_update_rate": 6.689632037155556e-05,
+      "validation_clean_pixel_degradation": 3.911065645626649e-05,
+      "validation_coverage": 0.00013422823014730395
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 9,
+      "minimum_improvement": 0.0,
+      "method": "photometric_ternary_census_k9_m0",
+      "validation_gain": 0.0009335052968789392,
+      "validation_oracle_recovery": 0.0401691363963218,
+      "validation_false_update_rate": 0.08420990928279447,
+      "validation_clean_pixel_degradation": 0.03898798326327341,
+      "validation_coverage": 0.08788845046826252
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 9,
+      "minimum_improvement": 0.01,
+      "method": "photometric_ternary_census_k9_m0.01",
+      "validation_gain": 0.0005569786349338135,
+      "validation_oracle_recovery": 0.02396703139371147,
+      "validation_false_update_rate": 0.03228452142632702,
+      "validation_clean_pixel_degradation": 0.014658847183653638,
+      "validation_coverage": 0.034466768393488376
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 9,
+      "minimum_improvement": 0.02,
+      "method": "photometric_ternary_census_k9_m0.02",
+      "validation_gain": 0.00022164221376022586,
+      "validation_oracle_recovery": 0.0095373602543916,
+      "validation_false_update_rate": 0.006119669907306418,
+      "validation_clean_pixel_degradation": 0.002721502445715871,
+      "validation_coverage": 0.006998429215109862
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 9,
+      "minimum_improvement": 0.05,
+      "method": "photometric_ternary_census_k9_m0.05",
+      "validation_gain": 5.330370105371962e-05,
+      "validation_oracle_recovery": 0.002293681294808229,
+      "validation_false_update_rate": 0.0003940304604859768,
+      "validation_clean_pixel_degradation": 0.00019141366306665188,
+      "validation_coverage": 0.0005884020307472832
+    },
+    {
+      "cost": "ternary_census",
+      "local_kernel": 9,
+      "minimum_improvement": 0.1,
+      "method": "photometric_ternary_census_k9_m0.1",
+      "validation_gain": 1.4908298281157695e-05,
+      "validation_oracle_recovery": 0.0006415105185745241,
+      "validation_false_update_rate": 3.571289652820215e-05,
+      "validation_clean_pixel_degradation": 2.1978833947431326e-05,
+      "validation_coverage": 8.043207228357979e-05
+    }
+  ]
+}

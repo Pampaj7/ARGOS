@@ -1,0 +1,6 @@
+{
+  "variant": "P1",
+  "parameters": 1201,
+  "receptive_field": 2,
+  "trainable_component": "proposal applicability detector only"
+}
