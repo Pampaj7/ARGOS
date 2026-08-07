@@ -1,0 +1,8 @@
+{
+  "blocks": 3,
+  "channels": 32,
+  "feature_channels": 17,
+  "parameters": 60739,
+  "receptive_field": 15,
+  "wall_time_s": 2267.212266268907
+}

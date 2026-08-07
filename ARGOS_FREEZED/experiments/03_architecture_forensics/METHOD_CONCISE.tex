@@ -1,0 +1,21 @@
+% Compact two-column draft. Requires amsmath.
+\paragraph{Frozen geometry adapter.}
+Let $d_t^S$ be the positive-left disparity produced by a frozen stereo estimator for the current rectified pair. ARGOS v2 keeps an immutable raw bank
+\(\mathcal M_t=\{(d_j^S,M_j,I_j^L):j\le t\}\) and retains only ages $k\in\{1,2,4,8\}$. A source is always the independently generated raw stereo prediction at $t-k$; no corrected output is written back.
+
+For each available age, frozen SEA-RAFT is run independently in both directions. Its current-to-source flow $F_{t\to t-k}$ defines a BiDA-style causal pull warp:
+\[
+q=(x,y)+F_{t\to t-k}(x,y),\qquad \widetilde d_t^{(k)}=\operatorname{grid\_sample}(d_{t-k}^S,q),
+\]
+with bilinear interpolation, zero padding, `align\_corners=True`, and source-validity threshold $0.999$. Forward--backward confidence is
+\(C=\exp[-e/(0.5+0.01m)]B\), where $e=\|F_{t\to t-k}+\operatorname{Warp}(F_{t-k\to t},F_{t\to t-k})\|_2$ and $m$ is the sum of forward and aligned-backward magnitudes.
+
+The shared evidence tensor has 17 channels: raw and candidate disparity normalized by 64; signed and absolute residuals normalized by 16; 5x5 residual mean and standard deviation normalized by 8; age/8; candidate validity; warp support; FB confidence; valid-witness fraction; candidate median/64; candidate MAD/8; candidate-to-median and raw-to-median deviations/8; agreement fraction; and raw provenance (zero). It has shape $[B,K,17,H,W]$ and is evaluated as $[BK,17,H,W]$ by one shared encoder.
+
+The encoder has a $17\to32$ 3x3 convolution, GroupNorm(8,32), SiLU, three residual two-convolution 32-channel blocks, and a $32\to3$ 1x1 head: 60,739 trainable parameters. For candidate $k$, the head gives $p_k=\sigma(z_{0k})$, $\delta_k=8\tanh(z_{1k})$, $w_k=\sigma(z_{2k})$, and $s_k=p_k\delta_k$. Invalid candidates receive $-\infty$ and one age is selected per pixel by $k^\star=\arg\max_k s_k$.
+
+The selected candidate is softly fused as
+\[
+d_t^{prop}=d_t^S+w_{k^\star}(\widetilde d_t^{(k^\star)}-d_t^S).
+\]
+Acceptance is $a=V_{k^\star}\land[p_{k^\star}\ge0.9]\land[s_{k^\star}\ge0.1]$. The final output is $d_t^{out}=\operatorname{where}(a,d_t^{prop},d_t^S)$, an exact raw fallback on rejected pixels. The current raw prediction, not this output, is appended to the bank. The interface contains no backbone identifier, cost volume, internal feature, recurrent corrected state, or critic.

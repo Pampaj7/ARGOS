@@ -1,0 +1,10 @@
+{
+  "dataset_7_opened": false,
+  "lock": "D7 remains closed because no D2 budget met the preregistered H4 gate",
+  "project": "ARGOS v2",
+  "run_integrity_sha256": "e64113449c240473010df90f6d0a14102f92d6beee531690659c37e16d7fa0a0",
+  "selection_input_sha256": "d60353fe4e7d2386165f0aa91dfe886278a4ec7dc2c516d34bb0cfda216e8cc3",
+  "selection_protocol_sha256": "3120b1e953c160299e0bc50a8288c6a7558d6795d489823463a9fc64c52b48d5",
+  "selection_results_sha256": "8a8db6bc4ec761e7e0adf16003a239d448a5c4eabd963fc8bdd760013e9ced48",
+  "verdict": "TRAINING-SCALE NO-GO"
+}

@@ -1,0 +1,14 @@
+{
+  "complete": true,
+  "flow_build_train_seconds": 113.84909399802564,
+  "flow_build_validation_seconds": 50.809299717016984,
+  "gpu": "NVIDIA H100 PCIe",
+  "host": "n-62-12-83",
+  "optimizer_steps": 119190,
+  "peak_host_ram_mb": 27331.109375,
+  "peak_vram_mb": 961.37939453125,
+  "samples_per_second": 373.72204343233255,
+  "steps_per_second": 31.14350361936105,
+  "wall_seconds": 3827.122389848999,
+  "workers": 48
+}

@@ -1,0 +1,28 @@
+{
+  "activation": "SiLU",
+  "channels": 64,
+  "dilations": [
+    1,
+    2,
+    4,
+    2,
+    1
+  ],
+  "heads": [
+    "mu_raw",
+    "mu_proposed",
+    "s_raw",
+    "s_proposed",
+    "harm_logit"
+  ],
+  "model": "SpatialErrorCritic",
+  "normalization": "GroupNorm(8)",
+  "parameter_budget_max": 1500000,
+  "parameters": {
+    "geometry": 386501,
+    "plane_sweep": 399749,
+    "stereo": 396293,
+    "temporal": 388805
+  },
+  "receptive_field_px": 43
+}

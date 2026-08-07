@@ -1,0 +1,8 @@
+component,parameters,calculation,source,tag
+input_conv,4896,32*17*3*3,src/argos_freezed/models/raw_multi_anchor_refiner.py:140-143,[IMPLEMENTED]
+input_groupnorm,64,32 weights + 32 biases,src/argos_freezed/models/raw_multi_anchor_refiner.py:141-143,[IMPLEMENTED]
+shared_block_1,18560,2*(32*32*3*3)+2*(32+32),src/argos_freezed/models/raw_multi_anchor_refiner.py:118-129,[IMPLEMENTED]
+shared_block_2,18560,2*(32*32*3*3)+2*(32+32),src/argos_freezed/models/raw_multi_anchor_refiner.py:118-129,[IMPLEMENTED]
+shared_block_3,18560,2*(32*32*3*3)+2*(32+32),src/argos_freezed/models/raw_multi_anchor_refiner.py:118-129,[IMPLEMENTED]
+output_head,99,3*32*1*1+3,src/argos_freezed/models/raw_multi_anchor_refiner.py:145-148,[IMPLEMENTED]
+TOTAL,60739,4896+64+3*18560+99,verified by instantiated model,[TESTED]

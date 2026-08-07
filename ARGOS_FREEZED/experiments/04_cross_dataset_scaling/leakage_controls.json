@@ -1,0 +1,11 @@
+{
+  "controls": [
+    "D2 is the only budget-selection dataset",
+    "D4D is never train/tune/threshold-select",
+    "SERV-CT is never temporal",
+    "SCARED-C anchors use only earlier frames after warmup",
+    "no frozen recipe, test unlock, training, zero-shot, cache generation, or evaluation is authorized by this registry"
+  ],
+  "dataset_7_opened": false,
+  "project": "ARGOS v2"
+}

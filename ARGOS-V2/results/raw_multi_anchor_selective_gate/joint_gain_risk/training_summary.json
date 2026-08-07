@@ -1,0 +1,9 @@
+{
+  "best_train_loss": 1.1440521166680984,
+  "best_validation_selective_gain": 0.042134955525398254,
+  "final_loss": 1.1450924857303493,
+  "initial_loss": 1.533562183380127,
+  "model": "joint_gain_risk",
+  "parameters": 5634,
+  "wall_time_s": 588.883741564001
+}

@@ -1,0 +1,4 @@
+run,gpu,frames
+SCARED-C CREStereo,GPU1,3486
+SCARED-C Fast-FoundationStereo,GPU1,3486
+D4D no-reference,GPU1,936

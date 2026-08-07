@@ -1,0 +1,16 @@
+{
+  "frames": 936,
+  "reset": 0.0,
+  "support_coverage": 0.9722460900616442,
+  "raw_mc_inconsistency": 2.304953621612846,
+  "fused_mc_inconsistency": 1.0236931396888331,
+  "mc_delta": -1.281260459829106,
+  "update_magnitude": 1.2812604613698677,
+  "temporal_weight": 0.4028665308149543,
+  "fb_confidence": 0.46297594601224756,
+  "project": "ARGOS v2",
+  "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "protocol": "four-frame curated causal windows; no-reference temporal diagnostic only",
+  "geometry_status": "NOT REPORTED: D4D Zivid stereo-disparity contract is inconsistent"
+}

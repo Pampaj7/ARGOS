@@ -1,0 +1,16 @@
+{
+  "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "common_support": "GT coverage>0.5 & raw valid & historical and recurrent aligned-valid/warp support",
+  "dataset_7_opened": false,
+  "no_future_access": true,
+  "project": "ARGOS v2",
+  "selection_source": "dataset 2 candidate evaluation",
+  "sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "split": "validation",
+  "state_resets_before_final recurrent candidate": true
+}

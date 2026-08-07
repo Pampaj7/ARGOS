@@ -1,0 +1,12 @@
+{
+  "best_checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/01_multiseed_replication/budget_1x/seed_20260724/checkpoints/best_validation.pt",
+  "best_d2_gain": 0.0018873739754781127,
+  "budget": "1x",
+  "current_train_loss": 0.46262081898889523,
+  "epoch": 10,
+  "latest_d2_gain": -0.00975355040282011,
+  "optimizer_step": 39730,
+  "runtime_s": 1602.1854659880046,
+  "seed": 20260724,
+  "status": "completed"
+}

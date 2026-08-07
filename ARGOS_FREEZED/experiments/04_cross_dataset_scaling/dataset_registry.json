@@ -1,0 +1,142 @@
+{
+  "dataset_7_opened": false,
+  "datasets": [
+    {
+      "allowed": "supervised D1/D3/D6; D2 validation only after warmup",
+      "evidence_counts": {
+        "frames": 16921,
+        "gated_sequences": 17
+      },
+      "excluded": "any D7 use; future-frame anchors; un-gated sequences",
+      "id": "SCARED-C",
+      "provenance": [
+        {
+          "note": "quality-gate and frame-count authority",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/DATASET_CARD.md",
+          "sha256": "c1a6fdd1c60fe02284603f34340cfb2f42da4f53dd052e97bba6caca95d3720d"
+        },
+        {
+          "note": "per-sequence quality-gate manifest",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/curated/manifests/quality_gate.csv",
+          "sha256": "1cc5709de15767de1bcd96ecb2267ea82f9a3c49e7e74d8248d69354203c4f24"
+        },
+        {
+          "note": "processed data root",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/SCARED-C/curated/geometric_gt/corrected_temporal_gt"
+        }
+      ],
+      "status": "included_for_existing_supervised_protocol_only",
+      "supervision": "processed temporal pseudo-GT after quality gate"
+    },
+    {
+      "allowed": "no-reference temporal or qualitative diagnostic only after a separate protocol",
+      "evidence_counts": {
+        "fps": 60,
+        "pilot_sequences": 3,
+        "rectified_pairs": 38241
+      },
+      "excluded": "supervised training, geometric-accuracy claim, zero-shot launch",
+      "id": "StereoMIS",
+      "pilot_sequences": [
+        "P1",
+        "P2_8",
+        "P3"
+      ],
+      "provenance": [
+        {
+          "note": "pilot count, FPS, and no-reference limitation",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/StereoMIS/DATASET_CARD.md",
+          "sha256": "38a329486137a8f16fe72d03519afe88c9dd9f3282781fd5d94c4187390b30bb"
+        },
+        {
+          "note": "rectified pilot root",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/StereoMIS/curated/geometric_gt/temporal_sequences"
+        }
+      ],
+      "status": "no_reference_only",
+      "supervision": "no dense depth/disparity reference"
+    },
+    {
+      "allowed": "static OOD geometry/safety planning only",
+      "evidence_counts": {
+        "samples": 16
+      },
+      "excluded": "temporal supervision or temporal metric",
+      "id": "SERV-CT",
+      "provenance": [
+        {
+          "note": "sample count and static-only limitation",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/SERVCT/DATASET_CARD.md",
+          "sha256": "f15275978fe554bab298915a666887eecfd2d473344fb6e02a2c069c0f0bd6ce"
+        },
+        {
+          "note": "8 static samples",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/SERVCT/argos/servct_argos/honest_train"
+        },
+        {
+          "note": "8 static samples",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/SERVCT/argos/servct_argos/honest_test"
+        }
+      ],
+      "status": "static_CT_GT_only",
+      "supervision": "CT-derived static geometry reference"
+    },
+    {
+      "allowed": "future zero-shot sparse-anchor evaluation only, never temporal supervision",
+      "evidence_counts": {
+        "anchors_built": 362,
+        "anchors_usable": 239
+      },
+      "excluded": "training, tuning, temporal supervision, launch in this no-go",
+      "id": "D4D",
+      "provenance": [
+        {
+          "note": "anchor counts and sparse/non-rigid restriction",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/D4D/processed/keyframe_stereo_gt_curated/DATASET_CARD.md",
+          "sha256": "db7382451939a4a292810e853e9b7922a90d40b82879ca0ced9ffd862063e338"
+        },
+        {
+          "note": "usable-anchor manifest",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/D4D/processed/keyframe_stereo_gt_curated/manifests/valid_and_warning_manifest.csv",
+          "sha256": "c3a1424f13e53219e6b9ec03d7933d3c94a3259bb0cbe7f3ccee5d3c5fdfaf50"
+        },
+        {
+          "note": "deterministic split root",
+          "path": "/dtu/p1/leopam/ARGOS/dataset/D4D/processed/keyframe_stereo_gt_curated/splits"
+        }
+      ],
+      "status": "sparse_anchor_GT_zero_shot_only",
+      "supervision": "Zivid structured-light sparse anchors"
+    },
+    {
+      "allowed": "none",
+      "excluded": "all claims and launches",
+      "id": "Hamlyn",
+      "provenance": [
+        {
+          "note": "SOTA state lines 177-197, 276-279",
+          "path": "/dtu/p1/leopam/ARGOS/SOTA/state.md",
+          "sha256": "1f786b6669d1ea01874d6e39041276f6b7514b677408428fb5fb5cd04d57f35d"
+        }
+      ],
+      "status": "locally_unavailable_unknown",
+      "supervision": null
+    },
+    {
+      "allowed": "none",
+      "excluded": "all claims and launches",
+      "id": "EndoSLAM",
+      "provenance": [
+        {
+          "note": "SOTA state lines 177-197, 276-279",
+          "path": "/dtu/p1/leopam/ARGOS/SOTA/state.md",
+          "sha256": "1f786b6669d1ea01874d6e39041276f6b7514b677408428fb5fb5cd04d57f35d"
+        }
+      ],
+      "status": "locally_unavailable_unknown",
+      "supervision": null
+    }
+  ],
+  "phase": "planning-only; no launch",
+  "project": "ARGOS v2"
+}

@@ -1,0 +1,9 @@
+condition,bin,valid_count,mean_gain
+agreement_count,1,224863,0.039011778083579
+agreement_count,2,4050961,0.21139648914598827
+agreement_count,3,9036586,0.01697157427081696
+agreement_count,4,14458515,0.0020845168612252715
+raw_deviation_from_temporal_median,lt010,17576039,0.001967434970031473
+raw_deviation_from_temporal_median,010_050,9224692,0.01186667008748659
+raw_deviation_from_temporal_median,050_100,585888,0.20447640722759222
+raw_deviation_from_temporal_median,ge100,384306,2.042094012541036

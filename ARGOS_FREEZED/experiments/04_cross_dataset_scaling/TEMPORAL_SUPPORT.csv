@@ -1,0 +1,7 @@
+dataset,temporal_support,allowed,launch_status
+SCARED-C,quality-gated processed pseudo-GT after causal warmup,existing supervised protocol only,blocked for cross-dataset launch
+StereoMIS,no-reference sequence data,separate diagnostic only,blocked
+SERV-CT,none,none,blocked
+D4D,sparse anchors only,none,blocked
+Hamlyn,unknown,none,blocked
+EndoSLAM,unknown,none,blocked

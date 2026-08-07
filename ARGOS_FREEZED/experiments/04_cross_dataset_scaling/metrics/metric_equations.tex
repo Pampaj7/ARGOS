@@ -1,0 +1,8 @@
+% ARGOS v2 audit-only temporal metrics
+\begin{align}
+\tilde d_t^{(k)}&=W(d_{t-k},F_{t\to t-k}),&\tilde g_t^{(k)}&=W(g_{t-k},F_{t\to t-k}),\\
+\mathrm{GT\text{-}TCE}_k&=\frac{1}{|V_k|}\sum_{x\in V_k}\left|(d_t-\tilde d_t^{(k)})-(g_t-\tilde g_t^{(k)})\right|,\\
+\mathrm{rGT\text{-}TCE}_k&=\frac{\mathrm{GT\text{-}TCE}_k}{|V_k|^{-1}\sum_{x\in V_k}|g_t(x)|+10^{-6}},\\
+\mathrm{NR\text{-}TCE}_k&=\operatorname{TrimMean}_{0.10,x\in V_k}\frac{|d_t(x)-\tilde d_t^{(k)}(x)|}{\tfrac12(|d_t(x)|+|\tilde d_t^{(k)}(x)|)+10^{-6}}.
+\end{align}
+Here $V_k$ requires finite positive disparity, in-bounds pull support, warped-source validity, forward--backward flow support, and strict common method support. Stereo plausibility uses $\rho(I_t^L,W(I_t^R,x-d_t))$ with positive-left $d_t$.

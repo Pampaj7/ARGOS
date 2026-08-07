@@ -1,0 +1,5 @@
+phase,domain,selection_use,status
+leave_one_backbone_out,SCARED-C,train/validation only,future
+completely_unseen_backbone,SCARED-C,none after freeze,future
+external_surgical_dataset,verified stereo+GT protocol,separate validation only,future
+combined_unseen_backbone_external_domain,external surgical,none after freeze,future

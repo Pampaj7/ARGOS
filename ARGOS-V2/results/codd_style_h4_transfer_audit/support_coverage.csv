@@ -1,0 +1,3 @@
+dataset,backbone,support_coverage
+D4D,RAFT-Stereo,0.9722471616716466
+D4D,StereoAnywhere,0.9722450184516418

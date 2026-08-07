@@ -1,0 +1,39 @@
+{
+  "campaign_tests": "20/20",
+  "d7_guard": "PASS including bare integer 7",
+  "data_integrity_checks": "39/39",
+  "dataset_7_opened": false,
+  "dependency_manifest_sha256": "9225e8dbc622687c348c8b15b35799b696d715cd3fafe50e943a223cffab32bd",
+  "frozen_hashes": "24/24",
+  "frozen_tests": "16/16",
+  "orchestration": "two disjoint one-GPU LSF slots PASS",
+  "project": "ARGOS v2",
+  "selection_protocol_sha256": "3120b1e953c160299e0bc50a8288c6a7558d6795d489823463a9fc64c52b48d5",
+  "slot_takeover_lock": "flock PASS by inspection and import",
+  "smoke": {
+    "aggregation": "PASS",
+    "dataset_7_opened": false,
+    "horizons": {
+      "1x": {
+        "T_max": 30,
+        "epochs": 2,
+        "optimizer_steps": 6
+      },
+      "3x": {
+        "T_max": 90,
+        "epochs": 1,
+        "optimizer_steps": 3
+      },
+      "6x": {
+        "T_max": 180,
+        "epochs": 1,
+        "optimizer_steps": 3
+      }
+    },
+    "project": "ARGOS v2",
+    "resume": "PASS",
+    "status": "PASS"
+  },
+  "status": "PASS",
+  "training": "smoke only; no full run yet"
+}

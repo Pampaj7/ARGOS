@@ -1,0 +1,4 @@
+budget,mean_multi_epe,mean_gain_vs_raw,mean_gain_vs_h4,all_three_seed_gains_vs_raw_positive,at_least_two_of_three_seeds_improve_h4,eligible,selection_metric,diagnostics,diagnostics_reason,provenance
+1x,0.3024681239027416,0.002859956964434418,-0.011544155268153056,False,False,False,strict-common-support D2 EPE,,not present in the strict D2 selection table,selection/validation_selection_results.json
+3x,0.301414260616798,0.00391382025037799,-0.010490291982209484,False,False,False,strict-common-support D2 EPE,,not present in the strict D2 selection table,selection/validation_selection_results.json
+6x,0.3004835978202876,0.004844483046888393,-0.009559629185699081,True,False,False,strict-common-support D2 EPE,,not present in the strict D2 selection table,selection/validation_selection_results.json

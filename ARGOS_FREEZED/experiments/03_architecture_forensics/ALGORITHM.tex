@@ -1,0 +1,22 @@
+\begin{algorithm}[t]
+\caption{Causal ARGOS v2 geometry-v1 inference}
+\label{alg:argos}
+\begin{algorithmic}[1]
+\Require current stereo pair; frozen stereo disparity $r=d_t^S$ and validity $M_t$; raw bank $\mathcal M_t$
+\For{$k\in\{1,2,4,8\}$}
+  \State Retrieve raw $(d_{t-k}^S,M_{t-k},I_{t-k}^L)$; if absent, create zero-valid candidate.
+  \If{present}
+    \State Compute $F_{t\to t-k}=\mathrm{SEA\text{-}RAFT}(I_t^L,I_{t-k}^L)$ and the independent reverse flow.
+    \State Pull-warp $d_{t-k}^S$ directly with $F_{t\to t-k}$; build validity, support and FB confidence.
+  \EndIf
+  \State Build the exact 17-channel $x_t^{(k)}$.
+\EndFor
+\State Apply the same shared encoder to all $K$ candidates.
+\State Mask unavailable scores with $-\infty$ and set $k^\star=\arg\max_k s_k$ pixelwise.
+\State Form $d^{prop}=r+w_{k^\star}(\widetilde d^{(k^\star)}-r)$.
+\State Accept iff availability, $p_{k^\star}\ge0.9$, and $s_{k^\star}\ge0.1$.
+\State Set $d^{out}=d^{prop}$ on accepted pixels and exactly $r$ elsewhere.
+\State Append only $(r,M_t,I_t^L,t)$ with provenance ``independent-frozen-stereo'' to $\mathcal M$.
+\Ensure No fused output, future frame, flow composition, critic, or backbone-internal feature enters $\mathcal M$ or the core.
+\end{algorithmic}
+\end{algorithm}

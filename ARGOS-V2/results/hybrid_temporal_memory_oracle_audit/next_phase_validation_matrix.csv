@@ -1,0 +1,6 @@
+phase,domain,backbones,status,selection_use,required_recalibration
+seen_backbone,SCARED-C,S2M2-S; RAFT-Stereo; StereoAnywhere,completed,dataset2 only,none beyond frozen cache-grid convention
+unseen_backbone,SCARED-C,Fast-FoundationStereo or another estimator excluded from refiner training,future,none,disparity normalization only if output convention differs; freeze before evaluation
+external_surgical_GT,Hamlyn/SERV-CT or another dataset with verified stereo and geometric GT,frozen seen plus one unseen,future,separate calibration split only,resolution/focal/baseline disparity normalization; flow confidence; frame-rate-aware anchor age; fusion thresholds
+acquisition_OOD,"different camera, resolution, baseline, lighting and surgical setup",frozen,future,none on final OOD,embedding distribution and Isolation Forest contamination on training support only; all thresholds frozen before final OOD
+no_reference,StereoMIS if no valid GT protocol is available,frozen,future diagnostic only,none,"no geometric claims; report support, temporal metrics and qualitative diagnostics only"

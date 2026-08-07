@@ -1,0 +1,28 @@
+{
+  "cache_readiness_manifest": null,
+  "cache_readiness_status": null,
+  "cache_root": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones",
+  "constraints": "no GT claim for StereoMIS; D4D sparse geometry requires verified Zivid registration and causal source window",
+  "dataset": "StereoMIS",
+  "dataset_7_opened": false,
+  "inference_started": false,
+  "project": "ARGOS v2",
+  "required_cache_files": {
+    "RAFT-Stereo": {
+      "disparity.npy": false,
+      "frame_ids.npy": false,
+      "frame_manifest.csv": false,
+      "metadata.json": false,
+      "valid_mask.npy": false
+    },
+    "StereoAnywhere": {
+      "disparity.npy": false,
+      "frame_ids.npy": false,
+      "frame_manifest.csv": false,
+      "metadata.json": false,
+      "valid_mask.npy": false
+    }
+  },
+  "status": "BLOCKED_CACHE_INCOMPLETE",
+  "temporal_manifest_rows": 0
+}

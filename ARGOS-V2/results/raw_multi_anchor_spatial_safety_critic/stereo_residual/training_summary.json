@@ -1,0 +1,9 @@
+{
+  "best_validation_selective_gain": 0.07643797248601913,
+  "family": "stereo",
+  "final_loss": -2.325289433474509,
+  "initial_loss": 3.815883159637451,
+  "parameters": 396293,
+  "seed": 20260722,
+  "wall_time_s": 2973.19405046897
+}

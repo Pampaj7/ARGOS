@@ -1,0 +1,21 @@
+{
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "canonical_checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+  "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "coverage": ">0.50 & raw valid & historical/recurrent aligned-valid & warp support",
+  "final_test": "dataset_7",
+  "future_access": false,
+  "policy_selection_only_dataset_2": true,
+  "project": "ARGOS v2",
+  "train": [
+    "dataset_1",
+    "dataset_3",
+    "dataset_6"
+  ],
+  "unseen_datasets_evaluated": false,
+  "validation_selection": "dataset_2"
+}

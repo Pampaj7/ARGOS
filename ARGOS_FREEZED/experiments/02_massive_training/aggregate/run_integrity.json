@@ -1,0 +1,424 @@
+{
+  "completed_runs": 9,
+  "dataset_7_opened": false,
+  "expected_completed_runs": 9,
+  "historical_invalid_attempts": [
+    {
+      "attempt": "budget_3x/seed_20260724",
+      "cause": "CUDA out of memory while constructing RAM bank on a shared GPU",
+      "classification": "historical_invalid_attempt_excluded",
+      "completion_evidence": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260724/manifest.json",
+      "evidence_log": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260724/logs/train.log",
+      "evidence_sha256": "0afb39751d46a68db01ab3d6a4002fbd118f77db44306256b6a0cb035242308c"
+    }
+  ],
+  "integrity_pass": true,
+  "project": "ARGOS v2",
+  "runs": [
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "7baec0ac326b75e500fc4f0e5d657babead3975b148449076ca6469932cf21d2"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "7b98a8f9249d4c55eebb6b26b6772eb00097720be67481ef6953b3383c79a4d3"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "9f2ccd7bd5dfedd079c2b5efe977ba28a3de3225c891dd56d4c83debcdc32d47"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "1dcb56fdbaba3ad13afc0cfb0937043f24dd533a3e329d8e62c88389960b6132"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "b9df5cb8f3a6086ed9aa037f6239937d50eb141bf41b8d85ae24476c2a48f4e1"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "73091d778b492aa2b1846e609d1acf089636f212683ea6257a7fe104af5756ee"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "88271e8ea20ce00567f210c33c94773182bf8ebee2c2af8c4a355b01a376ba8c"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "00f5e71be3bbdb8065fd25705a03112fc6f5940289202f759f815f7cc50e6ca3"
+        }
+      },
+      "budget": "1x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "1dcb56fdbaba3ad13afc0cfb0937043f24dd533a3e329d8e62c88389960b6132",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/01_multiseed_replication/budget_1x/seed_20260722",
+      "seed": 20260722
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "869b098edacbd47845efba5075805652b62521973bca009b0a59dce78c64db29"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "2fe26f43c824c541a2cc30c7d8ead4ed8ec9b1a55c85ca4f9197f858abbdd2c6"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "ca34ef537e2643d889a6c57f1e89a6e5037b77159f21a89796042805c8eba35e"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "3840e023e8084fdc9df2f80411eadb1d37f0aac7b060bae86bced0c1eee7aa65"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "16533567abaa79aad997b9b44ce6b59833d62131c069a60b34dfbe892293d738"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "2d913141a5fc1c9f737c0b511d53d032a61373253dc7058f8ccd47b7f1647934"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "2d6f6f86dfe2e0cb2bf7e0eb87e7929ca2ceeebec04a0ef04e419dcbd6b90bd8"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "a807c4cb0378bb41d6d3be05384dfe8c5af77ff11aaa2f65726c59f94585e948"
+        }
+      },
+      "budget": "1x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "3840e023e8084fdc9df2f80411eadb1d37f0aac7b060bae86bced0c1eee7aa65",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/01_multiseed_replication/budget_1x/seed_20260723",
+      "seed": 20260723
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "c06d3d49ce243d7fd2586a0f490453551aa16bfce993ec9fa5f4b0e073c2dd9e"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "5c81674ed6a80e518c619b690c9d26765c021bc3a845c5ca7d90c4ef90837fe1"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "0b8c01add97a236fd89ef8fc8580ff50f9e1f75a538ca3fe71a7b22df9176fb2"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "7732900ddc26e67bfaf67deac05f34d942d223a06189b20fd213758c5fbc3a0a"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "977e8684f823d2c5cb0515b93ac8822b472e579a1f8a90a821abc9c3e9fc5fef"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "a9853bb3bfccfb32a81b9b318ffb81e517cae0a7262ffe382830736a8e3f1120"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "23c5cc9123a8d52a7c6364a7c04a4534793ae916e8dd861abd474eafffdd1db0"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "a8af0ddc2e6bd54ced9fff906100707eed6686801d6c7713b5c6c56e18af4130"
+        }
+      },
+      "budget": "1x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "7732900ddc26e67bfaf67deac05f34d942d223a06189b20fd213758c5fbc3a0a",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/01_multiseed_replication/budget_1x/seed_20260724",
+      "seed": 20260724
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "a0a11eded7a5413c4166fe68016e6990429495ae02b2a11569bc68d846d3aafd"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "26a64860bf03a014b181861eef767c1c591751409418a8b0c2265bfa5f2c62c1"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "f61f22d7d1a931fca6f5f8a72ff50eaa60ec99b6e0cda4d83614b744442b9fab"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "0c013e231f5bf1befa1ddc22ba52b752ccab3703422b2cce767a8edad81699dc"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "e62eb345d427866b6cb5db2dff47ebd59ba3d276844dab1012098c7366cf60c3"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "16e51a496763c70bbb039d9990956f482ac47a4f1a18ed5f1f12dd746cb218f0"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "53f4b088e7cba14c268f258965d45d3f14724a0b0fea96a5d281ec60de119d12"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "3e6b302947a0fabc8e6c9431c77d7da196067573d9b0251e6ca8e8bf001cc410"
+        }
+      },
+      "budget": "3x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "0c013e231f5bf1befa1ddc22ba52b752ccab3703422b2cce767a8edad81699dc",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260722",
+      "seed": 20260722
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "975e467f82b08102fc9638cdc98135b944f69faa487467c3f353d152e4d91f15"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "7d04b43dad6dd4f0271f73ea0516e6211ca212670078afcc3c51c263fc07f5b1"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "7696279920d54226de64735c094f29cad2b718a00259bf8277f7e59462c91627"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "0723241290c975678955b529150b25818d812624f797696fa4279c80a0912af4"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "414aafbc66a64b71b7bf5081b5e7504394dc333374da86089bfc2ee62c2880fa"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "741905be9b2145cd369a818b3c9f5da313dcea54a8791d51fce40b68201fbe1f"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "ebb4047550609dbb2c7a65a89065729d73f699f064c00e04ab5491f989f8f1d8"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "f9087b5f13df554adef34e5abace947834ed80eb9bbb9791f3f3308940d28be1"
+        }
+      },
+      "budget": "3x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "0723241290c975678955b529150b25818d812624f797696fa4279c80a0912af4",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260723",
+      "seed": 20260723
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "4beb5949692ecf004c3a4c0e9d7db168971477ec887a833d9ba312bc71a985d2"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "212efca4252d522ec8954e70dd7182b719f7b2d8f8682440fc8e42b7bceecb5e"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "dc8d0e0db75090dc1ac112b906de7fb6be594410c575952fca04691200a4d435"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "7412939be76c9fd038b1a293418404afd074a591160e142e104fa6b53f0aaa4c"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "576080383d0e545aafe9d8fca886369ce3d82763638e7dcbb1978ccfbafc1286"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "408a3b61af4cd7dd0d7ed6165225331c9ba3f1b25d942ce14b05f97ee90589c3"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "d5756cf32bba13ea082f28402f58b8a2a4a868825b5b5050c9474bb2aefa2101"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "14130c17e5eabbabcff81f487774f1f8ed52d57dbc6727fcced68919262f5439"
+        }
+      },
+      "budget": "3x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "7412939be76c9fd038b1a293418404afd074a591160e142e104fa6b53f0aaa4c",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260724",
+      "seed": 20260724
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "33d3214f8175b841786bfe474043352711ee5536ded7e7e46fd0fc0d905d801f"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "08e89a3db5c84c510d1da5c36f6981dcdb887590f733e71696a844f36b2066b4"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "7c8ae8ece68f9e5438bfabbe79aeae39406fa6e83c94763d491268a421a6dfb8"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "aa4edfa2b5b7094dc6761006c869c131ab27eb7853a78380fda958871a34b891"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "057175a3374f1a4a82f8523a14841f4d0d1911e14b2d4d962e0cd52e978c87af"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "715dbb6f21457b5b603d2439c4b6994426aba64e48be6ef04f2b23e875e74f3d"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "3610e5a5edde71a8940591493c62eb9cb9229342fb1448c5f7fa84a8ce09cd7b"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "d092e45b373e7e9681a08c54b93286732a5e20e753404b730691a66fda329f97"
+        }
+      },
+      "budget": "6x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "aa4edfa2b5b7094dc6761006c869c131ab27eb7853a78380fda958871a34b891",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_6x/seed_20260722",
+      "seed": 20260722
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "65aeaee20b9375ef3f9077b18f31ccabe7285d9da9d681caff9327c1889293bc"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "a6280d710ef69c297532bcb95779113936bb36fc8ceb91c2a21d094f70ec0c02"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "686be92f84e1195c597911b0c9bddce8b48f6a229dff04254ff89ecc41836e8e"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "f02764b8bc7dc825a14ff958e659943a35162624187aa33b07ae01222e0e36e1"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "76d9b13ce505f60369ebdf604e6ad3fe36e9c28271d9dbbdc8886fab28fe9fef"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "c49b7e25fdd07e2779a520ab07f204404970abe0e8cf9f8ed8899062e6ea372a"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "d603b36e826beab76f9efe4b9c6dc9e57e971783c0fdf188a3ceeeb425abb028"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "7b32365b43e2a07072bb96dc5218c8823a3c56d5e8952a774b4f87f227faddb0"
+        }
+      },
+      "budget": "6x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "f02764b8bc7dc825a14ff958e659943a35162624187aa33b07ae01222e0e36e1",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_6x/seed_20260723",
+      "seed": 20260723
+    },
+    {
+      "artifacts": {
+        "checkpoints/best_validation.pt": {
+          "present": true,
+          "sha256": "f17128b22d8d598c5f230598727fd3132cc28d8c36ca56e2533e931e11e1b6e9"
+        },
+        "checkpoints/final.pt": {
+          "present": true,
+          "sha256": "067e4efecb19586966c3548841c81297609d86bcd81619b6fbdb2088bc80f799"
+        },
+        "config.yaml": {
+          "present": true,
+          "sha256": "140d13b2433bac10181e346fb3909d632c3b7d3b899b47bb9c1b7bccfc81f884"
+        },
+        "manifest.json": {
+          "present": true,
+          "sha256": "e15490c04e5d20a9cdf9740f6abee6e5025369d6f21348e2a29e0cdd56dac95d"
+        },
+        "runtime_summary.json": {
+          "present": true,
+          "sha256": "874a1d6c47563e5a6d9ea58934f81250258db035ab10924d7d34616a5c7620fc"
+        },
+        "state.json": {
+          "present": true,
+          "sha256": "aa17f2ae47abb10c650d8d79093b0dd026ba6e58c49be2686bc67d3c20da2dd2"
+        },
+        "train_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "6a050b6d081dcc9b97f2f3eaa1ace004ce781e87349371f9b0582d4d86750d5c"
+        },
+        "validation_metrics.csv": {
+          "finite_numeric_values": true,
+          "present": true,
+          "sha256": "aceba8f01eece20b5e5c0ddb780c546c679789a7af0cea0b6721e6edc0a72bfb"
+        }
+      },
+      "budget": "6x",
+      "complete": true,
+      "failures": [],
+      "integrity_pass": true,
+      "manifest_sha256": "e15490c04e5d20a9cdf9740f6abee6e5025369d6f21348e2a29e0cdd56dac95d",
+      "run_directory": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_6x/seed_20260724",
+      "seed": 20260724
+    }
+  ]
+}

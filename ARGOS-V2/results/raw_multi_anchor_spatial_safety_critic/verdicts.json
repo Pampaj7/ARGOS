@@ -1,0 +1,26 @@
+{
+  "binding_limitation": "harmful-update rate among accepted interventions is 24.7% at the frozen net-utility point, far above the 10% bound; no operating point on these checkpoints reaches the bound at coverage>=0.5%. Bottleneck: harm separability/calibration (test AUROC 0.692, ECE 0.222), not transfer or coverage.",
+  "checks": {
+    "all_backbones_improve": true,
+    "all_sequences_improve": true,
+    "authorizes_distant_anchors": true,
+    "beats_h4": true,
+    "beats_raw": true,
+    "better_separability_than_scalar_gate": true,
+    "clean_deg_bound_met": true,
+    "coverage_nontrivial": true,
+    "degraded_frame_bound_met": true,
+    "dominates_ungated_safety": true,
+    "harm_bound_met": false,
+    "no_coverage_collapse": true,
+    "not_near_total_fallback": true,
+    "retains_ungated_gain": true
+  },
+  "experiment": "raw_multi_anchor_spatial_safety_critic",
+  "geometry_verdict": "GO",
+  "next_controlled_experiment": "Hard-negative mining at occlusion/motion boundaries where harm concentrates, plus post-hoc calibration of the harm head, and predeclare a coverage- or harm-constrained operating point. If harm separability plateaus, move to joint training of candidate utility + pairwise fusion + spatial harm prediction + exact abstention rather than a frozen post-hoc veto.",
+  "overall_verdict": "CONDITIONAL GO",
+  "project": "ARGOS v2",
+  "safety_verdict": "CONDITIONAL",
+  "scientific_claim": "A lightweight (~0.40M-param) fully-convolutional spatial comparative error critic, trained as a veto-only post-hoc adapter over the frozen raw multi-anchor proposal on seen backbones (S2M2-S, RAFT-Stereo, StereoAnywhere) and calibrated on dataset 2, transfers to frozen dataset 7 without coverage collapse and strictly dominates the ungated multi-anchor on every safety axis while preserving the verified advantage over bounded CODD-style H=4 fusion (gain over H4 rises from +0.0068 ungated to +0.0101). It substantially improves harm separability over the prior scalar gate (test harm AUROC 0.57 -> 0.69) and avoids that gate's ~1% coverage collapse (7.9% coverage, real H4 advantage retained). It does NOT meet the <=10% harmful-update safety bound at any useful operating point (24.7% at the frozen point); the frozen post-hoc veto is insufficient for the safety target and the binding limitation is harm calibration, not geometry (multi-anchor GO), transfer (stable), or coverage (healthy). No claim of OOD generalization, unseen-backbone transfer, clinical safety, or conformal guarantees."
+}

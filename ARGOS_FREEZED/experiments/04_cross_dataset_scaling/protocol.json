@@ -1,0 +1,10 @@
+{
+  "dataset_7_opened": false,
+  "no_reference": "StereoMIS requires a separately preregistered diagnostic",
+  "project": "ARGOS v2",
+  "sparse": "D4D zero-shot only after a separately frozen support protocol",
+  "static": "SERV-CT only where a static CT reference is valid",
+  "status": "NO-GO planning contract",
+  "temporal": "only quality-gated SCARED-C processed pseudo-GT after warmup; never future frames",
+  "unknown": "Hamlyn and EndoSLAM require local inventory before inclusion"
+}

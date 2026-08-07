@@ -1,0 +1,8 @@
+project_name: ARGOS v2
+training_ids: [1, 3, 6]
+validation_ids: [2]
+test_ids: [7]
+dataset_7_wording: held out from the reported frozen training and validation protocol; not a project-wide pristine test set
+evaluation_support: strict common support across raw, bounded H4, multi-anchor, GT coverage, and validity
+empty_support_frames: excluded from pixel aggregation and reported explicitly
+open_test_only_after_freeze: true

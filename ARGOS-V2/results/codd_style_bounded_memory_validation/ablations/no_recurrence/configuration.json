@@ -1,0 +1,22 @@
+{
+  "alpha_reg": 0.2,
+  "batch_size": 4,
+  "clip_length": 4,
+  "coverage_threshold": 0.5,
+  "device": "cuda:0",
+  "disable_learned_stereo_evidence": false,
+  "epochs": 12,
+  "learning_rate": 0.0002,
+  "max_clips_per_sequence": null,
+  "memory_state": "raw_previous",
+  "mode": "train",
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_bounded_memory_validation/ablations/no_recurrence",
+  "overfit_epochs": 100,
+  "preload_workers": 20,
+  "resume": true,
+  "seed": 0,
+  "tau_fusion_native_px": 1.0,
+  "tau_reset_native_px": 5.0,
+  "weight_decay": 0.0001,
+  "workers": 20
+}

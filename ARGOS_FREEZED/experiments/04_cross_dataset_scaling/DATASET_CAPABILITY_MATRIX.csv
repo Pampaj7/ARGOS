@@ -1,0 +1,7 @@
+dataset,supervision,temporal_reference,current_allowed_use,launch_status,reason
+SCARED-C,processed temporal pseudo-GT,causal after warmup,existing supervised protocol only,blocked,no cross-dataset recipe is frozen
+StereoMIS,no dense depth/disparity reference,no-reference only,none,blocked,diagnostic protocol not registered
+SERV-CT,CT-derived static GT,invalid,none,blocked,static pairs cannot supervise temporal work
+D4D,sparse structured-light anchors,invalid for temporal supervision,none,blocked,future zero-shot needs frozen sparse-support protocol
+Hamlyn,unknown,unknown,none,blocked,locally unavailable/unknown
+EndoSLAM,unknown,unknown,none,blocked,locally unavailable/unknown

@@ -1,0 +1,8 @@
+{
+  "adaptive_hybrid_h8": "NO_GO_AS_ADAPTIVE_SAFETY_POLICY: validation gain selected, but test harmful/clean degradation exceeds safety target",
+  "fixed_h4_reference": "CONDITIONAL_GO: positive bounded-horizon gain; not stable unlimited streaming",
+  "hard_endpoint": "NO_GO_AS_PRIMARY: positive gain but materially worse harmful and clean-pixel safety than soft output",
+  "no_learned_stereo_evidence": "LEARNED_STEREO_EVIDENCE_NOT_ESSENTIAL: fixed-H4 test gain exceeds full reference in this single canonical run",
+  "no_recurrence": "RECURRENCE_USEFUL_BUT_NOT_REQUIRED: lower gain, safer than recurrent policies",
+  "overall_claim": "ARGOS v2 is a fixed short-window causal refiner (H=4), not an indefinitely streaming recurrent system or validated adaptive reset system."
+}

@@ -1,0 +1,40 @@
+{
+  "project": "ARGOS v2",
+  "scope": "prelaunch training dependencies; frozen for all nine training runs",
+  "source_repository_commit": "998d77156257a674b0b3beda0e5ce67d1e1c796e",
+  "runtime_argos_v2_imports": false,
+  "provenance_only_argos_v2_import": "audit_recipe.py only, before full launch",
+  "original_sources": [
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py", "sha256": "6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d", "role": "canonical recipe, bank, sampler, train and validation logic"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/losses/raw_multi_anchor_losses.py", "sha256": "6a77cfbdec84d161c7146a332a5aa73a36f024b43664b014fcc5f19012c3f53b", "role": "loss logic"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/argos_v2/cache_io.py", "sha256": "1b93eb0c3aaae0a84e8d548e976878b6ac64fab86b065df6b2d8749c4de2de03", "role": "read-only cache loading"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/argos_v2/scared_c_data.py", "sha256": "b1b3a2311c14e34e56a2587e97cc93b689c9c290808bd0c4a4963224b53a18c9", "role": "sequence/RGB/GT reading"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/data/temporal_pair_dataset.py", "sha256": "c64abc285c41d4698cb4f6ef33742bd379db8c8c43f0f243edd08dede9c3f701", "role": "masked GT resize"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_ppmstereo_validation.py", "sha256": "c275c9831bfff66ff84d0bf6049f5d6424eefc772d1d493a6434a5649cb676a5", "role": "batched direct age flow inference"}
+  ],
+  "frozen_runtime_sources": [
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/models/raw_multi_anchor_refiner.py", "sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/alignment/bida_pull_warp.py", "sha256": "a729232af2c6c0bf53ee40f899a5fa9281316dff691b86fb07f73ad8c5267a46"},
+    {"path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/alignment/sea_raft_adapter.py", "sha256": "764a9b64de3846cd710a41eb853720171b3fa79abe6e1191d4f438de92733148"}
+  ],
+  "experiment_training_sources": [
+    {"path": "scripts/campaign_common.py", "sha256": "d020528905476f281b17125d03c0a71e1db32c63bd51b5ea608de2193bef8fec", "copy_type": "extracted_and_guarded"},
+    {"path": "scripts/data_pipeline.py", "sha256": "5f785d79623dd51c1e547bddeb184f2f8233fe932bb0d2f7241fa3a916690c36", "copy_type": "extracted"},
+    {"path": "scripts/losses.py", "sha256": "37479712b7ad9dabff806c1ff6f75f8e7c132ca68dd682ddcc02c4777ff2b1b8", "copy_type": "numerically_identical_extraction"},
+    {"path": "scripts/train_one_run.py", "sha256": "f76742c06ac7025c1c7af21c17b44568d91a8541972d37bd63f5a9af52d045e4", "copy_type": "extracted_with_budget_and_resume_scaffolding"},
+    {"path": "scripts/launch_campaign.py", "sha256": "face188871f0877e7c2214d99fd99f4a5a448d361531250dbe85f344e71e6e76", "copy_type": "new_orchestration"}
+  ],
+  "experiment_evaluation_provenance": [
+    {"path": "scripts/evaluate_d2_common_support.py", "copy_type": "new_orchestration_of_validated_D2_path", "source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_unseen_backbone_transfer.py", "source_sha256": "f3160ab88bf2227ad9680683dffde13270f6067a1dcadf68c9f0b5093af74c0f"},
+    {"path": "scripts/provenance/codd_style_fusion.py", "copy_type": "body-preserving_import-rewrite", "source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/codd_style_fusion.py", "source_sha256": "4b1a22c638214371055012087f93e9faf8a3b087a40a0b969341f33e05187a49"},
+    {"path": "scripts/provenance/codd_bounded_memory.py", "copy_type": "byte-for-byte", "source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/codd_bounded_memory.py", "source_sha256": "53a7468a93a78009d294eb0cfc30be825d4f6f7a726d2abcdc2822d1730f5b04"},
+    {"path": "scripts/provenance/stereo_photometric.py", "copy_type": "byte-for-byte", "source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/stereo_photometric.py", "source_sha256": "7ab78bead1b38478ec61a1923101b7f421e4e475b184107a1758617ec9bb7924"},
+    {"path": "scripts/provenance/h4_infer.py", "copy_type": "exact_function_extraction", "source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_codd_style_bounded_memory_validation.py::infer", "source_sha256": "cf3a0c0862e277bb213b0c71bccc0666b68eb9c1141584fdaa45dbdeb48d7638"},
+    {"path": "scripts/provenance/canonical_geometry_v1_policy.json", "copy_type": "byte-for-byte", "source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_multi_anchor_temporal_refiner/soft_fusion/frozen_policy.json", "source_sha256": "ef5b56326c452dc502be9c775a79e045e0e6587fb4a6d399cfcf050b03c4a5c2"}
+  ],
+  "initial_weight_artifacts": {
+    "20260722": {"file_sha256": "f7b1f705f938cc6d49c8fbac3939a0c024bb18358f86b8a6d4852002452e3635", "tensor_sha256": "2520cd554ce967d9ac36bf6c8b547a83fd82d945f72201344e8403c6987c3d89"},
+    "20260723": {"file_sha256": "37a2a7a669fcac97c588c8e29102e741f55545fcdd8632ea1ad14471c94e1fdd", "tensor_sha256": "66aca2059bdb46facfbfe80448d96b13be9940c78e1d380bc7023f7483b55fdf"},
+    "20260724": {"file_sha256": "e154fb1f1472a7944764cdfb638b2dfa355f530414258dfb09b74361923fde87", "tensor_sha256": "ac189315bf86f5923b35ad1d5ee65d6537329a703b854508ff0c7139e3024151"}
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "dataset": "SERV-CT",
+  "temporal_h4_evaluation": "NOT APPLICABLE",
+  "reason": "cache manifest contains static, non-consecutive stereo pairs; temporal adjacency was not fabricated."
+}

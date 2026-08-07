@@ -1,0 +1,10 @@
+{
+  "best_train_loss": 0.928010618686676,
+  "best_validation_harm_auprc": 0.6217988629039645,
+  "final_loss": 1.1109286785125732,
+  "initial_loss": 1.4366989135742188,
+  "model": "joint_gain_risk",
+  "parameters": 5634,
+  "passed": true,
+  "wall_time_s": 61.71175676898565
+}

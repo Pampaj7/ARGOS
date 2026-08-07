@@ -1,0 +1,11 @@
+dataset,backbone,path,sha256,bytes,status
+D4D,RAFT-Stereo,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/disparity.npy,98be969f43b8c7fc8dedf3d1dba00f1645f9d5bfacce0b06634fe5071631a1a5,21565568,verified
+D4D,RAFT-Stereo,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/valid_mask.npy,7c1c029b46eea84b81bab2ea359d9373f1e88d7a30c4a4ae6fe0376a98258ca4,10782848,verified
+D4D,RAFT-Stereo,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/frame_ids.npy,76d5cd985118a9bbab6a16b8a248bca261a82da32d49e2b219fb57c83b90bb8a,426112,verified
+D4D,RAFT-Stereo,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/frame_manifest.csv,be00d465246083afe5233f052c978c80c46b13139cbdfb7fff32b9c5303d8dbc,154076,verified
+D4D,RAFT-Stereo,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/metadata.json,63f079950ffcc8a4dbc75fe888cefb828468d1d1dc6b8aa35c757d11337ac7e0,1719,verified
+D4D,StereoAnywhere,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/disparity.npy,0d53e4a6d7f4543baed54fde02aa5e671878c1ac1e21a70bf741e4f6e70ea975,21565568,verified
+D4D,StereoAnywhere,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/valid_mask.npy,7fa03c681039a8068bebabbd37c3dd64412089367c5b8a988ede7afcf0bc8e48,10782848,verified
+D4D,StereoAnywhere,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/frame_ids.npy,76d5cd985118a9bbab6a16b8a248bca261a82da32d49e2b219fb57c83b90bb8a,426112,verified
+D4D,StereoAnywhere,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/frame_manifest.csv,be00d465246083afe5233f052c978c80c46b13139cbdfb7fff32b9c5303d8dbc,154076,verified
+D4D,StereoAnywhere,/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/metadata.json,a8cef3a2ca5af38f83fcd6198571c9be90bd44cb198bc74e7ea1b7c1e3a7bd6f,1741,verified

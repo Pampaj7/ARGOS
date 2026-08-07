@@ -1,0 +1,15 @@
+stratum,pixel_fraction,weight_mass_fraction,rebalance_ratio,hard_negative_fraction
+raw_good_proposal_bad3,0.0009689189722747684,nan,nan,
+disparity_boundary,0.007410772218382769,nan,nan,
+occlusion_proxy,0.029475643231701844,nan,nan,
+high_stereo_residual,0.004640868533804278,nan,nan,
+temporal_inconsistency,0.0022525573581389335,nan,nan,
+low_warp_support,0.0,nan,nan,
+low_fb_confidence,0.029475643231701844,nan,nan,
+large_update_magnitude,0.010521255462776638,nan,nan,
+distant_anchor_cs4_cs8,0.2015521632609826,nan,nan,
+raw_proposal_ambiguity,0.29194608929102184,nan,nan,
+specular_low_texture,0.0009225523514999028,nan,nan,
+helpful_accepted,0.48870939323684043,nan,nan,
+easy_raw_fallback,0.16814663821445108,nan,nan,
+_overall,1.0,1.0,1.0,0.34314396854870854

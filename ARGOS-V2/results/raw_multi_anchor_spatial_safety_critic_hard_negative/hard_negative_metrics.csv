@@ -1,0 +1,14 @@
+stratum,count,harm_rate,accept_rate,accepted_harm_rate
+raw_good_proposal_bad3,3299,1.0,0.04152773567747802,1.0
+disparity_boundary,42833,1.0,0.09347932668736722,1.0
+occlusion_proxy,434955,1.0,0.09289466726442966,1.0
+high_stereo_residual,21208,1.0,0.11764428517540551,1.0
+temporal_inconsistency,41289,1.0,0.11937804257792632,1.0
+low_warp_support,0,0.0,0.0,0.0
+low_fb_confidence,434955,1.0,0.09289466726442966,1.0
+large_update_magnitude,433662,1.0,0.017769599365404395,1.0
+distant_anchor_cs4_cs8,1412680,1.0,0.10405470453322763,1.0
+raw_proposal_ambiguity,1522218,1.0,0.12452290013651132,1.0
+specular_low_texture,4536,1.0,0.25815696649029984,1.0
+helpful_accepted,1537242,0.0,0.3961100464338081,0.0
+easy_raw_fallback,925203,0.0,0.3145644793629074,0.0

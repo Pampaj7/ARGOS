@@ -1,0 +1,9 @@
+{
+  "best_validation_selective_gain": 0.0776887983083725,
+  "family": "plane_sweep",
+  "final_loss": -2.3686898227131006,
+  "initial_loss": 3.815883159637451,
+  "parameters": 399749,
+  "seed": 20260722,
+  "wall_time_s": 3502.6460064139683
+}

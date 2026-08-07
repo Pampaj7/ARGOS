@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#BSUB -J argos_v2_training_slot
+#BSUB -q p1
+#BSUB -gpu "num=1:mode=shared"
+#BSUB -n 48
+#BSUB -R "span[hosts=1]"
+#BSUB -R "select[sm90]"
+#BSUB -R "rusage[mem=128GB]"
+#BSUB -W 24:00
+#BSUB -o /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/logs/lsf_slot_%J.out
+#BSUB -e /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/logs/lsf_slot_%J.err
+
+set -euo pipefail
+: "${ARGOS_SLOT:?ARGOS_SLOT must be 0 or 1}"
+ROOT=/dtu/p1/leopam/ARGOS/ARGOS_FREEZED
+CAMPAIGN=$ROOT/experiments/02_massive_training
+PYTHON=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
+cd "$CAMPAIGN"
+exec "$PYTHON" scripts/launch_campaign.py --slot "$ARGOS_SLOT"

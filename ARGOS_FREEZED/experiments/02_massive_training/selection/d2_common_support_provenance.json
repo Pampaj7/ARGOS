@@ -1,0 +1,19 @@
+{
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "canonical_sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd",
+  "dataset_7_opened": false,
+  "h4_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "project": "ARGOS v2",
+  "rows": 106974,
+  "sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "status": "PASS",
+  "strict_common_support": "GT coverage & raw validity & H4 support & all CS1/2/4/8 support; all nine candidate and canonical predictions evaluated"
+}

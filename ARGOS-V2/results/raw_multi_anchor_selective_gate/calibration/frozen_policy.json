@@ -1,0 +1,103 @@
+{
+  "constraints": {
+    "clean_degradation": 0.03,
+    "degraded_frame_fraction": 0.25,
+    "harmful_update_rate": 0.1,
+    "minimum_coverage": 0.001
+  },
+  "dataset7_accessed": false,
+  "frozen_checkpoint_sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd",
+  "margin": 0.1,
+  "policies": {
+    "harm_mlp": {
+      "clean_degradation": 0.0007474356305304366,
+      "coverage": 0.006964205777749781,
+      "degraded_frame_fraction": 0.19928994082840237,
+      "exact_raw_fallback_frequency": 0.9930357942222502,
+      "gain": 0.0033800031524151564,
+      "harm_max": 0.5700000000000001,
+      "harmful_update_rate": 0.09449421018134149,
+      "harmful_update_rate_all_valid": 0.0006580771245088006,
+      "intervention_precision": 0.1899497487437186,
+      "margin": 0.1,
+      "policy": "harm_mlp",
+      "worst_frame_degradation": 0.10546064376831055
+    },
+    "joint_gain_risk": {
+      "clean_degradation": 0.00048133289295939117,
+      "coverage": 0.004653708405341426,
+      "degraded_frame_fraction": 0.08717948717948718,
+      "exact_raw_fallback_frequency": 0.9953462915946586,
+      "gain": 0.0035050574224442244,
+      "gain_min": 0.1,
+      "harm_max": 0.6,
+      "harmful_update_rate": 0.09037109694294589,
+      "harmful_update_rate_all_valid": 0.0004205607334433121,
+      "intervention_precision": 0.2872323034167075,
+      "margin": 0.1,
+      "policy": "joint_gain_risk",
+      "worst_frame_degradation": 2.7636844635009767
+    },
+    "logistic": {
+      "clean_degradation": 0.00028097318467060396,
+      "coverage": 0.005312394156092547,
+      "degraded_frame_fraction": 0.15266272189349112,
+      "exact_raw_fallback_frequency": 0.9946876058439075,
+      "gain": 0.0033151975367218256,
+      "harm_max": 0.55,
+      "harmful_update_rate": 0.0737526493670161,
+      "harmful_update_rate_all_valid": 0.00039180314349367894,
+      "intervention_precision": 0.1796127627885662,
+      "margin": 0.1,
+      "policy": "logistic",
+      "worst_frame_degradation": 2.8852116054958765
+    },
+    "magnitude_threshold": {
+      "clean_degradation": 0.0,
+      "coverage": 0.003467343702498624,
+      "degraded_frame_fraction": 0.14485207100591715,
+      "exact_raw_fallback_frequency": 0.9965326562975014,
+      "gain": 2.2722435460309498e-05,
+      "harmful_update_rate": 0.0,
+      "harmful_update_rate_all_valid": 0.0,
+      "intervention_precision": 0.0,
+      "margin": 0.1,
+      "policy": "magnitude_threshold",
+      "update_max": 0.05,
+      "worst_frame_degradation": 0.009761512279510498
+    },
+    "score_threshold": {
+      "clean_degradation": 6.496037417175523e-05,
+      "coverage": 0.0006116693735318794,
+      "degraded_frame_fraction": 0.03928994082840237,
+      "exact_raw_fallback_frequency": 0.9993883306264681,
+      "gain": 0.003131736069917679,
+      "harmful_update_rate": 0.25845771144278606,
+      "harmful_update_rate_all_valid": 0.0001580906664426922,
+      "intervention_precision": 0.6328358208955224,
+      "margin": 0.1,
+      "policy": "score_threshold",
+      "score_min": 0.75,
+      "worst_frame_degradation": 2.7636844635009767
+    },
+    "ungated": {
+      "clean_degradation": 0.046009945981144273,
+      "coverage": 0.08313225843852677,
+      "degraded_frame_fraction": 0.39723865877712033,
+      "exact_raw_fallback_frequency": 0.9168677415614732,
+      "gain": -0.0022734268568456173,
+      "harmful_update_rate": 0.4570777509334505,
+      "harmful_update_rate_all_valid": 0.037997905717100176,
+      "intervention_precision": 0.3444066183468775,
+      "margin": 0.1,
+      "policy": "ungated",
+      "worst_frame_degradation": 2.9876956091986764
+    }
+  },
+  "project": "ARGOS v2",
+  "selected_only_on": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "project": "ARGOS v2",
+  "protocol": "leave-one-dataset-out",
+  "status": "blocked",
+  "matrix": null,
+  "reason": "a valid multi-dataset supervised matrix does not exist yet"
+}

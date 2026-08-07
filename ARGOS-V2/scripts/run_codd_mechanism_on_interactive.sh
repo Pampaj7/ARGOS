@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Executed through `battach -L` inside the user-owned p1i allocation.
+set -euo pipefail
+ROOT=/dtu/p1/leopam/ARGOS/ARGOS-V2
+PYTHON=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
+OUT=$ROOT/results/codd_style_fusion_mechanism_audit
+cd "$ROOT"; mkdir -p "$OUT"
+
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH="$ROOT" "$PYTHON" scripts/run_codd_style_fusion_mechanism_audit.py \
+  --mode audit --evaluation-mode clip_reset --seed 0 --device cuda:0 --workers 20 --preload-workers 20 --output-root "$OUT" \
+  >"$OUT/canonical_clip_reset.log" 2>&1 & pid0=$!
+CUDA_VISIBLE_DEVICES=1 PYTHONPATH="$ROOT" "$PYTHON" scripts/run_codd_style_fusion_mechanism_audit.py \
+  --mode audit --evaluation-mode continuous_streaming --seed 0 --device cuda:0 --workers 20 --preload-workers 20 --output-root "$OUT" \
+  >"$OUT/canonical_streaming.log" 2>&1 & pid1=$!
+wait "$pid0"
+wait "$pid1"
+PYTHONPATH="$ROOT" "$PYTHON" scripts/run_codd_style_fusion_mechanism_audit.py --mode combine --output-root "$OUT"

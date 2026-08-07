@@ -1,0 +1,9 @@
+{
+  "best_train_loss": 1.1385088714751757,
+  "best_validation_selective_gain": 0.0401577465236187,
+  "final_loss": 1.1398900790645299,
+  "initial_loss": 1.5057599544525146,
+  "model": "harm_mlp",
+  "parameters": 5569,
+  "wall_time_s": 581.0758778010495
+}

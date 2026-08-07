@@ -1,0 +1,129 @@
+ D ARGOS-V2/component_probes/README.md
+ D ARGOS-V2/component_probes/architecture_decisions.md
+ D ARGOS-V2/component_probes/bidavideo_probe.csv
+ D ARGOS-V2/component_probes/component_combination_probe.csv
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_RAFT-Stereo_dataset_3_keyframe_1_000033.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_RAFT-Stereo_dataset_3_keyframe_1_000161.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_RAFT-Stereo_dataset_7_keyframe_4_001100.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_S2M2-S_dataset_3_keyframe_1_000033.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_S2M2-S_dataset_3_keyframe_1_000161.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_S2M2-S_dataset_7_keyframe_4_001100.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_StereoAnywhere_dataset_3_keyframe_1_000033.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_StereoAnywhere_dataset_3_keyframe_1_000161.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/RAFT_StereoAnywhere_dataset_7_keyframe_4_001100.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_RAFT-Stereo_dataset_3_keyframe_1_000033.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_RAFT-Stereo_dataset_3_keyframe_1_000161.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_RAFT-Stereo_dataset_7_keyframe_4_001100.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_S2M2-S_dataset_3_keyframe_1_000033.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_S2M2-S_dataset_3_keyframe_1_000161.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_S2M2-S_dataset_7_keyframe_4_001100.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_StereoAnywhere_dataset_3_keyframe_1_000033.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_StereoAnywhere_dataset_3_keyframe_1_000161.png
+ D ARGOS-V2/component_probes/diagnostic_contact_sheets/SEA-RAFT_StereoAnywhere_dataset_7_keyframe_4_001100.png
+ D ARGOS-V2/component_probes/endostreamdepth_probe.csv
+ D ARGOS-V2/component_probes/ppmstereo_candidate_signal.csv
+ D ARGOS-V2/component_probes/ppmstereo_probe.csv
+ D ARGOS-V2/component_probes/probe_manifest.json
+ D ARGOS-V2/component_probes/raft_vs_searaft.csv
+ D ARGOS-V2/component_probes/repository_component_map.md
+ D ARGOS-V2/component_probes/run_component_probes.py
+ D ARGOS-V2/component_probes/runtime_memory_summary.csv
+ D ARGOS-V2/component_probes/signal_predictiveness.csv
+ D ARGOS-V2/component_probes/wrappers/__init__.py
+ D ARGOS-V2/component_probes/wrappers/bidavideo_wrapper.py
+ D ARGOS-V2/component_probes/wrappers/endostreamdepth_wrapper.py
+ D ARGOS-V2/component_probes/wrappers/ppmstereo_wrapper.py
+ D ARGOS-V2/component_probes/wrappers/raft_wrapper.py
+ D ARGOS-V2/component_probes/wrappers/sea_raft_wrapper.py
+ D ARGOS-V2/external_code_backbone_needed/MANIFEST.json
+ D ARGOS-V2/external_code_backbone_needed/README.md
+ D ARGOS-V2/external_code_backbone_needed/bidavideo/alignment/causal_warp.py
+ D ARGOS-V2/external_code_backbone_needed/bidavideo/notes.md
+ D ARGOS-V2/external_code_backbone_needed/endostreamdepth/notes.md
+ D ARGOS-V2/external_code_backbone_needed/endostreamdepth/state_management/streaming_state.py
+ D ARGOS-V2/external_code_backbone_needed/ppmstereo/memory_selection/pick_and_play.py
+ D ARGOS-V2/external_code_backbone_needed/ppmstereo/notes.md
+ D ARGOS-V2/external_code_backbone_needed/raft/notes.md
+ D ARGOS-V2/external_code_backbone_needed/sea_raft/notes.md
+ D ARGOS-V2/external_code_backbone_needed/tests/test_external_components.py
+ D ARGOS-V2/model_design/external_components/raft.py
+ M ARGOS-V2/model_design/models/codd_style_fusion.py
+ M ARGOS-V2/model_design/tests/test_codd_style_fusion.py
+ D ARGOS-V2/results/full_run/run_full.jsonl
+ M ARGOS-V2/scripts/run_codd_style_fusion_probe.py
+?? ARGOS-V2/model_design/CODD_STYLE_MECHANISM_AUDIT.md
+?? ARGOS-V2/model_design/RAW_MULTI_ANCHOR_SELECTIVE_GATE_AUDIT.md
+?? ARGOS-V2/model_design/external_components/hybrid_temporal_memory.py
+?? ARGOS-V2/model_design/losses/raw_multi_anchor_losses.py
+?? ARGOS-V2/model_design/models/codd_bounded_memory.py
+?? ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py
+?? ARGOS-V2/model_design/models/raw_multi_anchor_selective_gate.py
+?? ARGOS-V2/model_design/models/spatial_error_critic.py
+?? ARGOS-V2/model_design/tests/test_codd_bounded_memory.py
+?? ARGOS-V2/model_design/tests/test_hybrid_temporal_memory.py
+?? ARGOS-V2/model_design/tests/test_raw_multi_anchor_refiner.py
+?? ARGOS-V2/model_design/tests/test_raw_multi_anchor_selective_gate.py
+?? ARGOS-V2/model_design/tests/test_spatial_critic_freeze_guard.py
+?? ARGOS-V2/model_design/tests/test_spatial_error_critic.py
+?? ARGOS-V2/results/codd_style_bounded_memory_validation/
+?? ARGOS-V2/results/codd_style_fusion_mechanism_audit/
+?? ARGOS-V2/results/codd_style_h4_transfer_audit/
+?? ARGOS-V2/results/dataset_robust_utility_selector/final_fold_test7_val2/seed_0/frame_metrics.csv
+?? ARGOS-V2/results/dataset_robust_utility_selector/final_fold_test7_val2/seed_1/frame_metrics.csv
+?? ARGOS-V2/results/dataset_robust_utility_selector/final_fold_test7_val2/seed_2/frame_metrics.csv
+?? ARGOS-V2/results/dataset_robust_utility_selector/fold_test7_val2/seed_0/frame_metrics.csv
+?? ARGOS-V2/results/hybrid_temporal_memory_oracle_audit/
+?? ARGOS-V2/results/raw_multi_anchor_selective_gate/
+?? ARGOS-V2/results/raw_multi_anchor_spatial_safety_critic/
+?? ARGOS-V2/results/raw_multi_anchor_spatial_safety_critic_hard_negative/
+?? ARGOS-V2/results/raw_multi_anchor_temporal_refiner/
+?? ARGOS-V2/results/raw_multi_anchor_unseen_backbone_transfer/
+?? ARGOS-V2/results/utility_memory_selector/seed_0/frame_metrics.csv
+?? ARGOS-V2/results/utility_memory_selector/seed_1/frame_metrics.csv
+?? ARGOS-V2/results/utility_memory_selector/seed_2/frame_metrics.csv
+?? ARGOS-V2/results/utility_selector_capacity_probe/medium_128x8_12ep_clean/seed_0/frame_metrics.csv
+?? ARGOS-V2/results/utility_selector_capacity_probe/medium_128x8_12ep_clean/seed_1/frame_metrics.csv
+?? ARGOS-V2/results/utility_selector_capacity_probe/medium_128x8_12ep_clean/seed_2/frame_metrics.csv
+?? ARGOS-V2/results/utility_selector_information_probe/candidate_conditioned_stereo_evidence_128x8/full_128x8/seed_0/frame_metrics.csv
+?? ARGOS-V2/results/utility_selector_information_probe/candidate_conditioned_stereo_evidence_128x8/full_128x8/seed_1/frame_metrics.csv
+?? ARGOS-V2/results/utility_selector_information_probe/candidate_conditioned_stereo_evidence_128x8/full_128x8/seed_2/frame_metrics.csv
+?? ARGOS-V2/scripts/assemble_spatial_critic_verdict.py
+?? ARGOS-V2/scripts/audit_codd_h4_transfer_caches.py
+?? ARGOS-V2/scripts/audit_spatial_critic_existing.py
+?? ARGOS-V2/scripts/finish_raw_multi_anchor_campaign.sh
+?? ARGOS-V2/scripts/freeze_spatial_critic.py
+?? ARGOS-V2/scripts/launch_codd_mechanism_canonical.bsub
+?? ARGOS-V2/scripts/launch_codd_style_mechanism_audit.bsub
+?? ARGOS-V2/scripts/launch_hybrid_memory_validation_gpu0.sh
+?? ARGOS-V2/scripts/launch_hybrid_memory_validation_gpu1.sh
+?? ARGOS-V2/scripts/launch_raw_multi_anchor_cs1_gpu1.sh
+?? ARGOS-V2/scripts/launch_raw_multi_anchor_primary_gpu0.sh
+?? ARGOS-V2/scripts/launch_raw_multi_anchor_primary_gpu1.sh
+?? ARGOS-V2/scripts/run_codd_bounded_ablation_training_interactive.sh
+?? ARGOS-V2/scripts/run_codd_bounded_ablation_training_stage2_interactive.sh
+?? ARGOS-V2/scripts/run_codd_bounded_final_test_interactive.sh
+?? ARGOS-V2/scripts/run_codd_bounded_policy_smoke_interactive.sh
+?? ARGOS-V2/scripts/run_codd_h4_d4d_no_reference.py
+?? ARGOS-V2/scripts/run_codd_mechanism_on_interactive.sh
+?? ARGOS-V2/scripts/run_codd_reset_every4_on_interactive.sh
+?? ARGOS-V2/scripts/run_codd_reset_validation_interactive.sh
+?? ARGOS-V2/scripts/run_codd_streaming_on_interactive.sh
+?? ARGOS-V2/scripts/run_codd_style_bounded_memory_validation.py
+?? ARGOS-V2/scripts/run_codd_style_fusion_mechanism_audit.py
+?? ARGOS-V2/scripts/run_hybrid_memory_probes_gpu1.sh
+?? ARGOS-V2/scripts/run_hybrid_memory_smoke_interactive.sh
+?? ARGOS-V2/scripts/run_hybrid_memory_test_gpu0.sh
+?? ARGOS-V2/scripts/run_hybrid_memory_test_gpu1.sh
+?? ARGOS-V2/scripts/run_hybrid_memory_test_keyframe4_gpu1.sh
+?? ARGOS-V2/scripts/run_hybrid_temporal_memory_oracle_audit.py
+?? ARGOS-V2/scripts/run_raw_multi_anchor_selective_gate.py
+?? ARGOS-V2/scripts/run_raw_multi_anchor_spatial_safety_critic.py
+?? ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py
+?? ARGOS-V2/scripts/run_raw_multi_anchor_unseen_backbone_transfer.py
+?? ARGOS-V2/scripts/run_spatial_critic_hard_negative.py
+?? ARGOS-V2/scripts/status_hybrid_memory_interactive.sh
+?? ARGOS-V2/scripts/summarize_codd_bounded_memory_validation.py
+?? ARGOS-V2/scripts/summarize_codd_h4_transfer_audit.py
+?? ARGOS-V2/scripts/watch_then_launch_raw_multi_anchor_cs1.sh
+?? SOTA/codd.pdf
+?? SOTA/stereo-temporal-canidate-selection.md

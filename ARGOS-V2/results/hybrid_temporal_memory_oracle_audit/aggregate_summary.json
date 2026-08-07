@@ -1,0 +1,234 @@
+{
+  "architecture_interpretation": {
+    "corrected_increment_beyond_raw_bank_px": 0.004894884263218435,
+    "corrected_increment_fraction_of_full_gain": 0.03389365199369866,
+    "no_model_trained_in_this_stage": true,
+    "raw_anchor_fraction_of_full_oracle_gain": 0.9661063480063014,
+    "reason": "raw anchors dominate the ceiling, while corrected candidates provide small but measurable unique support",
+    "recommended_next_architecture": "raw-anchor-first non-recurrent multi-anchor refiner; corrected CF1/CF2 as optional typed TTL<=2 ablation",
+    "stage1_oracle_verdict": "GO"
+  },
+  "best_single_temporal_candidate": {
+    "age": "8",
+    "available_count": 27061518.0,
+    "base_count": 28031346.0,
+    "candidate": "CS8",
+    "candidate_epe": 0.6143269949843451,
+    "candidate_error_sum": 16624621.032654762,
+    "contributing_frame_fraction": 0.8219847581179589,
+    "disagreement_sum": 8670268.128221512,
+    "fb_confidence_mean": 0.8384413016340373,
+    "fb_sum": 22689494.37611293,
+    "frame_contributes": 9923.0,
+    "oracle_error_sum": 12088065.826094627,
+    "provenance": "raw",
+    "raw_candidate_disagreement_mean": 0.32039104858129214,
+    "raw_epe_on_candidate_support": 0.5380536225508497,
+    "raw_error_sum": 14560547.791625023,
+    "row_count": 12072,
+    "single_candidate_oracle_gain": 0.09136523551747525,
+    "stage": "test",
+    "support_coverage": 0.9654020181549612,
+    "win_count": 11340688.0,
+    "winner_pixel_fraction": 0.41907065228195994
+  },
+  "candidate_support_coverage": {
+    "CF1": 0.9906386942674819,
+    "CF2": 0.9873375684492639,
+    "CS1": 0.9906386942674819,
+    "CS2": 0.9873375684492639,
+    "CS4": 0.9798935805651288,
+    "CS8": 0.9654020181549612
+  },
+  "claim_limit": "held-out SCARED-C sequences, seen S2M2-S/RAFT-Stereo/StereoAnywhere only; no unseen-backbone or external/OOD claim",
+  "decision": "GO",
+  "flicker_failure_probes": [
+    {
+      "auprc": 0.053686629967943544,
+      "auroc": 0.6640099028756429,
+      "count": 32256.0,
+      "method": "median_mad",
+      "prevalence": 0.023251488095238096,
+      "target": "raw_current_error"
+    },
+    {
+      "auprc": 0.036467122056366395,
+      "auroc": 0.6556922490954105,
+      "count": 32256.0,
+      "method": "isolation_forest",
+      "prevalence": 0.023251488095238096,
+      "target": "raw_current_error"
+    },
+    {
+      "auprc": 0.6249451658441317,
+      "auroc": 0.6989911732475721,
+      "count": 192622.0,
+      "method": "median_mad",
+      "prevalence": 0.38649271630447196,
+      "target": "temporal_memory_failure"
+    },
+    {
+      "auprc": 0.6825521210352682,
+      "auroc": 0.8124615477956301,
+      "count": 192622.0,
+      "method": "isolation_forest",
+      "prevalence": 0.38649271630447196,
+      "target": "temporal_memory_failure"
+    },
+    {
+      "auprc": 0.45423135183329433,
+      "auroc": 0.6319702664813935,
+      "count": 64342.0,
+      "method": "median_mad",
+      "prevalence": 0.3272978769699419,
+      "target": "harmful_corrected_update"
+    },
+    {
+      "auprc": 0.6063106676086207,
+      "auroc": 0.8284674700252919,
+      "count": 64342.0,
+      "method": "isolation_forest",
+      "prevalence": 0.3272978769699419,
+      "target": "harmful_corrected_update"
+    }
+  ],
+  "frozen_selection": {
+    "dataset_7_project_history_caveat": "dataset 7 was used in earlier ARGOS v2 studies; it is held out only from this anchor-selection procedure",
+    "full_hybrid_validation_pooled": {
+      "backbone": "ALL",
+      "base_count": 52954404.0,
+      "oracle_epe": 0.21751477610555434,
+      "oracle_error_sum": 11518365.329863071,
+      "oracle_family": "full_hybrid_bank",
+      "oracle_gain": 0.09323638854085511,
+      "oracle_type": "selection",
+      "raw_epe": 0.31075116464640945,
+      "raw_error_sum": 16455642.716156483,
+      "row_count": 12675,
+      "support_contract": "availability_aware",
+      "support_count": 52954404.0
+    },
+    "predeclared_materiality": {
+      "contributing_frame_fraction": 0.02,
+      "incremental_gain_px": 0.001,
+      "winner_pixel_fraction": 0.0025
+    },
+    "project": "ARGOS v2",
+    "selected_candidates": [
+      "CS1",
+      "CS2",
+      "CS4",
+      "CS8",
+      "CF1",
+      "CF2"
+    ],
+    "selection_data": [
+      "dataset_2_keyframe_2",
+      "dataset_2_keyframe_3",
+      "dataset_2_keyframe_4"
+    ],
+    "t8_retained": true,
+    "test_data_accessed": false
+  },
+  "go_threshold_hybrid_incremental_gain_px": 0.005,
+  "hybrid_increment_by_backbone": {
+    "RAFT-Stereo": 0.0584745861627049,
+    "S2M2-S": 0.0446921165440195,
+    "StereoAnywhere": 0.04892510664473171
+  },
+  "hybrid_increment_by_sequence": {
+    "dataset_7_keyframe_1": 0.0266645304786588,
+    "dataset_7_keyframe_2": 0.029469563231098228,
+    "dataset_7_keyframe_3": 0.07624206523354293,
+    "dataset_7_keyframe_4": 0.05278044534858298
+  },
+  "minimum_t8_support": 0.25,
+  "project": "ARGOS v2",
+  "provenance_complementarity": {
+    "base_count": 28031346.0,
+    "both_provenances_offer_gain_count": 16885442.0,
+    "both_provenances_offer_gain_fraction": 0.602377138793121,
+    "corrected_wins_all_raw_anchors_lose_count": 238061.0,
+    "corrected_wins_all_raw_anchors_lose_fraction": 0.008492671026214723,
+    "current_raw_remains_best_count": 6889437.0,
+    "current_raw_remains_best_fraction": 0.24577617500065818,
+    "far_raw_recovers_short_corrected_failure_count": 2543895.0,
+    "far_raw_recovers_short_corrected_failure_fraction": 0.09075179622127315,
+    "raw_anchor_wins_corrected_lose_count": 4018406.0,
+    "raw_anchor_wins_corrected_lose_fraction": 0.14335401518000598,
+    "row_count": 12072,
+    "stage": "test"
+  },
+  "raw_first_incremental_gain": {
+    "CF1": 0.002741150231684651,
+    "CF2": 0.0021537351483134314,
+    "CS1": 0.052360395308870836,
+    "CS2": 0.02840845425848341,
+    "CS4": 0.027872569822458247,
+    "CS8": 0.030882605085500354
+  },
+  "scope": "held-out SCARED-C sequences and seen backbones only; unseen-backbone and external-dataset OOD remain future work",
+  "test": {
+    "full_hybrid": {
+      "base_count": 28031346.0,
+      "oracle_epe": 0.40331263746024193,
+      "oracle_error_sum": 11305396.086820602,
+      "oracle_family": "full_hybrid_bank",
+      "oracle_gain": 0.14441890959783465,
+      "oracle_type": "selection",
+      "raw_epe": 0.5477315470580766,
+      "raw_error_sum": 15353652.510700226,
+      "row_count": 12072,
+      "stage": "test",
+      "support_contract": "availability_aware",
+      "support_count": 28031346.0,
+      "support_coverage": 1.0
+    },
+    "hybrid_gain_over_best_single_family": 0.050697269783818666,
+    "one_step_raw": {
+      "base_count": 28031346.0,
+      "oracle_epe": 0.49537115129874126,
+      "oracle_error_sum": 13885920.140473366,
+      "oracle_family": "current_plus_one_step_raw",
+      "oracle_gain": 0.05236039575933532,
+      "oracle_type": "selection",
+      "raw_epe": 0.5477315470580766,
+      "raw_error_sum": 15353652.510700226,
+      "row_count": 12072,
+      "stage": "test",
+      "support_contract": "availability_aware",
+      "support_count": 28031346.0,
+      "support_coverage": 1.0
+    },
+    "raw_anchor_bank": {
+      "base_count": 28031346.0,
+      "oracle_epe": 0.40820752172346036,
+      "oracle_error_sum": 11442606.281232834,
+      "oracle_family": "current_plus_raw_anchors",
+      "oracle_gain": 0.13952402533461622,
+      "oracle_type": "selection",
+      "raw_epe": 0.5477315470580766,
+      "raw_error_sum": 15353652.510700226,
+      "row_count": 12072,
+      "stage": "test",
+      "support_contract": "availability_aware",
+      "support_count": 28031346.0,
+      "support_coverage": 1.0
+    },
+    "short_corrected": {
+      "base_count": 28031346.0,
+      "oracle_epe": 0.4540099072440606,
+      "oracle_error_sum": 12726508.79738617,
+      "oracle_family": "current_plus_short_corrected",
+      "oracle_gain": 0.09372163981401599,
+      "oracle_type": "selection",
+      "raw_epe": 0.5477315470580766,
+      "raw_error_sum": 15353652.510700226,
+      "row_count": 12072,
+      "stage": "test",
+      "support_contract": "availability_aware",
+      "support_count": 28031346.0,
+      "support_coverage": 1.0
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "best_checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260724/checkpoints/best_validation.pt",
+  "best_d2_gain": 0.005158539861440659,
+  "budget": "3x",
+  "current_train_loss": 0.3957326557143131,
+  "epoch": 30,
+  "latest_d2_gain": -0.004412483889609575,
+  "optimizer_step": 119190,
+  "runtime_s": 3134.522914264002,
+  "seed": 20260724,
+  "status": "completed"
+}

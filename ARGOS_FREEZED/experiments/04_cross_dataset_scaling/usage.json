@@ -1,0 +1,13 @@
+{
+  "current_authorization": "no training, no zero-shot, no evaluation",
+  "dataset_7_opened": false,
+  "project": "ARGOS v2",
+  "rules": {
+    "D4D": "future zero-shot sparse-anchor only",
+    "EndoSLAM": "none",
+    "Hamlyn": "none",
+    "SCARED-C": "existing supervised protocol only",
+    "SERV-CT": "static geometry only",
+    "StereoMIS": "no-reference diagnostic protocol required"
+  }
+}

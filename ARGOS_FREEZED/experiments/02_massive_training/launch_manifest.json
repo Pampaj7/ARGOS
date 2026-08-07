@@ -1,0 +1,11 @@
+{
+  "project": "ARGOS v2",
+  "status": "PRELAUNCH_AUDIT",
+  "requested_runs": 9,
+  "concurrency": 2,
+  "gpu_per_run": 1,
+  "ddp": false,
+  "wave_order": [["1x/20260722", "1x/20260723"], ["1x/20260724", "3x/20260722"], ["3x/20260723", "3x/20260724"], ["6x/20260722", "6x/20260723"], ["6x/20260724"]],
+  "dataset_7_locked": true,
+  "jobs": []
+}

@@ -1,0 +1,53 @@
+{
+  "BiDA_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+  "SEA_RAFT_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+  "availability_aware_deployment": true,
+  "causal_contract": "direct current-to-anchor SEA-RAFT; no flow composition; model output never enters raw anchor bank",
+  "corrected_checkpoint_sha256": "8ebbbec7d713dc20792a1a413b8d762196ace46d8e2e1d7c7616ed338770aa3b",
+  "dataset7_caveat": "held out from this experiment but inspected by prior ARGOS v2 studies",
+  "dataset7_locked_until_freeze": true,
+  "output_enters_future_bank": false,
+  "project": "ARGOS v2",
+  "raw_candidates_immutable": true,
+  "seen_backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "split_unit": "complete dataset-ID and sequence",
+  "strict_support_reported": true,
+  "test_dataset_ids": [
+    7
+  ],
+  "test_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "train_dataset_ids": [
+    1,
+    3,
+    6
+  ],
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_dataset_ids": [
+    2
+  ],
+  "validation_sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ]
+}

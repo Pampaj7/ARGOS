@@ -1,0 +1,19 @@
+{
+  "project": "ARGOS v2",
+  "experiment": "frozen CODD-style H=4 transfer audit",
+  "checkpoint": "results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "checkpoint_selection": "dataset_2_validation only",
+  "training_seen_backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+  "unseen_backbones": ["CREStereo", "Fast-FoundationStereo"],
+  "state": "causal recurrent fused disparity, hard re-anchor every H=4 frames and at true sequence boundaries",
+  "flow": "frozen SEA-RAFT current(target)-to-past(source) pull warp with forward-backward support",
+  "inference_features": "canonical 142-channel CODD cues; frozen ResNet18 evidence reconstructed externally from images, disparity and BiDA alignment",
+  "forbidden": ["training", "threshold tuning", "backbone-specific normalization", "dataset-specific calibration", "new dense cache generation"],
+  "dataset_roles": {
+    "SCARED-C": "in-domain seen and unseen-backbone frozen evaluation",
+    "D4D": "external-domain cache compatibility and temporal-order audit before any temporal claim",
+    "SERV-CT": "static reset/identity audit only",
+    "StereoMIS": "not opened unless a complete chronological cache is verified"
+  }
+}

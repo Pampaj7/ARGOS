@@ -1,0 +1,14 @@
+project_name: ARGOS v2
+experiment_id: 00_template
+title: replace_me
+scientific_question: replace_me
+hypothesis: replace_me
+frozen_version: geometry_v1
+train_ids: []
+validation_ids: []
+test_ids: []
+seeds: []
+dataset_cache_paths: []
+output_path: experiments/00_template/results
+avoid_dense_caches: true
+commands: {}

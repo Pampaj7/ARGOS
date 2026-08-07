@@ -1,0 +1,2 @@
+sequence,frames,reset,support_coverage,raw_mc_inconsistency,fused_mc_inconsistency,mc_delta,update_magnitude,temporal_weight,fb_confidence
+specimen_1__2025_03_06-16_54_09__Clip_1__start,3,0.0,0.9823431372642517,0.15807617704073587,0.12752114236354828,-0.030555034056305885,0.03055504026512305,0.22627642254034677,0.7001380721728007

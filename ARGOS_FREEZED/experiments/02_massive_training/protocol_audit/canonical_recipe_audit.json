@@ -1,0 +1,134 @@
+{
+  "amp": "torch.autocast CUDA + GradScaler enabled",
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "batch_size": 12,
+  "budgets": {
+    "1x": {
+      "epochs": 10,
+      "steps": 39730
+    },
+    "3x": {
+      "epochs": 30,
+      "steps": 119190
+    },
+    "6x": {
+      "epochs": 60,
+      "steps": 238380
+    }
+  },
+  "cache_behavior": "validated stereo caches reused; SEA-RAFT live frozen; evidence bank held only in RAM; no persistent dense predictions",
+  "canonical_epochs": 10,
+  "canonical_optimizer_steps": 39730,
+  "checkpoint_selection": "maximum validation_best_gain; per-epoch D2 stride-64 policy grid p=[.3..9], u=[-.05,0,.01,.02,.05,.1], feasible coverage>=.005 and harm-cost<=.25 else maximum gain",
+  "coverage_threshold": 0.5,
+  "crop": {
+    "one_fixed_random_crop_per_frame_backbone": true,
+    "other_augmentation": null,
+    "training": [
+      64,
+      80
+    ],
+    "validation": [
+      144,
+      180
+    ]
+  },
+  "deployment_thresholds": {
+    "probability": 0.9,
+    "utility_px": 0.1
+  },
+  "effective_batch_size": 12,
+  "flow_batch_size": 32,
+  "gradient_clip_norm": 5.0,
+  "initial_weights": {
+    "20260722": {
+      "file_sha256": "f7b1f705f938cc6d49c8fbac3939a0c024bb18358f86b8a6d4852002452e3635",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/initial_weights/seed_20260722.pt",
+      "tensor_sha256": "2520cd554ce967d9ac36bf6c8b547a83fd82d945f72201344e8403c6987c3d89"
+    },
+    "20260723": {
+      "file_sha256": "37a2a7a669fcac97c588c8e29102e741f55545fcdd8632ea1ad14471c94e1fdd",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/initial_weights/seed_20260723.pt",
+      "tensor_sha256": "66aca2059bdb46facfbfe80448d96b13be9940c78e1d380bc7023f7483b55fdf"
+    },
+    "20260724": {
+      "file_sha256": "e154fb1f1472a7944764cdfb638b2dfa355f530414258dfb09b74361923fde87",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/initial_weights/seed_20260724.pt",
+      "tensor_sha256": "ac189315bf86f5923b35ad1d5ee65d6537329a703b854508ff0c7139e3024151"
+    }
+  },
+  "initialization": "from scratch after canonical dependency construction; never initialized from canonical trained checkpoint",
+  "loss": {
+    "classification": 1.0,
+    "clipped_delta_px": 8.0,
+    "fusion": 1.0,
+    "harmful_weight_regularizer": 0.2,
+    "maximum_positive_weight": 50.0,
+    "ranking": 0.25,
+    "regression": 0.5
+  },
+  "margin_px": 0.1,
+  "optimizer": {
+    "amsgrad": false,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "lr": 0.002,
+    "name": "AdamW",
+    "weight_decay": 0.0001
+  },
+  "persistent_workers": true,
+  "pin_memory": true,
+  "prefetch_factor": 4,
+  "project": "ARGOS v2",
+  "raw_examples": 25608,
+  "sampler": "BalancedGroupSampler: 30 backbone-sequence groups oversampled to max group 1589; deterministic seed+epoch interleaving",
+  "samples_per_epoch": 47670,
+  "scheduler": {
+    "T_max": "complete budget optimizer steps",
+    "eta_min": 0.0001,
+    "name": "CosineAnnealingLR",
+    "step_unit": "optimizer_step"
+  },
+  "source_runner": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py",
+  "status": "FROZEN_BEFORE_FULL_TRAINING",
+  "steps_per_epoch": 3973,
+  "test_id_locked": 7,
+  "train_ids": [
+    1,
+    3,
+    6
+  ],
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_cadence": {
+    "epochs": 1,
+    "optimizer_steps": 3973
+  },
+  "validation_ids": [
+    2
+  ],
+  "validation_sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "warmup": null,
+  "workers": 48
+}

@@ -1,0 +1,158 @@
+{
+  "backbones": {
+    "CREStereo": [
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/CREStereo/dataset_7_keyframe_1",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_1",
+        "shape": [
+          647,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      },
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/CREStereo/dataset_7_keyframe_2",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_2",
+        "shape": [
+          628,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      },
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/CREStereo/dataset_7_keyframe_3",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_3",
+        "shape": [
+          584,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      },
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/CREStereo/dataset_7_keyframe_4",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_4",
+        "shape": [
+          2197,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      }
+    ],
+    "Fast-FoundationStereo": [
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/Fast-FoundationStereo/dataset_7_keyframe_1",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_1",
+        "shape": [
+          647,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      },
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/Fast-FoundationStereo/dataset_7_keyframe_2",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_2",
+        "shape": [
+          628,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      },
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/Fast-FoundationStereo/dataset_7_keyframe_3",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_3",
+        "shape": [
+          584,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      },
+      {
+        "chronological": true,
+        "complete": true,
+        "convention": "positive_left_disparity",
+        "finite": true,
+        "frame_ids_match_gt": true,
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones/Fast-FoundationStereo/dataset_7_keyframe_4",
+        "positive_left_where_valid": true,
+        "sequence": "dataset_7_keyframe_4",
+        "shape": [
+          2197,
+          144,
+          180
+        ],
+        "units": "pixels_at_cache_resolution",
+        "valid_fraction": 1.0
+      }
+    ]
+  },
+  "checks": {
+    "chronological_frame_ids": true,
+    "complete": true,
+    "finite": true,
+    "frame_ids_match_gt": true,
+    "positive_left": true,
+    "resolution": [
+      144,
+      180
+    ]
+  },
+  "dataset": "dataset_7",
+  "project": "ARGOS v2",
+  "strict_common_support": 1.0
+}

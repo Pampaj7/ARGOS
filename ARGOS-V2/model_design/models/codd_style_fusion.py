@@ -132,7 +132,7 @@ def _cross_appearance_correlation(current: torch.Tensor, aligned_past: torch.Ten
 
 @torch.no_grad()
 def build_codd_cues(
-    extractor: FrozenResNet18Layer1,
+    extractor: FrozenResNet18Layer1 | None,
     *,
     raw: torch.Tensor,
     aligned_memory: torch.Tensor,
@@ -144,6 +144,7 @@ def build_codd_cues(
     forward_backward_confidence: torch.Tensor,
     warp_support: torch.Tensor,
     aligned_valid: torch.Tensor,
+    include_learned_stereo_evidence: bool = True,
 ) -> CODDCues:
     """Build CODD Sect. 3.3.2-style explicit frozen cues.
 
@@ -152,35 +153,50 @@ def build_codd_cues(
     convention before cross-frame correlations are formed.
     """
     height, width = raw.shape[-2:]
-    current_feature = extractor(current_rgb)
-    right_feature = extractor(current_right_rgb)
-    past_feature = extractor(past_rgb)
-    feature_size = current_feature.shape[-2:]
+    # The no-learned-stereo-evidence ablation deliberately retains only
+    # disparity/motion/RGB evidence.  It neither evaluates the frozen ResNet
+    # nor leaves a zero-valued learned feature block that the head could use as
+    # an architecture-side domain marker.
+    feature_size = (height // 4, width // 4)
     raw_f = _feature_disparity(raw, feature_size)
     memory_f = _feature_disparity(aligned_memory, feature_size)
-    flow_f = resize_flow(flow_current_to_past, feature_size)
-    aligned_past_feature = causal_warp(past_feature, flow_f).warped
+    if include_learned_stereo_evidence:
+        if extractor is None:
+            raise ValueError("learned stereo evidence requires the frozen extractor")
+        current_feature = extractor(current_rgb)
+        right_feature = extractor(current_right_rgb)
+        past_feature = extractor(past_rgb)
+        feature_size = current_feature.shape[-2:]
+        raw_f = _feature_disparity(raw, feature_size)
+        memory_f = _feature_disparity(aligned_memory, feature_size)
+        flow_f = resize_flow(flow_current_to_past, feature_size)
+        aligned_past_feature = causal_warp(past_feature, flow_f).warped
 
-    def confidence_curve(candidate: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        curve, supports = [], []
-        for offset in (-1.0, 0.0, 1.0):
-            sampled, support = _sample_right_feature(right_feature, candidate + offset)
-            curve.append((current_feature - sampled).abs().mean(dim=1, keepdim=True).clamp(0, 4) / 4)
-            supports.append(support.float())
-        return torch.cat(curve, dim=1), torch.cat(supports, dim=1)
+        def confidence_curve(candidate: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+            curve, supports = [], []
+            for offset in (-1.0, 0.0, 1.0):
+                sampled, support = _sample_right_feature(right_feature, candidate + offset)
+                curve.append((current_feature - sampled).abs().mean(dim=1, keepdim=True).clamp(0, 4) / 4)
+                supports.append(support.float())
+            return torch.cat(curve, dim=1), torch.cat(supports, dim=1)
 
-    raw_conf, raw_conf_support = confidence_curve(raw_f)
-    memory_conf, memory_conf_support = confidence_curve(memory_f)
-    # All correlations are formed at 1/4, then upsampled to the disparity grid.
-    low = torch.cat((
-        raw_conf, memory_conf, raw_conf - memory_conf,
-        _disparity_self_correlation(raw_f), _disparity_self_correlation(memory_f),
-        _appearance_self_correlation(current_feature), _appearance_self_correlation(aligned_past_feature),
-        _cross_disparity_correlation(raw_f, memory_f),
-        _cross_appearance_correlation(current_feature, aligned_past_feature),
-        raw_conf_support, memory_conf_support,
-        torch.tanh(current_feature / 3.0),
-    ), dim=1)
+        raw_conf, raw_conf_support = confidence_curve(raw_f)
+        memory_conf, memory_conf_support = confidence_curve(memory_f)
+        # All correlations are formed at 1/4, then upsampled to the cache grid.
+        low = torch.cat((
+            raw_conf, memory_conf, raw_conf - memory_conf,
+            _disparity_self_correlation(raw_f), _disparity_self_correlation(memory_f),
+            _appearance_self_correlation(current_feature), _appearance_self_correlation(aligned_past_feature),
+            _cross_disparity_correlation(raw_f, memory_f),
+            _cross_appearance_correlation(current_feature, aligned_past_feature),
+            raw_conf_support, memory_conf_support,
+            torch.tanh(current_feature / 3.0),
+        ), dim=1)
+    else:
+        low = torch.cat((
+            _disparity_self_correlation(raw_f), _disparity_self_correlation(memory_f),
+            _cross_disparity_correlation(raw_f, memory_f),
+        ), dim=1)
     low = _up(low, (height, width))
     residual = (aligned_memory - raw).clamp(-16, 16) / 16
     motion = torch.cat((
@@ -249,7 +265,41 @@ class CODDStyleFusionHead(nn.Module):
         return CODDFusionOutput(reset, fusion, temporal, fused)
 
 
+def convex_fusion_oracle(
+    raw: torch.Tensor,
+    memory: torch.Tensor,
+    ground_truth: torch.Tensor,
+    *,
+    epsilon: float = 1e-6,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """GT-only best convex interpolation and its coefficient.
+
+    This is diagnostic-only: it identifies the minimum absolute scalar
+    disparity error on the segment from ``raw`` to ``memory``.  Equal endpoint
+    disparities use an exactly-zero coefficient to avoid a division by zero.
+    """
+    denominator = memory - raw
+    safe = denominator.abs() > epsilon
+    # Compute the ratio only at safe elements with an explicit masked
+    # assignment: a denominator can be negative, so ``clamp_min`` is invalid.
+    weight = torch.zeros_like(raw)
+    weight[safe] = ((ground_truth - raw)[safe] / denominator[safe]).clamp(0.0, 1.0)
+    fused = (1.0 - weight) * raw + weight * memory
+    return fused, weight
+
+
+def hard_endpoint_fusion(
+    raw: torch.Tensor,
+    memory: torch.Tensor,
+    temporal_weight: torch.Tensor,
+    threshold: float,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Bit-exact raw-or-memory endpoint decision used only for the audit."""
+    accepted = temporal_weight >= threshold
+    return torch.where(accepted, memory, raw), accepted
+
+
 __all__ = [
     "CODDCues", "CODDFusionOutput", "CODDStyleFusionHead", "FrozenResNet18Layer1",
-    "RESNET18_CHECKPOINT", "build_codd_cues",
+    "RESNET18_CHECKPOINT", "build_codd_cues", "convex_fusion_oracle", "hard_endpoint_fusion",
 ]

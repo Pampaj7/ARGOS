@@ -1,0 +1,7 @@
+dataset,camera_geometry_reference,status,claim_limit
+SCARED-C,rectified stereo with processed pseudo-GT,known,quality-gated causal supervision only
+StereoMIS,rectified stereo calibration,no depth/disparity reference,no geometric-accuracy claim
+SERV-CT,stereo paired with CT-derived reference,static only,no temporal claim
+D4D,rectified-left sparse Zivid anchors,sparse only,no dense temporal claim
+Hamlyn,unknown,unknown,no claim
+EndoSLAM,unknown,unknown,no claim

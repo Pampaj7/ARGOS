@@ -1,0 +1,10 @@
+{
+  "canonical_checkpoint_sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd",
+  "dataset": "SCARED-C validation ID 2",
+  "dataset_7_opened": false,
+  "frame_rows": 295710,
+  "metric_definitions": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/04_cross_dataset_scaling/metrics/metric_definitions.json",
+  "project": "ARGOS v2",
+  "status": "PASS",
+  "strict_support": "GT coverage & raw validity & H4 support & all CS1/2/4/8 support"
+}

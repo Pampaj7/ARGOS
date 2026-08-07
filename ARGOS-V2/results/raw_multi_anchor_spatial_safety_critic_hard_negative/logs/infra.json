@@ -1,0 +1,3 @@
+{"lsf_job_id": 28960777, "queue": "p1i", "host": "n-62-12-83", "gpu": "cuda:0 (CUDA_VISIBLE_DEVICES=0), 2x H100 PCIe 80GB on node",
+ "pid": 233967, "ppid": 1, "detached": "setsid nohup, reparented to init", "workers": 8, "batch_size": 16,
+ "log": "logs/full_run.log", "walltime_remaining_at_launch": "~11h (campaign ~5h)", "env": "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python"}

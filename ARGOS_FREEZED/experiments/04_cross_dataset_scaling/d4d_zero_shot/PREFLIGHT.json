@@ -1,0 +1,28 @@
+{
+  "cache_readiness_manifest": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/04_cross_dataset_scaling/cache_preparation/cache_readiness.json",
+  "cache_readiness_status": "BLOCKED_VERSION_PIN_REQUIRED",
+  "cache_root": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones",
+  "constraints": "no GT claim for StereoMIS; D4D sparse geometry requires verified Zivid registration and causal source window",
+  "dataset": "D4D",
+  "dataset_7_opened": false,
+  "inference_started": false,
+  "project": "ARGOS v2",
+  "required_cache_files": {
+    "RAFT-Stereo": {
+      "disparity.npy": true,
+      "frame_ids.npy": true,
+      "frame_manifest.csv": true,
+      "metadata.json": true,
+      "valid_mask.npy": true
+    },
+    "StereoAnywhere": {
+      "disparity.npy": true,
+      "frame_ids.npy": true,
+      "frame_manifest.csv": true,
+      "metadata.json": true,
+      "valid_mask.npy": true
+    }
+  },
+  "status": "BLOCKED_VERSION_PIN_REQUIRED",
+  "temporal_manifest_rows": 832
+}

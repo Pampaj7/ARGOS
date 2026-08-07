@@ -1,0 +1,61 @@
+% ARGOS v2 -- Spatial Safety Critic. Frozen dataset-7 evaluation, stereo primary.
+% Seed 20260722. Freeze manifest SHA-256 c620ced... Repo 998d771.
+% Generated from frozen_test/summary.json + aggregate_summary.json (single source of truth).
+
+\begin{table}[t]
+\centering
+\caption{Frozen dataset-7 evaluation. Multi-anchor beats bounded CODD-style H=4
+(raw EPE 0.5479, H4 EPE 0.5173). The spatial critic (stereo primary, frozen on
+dataset 2) dominates the ungated proposal on every safety axis and beats H4, but
+does not reach the $\leq$10\% harmful-update bound. The prior scalar gate reaches
+low harm only by collapsing coverage and losing the H4 advantage.}
+\label{tab:d7}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Policy & EPE & gain/raw & gain/H4 & cov. & harm$_{\text{acc}}$ & prec. & clean-deg \\
+\midrule
+Ungated multi-anchor & 0.5105 & 0.0375 & $+$0.0068 & 15.5\% & 35.0\% & 49.0\% & 4.86\% \\
+Prior scalar gate (best) & 0.5171 & 0.0308 & $+$0.0001 & 1.1\% & 12.1\% & -- & 0.07\% \\
+\textbf{Spatial critic (stereo)} & \textbf{0.5072} & \textbf{0.0407} & $\mathbf{+0.0101}$ & 7.9\% & 24.7\% & 61.8\% & 2.10\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Per-backbone and per-sequence dataset-7 results (spatial critic).
+All three seen backbones and all four sequences improve.}
+\label{tab:d7groups}
+\begin{tabular}{lrr@{\hskip 2em}lrr}
+\toprule
+Backbone & gain & harm & Sequence & gain & harm \\
+\midrule
+S2M2-S         & 0.0264 & 25.1\% & kf1 & 0.0048 & 26.4\% \\
+RAFT-Stereo    & 0.0531 & 25.9\% & kf2 & 0.0238 & 41.9\% \\
+StereoAnywhere & 0.0427 & 23.1\% & kf3 & 0.1040 & 22.1\% \\
+               &        &        & kf4 & 0.0247 & 24.8\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Dataset-2 family comparison and D2$\rightarrow$D7 transfer (stereo).
+No family reaches a feasible operating point (harm$\leq$10\% at cov$\geq$0.5\%);
+net gains are statistically indistinguishable. Harm rate and coverage transfer
+stably to dataset 7 (no collapse).}
+\label{tab:families}
+\begin{tabular}{lrrrc}
+\toprule
+Family & harm AUROC & $\delta$ Spearman & best gain & feasible? \\
+\midrule
+geometry     & 0.708 & 0.375 & 0.0056 & no \\
+temporal     & 0.747 & 0.437 & 0.0061 & no \\
+stereo (primary) & 0.743 & 0.482 & 0.0063 & no \\
+plane\_sweep (ablation) & 0.750 & 0.503 & 0.0065 & no \\
+\midrule
+\multicolumn{5}{l}{Transfer (stereo frozen point): D2 cov 3.2\%/harm 26.3\% $\rightarrow$ D7 cov 7.9\%/harm 24.7\%;} \\
+\multicolumn{5}{l}{harm AUROC 0.743 $\rightarrow$ 0.691.} \\
+\bottomrule
+\end{tabular}
+\end{table}

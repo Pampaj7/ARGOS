@@ -1,0 +1,9 @@
+{
+  "all_common_counts_positive": true,
+  "checkpoint_policy": "single canonical Phase-1 seed 0: lowest ID-2 validation fused EPE among existing frozen checkpoints",
+  "clip_rows": 10443,
+  "continuous_rows": 10458,
+  "historical_recurrent_mask_difference_pixels": 0,
+  "reset_every4_rows": 10458,
+  "same_common_support_contract": "historical mask intersect recurrent mask for every reported comparison"
+}

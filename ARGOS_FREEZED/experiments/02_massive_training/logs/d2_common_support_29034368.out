@@ -1,0 +1,47 @@
+PASS ARGOS v2 geometry_v1 (24 immutable hashes)
+D2 sequence=dataset_2_keyframe_2
+D2 sequence=dataset_2_keyframe_3
+D2 sequence=dataset_2_keyframe_4
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29034368: <argos_v2_d2_common_support> in cluster <dcc> Done
+
+Job <argos_v2_d2_common_support> was submitted from host <hpclogin9.hpccluster.dtu.dk> by user <leopam> in cluster <dcc> at Wed Aug  5 21:39:11 2026
+Job was executed on host(s) <8*n-62-12-84>, in queue <p1>, as user <leopam> in cluster <dcc> at Wed Aug  5 21:39:11 2026
+</tmp/.lsbtmp334278> was used as the home directory.
+</dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training> was used as the working directory.
+Started at Wed Aug  5 21:39:11 2026
+Terminated at Wed Aug  5 21:53:03 2026
+Results reported at Wed Aug  5 21:53:03 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/bin/bash -lc 'cd /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training && exec /dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python scripts/evaluate_d2_common_support.py --device cuda:0 --flow-batch-size 32'
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   897.10 sec.
+    Max Memory :                                 11039 MB
+    Average Memory :                             6844.88 MB
+    Total Requested Memory :                     196608.00 MB
+    Delta Memory :                               185569.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                16
+    Run time :                                   832 sec.
+    Turnaround time :                            832 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/logs/d2_common_support_29034368.err> for stderr output of this job.
+

@@ -1,0 +1,7 @@
+{
+  "project": "ARGOS v2",
+  "protocol": "pooled-training",
+  "status": "blocked",
+  "matrix": null,
+  "reason": "no compatible supervised multi-dataset pool is evidenced or frozen"
+}

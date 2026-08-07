@@ -1,0 +1,7 @@
+{
+  "all_external_and_reconstructible": true,
+  "backbone_ids_used": false,
+  "backbone_internal_features_used": false,
+  "feature_channels": 17,
+  "project": "ARGOS v2"
+}

@@ -1,0 +1,35 @@
+{
+  "ages": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "backbones": [
+    "S2M2-S",
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "corrected_lifecycle": "canonical no-learned-evidence H=4 checkpoint",
+  "coverage_threshold": 0.5,
+  "dataset7_locked_until_freeze": true,
+  "direct_current_to_anchor_flow": true,
+  "flow_composition": false,
+  "future_access": false,
+  "project": "ARGOS v2",
+  "support_contracts": [
+    "strict_intersection",
+    "availability_aware"
+  ],
+  "test_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ]
+}

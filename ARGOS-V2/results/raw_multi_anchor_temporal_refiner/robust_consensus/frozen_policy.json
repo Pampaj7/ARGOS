@@ -1,0 +1,19 @@
+{
+  "configuration": "consensus",
+  "dataset7_accessed": false,
+  "feasible": true,
+  "policy": {
+    "coverage": 0.25503535091231,
+    "fb_min": 0.25,
+    "gain": 0.0023890468236442983,
+    "harmful_fraction": 0.06876233137414207,
+    "mad_max": 0.1,
+    "raw_deviation": 0.1
+  },
+  "project": "ARGOS v2",
+  "selected_only_on": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ]
+}

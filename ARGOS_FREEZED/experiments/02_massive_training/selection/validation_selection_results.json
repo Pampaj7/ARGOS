@@ -1,0 +1,135 @@
+{
+  "dataset_7_opened": false,
+  "eligible_budgets": [],
+  "project": "ARGOS v2",
+  "selection_input_sha256": "d60353fe4e7d2386165f0aa91dfe886278a4ec7dc2c516d34bb0cfda216e8cc3",
+  "table": {
+    "1x": {
+      "eligibility": {
+        "all_three_seed_gains_vs_raw_positive": false,
+        "at_least_two_of_three_seeds_improve_h4": false,
+        "cache_support_convention_and_parity_failures": 0,
+        "mean_gain_vs_h4_positive": false,
+        "mean_gain_vs_raw_positive": true
+      },
+      "eligible": false,
+      "mean_gain_vs_h4": -0.011544155268153056,
+      "mean_gain_vs_raw": 0.002859956964434418,
+      "mean_multi_epe": 0.3024681239027416,
+      "per_seed": [
+        {
+          "gain_vs_h4": -0.017011674008824085,
+          "gain_vs_raw": -0.002607561776236611,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.3079356426434126,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260722,
+          "valid_pixel_count": 51114633.0
+        },
+        {
+          "gain_vs_h4": -0.005566824754131783,
+          "gain_vs_raw": 0.008837287478455691,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.2964907933887203,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260723,
+          "valid_pixel_count": 51114633.0
+        },
+        {
+          "gain_vs_h4": -0.0120539670415033,
+          "gain_vs_raw": 0.002350145191084174,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.3029779356760918,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260724,
+          "valid_pixel_count": 51114633.0
+        }
+      ]
+    },
+    "3x": {
+      "eligibility": {
+        "all_three_seed_gains_vs_raw_positive": false,
+        "at_least_two_of_three_seeds_improve_h4": false,
+        "cache_support_convention_and_parity_failures": 0,
+        "mean_gain_vs_h4_positive": false,
+        "mean_gain_vs_raw_positive": true
+      },
+      "eligible": false,
+      "mean_gain_vs_h4": -0.010490291982209484,
+      "mean_gain_vs_raw": 0.00391382025037799,
+      "mean_multi_epe": 0.301414260616798,
+      "per_seed": [
+        {
+          "gain_vs_h4": -0.006471602159651091,
+          "gain_vs_raw": 0.007932510072936383,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.2973955707942396,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260722,
+          "valid_pixel_count": 51114633.0
+        },
+        {
+          "gain_vs_h4": -0.01653830014378571,
+          "gain_vs_raw": -0.0021341879111982376,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.30746226877837424,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260723,
+          "valid_pixel_count": 51114633.0
+        },
+        {
+          "gain_vs_h4": -0.00846097364319165,
+          "gain_vs_raw": 0.005943138589395824,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.2993849422777802,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260724,
+          "valid_pixel_count": 51114633.0
+        }
+      ]
+    },
+    "6x": {
+      "eligibility": {
+        "all_three_seed_gains_vs_raw_positive": true,
+        "at_least_two_of_three_seeds_improve_h4": false,
+        "cache_support_convention_and_parity_failures": 0,
+        "mean_gain_vs_h4_positive": false,
+        "mean_gain_vs_raw_positive": true
+      },
+      "eligible": false,
+      "mean_gain_vs_h4": -0.009559629185699081,
+      "mean_gain_vs_raw": 0.004844483046888393,
+      "mean_multi_epe": 0.3004835978202876,
+      "per_seed": [
+        {
+          "gain_vs_h4": -0.00772844337596984,
+          "gain_vs_raw": 0.006675668856617634,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.29865241201055837,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260722,
+          "valid_pixel_count": 51114633.0
+        },
+        {
+          "gain_vs_h4": -0.013830825862879759,
+          "gain_vs_raw": 0.0005732863697077151,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.3047547944974683,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260723,
+          "valid_pixel_count": 51114633.0
+        },
+        {
+          "gain_vs_h4": -0.007119618318247645,
+          "gain_vs_raw": 0.007284493914339829,
+          "h4_epe": 0.2909239686345885,
+          "multi_epe": 0.29804358695283617,
+          "raw_epe": 0.305328080867176,
+          "seed": 20260724,
+          "valid_pixel_count": 51114633.0
+        }
+      ]
+    }
+  },
+  "verdict": "TRAINING-SCALE NO-GO"
+}

@@ -1,0 +1,19 @@
+{
+  "gates": {
+    "all_seen_backbones_positive": true,
+    "distant_useful_nonzero": true,
+    "improves_fixed_h4": true,
+    "nearly_all_sequences_positive": true,
+    "soft_beats_hard": true,
+    "soft_exists": true
+  },
+  "geometry_verdict": "GO",
+  "hybrid_ttl2_promoted": false,
+  "raw_multi_anchor_soft": "NO-GO",
+  "safety_gates": {
+    "clean_degradation_le_3pct": false,
+    "degraded_frame_fraction_le_25pct": false,
+    "harmful_update_rate_le_10pct": false
+  },
+  "safety_verdict": "NO-GO"
+}

@@ -1,0 +1,14 @@
+{
+  "frozen_refiner": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd",
+  "frozen_refiner_expected": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd",
+  "frozen_refiner_match": true,
+  "geometry": "7bef21573a3c381bff6d52bbcdbc293fe313c5b49ce43dc02b6c7075a0880349",
+  "geometry_last": "0e5f1a70a214d6d2b8f152b260a4238ab39eec2869b514fa713a65c7236282d8",
+  "temporal": "53c8bb6f4fefafe960ab3a07154148b68f0dccf0096d8a879fae05975ee0e94c",
+  "temporal_last": "ff348a2d3b040b90377cc3d2b721456b115fe2a5d731b4d9ab61d6e90a7f86f6",
+  "stereo": "51293978085fb47da1dde9b94563654ce634b68b921d98f2e42c5e8406969f54",
+  "stereo_last": "526c7312319fb439de532e85e8455dc589f308ee1b32ba43f6de1476ff66d388",
+  "plane_sweep": "c5e14951e0154dd0b941777064ca97b753e6c11a7df1fd2ca539729d477ba0f9",
+  "plane_sweep_last": "346f4033dd2e89e92850ad0b38559301614926875110e457c7af752177756dee",
+  "_all_frozen_match": true
+}

@@ -1,0 +1,15 @@
+{
+  "project": "ARGOS v2",
+  "authorization": "planning records only",
+  "launches": {
+    "training": false,
+    "zero_shot": false,
+    "evaluation": false,
+    "cache_generation": false,
+    "dataset_7_opened": false
+  },
+  "current_supervised_source": "SCARED-C only",
+  "cross_training_matrix": null,
+  "lodo_matrix": null,
+  "reason": "other registered sources lack compatible authorized temporal supervision or are unavailable"
+}

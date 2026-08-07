@@ -1,0 +1,4 @@
+40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd  /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/checkpoints/raw_multi_anchor_best_validation.pt
+99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725  /dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt
+1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac  /dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth
+f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec  /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/04_cross_dataset_scaling/dependencies/resnet18-f37072fd.pth

@@ -1,0 +1,30 @@
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[font=\footnotesize,>=Latex,
+  frozen/.style={draw=blue!60,fill=blue!8,rounded corners,align=center,minimum height=7mm},
+  memory/.style={draw=gray!70,fill=gray!12,rounded corners,align=center,minimum height=7mm},
+  learned/.style={draw=orange!80!black,fill=orange!12,rounded corners,align=center,minimum height=7mm},
+  mask/.style={draw=green!50!black,fill=green!10,rounded corners,align=center,minimum height=7mm},
+  every path/.style={->,thick}]
+\node[frozen] (pair) {current stereo pair\\$I_t^L,I_t^R$};
+\node[frozen,right=8mm of pair] (stereo) {frozen stereo\\$d_t^S,M_t$};
+\draw (pair)--(stereo);
+\node[memory,below=13mm of pair] (bank) {immutable raw bank\\CS1 / CS2 / CS4 / CS8};
+\node[frozen,right=9mm of bank] (flow1) {SEA--RAFT\\$F_{t\to t-k},F_{t-k\to t}$};
+\node[frozen,right=8mm of flow1] (warp) {BiDA-style pull\\$\widetilde d_t^{(k)}$};
+\draw (bank)--(flow1)--(warp);
+\node[learned,below=13mm of stereo] (evidence) {shared evidence\\$[B,K,17,H,W]$};
+\node[learned,right=8mm of evidence] (enc) {shared candidate\\encoder\\60,739 params};
+\draw (warp)--(evidence)--(enc);
+\node[learned,right=8mm of enc] (score) {score maps\\$s_t^{(k)}$};
+\node[mask,right=8mm of score] (select) {pixelwise\\$\arg\max_k$};
+\draw (enc)--(score)--(select);
+\node[learned,right=8mm of select] (fusion) {pairwise soft fusion\\$d^{prop}$};
+\node[mask,right=8mm of fusion] (fallback) {acceptance +\\exact raw fallback\\$d_t^{out}$};
+\draw (select)--(fusion)--(fallback);
+\draw (stereo.south)--++(0,-13mm)-|(fusion.north);
+\draw[->,green!50!black] (stereo.south) -- ++(0,-27mm) -| node[pos=.75,below]{append\_raw only} (bank.south);
+\draw[red,->,very thick] (fallback.south) -- ++(0,-12mm) -| node[pos=.55,below]{NO fused writeback} (bank.east);
+\end{tikzpicture}
+\caption{ARGOS v2 geometry\_v1. Each age is aligned independently; one candidate is selected per pixel. Only the current raw stereo prediction updates memory. SEA--RAFT and BiDA-style alignment are frozen components, not ARGOS contributions.}
+\end{figure*}

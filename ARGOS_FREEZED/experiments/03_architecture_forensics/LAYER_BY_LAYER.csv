@@ -1,0 +1,9 @@
+layer,input_shape,operation,parameters,output_shape,source,tag
+0,[B*K,17,H,W],Conv2d(17,32,kernel=3,padding=1,bias=False),4896,[B*K,32,H,W],src/argos_freezed/models/raw_multi_anchor_refiner.py:140-143,[IMPLEMENTED]
+1,[B*K,32,H,W],GroupNorm(8,32)+SiLU,included above,[B*K,32,H,W],src/argos_freezed/models/raw_multi_anchor_refiner.py:141-143,[IMPLEMENTED]
+2,[B*K,32,H,W],SharedBlock: Conv3x3-GN-SiLU-Conv3x3-GN residual then SiLU,18560,[B*K,32,H,W],src/argos_freezed/models/raw_multi_anchor_refiner.py:118-129,[IMPLEMENTED]
+3,[B*K,32,H,W],same SharedBlock,18560,[B*K,32,H,W],src/argos_freezed/models/raw_multi_anchor_refiner.py:143,[IMPLEMENTED]
+4,[B*K,32,H,W],same SharedBlock,18560,[B*K,32,H,W],src/argos_freezed/models/raw_multi_anchor_refiner.py:143,[IMPLEMENTED]
+5,[B*K,32,H,W],Conv2d(32,3,kernel=1),99,[B*K,3,H,W],src/argos_freezed/models/raw_multi_anchor_refiner.py:145-148,[IMPLEMENTED]
+6,[B,K,3,H,W],channel transforms: sigmoid, tanh*8, sigmoid,[B,K,3,H,W] intermediate,[B,K,H,W] each,src/argos_freezed/models/raw_multi_anchor_refiner.py:155-166,[IMPLEMENTED]
+receptive_field,[B*K,17,H,W],one 3x3 plus six 3x3 convolutions,0,15-pixel theoretical local field,FREEZE_MANIFEST.json,[CONFIGURED]

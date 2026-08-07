@@ -1,0 +1,5 @@
+age,selected_cs1_frequency,used_cs1_frequency,used_cs1_gain,selected_cs2_frequency,used_cs2_frequency,used_cs2_gain,selected_cs4_frequency,used_cs4_frequency,used_cs4_gain,selected_cs8_frequency,used_cs8_frequency,used_cs8_gain
+CS1,0.09371461789940431,0.21254074827890568,0.0850626265965968,,,,,,,,,
+CS2,,,,0.13553519219329443,0.2420115764365442,0.10220450418501911,,,,,,
+CS4,,,,,,,0.2166922244923019,0.25598943754718656,0.15052061077502218,,,
+CS8,,,,,,,,,,0.5540579654149994,0.28945823773736357,0.31928391486210334

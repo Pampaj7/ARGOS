@@ -1,0 +1,76 @@
+% Full paper-ready method draft. Requires amsmath and booktabs.
+\section{ARGOS v2 geometry\_v1}
+\label{sec:argos-method}
+\paragraph{Scope.} We study a causal adapter around an arbitrary frozen stereo estimator. The estimator is an external interface: given the current rectified stereo pair, it returns a positive-left disparity $d_t^S\in\mathbb R^{1\times H\times W}$ and validity mask $M_t$. The adapter does not consume backbone identifiers, cost volumes, hidden states, or internal features.
+
+\subsection{Immutable raw memory}
+At time $t$, the bank stores only independently generated raw records
+\[
+\mathcal M_t=\{(d_j^S,M_j,I_j^L,\mathrm{id}_j,j,\tau_j):j\le t\},
+\]
+with a rolling index horizon of eight frames. Age $k$ denotes the source index $t-k$ and $k\in\mathcal A=\{1,2,4,8\}$. Records are detached clones; indices must increase strictly, valid disparities must be finite and positive, and provenance must be `independent\_frozen\_stereo`. The current raw record is appended only after the current output is constructed. Consequently, no corrected prediction can become the source of a later correction.
+
+\subsection{Direct causal motion and alignment}
+For every available source, frozen SEA-RAFT (four iterations, vendored InputPadder, float32 RGB tensors) is run independently in both directions,
+\[
+F_{t\rightarrow t-k}=\operatorname{SEA\text{-}RAFT}(I_t^L,I_{t-k}^L),\qquad
+F_{t-k\rightarrow t}=\operatorname{SEA\text{-}RAFT}(I_{t-k}^L,I_t^L).
+\]
+No flow is composed through intermediate frames. On the current grid, BiDA-style pull alignment samples the source at
+\[
+q_x=x+F_x(x,y),\quad q_y=y+F_y(x,y),\quad
+\widetilde d_t^{(k)}(x,y)=\operatorname{grid\_sample}(d_{t-k}^S,q),
+\]
+using bilinear interpolation, zero padding, and `align\_corners=True`. Coordinates outside the source rectangle are unsupported. Source validity is sampled with the same grid and thresholded at $0.999$; candidate validity also requires current validity.
+
+The reverse flow is pulled with the forward flow. With $\bar F=\operatorname{Warp}(F_{t-k\rightarrow t},F_{t\rightarrow t-k})$,
+\[
+e=\|F_{t\rightarrow t-k}+\bar F\|_2,\quad
+\theta=0.5+0.01(\|F_{t\rightarrow t-k}\|_2+\|\bar F\|_2),\quad
+C=\exp(-e/\max(\theta,10^{-6}))B.
+\]
+The binary consistency mask is $B\land(e\le\theta)$; the candidate availability used by retrieval is instead $V_k=M_t\land\operatorname{WarpValid}(M_{t-k})\land B$. $C$ is retained as continuous evidence.
+
+\subsection{Universal candidate evidence}
+For $r=d_t^S$, $c_k=\widetilde d_t^{(k)}$, available-age count $n$, candidate median $m$, MAD $q$, and agreement count $A_k$, the exact ordered evidence is
+\[
+x_t^{(k)}=[r/64,c_k/64,\clip(c_k-r,-16,16)/16,|c_k-r|/16,
+\mu_5(|c_k-r|)/8,\sigma_5(c_k-r)/8,k/8,V_k,B_k,C_k,n/K,m/64,q/8,|c_k-m|/8,|r-m|/8,A_k/K,p_k].
+\]
+The local statistics use 5x5 average pooling, stride one, padding two; variance is clamped at zero before the square root. The tensor is $[B,K,17,H,W]$. Photometric residual, flow magnitude, disparity disagreement, and gradient helper values are computed by the alignment utility but are not input channels.
+
+\subsection{Shared retrieval and fusion}
+The $K$ candidates are flattened into the batch dimension and passed through one shared CNN: a 3x3 $17\to32$ convolution, GroupNorm(8,32), SiLU, three residual blocks (each two 3x3 convolutions with GroupNorm and a residual SiLU), and a 1x1 $32\to3$ head. The head has zero weights and bias $[-2,0,-3]$. The total is 60,739 trainable parameters. For its three channels,
+\[
+p_k=\sigma(z_{0k}),\qquad\delta_k=8\tanh(z_{1k}),\qquad w_k=\sigma(z_{2k}),\qquad s_k=p_k\delta_k.
+\]
+Unavailable candidates are assigned $s_k=-\infty$ and one candidate is selected independently at each pixel,
+\[
+k^\star=\arg\max_{k\in\mathcal A}s_k.
+\]
+The selected candidate is fused pairwise with the current raw disparity,
+\[
+d_t^{prop}=(1-w_{k^\star})d_t^S+w_{k^\star}\widetilde d_t^{(k^\star)}.
+\]
+This is implemented equivalently as $d_t^S+w_{k^\star}(\widetilde d_t^{(k^\star)}-d_t^S)$.
+
+\subsection{Acceptance and fallback}
+Let $p_{k^\star}$ and $s_{k^\star}$ denote the selected outputs. Acceptance is
+\[
+a_t=V_{k^\star}\land[p_{k^\star}\ge0.9]\land[s_{k^\star}\ge0.1\,\mathrm{px}],
+\quad d_t^{out}=\operatorname{where}(a_t,d_t^{prop},d_t^S).
+\]
+The effective weight is $w_{k^\star}$ on accepted pixels and zero otherwise. Missing ages, invalid candidates, low probability, and low utility therefore fall back exactly to raw. This is a geometric abstention mechanism, not a safety guarantee.
+
+\subsection{Training objective}
+The validated training source uses $e_r=|r-g|$, $e_k=|c_k-g|$, $\Delta_k=e_r-e_k$, valid mask $V_k=[G>0.5]\land M_t\land A_k\land\mathrm{finite}(\Delta_k)$, and helpful target $h_k=[\Delta_k>0.10]\land V_k$. With positive weight $\rho=\clip(N_-/\max(N_+,1),1,50)$ and $\widehat\Delta=\clip(\Delta,-8,8)$,
+\[
+\mathcal L=1.0\mathcal L_{BCE}+0.5\mathcal L_{SmoothL1}+0.25\mathcal L_{rank}+1.0\mathcal L_{fusion}+0.2\mathcal L_{harm},
+\]
+where the first term is masked weighted BCE on $z_0$, the second masked weighted SmoothL1 on $\delta$ versus $\widehat\Delta$, ranking is a pairwise margin hinge with margin 0.10, fusion is masked weighted SmoothL1 of $r+w_k(c_k-r)$ versus ground truth, and the harmful regularizer is mean $w_k$ where $\Delta_k\le0.10$. Empty masks contribute zero. SEA-RAFT, alignment, and raw stereo are frozen/precomputed in this training path.
+
+\subsection{Complexity and invariants}
+At most eight SEA-RAFT calls, four candidate warps and shared-CNN evaluations are required per frame (two flow calls per available age). Evidence and adapter work scale as $O(KHW)$ after the flow network, memory as $O(KHW)$, and $K=4$. The invariants are past-only access, direct flow, no composition, raw-only writeback, no corrected recurrence, exact invalid masking/fallback, positive-left disparity, no backbone-specific internal data, frozen weights, and deterministic parity with the validated runner.
+
+\subsection{Relation to H4 and limitations}
+The bounded CODD-style H4 reference fuses a corrected memory state over a four-frame horizon and is an isolated strong baseline. Geometry\_v1 instead retrieves one of four independently generated raw anchors and never propagates a corrected state. Prior SCARED-C evidence supports causal same-domain transfer and substantial CS4/CS8 use, but not universal backbone independence, external/OOD generalization, clinical safety, guaranteed non-degradation, or real-time deployment.

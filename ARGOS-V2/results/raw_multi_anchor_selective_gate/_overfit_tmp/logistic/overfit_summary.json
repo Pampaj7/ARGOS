@@ -1,0 +1,9 @@
+{
+  "best_validation_harm_auprc": 0.3539193336034821,
+  "final_loss": 1.546320390701294,
+  "initial_loss": 1.92416250705719,
+  "model": "logistic",
+  "parameters": 21,
+  "passed": false,
+  "wall_time_s": 12.977867210982367
+}

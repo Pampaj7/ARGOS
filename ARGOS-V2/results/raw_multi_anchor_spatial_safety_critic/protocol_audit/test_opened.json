@@ -1,0 +1,10 @@
+{
+  "freeze_manifest_sha256": "c620cedb84f20751270c0e9ff5ed590b96eaaa512dd17a740831c23dbe2d5d24",
+  "opened_after_freeze": true,
+  "sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ]
+}

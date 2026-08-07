@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "comparison": "S2M2-S/dataset_7_keyframe_1/first four causal pairs",
+  "checkpoint_hash": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "reference": {
+    "raw_epe": 0.16074540514638208,
+    "fused_epe": 0.15926306114638666,
+    "delta_fusion_mean": 0.04211276679163943,
+    "raw_tepe": 0.04589531839523522,
+    "fused_tepe": 0.035079711517917334
+  },
+  "reproduced": {
+    "raw_epe": 0.16074540514638208,
+    "fused_epe": 0.15926324271221443,
+    "delta_fusion_mean": 0.04211366658930234,
+    "raw_tepe": 0.0458939053026511,
+    "fused_tepe": 0.0350769867108599
+  },
+  "max_abs_difference": 2.7248070574303895e-06,
+  "reset_rate": 0.25,
+  "support_coverage": 0.9944444298744202
+}

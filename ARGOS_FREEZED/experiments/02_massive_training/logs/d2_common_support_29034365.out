@@ -1,0 +1,44 @@
+PASS ARGOS v2 geometry_v1 (24 immutable hashes)
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29034365: <argos_v2_d2_common_support> in cluster <dcc> Exited
+
+Job <argos_v2_d2_common_support> was submitted from host <hpclogin9.hpccluster.dtu.dk> by user <leopam> in cluster <dcc> at Wed Aug  5 21:35:01 2026
+Job was executed on host(s) <8*n-62-12-84>, in queue <p1>, as user <leopam> in cluster <dcc> at Wed Aug  5 21:35:03 2026
+</tmp/.lsbtmp334278> was used as the home directory.
+</dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training> was used as the working directory.
+Started at Wed Aug  5 21:35:03 2026
+Terminated at Wed Aug  5 21:37:34 2026
+Results reported at Wed Aug  5 21:37:34 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/bin/bash -lc 'cd /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training && exec /dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python scripts/evaluate_d2_common_support.py --device cuda:0 --flow-batch-size 32'
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time :                                   162.02 sec.
+    Max Memory :                                 1168 MB
+    Average Memory :                             1080.33 MB
+    Total Requested Memory :                     196608.00 MB
+    Delta Memory :                               195440.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                16
+    Run time :                                   151 sec.
+    Turnaround time :                            153 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/logs/d2_common_support_29034365.err> for stderr output of this job.
+

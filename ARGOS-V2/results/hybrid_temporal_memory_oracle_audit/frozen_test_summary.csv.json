@@ -1,0 +1,63 @@
+{
+  "full_hybrid": {
+    "base_count": 28031346.0,
+    "oracle_epe": 0.40331263746024193,
+    "oracle_error_sum": 11305396.086820602,
+    "oracle_family": "full_hybrid_bank",
+    "oracle_gain": 0.14441890959783465,
+    "oracle_type": "selection",
+    "raw_epe": 0.5477315470580766,
+    "raw_error_sum": 15353652.510700226,
+    "row_count": 12072,
+    "stage": "test",
+    "support_contract": "availability_aware",
+    "support_count": 28031346.0,
+    "support_coverage": 1.0
+  },
+  "hybrid_gain_over_best_single_family": 0.050697269783818666,
+  "one_step_raw": {
+    "base_count": 28031346.0,
+    "oracle_epe": 0.49537115129874126,
+    "oracle_error_sum": 13885920.140473366,
+    "oracle_family": "current_plus_one_step_raw",
+    "oracle_gain": 0.05236039575933532,
+    "oracle_type": "selection",
+    "raw_epe": 0.5477315470580766,
+    "raw_error_sum": 15353652.510700226,
+    "row_count": 12072,
+    "stage": "test",
+    "support_contract": "availability_aware",
+    "support_count": 28031346.0,
+    "support_coverage": 1.0
+  },
+  "raw_anchor_bank": {
+    "base_count": 28031346.0,
+    "oracle_epe": 0.40820752172346036,
+    "oracle_error_sum": 11442606.281232834,
+    "oracle_family": "current_plus_raw_anchors",
+    "oracle_gain": 0.13952402533461622,
+    "oracle_type": "selection",
+    "raw_epe": 0.5477315470580766,
+    "raw_error_sum": 15353652.510700226,
+    "row_count": 12072,
+    "stage": "test",
+    "support_contract": "availability_aware",
+    "support_count": 28031346.0,
+    "support_coverage": 1.0
+  },
+  "short_corrected": {
+    "base_count": 28031346.0,
+    "oracle_epe": 0.4540099072440606,
+    "oracle_error_sum": 12726508.79738617,
+    "oracle_family": "current_plus_short_corrected",
+    "oracle_gain": 0.09372163981401599,
+    "oracle_type": "selection",
+    "raw_epe": 0.5477315470580766,
+    "raw_error_sum": 15353652.510700226,
+    "row_count": 12072,
+    "stage": "test",
+    "support_contract": "availability_aware",
+    "support_count": 28031346.0,
+    "support_coverage": 1.0
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "dataset_7_locked": true,
+  "failures": [
+    {
+      "budget": "3x",
+      "command": [
+        "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python",
+        "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/train_one_run.py",
+        "--budget",
+        "3",
+        "--seed",
+        "20260724",
+        "--device",
+        "cuda:0",
+        "--workers",
+        "48",
+        "--flow-batch-size",
+        "32",
+        "--batch-size",
+        "12"
+      ],
+      "ended_at": "2026-08-05T11:59:01.202505+00:00",
+      "exit_code": 1,
+      "gpu_slot": 0,
+      "host": "n-62-12-83",
+      "log": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260724/logs/train.log",
+      "pid": 1372948,
+      "seed": 20260724,
+      "started_at": "2026-08-05T11:51:29.535422+00:00"
+    }
+  ],
+  "host": "n-62-12-83",
+  "jobs": [
+    {
+      "budget": "1x",
+      "command": [
+        "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python",
+        "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/train_one_run.py",
+        "--budget",
+        "1",
+        "--seed",
+        "20260723",
+        "--device",
+        "cuda:0",
+        "--workers",
+        "48",
+        "--flow-batch-size",
+        "32",
+        "--batch-size",
+        "12"
+      ],
+      "ended_at": "2026-08-05T10:47:34.742518+00:00",
+      "exit_code": 0,
+      "gpu_slot": 0,
+      "host": "n-62-12-83",
+      "log": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/01_multiseed_replication/budget_1x/seed_20260723/logs/train.log",
+      "pid": 1248211,
+      "seed": 20260723,
+      "started_at": "2026-08-05T10:18:35.330270+00:00"
+    },
+    {
+      "budget": "3x",
+      "command": [
+        "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python",
+        "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/train_one_run.py",
+        "--budget",
+        "3",
+        "--seed",
+        "20260722",
+        "--device",
+        "cuda:0",
+        "--workers",
+        "48",
+        "--flow-batch-size",
+        "32",
+        "--batch-size",
+        "12"
+      ],
+      "ended_at": "2026-08-05T11:51:29.534653+00:00",
+      "exit_code": 0,
+      "gpu_slot": 0,
+      "host": "n-62-12-83",
+      "log": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260722/logs/train.log",
+      "pid": 1284321,
+      "seed": 20260722,
+      "started_at": "2026-08-05T10:47:34.743670+00:00"
+    },
+    {
+      "budget": "3x",
+      "command": [
+        "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python",
+        "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/train_one_run.py",
+        "--budget",
+        "3",
+        "--seed",
+        "20260724",
+        "--device",
+        "cuda:0",
+        "--workers",
+        "48",
+        "--flow-batch-size",
+        "32",
+        "--batch-size",
+        "12"
+      ],
+      "ended_at": "2026-08-05T11:59:01.202505+00:00",
+      "exit_code": 1,
+      "gpu_slot": 0,
+      "host": "n-62-12-83",
+      "log": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/budget_3x/seed_20260724/logs/train.log",
+      "pid": 1372948,
+      "seed": 20260724,
+      "started_at": "2026-08-05T11:51:29.535422+00:00"
+    }
+  ],
+  "lsf_job_id": "29029156",
+  "project": "ARGOS v2",
+  "slot": 1,
+  "status": "FAILED"
+}

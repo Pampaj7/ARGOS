@@ -1,0 +1,23 @@
+{
+  "project": "ARGOS v2",
+  "protocol_version": "training_budget_selection_v1_preregistered",
+  "written_before_full_training": true,
+  "selection_data": "dataset 2 only",
+  "budgets": ["1x", "3x", "6x"],
+  "paired_seeds": [20260722, 20260723, 20260724],
+  "strict_common_support": "identical intersection across raw, H4, canonical geometry_v1 and all compared seed checkpoints",
+  "eligibility": {
+    "mean_gain_vs_raw_positive": true,
+    "all_three_seed_gains_vs_raw_positive": true,
+    "mean_gain_vs_h4_positive": true,
+    "at_least_two_of_three_seeds_improve_h4": true,
+    "cache_support_convention_and_parity_failures": 0
+  },
+  "primary_choice": "eligible budget with lowest three-seed mean D2 validation EPE",
+  "parsimony_rule": "compare selected budget to each smaller eligible budget with paired frame/sequence bootstrap; if the predeclared 95% interval does not establish positive improvement, choose the smaller budget",
+  "bootstrap": {"confidence": 0.95, "replicates": 10000, "seed": 20260725, "resampling_unit": "paired sequence then frame within sequence"},
+  "no_eligible_budget_verdict": "TRAINING-SCALE NO-GO; dataset 7 remains closed",
+  "prohibited_selection_inputs": ["dataset 7", "unseen-backbone performance", "test safety diagnostics", "runtime", "anchor-age distribution"],
+  "anchor_age_role": "mechanism diagnostic only",
+  "immutable_after_first_full_result": true
+}

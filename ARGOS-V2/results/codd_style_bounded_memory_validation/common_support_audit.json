@@ -1,0 +1,6 @@
+{
+  "all_three_seen_backbones": true,
+  "dataset_7_opened_only_after_policy_freeze": true,
+  "paired_masks_identical_within_each_report": true,
+  "support_definition": ">0.50 & raw valid & historical/recurrent aligned-valid & warp support"
+}

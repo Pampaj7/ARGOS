@@ -1,0 +1,8 @@
+{
+  "project": "ARGOS v2",
+  "protocol": "zero-shot",
+  "status": "blocked",
+  "eligible_future_scope": "D4D sparse anchors only after a frozen support protocol",
+  "current_execution": null,
+  "reason": "no frozen recipe or support definition exists"
+}

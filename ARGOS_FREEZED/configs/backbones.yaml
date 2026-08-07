@@ -1,0 +1,8 @@
+project_name: ARGOS v2
+interface:
+  inputs: [left_rgb, right_rgb, raw_disparity, raw_validity]
+  backbone_id_input: false
+  internal_features: false
+validated_unseen_backbones: [CREStereo, Fast-FoundationStereo]
+stereo_inference: frozen
+stereo_cache_reuse: required_when_validated

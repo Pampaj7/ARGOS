@@ -1,0 +1,9 @@
+{
+  "best_train_loss": 1.1935565634084575,
+  "best_validation_selective_gain": 0.040210869163274765,
+  "final_loss": 1.1952423319243042,
+  "initial_loss": 1.5739244222640991,
+  "model": "logistic",
+  "parameters": 21,
+  "wall_time_s": 564.4906697419938
+}

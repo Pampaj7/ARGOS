@@ -1,0 +1,38 @@
+{
+  "dataset_7_project_history_caveat": "dataset 7 was used in earlier ARGOS v2 studies; it is held out only from this anchor-selection procedure",
+  "full_hybrid_validation_pooled": {
+    "backbone": "ALL",
+    "base_count": 52954404.0,
+    "oracle_epe": 0.21751477610555434,
+    "oracle_error_sum": 11518365.329863071,
+    "oracle_family": "full_hybrid_bank",
+    "oracle_gain": 0.09323638854085511,
+    "oracle_type": "selection",
+    "raw_epe": 0.31075116464640945,
+    "raw_error_sum": 16455642.716156483,
+    "row_count": 12675,
+    "support_contract": "availability_aware",
+    "support_count": 52954404.0
+  },
+  "predeclared_materiality": {
+    "contributing_frame_fraction": 0.02,
+    "incremental_gain_px": 0.001,
+    "winner_pixel_fraction": 0.0025
+  },
+  "project": "ARGOS v2",
+  "selected_candidates": [
+    "CS1",
+    "CS2",
+    "CS4",
+    "CS8",
+    "CF1",
+    "CF2"
+  ],
+  "selection_data": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "t8_retained": true,
+  "test_data_accessed": false
+}

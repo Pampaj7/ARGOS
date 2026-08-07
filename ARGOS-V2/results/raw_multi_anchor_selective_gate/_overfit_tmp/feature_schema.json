@@ -1,0 +1,27 @@
+{
+  "contains_backbone_identity": false,
+  "contains_gt": false,
+  "features": [
+    "top1_score",
+    "top1_top2_margin",
+    "fusion_weight",
+    "selected_age",
+    "signed_anchor_raw",
+    "absolute_anchor_raw",
+    "update_magnitude",
+    "temporal_median",
+    "temporal_mad",
+    "raw_median_deviation",
+    "anchor_median_deviation",
+    "valid_anchor_fraction",
+    "agreement_fraction",
+    "selected_support",
+    "selected_fb_confidence",
+    "local_disagreement_mean",
+    "local_disagreement_variance",
+    "local_update_mean",
+    "local_update_variance",
+    "selected_valid"
+  ],
+  "normalization": "fixed physical clipping; no dataset-7 statistics"
+}

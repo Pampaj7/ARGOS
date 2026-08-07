@@ -1,0 +1,62 @@
+{
+  "D4D": {
+    "aggregate_cache_manifest_rows": 832,
+    "discrepancy": "832 cached rows (416 per backbone) versus 156 stated causal subset; pin the exact source/window manifest before any flow or zero-shot run",
+    "expected_causal_rows_unpinned": 156,
+    "flow_cache": "MISSING",
+    "raw_disparity_caches": [
+      {
+        "backbone": "RAFT-Stereo",
+        "cache_rows": 416,
+        "flow_cache": "MISSING",
+        "frame_ids": 416,
+        "integrity": "PASS",
+        "shape": [
+          416,
+          144,
+          180
+        ],
+        "status": "BLOCKED_VERSION_PIN_REQUIRED",
+        "valid_shape": [
+          416,
+          144,
+          180
+        ]
+      },
+      {
+        "backbone": "StereoAnywhere",
+        "cache_rows": 416,
+        "flow_cache": "MISSING",
+        "frame_ids": 416,
+        "integrity": "PASS",
+        "shape": [
+          416,
+          144,
+          180
+        ],
+        "status": "BLOCKED_VERSION_PIN_REQUIRED",
+        "valid_shape": [
+          416,
+          144,
+          180
+        ]
+      }
+    ],
+    "sparse_zivid_anchors": {
+      "total": 362,
+      "usable": 239
+    },
+    "status": "BLOCKED_VERSION_PIN_REQUIRED"
+  },
+  "StereoMIS": {
+    "flow_cache": "MISSING",
+    "searched": [
+      "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/StereoMIS",
+      "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/StereoMIS"
+    ],
+    "status": "BLOCKED_RAW_CACHE_MISSING"
+  },
+  "dataset_7_opened": false,
+  "inference_executed": false,
+  "project": "ARGOS v2"
+}

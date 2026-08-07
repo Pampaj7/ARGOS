@@ -1,0 +1,8 @@
+control,status,evidence
+D2_only_budget_selection,pass,selection_protocol.json
+D7_locked,pass,02_massive_training/selection/D7_LOCKED_NO_GO.json
+SCARED-C_causal_anchors,required,DATASET_SPLITS.json
+StereoMIS_no_reference,blocked,DATASET_CAPABILITY_MATRIX.csv
+SERV-CT_not_temporal,blocked,DATASET_CAPABILITY_MATRIX.csv
+D4D_not_train_or_tune,blocked,DATASET_CAPABILITY_MATRIX.csv
+cross_training_or_LODO_launch,blocked,DATA_USAGE_MANIFEST.json

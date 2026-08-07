@@ -1,0 +1,15 @@
+{
+  "checkpoint": {
+    "cue_channels": 38,
+    "epoch": 8,
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_bounded_memory_validation/ablations/no_learned_stereo_evidence/checkpoints/best_validation.pt",
+    "sha256": "8ebbbec7d713dc20792a1a413b8d762196ace46d8e2e1d7c7616ed338770aa3b"
+  },
+  "complete": true,
+  "device": "cuda:0",
+  "sea_raft_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+  "sequences": [
+    "dataset_7_keyframe_4"
+  ],
+  "stage": "test"
+}

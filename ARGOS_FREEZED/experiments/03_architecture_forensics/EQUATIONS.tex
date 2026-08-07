@@ -1,0 +1,21 @@
+% Standalone equation fragment for ARGOS v2 geometry_v1.
+\begin{align}
+\mathcal M_t&=\{(d_j^S,M_j,I_j^L,j,\tau_j):j\le t,\ j\ge t-8\},\\
+F_{t\to t-k}&=\operatorname{SEA\!\text{-}RAFT}(I_t^L,I_{t-k}^L),\quad
+F_{t-k\to t}=\operatorname{SEA\!\text{-}RAFT}(I_{t-k}^L,I_t^L),\\
+q_x&=x+F_x(x,y),\quad q_y=y+F_y(x,y),\\
+\widetilde d_t^{(k)}(x,y)&=\operatorname{grid\_sample}(d_{t-k}^S,2q_x/(W-1)-1,2q_y/(H-1)-1),\\
+e_t^{(k)}&=\left\|F_{t\to t-k}+\operatorname{Warp}(F_{t-k\to t},F_{t\to t-k})\right\|_2,\\
+\theta_t^{(k)}&=0.5+0.01\left(\lVert F_{t\to t-k}\rVert_2+\lVert\operatorname{Warp}(F_{t-k\to t},F_{t\to t-k})\rVert_2\right),\\
+C_t^{(k)}&=\exp(-e_t^{(k)}/\max(\theta_t^{(k)},10^{-6}))B_t^{(k)},\\
+A_t^{(k)}&=M_t\land\operatorname{WarpValid}(M_{t-k},F_{t\to t-k})\land B_t^{(k)},\\
+x_t^{(k)}&=[r/64,c_k/64,\operatorname{clip}(c_k-r,-16,16)/16,|c_k-r|/16,\mu_5(|c_k-r|)/8,\sigma_5(c_k-r)/8,\\
+&\quad k/8,A_k,B_k,C_k,n/K,m/64,q/8,|c_k-m|/8,|r-m|/8,A_{agree}/K,p_k],\\
+p_k&=\sigma(z_{0k}),\quad \delta_k=8\tanh(z_{1k}),\quad w_k=\sigma(z_{2k}),\quad s_k=p_k\delta_k,\\
+k_t^\star(x)&=\arg\max_k s_t^{(k)}(x),\\
+d_t^{prop}&=r+w_{k_t^\star}(\widetilde d_t^{(k_t^\star)}-r),\\
+a_t&=A_{k_t^\star}\land[p_{k_t^\star}\ge .9]\land[s_{k_t^\star}\ge .1],\\
+d_t^{out}&=\operatorname{where}(a_t,d_t^{prop},r),\\
+\mathcal L&=1.0\mathcal L_{cls}+0.5\mathcal L_{reg}+0.25\mathcal L_{rank}+1.0\mathcal L_{fuse}+0.2\mathcal L_{harm},\\
+\mathcal M_{t+1}&=\operatorname{append\_raw}(\mathcal M_t,d_t^S,M_t,I_t^L,t).
+\end{align}

@@ -1,0 +1,86 @@
+project_name: ARGOS v2
+method_name: immutable_raw_multi_anchor
+version: geometry_v1
+anchor_ages: [1, 2, 4, 8]
+disparity_convention: positive_left
+flow_direction: current_to_anchor
+alignment: bida_style_pull_warp
+flow_composition: false
+fused_state_writeback: false
+raw_anchor_writeback: true
+recurrent_state: false
+candidate_selection: learned_single_anchor
+candidate_encoder: shared
+fusion: pairwise_soft
+exact_raw_fallback: true
+backbone_id_input: false
+backbone_internal_features: false
+spatial_critic: false
+hard_negative_critic: false
+feature_channel_count: 17
+feature_channel_order:
+  - raw_disparity_over_64
+  - candidate_disparity_over_64
+  - signed_residual_over_16
+  - absolute_residual_over_16
+  - local_5x5_absolute_residual_mean_over_8
+  - local_5x5_residual_std_over_8
+  - anchor_age_over_8
+  - candidate_validity
+  - warp_support
+  - forward_backward_confidence
+  - valid_witness_fraction
+  - candidate_median_over_64
+  - candidate_mad_over_8
+  - candidate_to_median_absolute_residual_over_8
+  - raw_to_median_absolute_residual_over_8
+  - agreement_fraction
+  - provenance_raw_zero
+model_parameter_count: 60739
+probability_threshold: 0.9
+utility_threshold_px: 0.1
+retrieval_mode: soft
+support_threshold: 0.999
+forward_backward_consistency:
+  absolute_threshold_px: 0.5
+  relative_threshold: 0.01
+disparity_validity:
+  finite: true
+  positive_left: true
+  external_validity_mask_required: true
+rgb_preprocessing:
+  disk_decoder_order: BGR
+  color_conversion: BGR_to_RGB_before_resize
+  model_order: RGB
+  resize: [144, 180]
+  resize_interpolation: INTER_AREA
+  range: [0, 255]
+disparity_preprocessing:
+  dtype: float32
+  resize: none
+flow_preprocessing:
+  dtype: float32
+  sea_raft_iterations: 4
+  direct_pairwise: true
+numerical_dtype: float32
+interpolation_mode: bilinear
+padding_mode: zeros
+align_corners: true
+model_checkpoint_path: checkpoints/raw_multi_anchor_best_validation.pt
+model_checkpoint_sha256: 40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd
+sea_raft_checkpoint_path: /dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth
+sea_raft_checkpoint_sha256: 1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac
+expected_image_shape: [144, 180]
+deterministic_settings:
+  inference_mode: true
+  model_eval: true
+  trainable_weights: false
+  seed: 20260722
+validated_numerical_tolerance:
+  live_sea_raft_epe: 0.0002
+  copied_model_tensor_atol: 0.0
+  extracted_alignment_tensor_atol: 0.0
+infrastructure_defaults:
+  flow_batch_size: 32
+  model_batch_size: 12
+  workers: auto

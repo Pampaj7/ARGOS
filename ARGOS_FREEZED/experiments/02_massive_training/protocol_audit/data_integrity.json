@@ -1,0 +1,709 @@
+{
+  "dataset_7_opened": false,
+  "project": "ARGOS v2",
+  "rows": [
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_1_keyframe_2",
+      "shape": [
+        280,
+        144,
+        180
+      ],
+      "valid_shape": [
+        280,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_1_keyframe_2",
+      "shape": [
+        280,
+        144,
+        180
+      ],
+      "valid_shape": [
+        280,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_1_keyframe_2",
+      "shape": [
+        280,
+        144,
+        180
+      ],
+      "valid_shape": [
+        280,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_1_keyframe_3",
+      "shape": [
+        471,
+        144,
+        180
+      ],
+      "valid_shape": [
+        471,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_1_keyframe_3",
+      "shape": [
+        471,
+        144,
+        180
+      ],
+      "valid_shape": [
+        471,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_1_keyframe_3",
+      "shape": [
+        471,
+        144,
+        180
+      ],
+      "valid_shape": [
+        471,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_1",
+      "shape": [
+        329,
+        144,
+        180
+      ],
+      "valid_shape": [
+        329,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_1",
+      "shape": [
+        329,
+        144,
+        180
+      ],
+      "valid_shape": [
+        329,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_1",
+      "shape": [
+        329,
+        144,
+        180
+      ],
+      "valid_shape": [
+        329,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_2",
+      "shape": [
+        1597,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1597,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_2",
+      "shape": [
+        1597,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1597,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_2",
+      "shape": [
+        1597,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1597,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_3",
+      "shape": [
+        448,
+        144,
+        180
+      ],
+      "valid_shape": [
+        448,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_3",
+      "shape": [
+        448,
+        144,
+        180
+      ],
+      "valid_shape": [
+        448,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_3",
+      "shape": [
+        448,
+        144,
+        180
+      ],
+      "valid_shape": [
+        448,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_4",
+      "shape": [
+        834,
+        144,
+        180
+      ],
+      "valid_shape": [
+        834,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_4",
+      "shape": [
+        834,
+        144,
+        180
+      ],
+      "valid_shape": [
+        834,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_3_keyframe_4",
+      "shape": [
+        834,
+        144,
+        180
+      ],
+      "valid_shape": [
+        834,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_1",
+      "shape": [
+        637,
+        144,
+        180
+      ],
+      "valid_shape": [
+        637,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_1",
+      "shape": [
+        637,
+        144,
+        180
+      ],
+      "valid_shape": [
+        637,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_1",
+      "shape": [
+        637,
+        144,
+        180
+      ],
+      "valid_shape": [
+        637,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_2",
+      "shape": [
+        1087,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1087,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_2",
+      "shape": [
+        1087,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1087,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_2",
+      "shape": [
+        1087,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1087,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_3",
+      "shape": [
+        1573,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1573,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_3",
+      "shape": [
+        1573,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1573,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_3",
+      "shape": [
+        1573,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1573,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_4",
+      "shape": [
+        1360,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1360,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_4",
+      "shape": [
+        1360,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1360,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_6_keyframe_4",
+      "shape": [
+        1360,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1360,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_2",
+      "shape": [
+        1033,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1033,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_2",
+      "shape": [
+        1033,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1033,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_2",
+      "shape": [
+        1033,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1033,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_3",
+      "shape": [
+        1102,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1102,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_3",
+      "shape": [
+        1102,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1102,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_3",
+      "shape": [
+        1102,
+        144,
+        180
+      ],
+      "valid_shape": [
+        1102,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "S2M2-S",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_4",
+      "shape": [
+        2114,
+        144,
+        180
+      ],
+      "valid_shape": [
+        2114,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "RAFT-Stereo",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_4",
+      "shape": [
+        2114,
+        144,
+        180
+      ],
+      "valid_shape": [
+        2114,
+        144,
+        180
+      ]
+    },
+    {
+      "backbone": "StereoAnywhere",
+      "finite_sample": true,
+      "frame_order": true,
+      "passed": true,
+      "positive_left": true,
+      "sequence": "dataset_2_keyframe_4",
+      "shape": [
+        2114,
+        144,
+        180
+      ],
+      "valid_shape": [
+        2114,
+        144,
+        180
+      ]
+    }
+  ],
+  "status": "PASS"
+}

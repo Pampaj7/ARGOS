@@ -1,0 +1,12 @@
+{
+  "gates": {
+    "all_seen_backbones_positive": true,
+    "beats_fixed_h4": false,
+    "clean_le_3pct": true,
+    "degraded_frames_le_25pct": true,
+    "harm_le_10pct": false,
+    "nearly_all_sequences_positive": true,
+    "nontrivial_coverage": true
+  },
+  "verdict": "NO-GO"
+}

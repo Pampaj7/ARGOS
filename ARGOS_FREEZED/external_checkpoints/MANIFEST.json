@@ -1,0 +1,20 @@
+{
+  "project": "ARGOS v2",
+  "checkpoints": [
+    {
+      "role": "frozen direct current-to-anchor optical flow",
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+      "architecture": "SEA-RAFT small, ResNet-18 pretrain, initial_dim=64, block_dims=[64,128,256], radius=4, dim=128, num_blocks=2, iterations=4",
+      "preprocessing": "OpenCV disk decode in BGR, conversion to RGB, resize to 144x180 with INTER_AREA, float32 in [0,255], then InputPadder",
+      "expected_input_resolution_behavior": "same-resolution image pairs; pad for SEA-RAFT and unpad flow to the input grid",
+      "flow_direction": "current_to_anchor",
+      "output_convention": "target-to-source [B,2,H,W] flow in pixels",
+      "support_consistency_convention": "BiDA pull warp; in-bounds support; forward-backward error <= 0.5 + 0.01*(magnitude sum)",
+      "provenance_artifact": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_multi_anchor_unseen_backbone_transfer/checkpoint_hashes.json",
+      "required_by_main_method": true,
+      "copied": false,
+      "reference_type": "external_absolute_path"
+    }
+  ]
+}

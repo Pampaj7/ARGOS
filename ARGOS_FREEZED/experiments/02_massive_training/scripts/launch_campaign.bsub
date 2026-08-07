@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#BSUB -J argos_v2_training_scale
+#BSUB -q p1
+#BSUB -gpu "num=2:mode=shared"
+#BSUB -n 48
+#BSUB -R "span[hosts=1]"
+#BSUB -R "select[sm90]"
+#BSUB -R "rusage[mem=256GB]"
+#BSUB -W 24:00
+#BSUB -o /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/logs/lsf_campaign_%J.out
+#BSUB -e /dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/logs/lsf_campaign_%J.err
+
+set -euo pipefail
+ROOT=/dtu/p1/leopam/ARGOS/ARGOS_FREEZED
+CAMPAIGN=$ROOT/experiments/02_massive_training
+PYTHON=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
+cd "$CAMPAIGN"
+exec "$PYTHON" scripts/launch_campaign.py

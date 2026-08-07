@@ -1,0 +1,34 @@
+{
+  "train_sequences": [
+    "dataset_1_keyframe_2",
+    "dataset_1_keyframe_3",
+    "dataset_3_keyframe_1",
+    "dataset_3_keyframe_2",
+    "dataset_3_keyframe_3",
+    "dataset_3_keyframe_4",
+    "dataset_6_keyframe_1",
+    "dataset_6_keyframe_2",
+    "dataset_6_keyframe_3",
+    "dataset_6_keyframe_4"
+  ],
+  "validation_sequences": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ],
+  "test_sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "test_dataset_ids": [
+    7
+  ],
+  "test_disjoint_from_train_val": true,
+  "frozen_test_dir_exists": false,
+  "freeze_manifest_exists": false,
+  "test_opened_marker_exists": false,
+  "dataset7_opened": false,
+  "note": "dataset 7 must remain closed until the freeze manifest is written"
+}

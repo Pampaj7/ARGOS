@@ -1,0 +1,82 @@
+{
+  "aggregate_mean": {
+    "clean_degradation": 0.008303188067327124,
+    "coverage": 0.021048882120965076,
+    "gain": 0.005673603309939305,
+    "gain_over_fixed_h4": 0.21292812625567117,
+    "harmful_update_rate": 0.22120101523824554
+  },
+  "aggregate_std": {
+    "clean_degradation": 0.0008531014900822718,
+    "coverage": 0.002502172788010239,
+    "gain": 0.00017625277653884834,
+    "gain_over_fixed_h4": 0.00017625413843615128,
+    "harmful_update_rate": 0.008542749883183947
+  },
+  "all_seeds_feasible": false,
+  "all_seeds_positive_gain": true,
+  "ensemble_gate_passed": false,
+  "ensemble_policy": {
+    "accepted_count": 135503,
+    "clean_degradation": 0.007814811278373204,
+    "coverage": 0.020617670428281158,
+    "degraded_frame_fraction": 0.17151873767258383,
+    "exact_raw_fallback_frequency": 0.9793823295717189,
+    "feasible": false,
+    "gain": 0.00598129304125905,
+    "gain_over_fixed_h4": 0.21323582530021667,
+    "harmful_update_rate": 0.20101399969004377,
+    "harmful_update_rate_all_valid": 0.004144440397079933,
+    "intervention_precision": 0.5498476048500771,
+    "lambda_uncertainty": 0.0,
+    "mean_accepted_update": 0.45141318440437317,
+    "output_epe": 0.3040236532688141,
+    "policy": "stereo@ensemble",
+    "tau_gain": -0.05,
+    "tau_harm": 0.5,
+    "valid_count": 6572178,
+    "worst_frame_degradation": 0.8727216720581055
+  },
+  "frozen_thresholds": {
+    "lambda_uncertainty": 0.0,
+    "tau_gain": -0.05,
+    "tau_harm": 0.5
+  },
+  "gate": {
+    "clean_deg": 0.03,
+    "coverage": 0.05,
+    "degraded_frame": 0.25,
+    "harm": 0.1
+  },
+  "gate_passed": false,
+  "per_seed": [
+    {
+      "clean_degradation": 0.007292780319667653,
+      "coverage": 0.018094914653863606,
+      "feasible": false,
+      "gain": 0.005446652881801128,
+      "gain_over_fixed_h4": 0.21270117163658142,
+      "harmful_update_rate": 0.2272142478746752,
+      "seed": 20260722
+    },
+    {
+      "clean_degradation": 0.009379338844268852,
+      "coverage": 0.0242131299547882,
+      "feasible": false,
+      "gain": 0.005697816610336304,
+      "gain_over_fixed_h4": 0.21295234560966492,
+      "harmful_update_rate": 0.22726901396944693,
+      "seed": 20260723
+    },
+    {
+      "clean_degradation": 0.008237445038044865,
+      "coverage": 0.02083860175424342,
+      "feasible": false,
+      "gain": 0.005876340437680483,
+      "gain_over_fixed_h4": 0.2131308615207672,
+      "harmful_update_rate": 0.20911978387061445,
+      "seed": 20260724
+    }
+  ],
+  "recipe": "E"
+}

@@ -1,0 +1,10 @@
+{
+  "best_train_loss": 0.925538182258606,
+  "best_validation_harm_auprc": 0.6212530482105876,
+  "final_loss": 1.108542811870575,
+  "initial_loss": 1.4335144758224487,
+  "model": "harm_mlp",
+  "parameters": 5569,
+  "passed": true,
+  "wall_time_s": 61.382664954988286
+}

@@ -1,0 +1,23 @@
+project: ARGOS v2
+phase: planning-only
+launches: blocked
+reason: No valid cross-training or leave-one-dataset-out matrix exists from current evidence.
+datasets:
+  - id: SCARED-C
+    status: supervised_processed_temporal_pseudo_gt_only
+    current_use: existing causal supervised protocol only
+  - id: StereoMIS
+    status: no_reference_only
+    current_use: blocked pending a separately registered diagnostic
+  - id: SERV-CT
+    status: static_CT_GT_only
+    current_use: blocked for temporal work
+  - id: D4D
+    status: sparse_anchor_GT_future_zero_shot_only
+    current_use: blocked pending a frozen sparse-support protocol
+  - id: Hamlyn
+    status: locally_unavailable_unknown
+    current_use: none
+  - id: EndoSLAM
+    status: locally_unavailable_unknown
+    current_use: none

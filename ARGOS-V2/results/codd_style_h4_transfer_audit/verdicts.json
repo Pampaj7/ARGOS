@@ -1,0 +1,14 @@
+{
+  "unseen_backbone_verdict": {
+    "status": "GO",
+    "basis": "Both excluded backbones improve aggregate EPE: CREStereo +0.022237, Fast-FoundationStereo +0.014731; strict common support was used."
+  },
+  "external_domain_verdict": {
+    "status": "NO-GO FOR GEOMETRIC CLAIM",
+    "basis": "D4D Zivid/reference stereo-disparity contract is inconsistent; only no-reference temporal diagnostics were reported."
+  },
+  "joint_unseen_backbone_and_domain": {
+    "status": "UNTESTED",
+    "basis": "No complete D4D cache for CREStereo or Fast-FoundationStereo."
+  }
+}

@@ -1,0 +1,22 @@
+fact,symbol_or_function,frozen_source,provenance_source,evidence_type,notes
+project/version/constants,PROJECT_NAME VERSION,src/argos_freezed/constants.py,FREEZE_MANIFEST.json,[CONFIGURED],ARGOS v2 geometry_v1
+ages,ANCHOR_AGES,src/argos_freezed/constants.py:5,ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py,[IMPLEMENTED],exact [1,2,4,8]
+parameter count,RawMultiAnchorRefiner,src/argos_freezed/models/raw_multi_anchor_refiner.py:132-148,ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py,[TESTED],instantiated sum 60739
+bank schema,RawAnchor,src/argos_freezed/types.py;memory_bank.py,ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py,[IMPLEMENTED],detached raw clones
+bank write,append_raw,src/argos_freezed/memory_bank.py:27-65,ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py:245-310,[TESTED],raw-only
+pipeline order,FrozenArgosGeometryRefiner.step,src/argos_freezed/pipeline.py:29-88,ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py:258-305,[IMPLEMENTED],append after output
+right RGB use,step arguments,src/argos_freezed/pipeline.py:30-41,ARGOS-V2 runner,[IMPLEMENTED],shape checked only post-stereo
+SEA-RAFT role,SEARAFTFlowAdapter,src/argos_freezed/alignment/sea_raft_adapter.py:17-127,ARGOS-V2/model_design/external_components/bidavideo.py,[CONFIGURED],iterations 4
+flow direction,current_to_anchor,SEARAFTFlowAdapter.current_to_anchor,ARGOS-V2/model_design/external_components/bidavideo.py,[TESTED],direct pairwise calls
+warp,causal_warp,src/argos_freezed/alignment/bida_pull_warp.py:57-105,ARGOS-V2/model_design/external_components/bidavideo.py,[IMPLEMENTED],grid+flow, zero padding
+FB consistency,forward_backward_consistency,src/argos_freezed/alignment/bida_pull_warp.py:107-130,ARGOS-V2/model_design/external_components/bidavideo.py,[IMPLEMENTED],0.5+0.01 magnitude
+candidate evidence,build_candidate_features,src/argos_freezed/models/raw_multi_anchor_refiner.py:63-115,ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py,[TESTED],17 exact channels
+invalid masking,RawMultiAnchorRefiner.forward,src/argos_freezed/models/raw_multi_anchor_refiner.py:150-167,ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py,[TESTED],-infinity
+retrieval,retrieve_and_fuse,src/argos_freezed/models/raw_multi_anchor_refiner.py:170-194,ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py,[IMPLEMENTED],pixelwise max
+fallback,retrieve_and_fuse,src/argos_freezed/models/raw_multi_anchor_refiner.py:186-194,tests/test_exact_raw_fallback.py,[TESTED],torch.where raw
+training targets,multi_anchor_targets,ARGOS-V2/model_design/losses/raw_multi_anchor_losses.py:23-43,ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py:391-397,[IMPLEMENTED],margin .10 coverage .50
+training losses,raw_multi_anchor_losses,ARGOS-V2/model_design/losses/raw_multi_anchor_losses.py:46-98,ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py,[IMPLEMENTED],weights 1,.5,.25,1,.2
+training sample,build_ram_bank,ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py:245-310,ARGOS-V2/results/raw_multi_anchor_temporal_refiner,[IMPLEMENTED],IDs 1/3/6 train, ID2 validation
+tests,architecture contracts,ARGOS_FREEZED/tests/*.py,none,[TESTED],see INVARIANTS.csv
+transfer claim,unseen result,ARGOS-V2/results/raw_multi_anchor_unseen_backbone_transfer/,none,[EMPIRICALLY VALIDATED],prior validated artifact; D7 not opened here
+SOTA lineage,CODD/BiDA notes,/dtu/p1/leopam/ARGOS/SOTA/stereo-temporal-canidate-selection.md,/dtu/p1/leopam/ARGOS/SOTA/codd.pdf,[INTERPRETATION],lineage only, not attribution of ARGOS contribution

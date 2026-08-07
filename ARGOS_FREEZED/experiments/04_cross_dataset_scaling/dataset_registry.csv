@@ -1,0 +1,7 @@
+dataset,status,supervision,allowed,excluded
+SCARED-C,included_for_existing_supervised_protocol_only,processed temporal pseudo-GT after quality gate,supervised D1/D3/D6; D2 validation only after warmup,any D7 use; future-frame anchors; un-gated sequences
+StereoMIS,no_reference_only,no dense depth/disparity reference,no-reference temporal or qualitative diagnostic only after a separate protocol,"supervised training, geometric-accuracy claim, zero-shot launch"
+SERV-CT,static_CT_GT_only,CT-derived static geometry reference,static OOD geometry/safety planning only,temporal supervision or temporal metric
+D4D,sparse_anchor_GT_zero_shot_only,Zivid structured-light sparse anchors,"future zero-shot sparse-anchor evaluation only, never temporal supervision","training, tuning, temporal supervision, launch in this no-go"
+Hamlyn,locally_unavailable_unknown,,none,all claims and launches
+EndoSLAM,locally_unavailable_unknown,,none,all claims and launches

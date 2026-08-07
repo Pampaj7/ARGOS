@@ -1,0 +1,10 @@
+{
+  "project": "ARGOS v2",
+  "rows": 32,
+  "raw_backbones": [
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "temporal_refiners": "N/A: static pairs; no temporal adjacency",
+  "dataset_7_opened": false
+}

@@ -1,0 +1,9 @@
+{
+  "best_validation_selective_gain": 0.06736903637647629,
+  "family": "geometry",
+  "final_loss": -2.0949444377343265,
+  "initial_loss": 3.815883159637451,
+  "parameters": 386501,
+  "seed": 20260722,
+  "wall_time_s": 3367.4685246809386
+}

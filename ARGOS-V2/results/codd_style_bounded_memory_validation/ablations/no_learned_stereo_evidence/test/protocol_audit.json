@@ -1,0 +1,17 @@
+{
+  "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_bounded_memory_validation/ablations/no_learned_stereo_evidence/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "8ebbbec7d713dc20792a1a413b8d762196ace46d8e2e1d7c7616ed338770aa3b",
+  "common_support": "GT coverage>0.5 & raw valid & historical and recurrent aligned-valid/warp support",
+  "dataset_7_opened": true,
+  "no_future_access": true,
+  "project": "ARGOS v2",
+  "selection_source": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_bounded_memory_validation/reset_policy/fixed_h4_policy.json",
+  "sequences": [
+    "dataset_7_keyframe_1",
+    "dataset_7_keyframe_2",
+    "dataset_7_keyframe_3",
+    "dataset_7_keyframe_4"
+  ],
+  "split": "test",
+  "state_resets_before_final recurrent candidate": true
+}

@@ -1,0 +1,3 @@
+# ARGOS v2 bounded-memory candidate definition
+
+At time t, `d_S` is the frozen current disparity. `d_M_raw` is the causal BiDA warp of frozen raw t-1. `d_M_rec` is the causal BiDA warp of the preceding fused state. The fixed-horizon policy re-anchors the state to raw t-1 before a step when age reaches H. Adaptive policies additionally use only current causal support, FB confidence, disagreement, activation and update magnitude. Hard output is exact `where(accepted, d_M_rec, d_S)`; soft output is the frozen CODD convex equation. All reported geometry uses the common cache-grid support with GT coverage >0.50.

@@ -1,0 +1,10 @@
+{
+  "flow": "live frozen SEA-RAFT target-current to source-anchor direct inference",
+  "no_fused_state_writeback": true,
+  "no_future_frame_access": true,
+  "no_spatial_critic": true,
+  "no_training": true,
+  "project": "ARGOS v2",
+  "raw_anchors_immutable": true,
+  "strict_common_support": "GT coverage & cached raw validity & H4 support & all CS1/CS2/CS4/CS8 support"
+}

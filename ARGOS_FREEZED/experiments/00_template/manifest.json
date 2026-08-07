@@ -1,0 +1,23 @@
+{
+  "experiment_id": "00_template",
+  "title": null,
+  "scientific_question": null,
+  "hypothesis": null,
+  "frozen_core_version": "geometry_v1",
+  "frozen_manifest_sha256": null,
+  "source_commit": null,
+  "split": {"train": [], "validation": [], "test": []},
+  "seeds": [],
+  "checkpoint_hashes": {},
+  "dataset_cache_hashes": {},
+  "configuration": {},
+  "launch_command": null,
+  "smoke_command": null,
+  "runtime": {},
+  "result_metrics": {},
+  "validation_decision_frozen": false,
+  "verdict": null,
+  "supported_claims": [],
+  "prohibited_claims": [],
+  "artifact_paths": []
+}

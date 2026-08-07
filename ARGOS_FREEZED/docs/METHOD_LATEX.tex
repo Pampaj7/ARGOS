@@ -1,0 +1,17 @@
+\section{Immutable raw multi-anchor refinement}
+\label{sec:argos_method}
+Given the current frozen-stereo disparity $d_t$ and validity $v_t$, ARGOS v2 maintains an immutable bank $\mathcal{B}_t=\{(d_{t-a},v_{t-a},I_{t-a})\mid a\in\{1,2,4,8\}\}$ of independently generated raw predictions.  No refined output is written to this bank.
+
+For each available age $a$, frozen SEA-RAFT estimates a direct target-to-source flow $f_{t\rightarrow t-a}$.  A causal BiDA-style pull warp aligns the raw anchor to the current grid,
+\begin{equation}
+  \tilde d_{t,a}(x)=d_{t-a}\!\left(x+f_{t\rightarrow t-a}(x)\right),
+\end{equation}
+using bilinear sampling, zero padding, and explicit support and forward--backward consistency.  We never compose adjacent flow fields.
+
+A universal 17-channel evidence vector describes each candidate using raw and aligned disparity, signed and absolute residuals, local statistics, anchor age, validity, warp support, forward--backward confidence, multi-anchor median/MAD agreement, and raw provenance.  The same shallow candidate encoder is shared across all ages and stereo estimators.  It predicts utility, expected improvement, and a fusion weight.  Invalid candidates receive selection score $-\infty$, and a learned argmax retrieves one anchor per output location.
+
+For an accepted candidate $a^*$, pairwise soft fusion produces
+\begin{equation}
+  \hat d_t=d_t+w_{t,a^*}(\tilde d_{t,a^*}-d_t).
+\end{equation}
+If no candidate is valid or passes the frozen acceptance criteria, $\hat d_t=d_t$ exactly.  The 60,739 trainable parameters belong only to the shared evidence encoder and retrieval/fusion head and are frozen at evaluation.  The interface uses external RGB, raw disparity, validity, and flow evidence; it consumes neither backbone identity nor internal cost volumes, feature maps, or hidden states.

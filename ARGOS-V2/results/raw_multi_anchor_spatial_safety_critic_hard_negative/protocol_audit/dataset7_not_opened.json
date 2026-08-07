@@ -1,0 +1,44 @@
+{
+  "aggregate_mean": {
+    "clean_degradation": 0.008303188067327124,
+    "coverage": 0.021048882120965076,
+    "gain": 0.005673603309939305,
+    "gain_over_fixed_h4": 0.21292812625567117,
+    "harmful_update_rate": 0.22120101523824554
+  },
+  "dataset7_accessed": false,
+  "ensemble_gate_passed": false,
+  "ensemble_policy": {
+    "accepted_count": 135503,
+    "clean_degradation": 0.007814811278373204,
+    "coverage": 0.020617670428281158,
+    "degraded_frame_fraction": 0.17151873767258383,
+    "exact_raw_fallback_frequency": 0.9793823295717189,
+    "feasible": false,
+    "gain": 0.00598129304125905,
+    "gain_over_fixed_h4": 0.21323582530021667,
+    "harmful_update_rate": 0.20101399969004377,
+    "harmful_update_rate_all_valid": 0.004144440397079933,
+    "intervention_precision": 0.5498476048500771,
+    "lambda_uncertainty": 0.0,
+    "mean_accepted_update": 0.45141318440437317,
+    "output_epe": 0.3040236532688141,
+    "policy": "stereo@ensemble",
+    "tau_gain": -0.05,
+    "tau_harm": 0.5,
+    "valid_count": 6572178,
+    "worst_frame_degradation": 0.8727216720581055
+  },
+  "gate": {
+    "clean_deg": 0.03,
+    "coverage": 0.05,
+    "degraded_frame": 0.25,
+    "harm": 0.1
+  },
+  "per_seed_feasible": [
+    false,
+    false,
+    false
+  ],
+  "reason": "dataset-2 gate on the frozen ensemble policy failed"
+}

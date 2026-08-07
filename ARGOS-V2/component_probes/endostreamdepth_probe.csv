@@ -1,6 +1,0 @@
-component,status,reason
-MambaModel import,pass,
-MambaModel instantiate,blocked,ModuleNotFoundError: No module named 'mamba_ssm'
-xLSTMModel import,blocked,ModuleNotFoundError: No module named 'xlstm'
-temporal_consistency_loss import,pass,
-temporal_consistency_loss real S2M2 sequence,pass,raw_loss=0.028190; frozen_first_frame_loss=0.000000; lower frozen means loss can reward freezing

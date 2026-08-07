@@ -1,0 +1,14 @@
+{
+  "project": "ARGOS v2",
+  "role": "isolated architectural comparison baseline; not imported by the main method",
+  "checkpoint_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "architecture": "CODD-style fusion with BiDA-style alignment and corrected recurrent disparity state",
+  "four_frame_reset_rule": "state is reset before each four-frame causal window; the final recurrent candidate is evaluated before reset",
+  "provenance_artifacts": [
+    "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_bounded_memory_validation/protocol_audit.json",
+    "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_h4_transfer_audit/protocol_audit/checkpoint_hashes.json"
+  ],
+  "imported_by_main_method": false,
+  "copied": false
+}

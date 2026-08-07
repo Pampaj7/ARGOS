@@ -1,0 +1,7 @@
+{
+  "cue_channels": 142,
+  "epoch": 12,
+  "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+  "seed": 0,
+  "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"
+}

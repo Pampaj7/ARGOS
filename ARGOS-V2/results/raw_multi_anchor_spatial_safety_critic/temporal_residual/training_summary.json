@@ -1,0 +1,9 @@
+{
+  "best_validation_selective_gain": 0.07275280356407166,
+  "family": "temporal",
+  "final_loss": -2.2332544128779297,
+  "initial_loss": 3.815883159637451,
+  "parameters": 388805,
+  "seed": 20260722,
+  "wall_time_s": 3296.5049707429716
+}

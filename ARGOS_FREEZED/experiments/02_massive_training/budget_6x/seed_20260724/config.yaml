@@ -1,0 +1,25 @@
+project: ARGOS v2
+experiment_id: training_budget_scaling
+budget: 6x
+seed: 20260724
+epochs: 60
+batch_size: 12
+effective_batch_size: 12
+workers: 48
+flow_batch_size: 32
+learning_rate: 0.002
+weight_decay: 0.0001
+scheduler: CosineAnnealingLR
+eta_min: 0.0001
+warmup: null
+amp: true
+gradient_clip_norm: 5.0
+train_ids:
+- 1
+- 3
+- 6
+validation_ids:
+- 2
+test_locked: true
+max_frames: null
+frozen_manifest_sha256: bc8ced366e80c406c42d28657f8d70fc724c223739388880bc0deebbb1f63aed

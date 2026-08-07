@@ -1,0 +1,11 @@
+{
+  "project": "ARGOS v2",
+  "status": "frozen evaluation definitions; no model inputs",
+  "ages_frames": [1, 2, 4, 8],
+  "warp": {"direction": "current_to_past", "coordinate": "source(x)=x+F_current_to_past(x)", "interpolation": "bilinear", "inbounds": true},
+  "gt_tce": {"formula": "mean(abs((d_t-W(d_past))-(g_t-W(g_past))))", "support": ["current_GT_valid", "warped_past_GT_valid", "inbounds", "flow_forward_backward_support", "finite_positive_disparities", "strict_method_support"], "epsilon": 1e-6},
+  "rgt_tce": {"formula": "GT-TCE/(mean(abs(g_t))+epsilon)", "epsilon": 1e-6},
+  "nr_tce": {"formula": "trimmed_mean(abs(d_t-W(d_past))/(0.5*(abs(d_t)+abs(W(d_past)))+epsilon))", "trim_fraction": 0.1, "epsilon": 1e-6},
+  "stereo_photo": {"formula": "mean(sqrt(mean_channel((I_left-W(I_right,x-d))^2)+1e-6))", "convention": "positive_left"},
+  "temporal_photo": {"role": "motion reliability stratifier; not disparity accuracy"}
+}

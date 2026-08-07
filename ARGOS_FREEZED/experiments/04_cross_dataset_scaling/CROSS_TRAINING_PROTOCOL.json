@@ -1,0 +1,7 @@
+{
+  "project": "ARGOS v2",
+  "protocol": "cross-training",
+  "status": "blocked",
+  "matrix": null,
+  "reason": "only SCARED-C is currently authorized supervised data; other sources are no-reference, static, sparse-only, or unavailable"
+}

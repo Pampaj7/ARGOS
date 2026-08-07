@@ -1,0 +1,28 @@
+{
+  "project": "ARGOS v2",
+  "version": "geometry_v1",
+  "checkpoint": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/checkpoints/raw_multi_anchor_best_validation.pt",
+    "sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd"
+  },
+  "hashes": {"frozen_manifest_sha256": "bc8ced366e80c406c42d28657f8d70fc724c223739388880bc0deebbb1f63aed", "sea_raft_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"},
+  "parameter_count": 60739,
+  "anchor_ages": [1, 2, 4, 8],
+  "tensor_conventions": {"disparity": "positive-left", "flow": "pixel displacement [B,2,H,W]", "flow_direction": "target/current_to_source/anchor", "dtype": "float32 inference; masks bool", "grid": "cache-resolution HxW; canonical cache 144x180", "batch": "B=1 in public step"},
+  "memory_bank": {"schema": {"disparity": "[1,1,H,W] detached clone", "validity": "[1,1,H,W] detached clone", "left_rgb": "[1,3,H,W] detached clone", "frame_id": "str", "frame_index": "strictly increasing int", "timestamp": "float|null", "provenance": "independent_frozen_stereo"}, "lookup": "frame_index-age", "eviction": "indices < current_index-8 removed", "write": "append_raw after output; never fused"},
+  "flow": {"checkpoint": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth", "iterations": 4, "variant": "SEA-RAFT Tartan-C-T-TSKH-spring540x960-S", "input": "float32 RGB tensor as supplied by caller", "padding": "vendored InputPadder", "direction": "current_to_anchor and anchor_to_current pair per available age", "composition": false, "gradients": false},
+  "warp": {"operator": "grid_sample", "grid": "(x+flow_x,y+flow_y)", "mode": "bilinear", "padding": "zeros", "align_corners": true, "support": "coordinates inside [0,W-1]x[0,H-1]", "source_valid_threshold": 0.999},
+  "masks": {"available": "candidate_valid & warp_support", "candidate_valid": "sampled source validity & current validity", "fb": "error <= 0.5 + 0.01*(|forward|+|aligned backward|)", "fb_confidence": "exp(-error/threshold)*support", "acceptance": "available & sigmoid(logit)>=0.9 & probability*delta>=0.1"},
+  "feature_channels": "See FEATURE_CHANNELS.csv; exactly 17 ordered channels.",
+  "encoder": {"input": "[B*K,17,H,W]", "channels": 32, "blocks": 3, "conv": "3x3, padding 1, no bias first conv", "normalization": "GroupNorm(8,32)", "activation": "SiLU", "block": "two 3x3 conv/GN layers with residual then SiLU", "head": "1x1 Conv2d(32,3), zero weights, bias [-2,0,-3]", "receptive_field": 15},
+  "retrieval": {"logit": "head channel 0", "probability": "sigmoid(logit)", "predicted_delta": "8*tanh(head channel 1)", "fusion_weight": "sigmoid(head channel 2)", "score": "probability*predicted_delta", "invalid": "score=-infinity", "selection": "pixelwise max over K; first index wins ties under torch.max"},
+  "fusion": {"proposal": "raw + effective_weight*(selected_aligned_anchor-raw)", "effective_weight": "predicted weight if accepted else 0", "fallback": "torch.where(accepted, proposal, raw)", "hard_mode": false},
+  "output_schema": "RefinementResult fields are documented in ARCHITECTURE_FORENSICS.md and TENSOR_SHAPES.csv.",
+  "training_losses": {"targets": "raw/candidate absolute errors, delta=raw_error-candidate_error, helpful=delta>margin, valid=GT coverage>0.5 & raw valid & available", "margin_px": 0.1, "classification": "weighted BCEWithLogits on utility logit", "regression": "weighted SmoothL1 predicted_delta vs clipped delta", "ranking": "pairwise hinge over valid candidates whose true delta difference exceeds margin", "fusion": "weighted SmoothL1 of raw+weight*(candidate-raw) vs GT", "harmful_regularizer": "mean fusion weight on delta<=margin", "weights": {"classification": 1.0, "regression": 0.5, "ranking": 0.25, "fusion": 1.0, "harmful_regularizer": 0.2}, "unknown": null},
+  "invariants": "See INVARIANTS.csv.",
+  "complexity": {"K": 4, "flow_evaluations": "2 per available age; up to 8/frame", "warps": "one disparity warp plus one backward-flow warp per age, plus photometric helper warp", "cnn_evaluations": "K candidates flattened into shared encoder batch", "asymptotic": "flow cost O(K*C_flow); evidence and CNN O(K*H*W) after flow; storage O(K*H*W)", "measured_runtime": null, "measured_runtime_reason": "not present in inspected frozen sources"},
+  "claims": ["causal online operation", "immutable raw temporal memory", "same-domain transfer reported for evaluated unseen backbones", "substantial CS4/CS8 use"],
+  "limitations": ["not universal backbone agnosticism", "not external-domain/OOD proof", "not clinical safety", "not guaranteed non-degradation", "not real-time without dedicated benchmark"],
+  "unresolved_details": ["formal FLOPs", "deployment runtime", "upstream stereo preprocessing beyond interface"],
+  "source_references": ["src/argos_freezed/pipeline.py", "src/argos_freezed/memory_bank.py", "src/argos_freezed/alignment/bida_pull_warp.py", "src/argos_freezed/alignment/sea_raft_adapter.py", "src/argos_freezed/models/raw_multi_anchor_refiner.py", "ARGOS-V2/model_design/losses/raw_multi_anchor_losses.py", "ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py"]
+}

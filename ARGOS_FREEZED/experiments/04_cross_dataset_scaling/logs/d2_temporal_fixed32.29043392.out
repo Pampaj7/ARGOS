@@ -1,0 +1,43 @@
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29043392: <argos_v2_d2_temporal_fixed32> in cluster <dcc> Exited
+
+Job <argos_v2_d2_temporal_fixed32> was submitted from host <hpclogin9.hpccluster.dtu.dk> by user <leopam> in cluster <dcc> at Thu Aug  6 18:05:48 2026
+Job was executed on host(s) <8*n-62-12-86>, in queue <p1>, as user <leopam> in cluster <dcc> at Thu Aug  6 18:59:29 2026
+</zhome/1e/4/234278> was used as the home directory.
+</dtu/p1/leopam/ARGOS/ARGOS_FREEZED> was used as the working directory.
+Started at Thu Aug  6 18:59:29 2026
+Terminated at Thu Aug  6 18:59:32 2026
+Results reported at Thu Aug  6 18:59:32 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+set -euo pipefail; ROOT=/dtu/p1/leopam/ARGOS/ARGOS_FREEZED; PY=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python; TMP=$ROOT/experiments/04_cross_dataset_scaling/logs/smoke_tmp_$LSB_JOBID; cd $ROOT; $PY scripts/verify_freeze.py; $PY experiments/04_cross_dataset_scaling/scripts/run_d2_temporal_audit.py --dataset-id 2 --device cuda:0 --smoke --max-frames 17 --flow-batch-size 8 --output $TMP; test -f $TMP/aggregate_summary.json; rm -rf $TMP; $PY experiments/04_cross_dataset_scaling/scripts/run_d2_temporal_audit.py --dataset-id 2 --device cuda:0 --flow-batch-size 16
+------------------------------------------------------------
+
+Exited with exit code 127.
+
+Resource usage summary:
+
+    CPU time :                                   1.03 sec.
+    Max Memory :                                 -
+    Average Memory :                             -
+    Total Requested Memory :                     262144.00 MB
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              -
+    Max Threads :                                -
+    Run time :                                   3 sec.
+    Turnaround time :                            3224 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file </dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/04_cross_dataset_scaling/logs/d2_temporal_fixed32.29043392.err> for stderr output of this job.
+

@@ -1,0 +1,3 @@
+backbone,feature_channels,external_only,backbone_internal_features,reconstructible
+CREStereo,17,True,False,True
+Fast-FoundationStereo,17,True,False,True

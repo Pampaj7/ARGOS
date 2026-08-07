@@ -1,0 +1,39 @@
+project_name: ARGOS v2
+experiment_id: training_budget_scaling_geometry_v1
+frozen_version: geometry_v1
+frozen_manifest_sha256: bc8ced366e80c406c42d28657f8d70fc724c223739388880bc0deebbb1f63aed
+seeds: [20260722, 20260723, 20260724]
+budgets:
+  1x: {epochs: 10, optimizer_steps: 39730}
+  3x: {epochs: 30, optimizer_steps: 119190}
+  6x: {epochs: 60, optimizer_steps: 238380}
+steps_per_epoch: 3973
+samples_per_epoch: 47670
+train_ids: [1, 3, 6]
+validation_ids: [2]
+test_ids: [7]
+training_backbones: [S2M2-S, RAFT-Stereo, StereoAnywhere]
+anchor_ages: [1, 2, 4, 8]
+feature_channels: 17
+parameters: 60739
+batch_size: 12
+effective_batch_size: 12
+workers: 48
+prefetch_factor: 4
+persistent_workers: true
+flow_batch_size: 32
+optimizer: {name: AdamW, learning_rate: 0.002, weight_decay: 0.0001, betas: [0.9, 0.999], eps: 1.0e-8}
+scheduler: {name: CosineAnnealingLR, unit: optimizer_step, eta_min: 0.0001, horizon: proportional_complete_budget}
+warmup: null
+amp: cuda_autocast_and_grad_scaler
+gradient_clip_norm: 5.0
+validation_cadence_steps: 3973
+checkpoint_selection: maximum_D2_validation_best_gain
+probability_threshold: 0.9
+utility_threshold_px: 0.1
+margin_px: 0.1
+coverage_threshold: 0.5
+training_crop: [64, 80]
+validation_shape: [144, 180]
+only_variable: total_optimization_budget
+dense_prediction_cache: false

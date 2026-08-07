@@ -1,0 +1,225 @@
+{
+  "project_name": "ARGOS v2",
+  "frozen_version": "geometry_v1",
+  "creation_timestamp": "2026-08-04T22:02:47Z",
+  "source_repository_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2",
+  "source_git_commit": "998d77156257a674b0b3beda0e5ce67d1e1c796e",
+  "working_tree_status": {
+    "clean": false,
+    "porcelain_entries": 129,
+    "snapshot": "docs/SOURCE_WORKTREE_STATUS.txt",
+    "snapshot_sha256": "edeb6efb3b1ebe64bc9717691d761b9ba11c7709a75c5d1d827caffe6d9f4726",
+    "note": "Recorded honestly before ARGOS_FREEZED creation; 127 entries were under ARGOS-V2 and two under SOTA. No reset or commit was performed."
+  },
+  "canonical_architecture": {
+    "description": "frozen stereo -> frozen direct current-to-anchor SEA-RAFT -> causal BiDA pull alignment -> immutable raw CS1/CS2/CS4/CS8 bank -> shared learned candidate evidence -> learned single-anchor retrieval -> pairwise soft fusion -> exact raw fallback -> raw-only memory write",
+    "anchor_ages": [1, 2, 4, 8],
+    "parameter_count": 60739,
+    "feature_channels": 17,
+    "flow_composition": false,
+    "future_frame_access": false,
+    "recurrent_state": false,
+    "fused_state_writeback": false,
+    "raw_anchor_writeback": true,
+    "backbone_id_input": false,
+    "backbone_internal_features": false,
+    "spatial_critic": false
+  },
+  "canonical_checkpoint": {
+    "source_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_multi_anchor_temporal_refiner/soft_fusion/checkpoints/best_validation.pt",
+    "frozen_path": "checkpoints/raw_multi_anchor_best_validation.pt",
+    "sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd"
+  },
+  "sea_raft": {
+    "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+    "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+    "copied": false
+  },
+  "h4_baseline": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt",
+    "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+    "imported_by_main_method": false
+  },
+  "source_file_provenance": [
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py",
+      "original_sha256": "6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d",
+      "frozen_relative_path": "src/argos_freezed/__init__.py",
+      "frozen_sha256": "b1192809e51a4987131b946da159129ca0ecf237c3e3c37bbb62cda453630cd9",
+      "copy_type": "thin_wrapper",
+      "reason": "minimal package exports for the validated runner path",
+      "tests": ["test_no_critic_imports.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py",
+      "original_sha256": "6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d",
+      "frozen_relative_path": "src/argos_freezed/constants.py",
+      "frozen_sha256": "f9fa2486482b5047cd464126045d83945629c3188ae7587b720119cc4a07f0e8",
+      "copy_type": "extracted",
+      "reason": "validated immutable constants extracted from runner and manifests",
+      "tests": ["test_checkpoint_hashes.py", "test_direct_anchor_alignment.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py",
+      "original_sha256": "6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d",
+      "frozen_relative_path": "src/argos_freezed/types.py",
+      "frozen_sha256": "858fbe3b1979a06363528be96030a0cb40446e36b8cf62a90a195585e458dced",
+      "copy_type": "thin_wrapper",
+      "reason": "structured immutable public return and raw-anchor records",
+      "tests": ["test_raw_only_bank_update.py", "test_original_runner_parity.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py",
+      "original_sha256": "6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d",
+      "frozen_relative_path": "src/argos_freezed/pipeline.py",
+      "frozen_sha256": "b369ce07c7d3e42dc68d92aff2d5010c114b2e35ec752020f37fe8f383679b72",
+      "copy_type": "extracted",
+      "reason": "small canonical inference API assembled from the validated evaluation path without training branches",
+      "tests": ["test_frozen_weights.py", "test_direct_anchor_alignment.py", "test_no_flow_composition.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/run_raw_multi_anchor_temporal_refiner.py",
+      "original_sha256": "6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d",
+      "frozen_relative_path": "src/argos_freezed/memory_bank.py",
+      "frozen_sha256": "859b3e63bbdff7ea7afb9987aea55c1bd2e0ef5d27f8c9fd1330f99ff26bff1f",
+      "copy_type": "extracted",
+      "reason": "makes the validated raw-only causal memory contract enforceable by API",
+      "tests": ["test_no_future_access.py", "test_no_fused_writeback.py", "test_raw_only_bank_update.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py",
+      "original_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "frozen_relative_path": "src/argos_freezed/evidence.py",
+      "frozen_sha256": "9b25254e6843603bc2bffd54c31a1eac91e8e6c297d1635f6b8e00cce4ca236e",
+      "copy_type": "thin_wrapper",
+      "reason": "stable local evidence API re-export",
+      "tests": ["test_original_runner_parity.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py",
+      "original_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "frozen_relative_path": "src/argos_freezed/retrieval.py",
+      "frozen_sha256": "39106210e1b4b0c5b247b360b8eb18160ca43f5d8a321bb96e71a6263fae8d37",
+      "copy_type": "thin_wrapper",
+      "reason": "stable local retrieval API re-export",
+      "tests": ["test_invalid_anchor_masking.py", "test_original_runner_parity.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py",
+      "original_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "frozen_relative_path": "src/argos_freezed/fusion.py",
+      "frozen_sha256": "176f2f8253d1902384b2fd72c76a139886cf14391c280b3e3f7b36babfcb9eff",
+      "copy_type": "thin_wrapper",
+      "reason": "stable local fusion API re-export",
+      "tests": ["test_exact_raw_fallback.py", "test_original_runner_parity.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py",
+      "original_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "frozen_relative_path": "src/argos_freezed/fallback.py",
+      "frozen_sha256": "37ae9d25ff1cbca8fa858982cc90b974bf7a4b120b20c500fe1f728724d23223",
+      "copy_type": "thin_wrapper",
+      "reason": "explicit exact-raw fallback API over validated semantics",
+      "tests": ["test_exact_raw_fallback.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+      "original_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "frozen_relative_path": "src/argos_freezed/alignment/__init__.py",
+      "frozen_sha256": "a7125997005d26b235f567521de10ed5245517c0ab044830333aee19eecabad8",
+      "copy_type": "thin_wrapper",
+      "reason": "minimal local alignment exports",
+      "tests": ["test_original_runner_parity.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+      "original_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "frozen_relative_path": "src/argos_freezed/alignment/bida_pull_warp.py",
+      "frozen_sha256": "a729232af2c6c0bf53ee40f899a5fa9281316dff691b86fb07f73ad8c5267a46",
+      "copy_type": "extracted",
+      "reason": "validated pairwise causal numerical functions extracted without operation changes",
+      "tests": ["test_original_runner_parity.py", "test_direct_anchor_alignment.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/external_components/bidavideo.py",
+      "original_sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530",
+      "frozen_relative_path": "src/argos_freezed/alignment/sea_raft_adapter.py",
+      "frozen_sha256": "764a9b64de3846cd710a41eb853720171b3fa79abe6e1191d4f438de92733148",
+      "copy_type": "extracted",
+      "reason": "SEA-RAFT-only subset of the validated flow adapter; optical RAFT and noncausal reference removed",
+      "tests": ["test_checkpoint_hashes.py", "test_direct_anchor_alignment.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py",
+      "original_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "frozen_relative_path": "src/argos_freezed/models/__init__.py",
+      "frozen_sha256": "a0cd4ce5b4eeeef7f31b9511796f362245aef4dd17188412bf0e5c0e969ff3aa",
+      "copy_type": "thin_wrapper",
+      "reason": "minimal model package export",
+      "tests": ["test_original_runner_parity.py"]
+    },
+    {
+      "original_absolute_path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design/models/raw_multi_anchor_refiner.py",
+      "original_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "frozen_relative_path": "src/argos_freezed/models/raw_multi_anchor_refiner.py",
+      "frozen_sha256": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b",
+      "copy_type": "byte_identical",
+      "reason": null,
+      "tests": ["test_checkpoint_hashes.py", "test_frozen_weights.py", "test_deterministic_inference.py", "test_original_runner_parity.py"]
+    }
+  ],
+  "frozen_file_hashes": {
+    "src/argos_freezed/__init__.py": "b1192809e51a4987131b946da159129ca0ecf237c3e3c37bbb62cda453630cd9",
+    "src/argos_freezed/constants.py": "f9fa2486482b5047cd464126045d83945629c3188ae7587b720119cc4a07f0e8",
+    "src/argos_freezed/types.py": "858fbe3b1979a06363528be96030a0cb40446e36b8cf62a90a195585e458dced",
+    "src/argos_freezed/pipeline.py": "b369ce07c7d3e42dc68d92aff2d5010c114b2e35ec752020f37fe8f383679b72",
+    "src/argos_freezed/memory_bank.py": "859b3e63bbdff7ea7afb9987aea55c1bd2e0ef5d27f8c9fd1330f99ff26bff1f",
+    "src/argos_freezed/evidence.py": "9b25254e6843603bc2bffd54c31a1eac91e8e6c297d1635f6b8e00cce4ca236e",
+    "src/argos_freezed/retrieval.py": "39106210e1b4b0c5b247b360b8eb18160ca43f5d8a321bb96e71a6263fae8d37",
+    "src/argos_freezed/fusion.py": "176f2f8253d1902384b2fd72c76a139886cf14391c280b3e3f7b36babfcb9eff",
+    "src/argos_freezed/fallback.py": "37ae9d25ff1cbca8fa858982cc90b974bf7a4b120b20c500fe1f728724d23223",
+    "src/argos_freezed/alignment/__init__.py": "a7125997005d26b235f567521de10ed5245517c0ab044830333aee19eecabad8",
+    "src/argos_freezed/alignment/bida_pull_warp.py": "a729232af2c6c0bf53ee40f899a5fa9281316dff691b86fb07f73ad8c5267a46",
+    "src/argos_freezed/alignment/sea_raft_adapter.py": "764a9b64de3846cd710a41eb853720171b3fa79abe6e1191d4f438de92733148",
+    "src/argos_freezed/models/__init__.py": "a0cd4ce5b4eeeef7f31b9511796f362245aef4dd17188412bf0e5c0e969ff3aa",
+    "src/argos_freezed/models/raw_multi_anchor_refiner.py": "ee58f36744c8174d0bdf439084c0ce616220e090120f517d0603df21dd75953b"
+  },
+  "configuration_hashes": {
+    "configs/backbones.yaml": "d76f4638a939a036876bb427775daade617e4b86ab921f160c679800364d2dd0",
+    "configs/datasets.yaml": "511b81b5af8d2b306761c330d0736eae76dc9ff96d28e4183cfb19be81044e42",
+    "configs/geometry_v1.yaml": "7e8c61c51be0ab276e6843dffba5436847b499832d33999aab55933dfad0c284"
+  },
+  "evidence_artifact_hashes": {
+    "evidence/aggregate_summary.json": "d03d1fcf21bff4755242e674fe4c0079c899e866080c901e73c7247c45c80f61",
+    "evidence/checkpoint_hashes.json": "36654b86d81863a099ad625b6e17eb72c88b7055bc65c9cfd3db8162bdf3e0f3",
+    "evidence/reproduction_check.json": "08a35bc9e1a4b50869b640386d189f562cd78301ec53fe2adfc8371d60a04838",
+    "evidence/verdicts.json": "f004369204ec35ee0159d7448b315c5cf11bc93601295879fec605e78a1ad190",
+    "evidence/paper_ready_tables.tex": "b7ecf781783b7cedd4cea9b98f08cee04c0a37d6fb0243512bb26d10ad9ff8ab"
+  },
+  "environment": {
+    "python": "3.10.20",
+    "pytorch": "2.5.1+cu121",
+    "cuda_runtime": "12.1",
+    "cudnn": "9.1.0",
+    "numpy": "2.2.6",
+    "pyyaml": "6.0.3",
+    "opencv": "4.13.0",
+    "scikit_learn": "1.7.2"
+  },
+  "tested_hardware": {
+    "host": "n-62-12-83",
+    "gpu": "2 x NVIDIA H100 PCIe 80 GB",
+    "driver": "610.57.04",
+    "cpu": "AMD EPYC"
+  },
+  "parity_tolerance": {
+    "byte_copied_model_tensors": 0.0,
+    "extracted_alignment_tensors": 0.0,
+    "live_sea_raft_epe_reproduction": 0.0002
+  },
+  "test_command": "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python -m pytest -q tests",
+  "smoke_command": "/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python scripts/smoke_test.py --device cuda:0",
+  "prohibited_modules": ["spatial critic", "scalar gate", "hard-negative critic", "plane-sweep critic", "harm ensemble", "risk calibration", "bounded H4 in main path", "ARGOS-V2 runtime package"],
+  "allowed_claims": ["causal online geometry refinement", "backbone-independent input interface", "same-domain transfer to the evaluated unseen stereo estimators", "continued long-range anchor use", "improved geometry within SCARED-C"],
+  "prohibited_claims": ["universal backbone agnosticism", "external-domain robustness", "OOD generalization", "clinical safety", "risk-controlled intervention", "real-time deployment without measurement"]
+}

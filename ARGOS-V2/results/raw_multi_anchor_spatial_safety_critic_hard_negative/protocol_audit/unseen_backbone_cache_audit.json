@@ -1,0 +1,190 @@
+{
+  "backbones": {
+    "CREStereo": {
+      "all_ok": true,
+      "sequences": {
+        "dataset_7_keyframe_1": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 647,
+          "frames_gt": 647,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        },
+        "dataset_7_keyframe_2": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 628,
+          "frames_gt": 628,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        },
+        "dataset_7_keyframe_3": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 584,
+          "frames_gt": 584,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        },
+        "dataset_7_keyframe_4": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 2197,
+          "frames_gt": 2197,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        }
+      }
+    },
+    "Fast-FoundationStereo": {
+      "all_ok": true,
+      "sequences": {
+        "dataset_7_keyframe_1": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 647,
+          "frames_gt": 647,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        },
+        "dataset_7_keyframe_2": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 628,
+          "frames_gt": 628,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        },
+        "dataset_7_keyframe_3": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 584,
+          "frames_gt": 584,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        },
+        "dataset_7_keyframe_4": {
+          "all_finite_where_valid": true,
+          "chronological": true,
+          "completion_status": true,
+          "disparity_convention": "positive_left_disparity",
+          "disparity_sign_nonneg_frac": 1.0,
+          "disparity_units": "pixels_at_cache_resolution",
+          "frame_ids_match_gt_order": true,
+          "frames_cache": 2197,
+          "frames_gt": 2197,
+          "ok": true,
+          "resolution": [
+            144,
+            180
+          ],
+          "resolution_ok": true,
+          "valid_fraction": 1.0
+        }
+      }
+    }
+  },
+  "both_backbones_ok": true,
+  "cache_dir": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_scaredc_backbones",
+  "strict_common_support": {
+    "dataset_7_keyframe_1": {
+      "common_valid_fraction": 1.0,
+      "per_backbone_valid_fraction": {
+        "CREStereo": 1.0,
+        "Fast-FoundationStereo": 1.0
+      }
+    },
+    "dataset_7_keyframe_2": {
+      "common_valid_fraction": 1.0,
+      "per_backbone_valid_fraction": {
+        "CREStereo": 1.0,
+        "Fast-FoundationStereo": 1.0
+      }
+    },
+    "dataset_7_keyframe_3": {
+      "common_valid_fraction": 1.0,
+      "per_backbone_valid_fraction": {
+        "CREStereo": 1.0,
+        "Fast-FoundationStereo": 1.0
+      }
+    },
+    "dataset_7_keyframe_4": {
+      "common_valid_fraction": 1.0,
+      "per_backbone_valid_fraction": {
+        "CREStereo": 1.0,
+        "Fast-FoundationStereo": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS-V2/results/raw_multi_anchor_temporal_refiner/soft_fusion/checkpoints/best_validation.pt",
+  "checkpoint_sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd",
+  "configuration": "soft",
+  "constraints": "sample coverage>=0.005; harm-cost<=0.25; harmful fraction<=0.15",
+  "dataset7_accessed": false,
+  "feasible": false,
+  "policy": {
+    "harm_cost_fraction": 1.1976861713536233,
+    "harmful_fraction": 0.453481443649983,
+    "precision": 0.34072466235387583,
+    "probability_threshold": 0.9,
+    "sample_coverage": 0.08515933547496192,
+    "sample_net_utility": -0.002397799165919423,
+    "utility_threshold_px": 0.1
+  },
+  "project": "ARGOS v2",
+  "selected_only_on": [
+    "dataset_2_keyframe_2",
+    "dataset_2_keyframe_3",
+    "dataset_2_keyframe_4"
+  ]
+}

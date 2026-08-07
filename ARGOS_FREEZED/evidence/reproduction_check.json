@@ -1,0 +1,26 @@
+{
+  "comparison": "S2M2-S/dataset_7_keyframe_1/first four eligible multi-anchor frames",
+  "deterministic": true,
+  "exact_raw_fallback_checked": true,
+  "fusion_weight_checked": true,
+  "max_abs_difference": 0.00013398523318777777,
+  "no_fused_state_writeback": true,
+  "proposal_checked": true,
+  "raw_max_abs_difference": 2.3538709739895358e-05,
+  "reference_output_epe": 0.18497117157050427,
+  "reference_raw_epe": 0.17815607225734917,
+  "reproduced_output_epe": 0.1848371863373165,
+  "reproduced_raw_epe": 0.17813253354760927,
+  "runtime": [
+    {
+      "frames": 639,
+      "live_sea_raft": true,
+      "sequence": "dataset_7_keyframe_1",
+      "wall_seconds": 72.35851364700648
+    }
+  ],
+  "selected_anchor_age_checked": true,
+  "status": "PASS",
+  "tolerance": 0.0002,
+  "valid_mask_checked": true
+}

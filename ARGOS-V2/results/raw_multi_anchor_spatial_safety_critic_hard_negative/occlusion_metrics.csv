@@ -1,0 +1,4 @@
+stratum,count,harm_rate,accept_rate,accepted_harm_rate
+occlusion_proxy,434955,1.0,0.09289466726442966,1.0
+low_warp_support,0,0.0,0.0,0.0
+low_fb_confidence,434955,1.0,0.09289466726442966,1.0

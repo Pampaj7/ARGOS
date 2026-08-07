@@ -1,0 +1,11 @@
+{
+  "project": "ARGOS v2",
+  "dataset_7_access": "denied",
+  "methods": {
+    "raw_stereo": {"kind": "validated cached frozen stereo", "source": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/data_pipeline.py", "memory": "none", "fallback": "raw"},
+    "h4_bounded_codd_style": {"checkpoint_manifest": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/baselines/bounded_h4/MANIFEST.json", "inference": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/provenance/h4_infer.py", "memory": "corrected recurrent state", "reset": "before each fixed four-frame causal window", "flow": "direct current_to_past", "fallback": "raw when support absent"},
+    "immutable_raw_multi_anchor": {"checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/checkpoints/raw_multi_anchor_best_validation.pt", "checkpoint_sha256": "40526a32ef6e9a62a3ea2b59e6751a60c441b8190f9b96522e3b12b35895d5cd", "implementation": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/models/raw_multi_anchor_refiner.py", "memory": "raw-only immutable anchors", "anchor_ages": [1, 2, 4, 8], "writeback": "current independently generated raw stereo only", "flow": "direct current_to_anchor", "disparity": "positive_left", "fallback": "exact raw"},
+    "sea_raft": {"checkpoint": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth", "checkpoint_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac", "role": "frozen current-to-past direct flow"}
+  },
+  "support": "strict: GT coverage, raw validity, H4 support, and all CS1/2/4/8 aligned-valid plus warp-support masks"
+}

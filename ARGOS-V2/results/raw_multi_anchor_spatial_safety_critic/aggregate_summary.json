@@ -1,0 +1,162 @@
+{
+  "constraints": {
+    "clean_degradation": 0.03,
+    "degraded_frame_fraction": 0.25,
+    "harmful_update_rate": 0.1,
+    "minimum_coverage": 0.005
+  },
+  "dataset2_family_comparison": {
+    "geometry": {
+      "best_gain": 0.005640074145048857,
+      "coverage": 0.030067049309985213,
+      "delta_spearman": 0.37497110837284453,
+      "feasible_point_exists": false,
+      "harm": 0.25358541744683866,
+      "harm_auprc": 0.6356261645174958,
+      "harm_auroc": 0.7076445365824252
+    },
+    "plane_sweep": {
+      "best_gain": 0.0064864871092140675,
+      "coverage": 0.029892830048121034,
+      "delta_spearman": 0.503429760495555,
+      "feasible_point_exists": false,
+      "harm": 0.25740477753854457,
+      "harm_auprc": 0.724862253889002,
+      "harm_auroc": 0.749930490834545
+    },
+    "stereo": {
+      "best_gain": 0.006349275354295969,
+      "coverage": 0.031540381286082025,
+      "delta_spearman": 0.4819375724236207,
+      "feasible_point_exists": false,
+      "harm": 0.2631350433452812,
+      "harm_auprc": 0.699664355908506,
+      "harm_auroc": 0.7426698011645776
+    },
+    "temporal": {
+      "best_gain": 0.006068903021514416,
+      "coverage": 0.027638326290006145,
+      "delta_spearman": 0.43665623845089874,
+      "feasible_point_exists": false,
+      "harm": 0.2550868732245491,
+      "harm_auprc": 0.6885584985463755,
+      "harm_auroc": 0.7470346318454684
+    }
+  },
+  "dataset7": {
+    "critic_accepted_age_fraction": {
+      "accepted_age_1_fraction": 0.2306879565112818,
+      "accepted_age_2_fraction": 0.25725851807780153,
+      "accepted_age_4_fraction": 0.26212540983161864,
+      "accepted_age_8_fraction": 0.249928115579298
+    },
+    "critic_primary_stereo": {
+      "clean_degradation": 0.020958006165294137,
+      "convex_oracle_recovery": 0.2628761624080123,
+      "coverage": 0.07899696874306017,
+      "degraded_frame_fraction": 0.16674950298210736,
+      "gain": 0.04074168756235587,
+      "gain_over_fixed_h4": 0.010076029771440353,
+      "harmful_update_rate": 0.2473117939277105,
+      "harmful_update_rate_all_valid": 0.019536882054697485,
+      "intervention_precision": 0.6181011300773458,
+      "output_epe": 0.5071843122992583,
+      "output_tepe": 0.11897528648332514,
+      "raw_bank_oracle_recovery": 0.2920048705767887,
+      "raw_tepe": 0.11064416395424244,
+      "ungated_gain_retained": 1.0878818643148833,
+      "worst_frame_degradation": 1.9843463897705078
+    },
+    "fixed_h4_epe_common_support": 0.5172603420706986,
+    "harm_detection_test": {
+      "brier": 0.2716625939983019,
+      "delta_mae": 0.4313279986381531,
+      "delta_spearman": 0.4061766084732719,
+      "ece": 0.22235456911684692,
+      "harm_auprc": 0.5727142366891543,
+      "harm_auroc": 0.691540011682469
+    },
+    "peak_gpu_memory_mb": 714.59228515625,
+    "raw_epe": 0.5479259998616142,
+    "runtime_ms_per_frame": 1.022895056777865,
+    "ungated_multi_anchor": {
+      "clean_degradation": 0.04856419675415109,
+      "coverage": 0.15475228472857797,
+      "degraded_frame_fraction": 0.2624254473161034,
+      "gain": 0.03745047040380052,
+      "gain_over_fixed_h4": 0.006784812612885003,
+      "harmful_update_rate": 0.35034363004133623,
+      "intervention_precision": 0.4903204544284876,
+      "output_epe": 0.5104755294578136
+    }
+  },
+  "experiment": "raw_multi_anchor_spatial_safety_critic",
+  "freeze_manifest_sha256": "c620cedb84f20751270c0e9ff5ed590b96eaaa512dd17a740831c23dbe2d5d24",
+  "frozen_on": "dataset 2 (validation) only",
+  "per_backbone_test": {
+    "RAFT-Stereo": {
+      "coverage": 0.08421943508776517,
+      "gain": 0.05313071630024999,
+      "harm": 0.25848910420247395
+    },
+    "S2M2-S": {
+      "coverage": 0.07846481839780174,
+      "gain": 0.026423747114589537,
+      "harm": 0.2509381042374455
+    },
+    "StereoAnywhere": {
+      "coverage": 0.0743066527436136,
+      "gain": 0.04267059927222808,
+      "harm": 0.23081415217175016
+    }
+  },
+  "per_sequence_test": {
+    "dataset_7_keyframe_1": {
+      "coverage": 0.03513152841913076,
+      "gain": 0.004749181147026711,
+      "harm": 0.2641051324691154
+    },
+    "dataset_7_keyframe_2": {
+      "coverage": 0.0486236483249714,
+      "gain": 0.023841279407534628,
+      "harm": 0.4186592805553608
+    },
+    "dataset_7_keyframe_3": {
+      "coverage": 0.055311599867867024,
+      "gain": 0.104010210041712,
+      "harm": 0.22142108774447655
+    },
+    "dataset_7_keyframe_4": {
+      "coverage": 0.13387991261580473,
+      "gain": 0.024645207166959556,
+      "harm": 0.24816360461754042
+    }
+  },
+  "primary_family": "stereo",
+  "project": "ARGOS v2",
+  "scalar_gate_d7_best": {
+    "clean_degradation": 0.0007378931632896487,
+    "coverage": 0.011070084343329688,
+    "gain": 0.030795942859864665,
+    "gain_over_fixed_h4": 0.0001303105471257425,
+    "harmful_update_rate": 0.12059375786396867,
+    "output_epe": 0.5171300570017494,
+    "policy": "logistic"
+  },
+  "seed": 20260722,
+  "test_dataset_id": 7,
+  "transfer_d2_to_d7": {
+    "harm_auroc_test": 0.691540011682469,
+    "harm_auroc_validation": 0.7426698011645776,
+    "test": {
+      "coverage": 0.07899696874306017,
+      "gain": 0.04074168756235587,
+      "harmful_update_rate": 0.2473117939277105
+    },
+    "validation": {
+      "coverage": 0.031540381286082025,
+      "gain": 0.006349275354295969,
+      "harmful_update_rate": 0.2631350433452812
+    }
+  }
+}
