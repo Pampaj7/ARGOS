@@ -1,6 +1,6 @@
 # Source provenance
 
-Port source root: `/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design`.
+Port source root: `/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design`; generic training-step extraction also uses its validated runners.
 
 | Source path | SHA-256 | Port destination |
 | --- | --- | --- |
@@ -11,5 +11,7 @@ Port source root: `/dtu/p1/leopam/ARGOS/ARGOS-V2/model_design`.
 | `losses/codd_fusion_losses.py` | `6558e6d7611ca43be9f10333fb9dcc2e851a7e6aaca46ad856ebf468756c2f0f` | `src/argos_v2_hand/losses.py` |
 | `external_components/bidavideo.py` (tensor-only causal helpers) | `133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530` | `src/argos_v2_hand/alignment.py` |
 | `external_components/stereo_photometric.py` | `7ab78bead1b38478ec61a1923101b7f421e4e475b184107a1758617ec9bb7924` | `src/argos_v2_hand/stereo.py` |
+| `scripts/run_raw_multi_anchor_temporal_refiner.py` (prepared-batch train-step extraction) | `6bfda6ed18beadf1698fa05e56356ff3b110b7c7b5fd7be940f388f38bd11a3d` | `src/argos_v2_hand/training.py` |
+| `scripts/run_codd_style_fusion_probe.py` (prepared-batch train-step extraction) | `5d9e067a788a6d97110f9fbfa8446b67e229cc1a3b539be681eeb3493cda0b54` | `src/argos_v2_hand/training.py` |
 
-Imports were rewritten for package-local modules. External flow inference/checkpoint adapters were deliberately excluded; callers supply flow tensors. Full H4 cue construction requires a caller-supplied frozen ResNet-18 checkpoint via `FrozenResNet18Layer1(checkpoint=Path(...))`; this package carries no checkpoint.
+Imports were rewritten for package-local modules. `training.py` is an extracted copy of each runner's inner prepared-batch forward/loss/AMP/clip/optimizer sequence, not its loader/checkpoint orchestration: those outer concerns require ARGOS-V2 cache, dataset, checkpoint, and results paths and are deliberately outside this standalone package. External flow inference/checkpoint adapters were likewise excluded; callers supply flow tensors. Full H4 cue construction requires a caller-supplied frozen ResNet-18 checkpoint via `FrozenResNet18Layer1(checkpoint=Path(...))`; this package carries no checkpoint.
