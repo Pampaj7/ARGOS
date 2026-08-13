@@ -1,0 +1,8 @@
+{
+  "method": "bidastabilizer_bidirectional_offline",
+  "causality": "noncausal_bidirectional_offline",
+  "clip_length": null,
+  "future_frames_required": true,
+  "online_or_h4": false,
+  "input": "BiDAStabilizer forward() propagates from both sequence ends; no causal derivative is provided."
+}

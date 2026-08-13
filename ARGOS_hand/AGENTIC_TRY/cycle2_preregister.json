@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-08-12T15:09:49+02:00",
+  "amended_at": "2026-08-12T13:17:54+00:00",
+  "prior_preregistration_sha256": "c5d5cdc50d0b7d551e71d15fb16dd3260d16e65d03cc6f62e450dab4535449c1",
+  "prior_preregistration_archive": {
+    "path": "cycle2_preregister_pre_smoke.json",
+    "sha256": "c5d5cdc50d0b7d551e71d15fb16dd3260d16e65d03cc6f62e450dab4535449c1"
+  },
+  "amendment_reason": "pre-full-validation review clarification",
+  "intermediate_development_smoke": {
+    "dataset": "SCARED-D2 seen",
+    "output": "runs/relative_guard_g2_smoke",
+    "timing": "occurred after the initial preregistration and before this amendment",
+    "effect": "not used to change formula, kappa, or the development gate; it preceded only schema and diagnostic clarifications"
+  },
+  "objective": "Evaluate one fixed relative guard over frozen hard_h4:factory_035 without retuning.",
+  "candidate": {
+    "module": "relative_guard_h4",
+    "factory": "factory",
+    "endpoint": "S = raw_valid & aligned_validity & warp_support; V(x) = isfinite(x) & (x > 0); accepted = S & V(raw) & V(hard035) & (raw / 2 <= hard035) & (hard035 <= 2 * raw); disparity = where(accepted, hard035, raw)",
+    "kappa": 2,
+    "tau": 0.35,
+    "causal": true,
+    "backbone_agnostic": true,
+    "code_sha256": "b08ede8416ed42c1c89aa344d6316139769af9e3bf65e2c34566dc6a88b15306",
+    "test_sha256": "af43f1ea1fdeb4a292e27b14418300c30ac824348585b330ceb6d6f25517bd4f"
+  },
+  "immutable_parents": {
+    "hard_h4_factory": "hard_h4:factory_035",
+    "hard_h4_sha256": "a1a70e941bd08e3ec06be457cedd89cb8f23c8cabf489467051cdcd2365d55a8",
+    "freeze_decision_sha256": "8262a4c9aaec2fbe83bbe0b1bf72ca1e999fdb5e6b2430c87605905516710ef7"
+  },
+  "development_gate": {
+    "dataset": "SCARED-D2",
+    "domain_status": "seen",
+    "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "keyframes": [2, 3, 4],
+    "report_count": 9,
+    "aggregation": "macro_sequence mean over nine backbone-keyframe reports",
+    "gates": {
+      "mean9_disparity_mae": {"operator": "<", "canonical": 0.267534770699263},
+      "mean9_disparity_rmse": {"operator": "<=", "canonical": 0.4162205115382129},
+      "mean9_bad1": {"operator": "<=", "canonical": 0.01511966960609508},
+      "mean9_depth_mae": {"operator": "<=", "canonical": 1.6251343559108247},
+      "mean9_depth_rmse": {"operator": "<=", "canonical": 2.2721260586030874},
+      "per_backbone_disparity_mae": {"operator": "<=", "reference": "canonical"}
+    }
+  },
+  "invariants": [
+    "No ground truth, backbone identity, future frame, or retuning enters the adapter.",
+    "Raw-invalid values are returned as raw; the guard does not rescue them.",
+    "Only the existing raw_valid & aligned_validity & warp_support mask is used.",
+    "Endpoint, ratio boundaries, invalid values, support, dtype/shape, factory, and driver-state propagation are unit tested."
+  ],
+  "ood_gate": {
+    "dataset": "Vid10_Liver_Med",
+    "recording": "full",
+    "max_frames": null,
+    "comparison": "paired canonical and candidate full-recording reports",
+    "aggregation": "each report uses primary_aggregate=macro_sequence over the full recording",
+    "metric_gates": [
+      {"candidate_path": "aggregate.disparity_px.refined.MAE.macro_sequence", "operator": "<", "canonical_path": "aggregate.disparity_px.refined.MAE.macro_sequence"},
+      {"candidate_path": "aggregate.depth_mm.refined.MAE_Z.macro_sequence", "operator": "<", "canonical_path": "aggregate.depth_mm.refined.MAE_Z.macro_sequence"}
+    ],
+    "finite_positive_prediction_gate": {
+      "protocol_mask": "valid_values",
+      "definition": "a valid prediction is isfinite(value) & (value > 0) on valid_values",
+      "candidate_zero_rate_paths": [
+        "aggregate.disparity_px.refined.InvalidRate.macro_sequence",
+        "aggregate.depth_mm.refined.InvalidRate.macro_sequence"
+      ],
+      "operator": "==",
+      "value": 0
+    },
+    "paired_equality": [
+      {"candidate_path": "aggregate.disparity_px.refined.MAE.support_count", "operator": "==", "canonical_path": "aggregate.disparity_px.refined.MAE.support_count"},
+      {"candidate_path": "aggregate.depth_mm.refined.MAE_Z.support_count", "operator": "==", "canonical_path": "aggregate.depth_mm.refined.MAE_Z.support_count"},
+      {"candidate_path": "diagnostics.adapter_support_coverage", "operator": "==", "canonical_path": "diagnostics.adapter_support_coverage"}
+    ],
+    "adapter_support": "diagnostic only; it is required paired-equal above and is not a metric mask",
+    "caveat": "ToF is nonindependent.",
+    "sealed": true
+  },
+  "stop_rule": "One candidate only: no other kappa, recording, or retuning."
+}

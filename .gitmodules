@@ -1,0 +1,6 @@
+[submodule "ARGOS_hand/external_comparison/upstreams/nvds"]
+	path = ARGOS_hand/external_comparison/upstreams/nvds
+	url = https://github.com/RaymondWang987/NVDS.git
+[submodule "ARGOS_hand/external_comparison/upstreams/bidavideo"]
+	path = ARGOS_hand/external_comparison/upstreams/bidavideo
+	url = https://github.com/TomTomTommi/bidavideo.git

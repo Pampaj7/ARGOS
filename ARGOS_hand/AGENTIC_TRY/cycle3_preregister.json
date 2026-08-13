@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-08-12T16:10:30+02:00",
+  "amendment": {
+    "timestamp": "2026-08-12T16:20:48+02:00",
+    "prior_preregistration": {"path": "cycle3_preregister_pre_probe_fix.json", "sha256": "960156863c181aef9ed39225f7c51241de0968c464d0834577dfa950a9811a7b"},
+    "reason": "Pre-data review corrected D2 probe import paths and output containment, strengthened recurrent-state coverage, and clarified sealed Vid10 paired-run sequencing. Candidate formula and D2/D7 gates are unchanged."
+  },
+  "chronology_correction": {
+    "timestamp": "2026-08-12T16:24:25+02:00",
+    "timestamp_utc": "2026-08-12T14:24:25+00:00",
+    "prior_preregistration": {"path": "cycle3_preregister_pre_timestamp_fix.json", "sha256": "8b62db2c0b911a0ba037bd6b26833cee7bb195a0c22d3b5c8bda45944fb74974"},
+    "archive_chain": [
+      {"path": "cycle3_preregister_pre_probe_fix.json", "sha256": "960156863c181aef9ed39225f7c51241de0968c464d0834577dfa950a9811a7b"},
+      {"path": "cycle3_preregister_pre_timestamp_fix.json", "sha256": "8b62db2c0b911a0ba037bd6b26833cee7bb195a0c22d3b5c8bda45944fb74974"}
+    ],
+    "reason": "pre-probe provenance chronology correction; timestamp is after final candidate, test, and probe code mtimes. Candidate formula and gates are unchanged."
+  },
+  "objective": "Evaluate one fixed lower-only guard over frozen hard_h4:factory_035 without retuning.",
+  "candidate": {
+    "module": "lower_guard_h4",
+    "factory": "factory",
+    "tau": 0.35,
+    "lower_ratio": 0.5,
+    "endpoint": "S = raw_valid & aligned_validity & warp_support; Vr = isfinite(raw) & (raw > 0); A = S & Vr & isfinite(hard035) & (hard035 >= 0.5 * raw); disparity = where(A, hard035, raw)",
+    "upper_cap": null,
+    "causal": true,
+    "backbone_agnostic": true,
+    "prohibited_inputs": ["ground truth", "backbone identity", "future frames"]
+  },
+  "hashes": {
+    "candidate_code": {"path": "lower_guard_h4.py", "sha256": "6924e46b9986ac040797875e91a3186d2277306bb15652c280f2473816107293"},
+    "test_code": {"path": "test_lower_guard_h4.py", "sha256": "1980fc0426564dd9cfefaa7246b5476b2e3281f111884a0f8b7627eaa36c30df"},
+    "probe_code": {"path": "probe_lower_guard_d2.py", "sha256": "251da239448ec855328aeec8ade5e4eb3a7f591165a4488bb6db88355817cf50"},
+    "hard_h4_parent": {"path": "hard_h4.py", "sha256": "a1a70e941bd08e3ec06be457cedd89cb8f23c8cabf489467051cdcd2365d55a8"},
+    "freeze_decision": {"path": "freeze_decision.json", "sha256": "8262a4c9aaec2fbe83bbe0b1bf72ca1e999fdb5e6b2430c87605905516710ef7"},
+    "evaluator": {"path": "../original_h4/model_design/comparison/definitive_evaluation.py", "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"},
+    "comparison_driver": {"path": "../original_h4/model_design/comparison/run_comparison.py", "sha256": "f462edda4e5aedc9806295dbd9fa46baf4e950a0ba844fa78135c39e5414b31e"},
+    "checkpoint": {"path": "../original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt", "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"},
+    "policy": {"path": "../original_h4/model_design/checkpoints/codd_style_h4_policy.json", "sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d"}
+  },
+  "development_gate": {
+    "dataset": "SCARED-D2", "domain_status": "seen", "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "keyframes": [2, 3, 4], "report_count": 9, "aggregation": "macro_sequence mean over nine backbone-keyframe reports",
+    "gates": {
+      "disparity_mae": {"operator": "<", "canonical": 0.267534770699263},
+      "disparity_rmse": {"operator": "<=", "canonical": 0.4162205115382129},
+      "depth_zmae": {"operator": "<=", "canonical": 1.6251343559108247},
+      "depth_zrmse": {"operator": "<=", "canonical": 2.2721260586030874},
+      "bad1": {"operator": "<=", "canonical": 0.01511966960609508}
+    },
+    "hard035_bad1_context_only": 0.015280355947477061,
+    "per_backbone_disparity_mae": {
+      "operator": "<=", "canonical": {"S2M2-S": 0.26454350483132645, "RAFT-Stereo": 0.2613881574378583, "StereoAnywhere": 0.27667367904741477}
+    },
+    "paired_invariants": ["exact frame equality", "exact official support equality", "zero invalid predictions equality"],
+    "selection_rule": "candidate only; no tuning from probe"
+  },
+  "d2_no_gt_probe": {
+    "dataset": "SCARED-D2 only", "ground_truth": "must not be read or computed", "output": "only after explicit output-path invocation",
+    "exports": ["trajectory/frame reanchor and state_age", "S coverage", "hard changes outside S", "raw/hard nonfinite and nonpositive counts", "h/raw < .5 and > 2 counts", "h/raw quantiles grouped by state_age"]
+  },
+  "d7_gate": {
+    "candidate_status": "unopened", "canonical_status": "opened", "dataset": "SCARED-D7", "backbones": ["CREStereo", "Fast-FoundationStereo"], "sequences": "all available D7 sequences",
+    "per_backbone_gates": {"disparity_mae": "strictly better", "depth_zmae": "strictly better", "disparity_rmse": "no worse", "depth_zrmse": "no worse", "bad1": "no worse", "support": "exactly equal", "zero_invalid": "exactly equal"}
+  },
+  "vid10_gate": {
+    "condition": "only if D7 passes", "dataset": "Vid10", "recording": "full paired evaluation", "scope": "each available architecture",
+    "candidate_status": "sealed and unopened", "max_frames": null,
+    "paired_run_protocol": "Run canonical and candidate full recordings to COMPLETE without inspecting either metrics or results; inspect them jointly only after both manifests pass integrity. If either integrity or manifest check fails, OOD is not evaluable and no alternate recording is permitted. No code, policy, or candidate change is allowed between paired runs.",
+    "metric_gates": {"disparity_mae": "strictly better", "depth_zmae": "strictly better", "disparity_rmse": "no worse", "depth_zrmse": "no worse", "bad1": "no worse"},
+    "paired_invariants": ["exact support equality", "zero invalid predictions equality"], "caveat": "DRENDS ToF is nonindependent."
+  },
+  "stop_rules": ["One candidate only.", "No kappa, threshold, upper cap, recording, or retuning change after this preregistration.", "Stop if any conjunctive gate or paired invariant fails.", "Do not open candidate D7 or Vid10 results before the preceding gate passes."]
+}

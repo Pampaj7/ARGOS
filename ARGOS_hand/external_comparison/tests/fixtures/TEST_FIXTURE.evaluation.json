@@ -1,0 +1,14 @@
+{
+  "backbone": "identity",
+  "dataset": "SCARED-C",
+  "frame_ids": [
+    "frame-0",
+    "frame-1",
+    "frame-2",
+    "frame-3",
+    "frame-4"
+  ],
+  "protocol": "TEST_FIXTURE identity output; not H4 or real evaluation",
+  "sequence_id": "fixture",
+  "split": "d2"
+}

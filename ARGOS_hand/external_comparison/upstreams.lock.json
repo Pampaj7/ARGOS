@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "upstreams": {
+    "nvds": {
+      "origin": "https://github.com/RaymondWang987/NVDS.git",
+      "commit": "381c373b55a672ad75736fd722564ec3426ac9ea",
+      "license": "MIT",
+      "license_sha256": "a43a46edc5af7cb62995ef633d9386c66d70c9d10cfc4b23a1aac14fae7e66ed"
+    },
+    "bidavideo": {
+      "origin": "https://github.com/TomTomTommi/bidavideo.git",
+      "commit": "dae817df1ceaafcb865ebd9c7aa44b16c535e856",
+      "license": "MIT",
+      "license_sha256": "6830ae0c4a9255afd6310b9e5f532ab9da26d9bb1c676073abe600462d54d413"
+    }
+  }
+}

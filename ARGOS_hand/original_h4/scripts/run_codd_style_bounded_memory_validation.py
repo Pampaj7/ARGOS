@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from run_codd_style_fusion_probe import TEST, VALIDATION, seed_all, to_device  # noqa: E402
+from canonical_h4_provenance import verify_canonical_inputs  # noqa: E402
 from run_codd_style_fusion_mechanism_audit import (  # noqa: E402
     aggregate, common_support, frame_metrics, grouped, metadata, save_json, sha256, write_csv,
 )
@@ -33,12 +34,15 @@ from model_design.models.codd_bounded_memory import (  # noqa: E402
     BoundedMemoryPolicy, ResetEvidence, advance_state_age,
 )
 from model_design.models.codd_style_fusion import (  # noqa: E402
-    CODDFusionOutput, CODDStyleFusionHead, FrozenResNet18Layer1,
+    CODDFusionOutput, CODDStyleFusionHead, FrozenResNet18Layer1, RESNET18_CHECKPOINT,
     build_codd_cues, hard_endpoint_fusion,
 )
 
 
-CANONICAL_CHECKPOINT = ROOT / "results/codd_style_fusion_probe/bida_memory_phase1/full_phase1/seed_0/checkpoints/best_validation.pt"
+CANONICAL_CHECKPOINT = ROOT / "model_design/checkpoints/codd_style_h4_best_validation.pt"
+CANONICAL_POLICY = ROOT / "model_design/checkpoints/codd_style_h4_policy.json"
+CANONICAL_CHECKPOINT_SHA256 = "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"
+CANONICAL_RESNET18_SHA256 = "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
 RESULT_ROOT = ROOT / "results/codd_style_bounded_memory_validation"
 
 
@@ -67,30 +71,15 @@ def arguments() -> argparse.Namespace:
     # seen-backbone protocol; these only choose existing cache records.
     parser.add_argument("--backbones", nargs="+")
     parser.add_argument("--sequences", nargs="+")
-    parser.add_argument("--frozen-policy", type=Path)
+    parser.add_argument("--frozen-policy", type=Path, default=CANONICAL_POLICY)
     parser.add_argument("--selection-root", type=Path, default=RESULT_ROOT / "reset_policy/validation_candidates")
     parser.add_argument("--tiny", action="store_true")
     return parser.parse_args()
 
 
 def policy_from_args(config: argparse.Namespace) -> tuple[BoundedMemoryPolicy, float | None]:
-    if config.frozen_policy is not None:
-        record = json.loads(config.frozen_policy.read_text())
-        if record.get("selection_split") != "dataset_2_validation":
-            raise RuntimeError("frozen policy was not selected exclusively on dataset 2")
-        return BoundedMemoryPolicy.from_dict(record["policy"]), record.get("hard_threshold")
-    if config.split == "test":
-        raise RuntimeError("dataset 7 requires --frozen-policy selected on dataset 2")
-    return BoundedMemoryPolicy(
-        name=config.policy_name,
-        max_age=config.max_age,
-        accumulated_update_max=config.accumulated_update_max,
-        disagreement_max=config.disagreement_max,
-        warp_support_min=config.warp_support_min,
-        fb_confidence_min=config.fb_confidence_min,
-        temporal_activation_max=config.temporal_activation_max,
-        update_magnitude_max=config.update_magnitude_max,
-    ), config.hard_threshold
+    record = verify_canonical_inputs(config.checkpoint, config.frozen_policy)
+    return BoundedMemoryPolicy.from_dict(record["policy"]), None
 
 
 def initial_state(item: dict) -> dict:
@@ -132,11 +121,26 @@ def infer(model, extractor, item, state, forward, backward, *, include_learned: 
     return evidence, model(cues, item["raw"], evidence.aligned_past_disparity)
 
 
+def evaluation_scope(config: argparse.Namespace) -> tuple[tuple[str, ...], tuple[str, ...], int | None]:
+    sequences = tuple(config.sequences) if config.sequences else (VALIDATION if config.split == "validation" else TEST)
+    backbones = tuple(config.backbones) if config.backbones else SEEN_BACKBONES
+    max_pairs = None
+    if config.tiny:
+        sequences, backbones, max_pairs = (sequences[0],), (backbones[0],), 4
+    return sequences, backbones, max_pairs
+
+
 @torch.no_grad()
 def evaluate(config: argparse.Namespace) -> None:
+    if config.memory_state != "recurrent":
+        raise RuntimeError("canonical H4 requires recurrent corrected-state memory")
+    if config.disable_learned_stereo_evidence:
+        raise RuntimeError("canonical H4 requires frozen learned stereo evidence")
     policy, hard_threshold = policy_from_args(config)
     seed_all(config.seed)
     device = torch.device(config.device)
+    if sha256(RESNET18_CHECKPOINT) != CANONICAL_RESNET18_SHA256:
+        raise RuntimeError(f"frozen ResNet-18 checkpoint hash mismatch: {RESNET18_CHECKPOINT}")
     checkpoint = torch.load(config.checkpoint, map_location="cpu", weights_only=False)
     model = CODDStyleFusionHead(checkpoint["cue_channels"]).to(device)
     model.load_state_dict(checkpoint["model"]); model.eval()
@@ -149,11 +153,7 @@ def evaluate(config: argparse.Namespace) -> None:
     assert extractor is None or not any(parameter.requires_grad for parameter in extractor.parameters())
     assert not any(parameter.requires_grad for parameter in adapter.model.parameters())
 
-    sequences = tuple(config.sequences) if config.sequences else (VALIDATION if config.split == "validation" else TEST)
-    backbones = tuple(config.backbones) if config.backbones else SEEN_BACKBONES
-    max_pairs = None
-    if config.tiny:
-        sequences = (sequences[0],); backbones = (SEEN_BACKBONES[0],); max_pairs = 4
+    sequences, backbones, max_pairs = evaluation_scope(config)
     dataset = TemporalPairDataset(backbones, sequences, coverage_threshold=.50,
         include_right_rgb=True, max_pairs_per_sequence=max_pairs)
     dataset.preload_frame_data(config.preload_workers)
@@ -228,6 +228,8 @@ def evaluate(config: argparse.Namespace) -> None:
             rows.append(row)
         state = next_state; age = next_age; accumulated = next_accumulated
 
+    if not rows:
+        raise RuntimeError("empty evaluation: no frame satisfied the canonical support contract")
     summary = aggregate(rows)
     summary["reset_rate"] = float(np.mean([row["reset"] for row in rows]))
     summary["mean_state_age"] = float(np.mean([row["step_since_reset"] for row in rows]))
@@ -246,6 +248,9 @@ def evaluate(config: argparse.Namespace) -> None:
         "sequences": list(sequences), "dataset_7_opened": config.split == "test",
         "selection_source": str(config.frozen_policy) if config.frozen_policy else "dataset 2 candidate evaluation",
         "checkpoint": str(config.checkpoint), "checkpoint_sha256": sha256(config.checkpoint),
+        "frozen_policy": str(config.frozen_policy), "frozen_policy_sha256": sha256(config.frozen_policy),
+        "frozen_resnet18_checkpoint": str(RESNET18_CHECKPOINT), "frozen_resnet18_sha256": sha256(RESNET18_CHECKPOINT),
+        "memory_state": "recurrent corrected disparity", "learned_stereo_evidence": "required and enabled",
         "no_future_access": True, "state_resets_before_final recurrent candidate": True,
         "common_support": "GT coverage>0.5 & raw valid & historical and recurrent aligned-valid/warp support",
     })

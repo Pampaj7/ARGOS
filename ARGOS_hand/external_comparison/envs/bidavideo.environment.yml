@@ -1,0 +1,17 @@
+name: argos-external-bidavideo-cu113
+channels: [pytorch, nvidia, conda-forge]
+dependencies:
+  - python=3.8
+  - pytorch=1.12.1
+  - torchvision=0.13.1
+  - cudatoolkit=11.3
+  - numpy=1.23.5
+  - pip
+  - pip:
+    - hydra-core==1.1
+    - einops==0.4.1
+    - opencv-python==4.6.0.66
+    - Pillow==9.5.0
+    - pytorch-lightning==1.6.0
+    - scipy==1.10.0
+    - pytorch3d==0.7.4

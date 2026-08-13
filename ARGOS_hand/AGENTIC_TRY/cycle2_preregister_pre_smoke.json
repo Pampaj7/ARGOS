@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-08-12T15:09:49+02:00",
+  "objective": "Evaluate one fixed relative guard over frozen hard_h4:factory_035 without retuning.",
+  "candidate": {
+    "module": "relative_guard_h4",
+    "factory": "factory",
+    "endpoint": "S = raw_valid & aligned_validity & warp_support; V(x) = isfinite(x) & (x > 0); accepted = S & V(raw) & V(hard035) & (raw / 2 <= hard035) & (hard035 <= 2 * raw); disparity = where(accepted, hard035, raw)",
+    "kappa": 2,
+    "tau": 0.35,
+    "causal": true,
+    "backbone_agnostic": true,
+    "code_sha256": "d28b583cbca8b8776c00866497345324b8459b8203f1c672f09733f8628272a0",
+    "test_sha256": "afd9005bde3914ae68e8dc1da4e11fecce8cb92520fb03e4a693aa502e96e098"
+  },
+  "immutable_parents": {
+    "hard_h4_factory": "hard_h4:factory_035",
+    "hard_h4_sha256": "a1a70e941bd08e3ec06be457cedd89cb8f23c8cabf489467051cdcd2365d55a8",
+    "freeze_decision_sha256": "8262a4c9aaec2fbe83bbe0b1bf72ca1e999fdb5e6b2430c87605905516710ef7"
+  },
+  "development_gate": {
+    "dataset": "SCARED-D2",
+    "domain_status": "seen",
+    "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "keyframes": [2, 3, 4],
+    "report_count": 9,
+    "aggregation": "macro_sequence mean over nine backbone-keyframe reports",
+    "gates": {
+      "mean9_disparity_mae": {"operator": "<", "canonical": 0.267534770699263},
+      "mean9_disparity_rmse": {"operator": "<=", "canonical": 0.4162205115382129},
+      "mean9_bad1": {"operator": "<=", "canonical": 0.01511966960609508},
+      "mean9_depth_mae": {"operator": "<=", "canonical": 1.6251343559108247},
+      "mean9_depth_rmse": {"operator": "<=", "canonical": 2.2721260586030874},
+      "per_backbone_disparity_mae": {"operator": "<=", "reference": "canonical"}
+    }
+  },
+  "invariants": [
+    "No ground truth, backbone identity, future frame, or retuning enters the adapter.",
+    "Raw-invalid values are returned as raw; the guard does not rescue them.",
+    "Only the existing raw_valid & aligned_validity & warp_support mask is used.",
+    "Endpoint, ratio boundaries, invalid values, support, dtype/shape, factory, and driver-state propagation are unit tested."
+  ],
+  "ood_gate": {
+    "dataset": "Vid10_Liver_Med",
+    "recording": "full",
+    "comparison": "paired canonical and candidate on identical recording/support",
+    "required": ["strict disparity MAE improvement", "strict depth (zMAE) improvement", "finite positive support"],
+    "caveat": "ToF is nonindependent.",
+    "sealed": true
+  },
+  "stop_rule": "One candidate only: no other kappa, recording, or retuning."
+}

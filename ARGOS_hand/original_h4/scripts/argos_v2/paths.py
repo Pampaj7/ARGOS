@@ -1,6 +1,8 @@
 from pathlib import Path
 
-V2_ROOT = Path(__file__).resolve().parents[2]
+# The frozen H4 code lives in original_h4, while its immutable input caches and
+# curated SCARED-C data remain owned by ARGOS-V2/ARGOS.  Do not write there.
+V2_ROOT = Path("/dtu/p1/leopam/ARGOS/ARGOS-V2")
 ARGOS_ROOT = V2_ROOT.parent
 
 DATASET_DIR = ARGOS_ROOT / "dataset"

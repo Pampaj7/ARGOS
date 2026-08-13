@@ -2,3 +2,6 @@ __pycache__/
 *.py[co]
 .pytest_cache/
 *.egg-info/
+dataset
+external
+original_h4/cache_scaredc_backbones

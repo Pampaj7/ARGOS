@@ -32,9 +32,12 @@ pytest -q
 
 See `PROVENANCE.md` for exact source files and hashes.
 
-## `original_h4/` — the original code
+## `original_h4/` — the H4 working copy
 
-Byte-identical copies of the authoritative ARGOS-V2 H4 model, loss, alignment,
-dataset helpers, and runner files live under `original_h4/`. Nothing there is
-installed or imported by the port; it is a source snapshot for direct review.
-The authoritative paths and hashes remain in ARGOS-V2.
+Started as byte-identical copies of the authoritative ARGOS-V2 H4 model, loss,
+alignment, dataset helpers, and runner files. **It is now hand-edited** and no
+longer tracked against `SOURCE_HASHES.sha256` — treat every file here as
+working code, not a verified snapshot. The authoritative, unmodified source
+stays in ARGOS-V2; diff against it there if you need to know what changed.
+
+Nothing here is installed or imported by the port in `src/`.

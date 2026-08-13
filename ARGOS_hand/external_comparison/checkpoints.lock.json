@@ -1,0 +1,177 @@
+{
+  "checkpoints": {
+    "bidastabilizer_raftstereo_robust": {
+      "artifacts": [
+        {
+          "bytes": 133746795,
+          "path": "checkpoints/bidavideo/raftstereo_robust/raftstereo_robust.pth",
+          "sha256": "ae81cce9337f3686b2076f360b3c28379126e453dce2e9931d056698acc44914",
+          "source_file_id": "1qoRJnro0zYBrtGRssQeNvJVWRW3oaz5i",
+          "source_folder_id": "1Ex-y2XRBiFUmhmUsDj_OJECKh6EZR4pn",
+          "source_url": "https://drive.google.com/file/d/1qoRJnro0zYBrtGRssQeNvJVWRW3oaz5i/view?usp=drivesdk"
+        },
+        {
+          "bytes": 44670145,
+          "path": "checkpoints/bidavideo/raftstereo_stabilizer_robust/raftstereo_stabilizer_robust.pth",
+          "sha256": "184093cc9f1728fa17c245cc96a294e214252304043f78a615aa363adc8c75ba",
+          "source_file_id": "1gZQoATCf3UqGm3gvbfgX6dszCnqzZHBn",
+          "source_folder_id": "1o2Epp9xv5i219SGt0qUXGvET-tI65idh",
+          "source_url": "https://drive.google.com/file/d/1gZQoATCf3UqGm3gvbfgX6dszCnqzZHBn/view?usp=drivesdk"
+        },
+        {
+          "bytes": 35664978,
+          "path": "checkpoints/bidavideo/sea_raft/Tartan-C-T-TSKH-spring540x960-S.pth",
+          "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac",
+          "source_file_id": "1z4jqECnZ2YjUYVzGLn27RDNqbMv7gdQt",
+          "source_folder_id": "1YLovlvUW94vciWvTyLf-p3uWscbOQRWW",
+          "source_url": "https://drive.google.com/file/d/1z4jqECnZ2YjUYVzGLn27RDNqbMv7gdQt/view?usp=drivesdk"
+        }
+      ],
+      "derived": {
+        "raftstereo": {
+          "bytes": 44604828,
+          "key_contract": {
+            "keys_sha256": "93316b81268b610712b2cb5dd671fe8667a8f888d95d8181de360a9c8cb173a5",
+            "tensor_count": 337
+          },
+          "path": "checkpoints/derived/bidavideo_raftstereo_robust.state_dict.pth",
+          "sha256": "1ef03c1e20de94fa5a3bbbff6d22402d7cc9b5401e631f3818f3fc80774c184a",
+          "source_bytes": 133746795,
+          "source_path": "checkpoints/bidavideo/raftstereo_robust/raftstereo_robust.pth",
+          "source_sha256": "ae81cce9337f3686b2076f360b3c28379126e453dce2e9931d056698acc44914"
+        },
+        "sea_raft": {
+          "bytes": 35656158,
+          "key_contract": {
+            "keys_sha256": "90cbd324196721fdf2216578cb1f49528d7c9c0efbd6928507cb999b762c5c07",
+            "tensor_count": 276
+          },
+          "path": "checkpoints/derived/bidavideo_sea_raft.state_dict.pth",
+          "sha256": "d881d0c1a1dfa66287ec91d3144959a7e25ffa03a9ec1a88891b170ed1aceda3",
+          "source_bytes": 35664978,
+          "source_path": "checkpoints/bidavideo/sea_raft/Tartan-C-T-TSKH-spring540x960-S.pth",
+          "source_sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+        },
+        "stabilizer": {
+          "bytes": 38653974,
+          "embedded_sea_raft": {
+            "keys_sha256": "90cbd324196721fdf2216578cb1f49528d7c9c0efbd6928507cb999b762c5c07",
+            "matches_standalone": false,
+            "runtime_order": "load standalone SEA-RAFT then strict-load stabilizer; embedded raft.model.* intentionally overwrites standalone initialization",
+            "tensor_count": 276
+          },
+          "key_contract": {
+            "keys_sha256": "06b1e1affbe7c3ca5dd4e32ce0eb1903d9819c27024701c6cbc4a4b7e02f8502",
+            "tensor_count": 348
+          },
+          "path": "checkpoints/derived/bidavideo_raftstereo_stabilizer_robust.state_dict.pth",
+          "sha256": "4a1a14e14b39bf10beee946401a58770195fe81074a4662fbcbe583f619e9ee0",
+          "source_bytes": 44670145,
+          "source_path": "checkpoints/bidavideo/raftstereo_stabilizer_robust/raftstereo_stabilizer_robust.pth",
+          "source_sha256": "184093cc9f1728fa17c245cc96a294e214252304043f78a615aa363adc8c75ba"
+        }
+      },
+      "download_method": "Unauthenticated drive.usercontent.google.com direct download; Content-Disposition filename and Content-Length matched Drive metadata; no cookies used.",
+      "license_note": "The official BiDAVideo Drive download does not publish separate checkpoint licence terms; the pinned BiDAVideo code is MIT and its vendored SEA-RAFT is BSD-3-Clause.",
+      "licenses": {
+        "BiDAVideo": "MIT",
+        "SEA-RAFT": "BSD-3-Clause"
+      },
+      "method_label": "BiDAStabilizer RAFTStereo robust",
+      "official_url": "https://drive.google.com/drive/folders/1eLcJXLf8qEF70WLKtNcGDHFwpgNTywN5?usp=drive_link",
+      "reason": "Official BiDAVideo Drive folders expose the exact required RAFTStereo robust backbone, BiDAStabilizer robust checkpoint, and its upstream-hard-coded SEA-RAFT dependency. The allowlist hash is the deterministic SHA256 of the sorted compact artifact manifest below.",
+      "required_pair": [
+        "raftstereo_robust.pth",
+        "raftstereo_stabilizer_robust.pth"
+      ],
+      "runtime_load": {
+        "device": "cuda:0 logical device when CUDA_VISIBLE_DEVICES is set",
+        "strict": true,
+        "weights_only": true
+      },
+      "set_manifest_format": "sha256(jq -cS '{artifacts:[{path,bytes,sha256,source_url,source_file_id,source_folder_id},...]}' with artifacts in listed order)",
+      "set_sha256": "4515a3da9352d26385f4f6ab955cff3493075b9c42f425c74104073d3b18151f",
+      "sha256": "4515a3da9352d26385f4f6ab955cff3493075b9c42f425c74104073d3b18151f",
+      "status": "READY"
+    },
+    "nvds_official_dpt_bidirectional": {
+      "artifacts": [
+        {
+          "bytes": 354794886,
+          "path": "checkpoints/nvds/NVDS_Stabilizer.pth",
+          "sha256": "631d9207e58d84a31f9e5765e42ed38660bd486c71e6fe98a8729cc54524b618",
+          "source_url": "https://github.com/RaymondWang987/NVDS/releases/download/NVDS_checkpoints/NVDS_Stabilizer.pth"
+        },
+        {
+          "bytes": 1376378527,
+          "path": "checkpoints/nvds/dpt_large-midas-2f21e586.pt",
+          "sha256": "2f21e586477d90cb9624c7eef5df7891edca49a1c4795ee2cb631fd4daa6ca69",
+          "source_url": "https://github.com/intel-isl/DPT/releases/download/1_0/dpt_large-midas-2f21e586.pt"
+        },
+        {
+          "bytes": 18768907,
+          "path": "checkpoints/nvds/gmflow/gmflow_sintel-0c07dcb3.pth",
+          "sha256": "0c07dcb35770464f38a5ff4de18c04177b242dc5de8cd2068adf46f3d4fe193a",
+          "source_container": "pretrained.zip",
+          "source_container_bytes": 139845048,
+          "source_container_sha256": "fe83705a23ae7d59b660f16e8724f68a35105cf4671f05b7c6437b93a7a3ab25",
+          "source_url": "https://drive.google.com/file/d/1d5C5cgHIxWGsFR1vYs5XrQbbUiZl9TX2/view?usp=sharing"
+        }
+      ],
+      "licenses": {
+        "DPT": "MIT",
+        "GMFlow": "Apache-2.0",
+        "NVDS": "MIT"
+      },
+      "method_label": "NVDS",
+      "reason": "Official NVDS bidirectional inference baseline using the README-pinned DPT predictor and the GMFlow checkpoint hard-coded by the upstream inference script. This is NVDS, not NVDS+.",
+      "set_manifest_format": "sha256(jq -cS '{artifacts:[{path,bytes,sha256,source_url[,source_container_sha256,source_container_bytes]},...]}' with artifacts in listed order)",
+      "set_sha256": "8aa1f4154f3588ec5022208cf32686311aed38369abe4434f2a934c5ff15ec95",
+      "sha256": "8aa1f4154f3588ec5022208cf32686311aed38369abe4434f2a934c5ff15ec95",
+      "status": "READY"
+    },
+    "nvds_official_midas_bidirectional": {
+      "artifacts": [
+        {
+          "bytes": 354794886,
+          "path": "checkpoints/nvds/NVDS_Stabilizer.pth",
+          "sha256": "631d9207e58d84a31f9e5765e42ed38660bd486c71e6fe98a8729cc54524b618",
+          "source_url": "https://github.com/RaymondWang987/NVDS/releases/download/NVDS_checkpoints/NVDS_Stabilizer.pth"
+        },
+        {
+          "bytes": 422509849,
+          "path": "checkpoints/nvds/midas_v21_384.pt",
+          "sha256": "f6b980704cfd7259c7cc2b058c2f160159c55e84b3b6c08331b4156a84629f70",
+          "source_url": "https://github.com/isl-org/MiDaS/releases/download/v2_1/midas_v21_384.pt"
+        },
+        {
+          "bytes": 18768907,
+          "path": "checkpoints/nvds/gmflow/gmflow_sintel-0c07dcb3.pth",
+          "sha256": "0c07dcb35770464f38a5ff4de18c04177b242dc5de8cd2068adf46f3d4fe193a",
+          "source_container": "pretrained.zip",
+          "source_container_bytes": 139845048,
+          "source_container_sha256": "fe83705a23ae7d59b660f16e8724f68a35105cf4671f05b7c6437b93a7a3ab25",
+          "source_url": "https://drive.google.com/file/d/1d5C5cgHIxWGsFR1vYs5XrQbbUiZl9TX2/view?usp=sharing"
+        }
+      ],
+      "licenses": {
+        "GMFlow": "Apache-2.0",
+        "MiDaS": "MIT",
+        "NVDS": "MIT"
+      },
+      "method_label": "NVDS",
+      "reason": "Official NVDS bidirectional inference baseline using the README-pinned MiDaS predictor and the GMFlow checkpoint hard-coded by the upstream inference script. This is NVDS, not NVDS+.",
+      "set_manifest_format": "sha256(jq -cS '{artifacts:[{path,bytes,sha256,source_url[,source_container_sha256,source_container_bytes]},...]}' with artifacts in listed order)",
+      "set_sha256": "9ee7f089c878c707a8c12cdc4628b64df177b0606c499dd281127d7fb9e03825",
+      "sha256": "9ee7f089c878c707a8c12cdc4628b64df177b0606c499dd281127d7fb9e03825",
+      "status": "READY"
+    },
+    "nvds_plus": {
+      "official_url": "https://github.com/RaymondWang987/NVDS/releases/tag/NVDS_checkpoints",
+      "reason": "The official NVDS release provides NVDS_Stabilizer.pth for monocular DPT/MiDaS depth and documents no NVDS+ stereo/raw-disparity checkpoint or SHA256.",
+      "sha256": null,
+      "status": "BLOCKED"
+    }
+  },
+  "schema": 2
+}

@@ -1,0 +1,8 @@
+{
+  "method": "nvds_plus_forward_clip4",
+  "causality": "causal_clip",
+  "clip_length": 4,
+  "future_frames_required": false,
+  "online_or_h4": false,
+  "input": "RGB L/R float32 plus positive-left raw disparity; NVDS upstream only documents monocular-depth input, so raw-stereo transfer is blocked pending an official compatible checkpoint."
+}

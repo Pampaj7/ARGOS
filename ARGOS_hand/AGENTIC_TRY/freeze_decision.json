@@ -1,0 +1,135 @@
+{
+  "decision_type": "pre_ood_module_freeze",
+  "frozen_at": "2026-08-12",
+  "selection_closed": true,
+  "selected_module": "hard_h4:factory_035",
+  "selection": {
+    "dataset": "SCARED-D2",
+    "dataset_provenance_label": "SCARED-C/d2",
+    "domain_status": "seen",
+    "backbone_set": "all predeclared seen backbones",
+    "sequences": [
+      "dataset_2_keyframe_2",
+      "dataset_2_keyframe_3",
+      "dataset_2_keyframe_4"
+    ],
+    "report_count": 9,
+    "primary_metric": "mean of 9 report macro_sequence refined disparity MAE",
+    "selection_rule": "lowest primary metric",
+    "no_ground_truth_or_backbone_identity_used_for_selection": true
+  },
+  "candidates": {
+    "canonical": {
+      "disparity_mae": 0.267534770699263,
+      "disparity_rmse": 0.4162205115382129,
+      "bad1": 0.01511966960609508,
+      "depth_mae": 1.6251343559108247,
+      "depth_rmse": 2.2721260586030874
+    },
+    "hard_h4:factory_035": {
+      "disparity_mae": 0.2655824879558329,
+      "disparity_rmse": 0.415053132646217,
+      "bad1": 0.015280355947477061,
+      "depth_mae": 1.6098637992804472,
+      "depth_rmse": 2.262100659947586
+    },
+    "hard_h4:factory_050": {
+      "disparity_mae": 0.26749022751874435,
+      "disparity_rmse": 0.4162724196565752,
+      "bad1": 0.015153234622898788,
+      "depth_mae": 1.6256459640158178,
+      "depth_rmse": 2.2771043250932874
+    },
+    "gated": {
+      "disparity_mae": 0.267536457970,
+      "disparity_rmse": 0.416346511613,
+      "bad1": 0.015128998734,
+      "depth_mae": 1.625835808935,
+      "depth_rmse": 2.275301035998
+    }
+  },
+  "decision": {
+    "selected_by": "hard_h4:factory_035 has the lowest primary metric",
+    "secondary_metric_note": "Bad1 regresses versus canonical and is not the selection metric.",
+    "post_selection_rule": "No retuning after target inspection."
+  },
+  "frozen_protocol": {
+    "factory": "factory_035",
+    "threshold": 0.35,
+    "endpoint": "accepted = temporal_weight >= threshold; disparity = where(accepted, aligned_memory, raw)",
+    "h4_protocol": "fixed H=4; raw t-1 after re-anchor; preceding fused otherwise"
+  },
+  "immutable_artifacts": {
+    "hard_h4_code": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/AGENTIC_TRY/hard_h4.py",
+      "sha256": "a1a70e941bd08e3ec06be457cedd89cb8f23c8cabf489467051cdcd2365d55a8"
+    },
+    "canonical_code": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/canonical_h4.py",
+      "sha256": "4148ee8b4b6d6662c1519bfdf9e850868d0fe7bb923d34617ccfaf6f757593c8"
+    },
+    "checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt",
+      "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"
+    },
+    "policy": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_policy.json",
+      "sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d"
+    },
+    "evaluator": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+      "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+    },
+    "comparison_driver": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+      "sha256": "f462edda4e5aedc9806295dbd9fa46baf4e950a0ba844fa78135c39e5414b31e"
+    },
+    "metrics": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+      "sha256": "1142e53f5f6865343ca2723f125789e1c592b68278751e177517b33add10139a"
+    }
+  },
+  "selected_run_provenance": {
+    "status": "COMPLETE",
+    "run_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/AGENTIC_TRY/runs/hard035_d2_seen/run_manifest.json",
+      "sha256": "b5d03fdf2a4314f4eede1cbc6421890d0a594816108d2323e6e13ba49b72d45a"
+    },
+    "source_run_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/AGENTIC_TRY/runs/hard035_d2_seen/runs/scared-d2/hard_h4__factory_035/run_manifest.json",
+      "sha256": "468fcfbfde2e23e0394c138e9880c11e6937d6c10f4a1ad83d904f19d43a11b5"
+    },
+    "report_provenance": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/AGENTIC_TRY/runs/hard035_d2_seen/runs/scared-d2/hard_h4__factory_035/summary.json",
+      "sha256": "9eeb40618962a2913d8509152ae2f10d3cb8875ddc1906206c8b935dc2e29fa6",
+      "report_count": 9
+    },
+    "output_provenance": {
+      "aggregate_metrics": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/AGENTIC_TRY/runs/hard035_d2_seen/scared_aggregate_metrics.csv",
+        "sha256": "01e385188edbd6573207cb96c8a4970cf5d361c7eac18721a0a76eaf72cb1a9f"
+      },
+      "per_sequence_metrics": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/AGENTIC_TRY/runs/hard035_d2_seen/scared_per_sequence_metrics.csv",
+        "sha256": "d158c068864fcda22c8a00a99bf29f640dbf4fd18d78eeea3a8334f72b89a3a4"
+      }
+    }
+  },
+  "unopened_evaluation_gates": {
+    "d2_unseen": {
+      "backbone_set": [
+        "CREStereo",
+        "Fast-FoundationStereo"
+      ],
+      "criterion": "each must improve disparity MAE by at least 0.0002 versus canonical"
+    },
+    "drends_vid14": {
+      "support": "identical 64-frame support",
+      "criterion": "both disparity MAE and depth MAE must strictly improve",
+      "caveat": "ToF is nonindependent."
+    },
+    "d7_unseen": {
+      "criterion": "optional confirmation"
+    }
+  }
+}

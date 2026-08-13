@@ -1,0 +1,18 @@
+{
+  "artifacts": {
+    "TEST_FIXTURE": {
+      "input_sha256": "0be04209f8ad01d25fc5a06264bd1a3bb74415b785dafcffc48c2b2af4e560fe",
+      "json_sha256": "37ff6613b70d9c49eee09e83adb84f997a46d7dae5f2288b292724e8ec898a81",
+      "metadata": {
+        "backbone": "identity",
+        "dataset": "SCARED-C",
+        "sequence_id": "fixture",
+        "split": "d2"
+      },
+      "npz_sha256": "dde41922c8954ada75922584cc03bfe4630192fe20bd6b830546caa4877b4271",
+      "path": "tests/fixtures/TEST_FIXTURE.evaluation.npz",
+      "publication": "TEST_ONLY"
+    }
+  },
+  "schema": 1
+}
