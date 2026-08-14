@@ -85,30 +85,60 @@ def default_output(results: Path, config: argparse.Namespace) -> Path:
     return results / config.dataset / f"{name}{'__smoke' if config.smoke else ''}"
 
 
-def drive(adapter: Any, frames: list[Mapping[str, Any]], flow: Callable[[Mapping[str, Any], Mapping[str, Any]], tuple[Any, Any]]):
-    """Causal H=4 protocol.  Frames supplied to the adapter deliberately omit GT."""
+def _horizon(adapter: Any, horizon: int | None | object = ... ) -> int | None:
+    """Resolve an explicitly declared finite horizon; the canonical default is H=4."""
+    value = getattr(adapter, "horizon", 4) if horizon is ... else horizon
+    if value is not None and (not isinstance(value, int) or value < 1):
+        raise ValueError("horizon must be a positive integer or None for continuous recurrence")
+    return value
+
+
+def _finite(value: Any) -> bool:
+    """Small adapter-boundary guard; booleans and missing test flows are not numeric evidence."""
+    if value is None or isinstance(value, (bool, str)):
+        return True
+    if hasattr(value, "isfinite"):
+        return bool(value.isfinite().all())
+    try:
+        import math
+        return math.isfinite(float(value))
+    except (TypeError, ValueError):
+        import numpy as np
+        return bool(np.isfinite(np.asarray(value)).all())
+
+
+def drive(adapter: Any, frames: list[Mapping[str, Any]], flow: Callable[[Mapping[str, Any], Mapping[str, Any]], tuple[Any, Any]], *,
+          horizon: int | None | object = ...):
+    """Causal bounded recurrence; adapter frames deliberately omit GT and metadata."""
     if not frames:
         return []
+    horizon = _horizon(adapter, horizon)
     first = {key: frames[0][key] for key in ("raw", "raw_valid", "rgb", "right_rgb", "index") if key in frames[0]}
+    if not _finite(first["raw"]):
+        raise ValueError("non-finite first-frame raw disparity")
     outputs = [(0, adapter.start(first))]
     state = None; age = 0
     for index in range(1, len(frames)):
         current, previous = frames[index], frames[index - 1]
-        reanchor = state is None or age >= 4
+        reanchor = state is None or (horizon is not None and age >= horizon)
         memory = ({"disparity": previous["raw"], "valid": previous["raw_valid"], "rgb": previous["rgb"], "index": previous.get("index")}
                   if reanchor else state)
         forward, backward = flow(current, {"rgb": memory["rgb"], "index": memory["index"]})
+        if not all(_finite(value) for value in (current["raw"], memory["disparity"], forward, backward)):
+            raise ValueError("non-finite causal adapter input")
         item = {"raw": current["raw"], "raw_valid": current["raw_valid"], "current_rgb": current["rgb"],
                 "current_right_rgb": current["right_rgb"], "past_rgb": memory["rgb"],
                 "past_disparity": memory["disparity"], "past_valid": memory["valid"],
                 "forward_flow": forward, "backward_flow": backward, "reanchor": reanchor,
-                "state_age": 1 if reanchor else age + 1}
+                "state_age": 1 if reanchor else age + 1, "horizon": horizon}
         result = adapter.step(item)
         for key in ("disparity", "support", "reset", "state_age", "diagnostics"):
             if key not in result:
                 raise RuntimeError(f"adapter.step result missing {key}")
         if bool(result["reset"]) != reanchor or int(result["state_age"]) != item["state_age"]:
-            raise RuntimeError("adapter changed the fixed H=4 protocol state")
+            raise RuntimeError("adapter changed the declared recurrence protocol state")
+        if not _finite(result["disparity"]):
+            raise ValueError("non-finite temporal adapter output")
         outputs.append((index, result))
         state = {"disparity": result["disparity"], "valid": current["raw_valid"], "rgb": current["rgb"], "index": current.get("index")}
         age = int(result["state_age"])
@@ -233,6 +263,7 @@ def _scared(config: argparse.Namespace, adapter: Any, bundle_sink: Callable[[Map
                             anchors.append((anchor.aligned_validity & anchor.warp_support)[0, 0].cpu().numpy())
                     bundle.append({"raw": frames[index]["raw"][0, 0].cpu().numpy(),
                                    "refined": result["disparity"][0, 0].detach().cpu().numpy(),
+                                   "aligned_memory": result.get("aligned_memory", frames[index - 1]["raw"])[0, 0].detach().cpu().numpy(),
                                    "gt": gts[index], "gt_valid": covers[index] > .5,
                                    "protocol_mask": official_scared_protocol_mask(
                                        raw_valid, (evidence.aligned_validity & evidence.warp_support)[0, 0].cpu().numpy(), anchors),
@@ -269,6 +300,7 @@ def _scared(config: argparse.Namespace, adapter: Any, bundle_sink: Callable[[Map
                              "backbone": backbone, "sequence_id": sequence,
                              "raw_disparity": np.asarray([item["raw"] for item in bundle]),
                              "refined_disparity": np.asarray([item["refined"] for item in bundle]),
+                             "aligned_memory": np.asarray([item["aligned_memory"] for item in bundle]),
                              "gt_disparity": np.asarray([item["gt"] for item in bundle]),
                              "gt_valid": np.asarray([item["gt_valid"] for item in bundle]),
                              "protocol_mask": np.asarray([item["protocol_mask"] for item in bundle]),

@@ -11,6 +11,7 @@ import os
 import random
 import shutil
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -27,8 +28,12 @@ from run_h4_augmented_fusion_probe import (  # noqa: E402
 )
 from model_design.data.drends_temporal_dataset import DrendsTemporalClipDataset, build_raft_cache  # noqa: E402
 from model_design.data.temporal_clip_dataset import TemporalClipDataset  # noqa: E402
+from model_design.comparison.drends_evaluation import _prediction_depth_mm  # noqa: E402
+from model_design.metrics.unified_metrics import MetricConfig  # noqa: E402
 
-SCARED_TRAIN = ("dataset_1_keyframe_1", "dataset_1_keyframe_2", "dataset_1_keyframe_3", "dataset_3_keyframe_1", "dataset_3_keyframe_2", "dataset_3_keyframe_3", "dataset_3_keyframe_4", "dataset_6_keyframe_1", "dataset_6_keyframe_2", "dataset_6_keyframe_3", "dataset_6_keyframe_4", "dataset_2_keyframe_2", "dataset_2_keyframe_3")
+# Match the accepted SCARED-C H4 augmented split.  keyframe_1 was quality-gate
+# rejected and has no curated manifest/cache.
+SCARED_TRAIN = ("dataset_1_keyframe_2", "dataset_1_keyframe_3", "dataset_3_keyframe_1", "dataset_3_keyframe_2", "dataset_3_keyframe_3", "dataset_3_keyframe_4", "dataset_6_keyframe_1", "dataset_6_keyframe_2", "dataset_6_keyframe_3", "dataset_6_keyframe_4", "dataset_2_keyframe_2", "dataset_2_keyframe_3")
 SCARED_VAL = ("dataset_2_keyframe_4",)
 DRENDS_TRAIN = ("Vid10_Liver_Med", "Vid12_Pancreas_Ext")
 DRENDS_VAL = ("Vid13_Pancreas_Med",)
@@ -37,11 +42,14 @@ OUT = ROOT / "results/h4_scared_drends_augmented/seed_0"
 FINAL_DIR = ROOT / "model_design/checkpoints/h4_scared_drends_augmented"
 CACHE = ROOT / "cache_drends_backbones"
 STEPS_PER_EPOCH = 252
+EXPECTED_BEST_EPOCH = 27
+EXPECTED_BEST_CHECKPOINT_SHA256 = "e90586fdb90305c37887f191e111a4e4dd9b2c8ba0c5a7c951e4e4d797fd20b4"
+EXPECTED_TRAINING_SOURCE_SNAPSHOT_SHA256 = "bb03e605791bb8cd9aac5a3c21b27049692c271a696b6e88926ca54b073f1c0d"
 
 
 def arguments():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--mode", choices=("train", "dry-run"), default="train")
+    p.add_argument("--mode", choices=("train", "revalidate", "dry-run"), default="train")
     p.add_argument("--output", type=Path, default=OUT); p.add_argument("--cache-root", type=Path, default=CACHE)
     p.add_argument("--device", default="cuda:0"); p.add_argument("--seed", type=int, default=0); p.add_argument("--epochs", type=int, default=150)
     p.add_argument("--patience", type=int, default=10); p.add_argument("--batch-size", type=int, default=32); p.add_argument("--workers", type=int, default=20); p.add_argument("--preload-workers", type=int, default=20)
@@ -100,26 +108,86 @@ def loader(dataset, c, sampler=None):
 
 def evaluate_domain(model, extractor, adapter, data, c, name):
     model.eval(); total = {"raw": 0., "fused": 0., "count": 0, "harmful": 0., "depth_sq_raw": 0., "depth_sq_fused": 0., "depth_count": 0}
+    metrics = MetricConfig()
     with torch.no_grad():
         for cpu in loader(data, c):
             _, states = run_clip(model, extractor, adapter, to_device(cpu, next(model.parameters()).device), c, training=False)
             for state in states:
-                item, output, mask = state["item"], state["output"], state["raw_memory_valid"]
-                if not bool(mask.any()): continue
-                raw_err, fused_err = (item["raw"] - item["gt"]).abs(), (output.fused_disparity - item["gt"]).abs(); n = int(mask.sum())
-                total["raw"] += float(raw_err[mask].sum()); total["fused"] += float(fused_err[mask].sum()); total["count"] += n; total["harmful"] += int((mask & (fused_err > raw_err + .1)).sum())
+                item, output = state["item"], state["output"]
+                support = item["gt_valid"].bool()
                 if name == "drends":
-                    product, gt_depth = item["focal_baseline_mm"].view(-1,1,1,1), item["gt_depth_mm"]
-                    raw_depth, fused_depth = product / item["raw"].clamp_min(1e-6), product / output.fused_disparity.clamp_min(1e-6)
-                    total["depth_sq_raw"] += float(((raw_depth - gt_depth).square()[mask]).sum()); total["depth_sq_fused"] += float(((fused_depth - gt_depth).square()[mask]).sum()); total["depth_count"] += n
+                    # Match frozen DRENDS evaluation: fixed GT support, clipped
+                    # positive depths, and the official invalid-prediction penalty.
+                    product = float(item["focal_baseline_mm"].reshape(-1)[0])
+                    depth_support = support.detach().cpu().numpy()
+                    gt_depth = item["gt_depth_mm"].detach().cpu().numpy()
+                    raw_depth = _prediction_depth_mm(item["raw"].detach().cpu().numpy(), product)
+                    fused_depth = _prediction_depth_mm(output.fused_disparity.detach().cpu().numpy(), product)
+                    penalty = metrics.invalid_penalty_mm
+                    raw_error = np.where(np.isfinite(raw_depth) & (raw_depth > 0), raw_depth - gt_depth, penalty)
+                    fused_error = np.where(np.isfinite(fused_depth) & (fused_depth > 0), fused_depth - gt_depth, penalty)
+                    total["depth_sq_raw"] += float(np.square(raw_error[depth_support]).sum()); total["depth_sq_fused"] += float(np.square(fused_error[depth_support]).sum()); total["depth_count"] += int(depth_support.sum())
+                if not bool(support.any()): continue
+                raw_valid, fused_valid = torch.isfinite(item["raw"]) & (item["raw"] > 0), torch.isfinite(output.fused_disparity) & (output.fused_disparity > 0)
+                raw_err = torch.where(raw_valid, (item["raw"] - item["gt"]).abs(), torch.full_like(item["raw"], metrics.invalid_penalty_px))
+                fused_err = torch.where(fused_valid, (output.fused_disparity - item["gt"]).abs(), torch.full_like(output.fused_disparity, metrics.invalid_penalty_px)); n = int(support.sum())
+                total["raw"] += float(raw_err[support].sum()); total["fused"] += float(fused_err[support].sum()); total["count"] += n; total["harmful"] += int((support & (fused_err > raw_err + .1)).sum())
     if not total["count"]: raise RuntimeError(f"empty {name} validation")
     raw, fused = total["raw"] / total["count"], total["fused"] / total["count"]
     result = {"raw_epe": raw, "fused_epe": fused, "ratio": fused / raw, "gain": raw - fused, "valid_count": total["count"], "harmful_update_rate": total["harmful"] / total["count"]}
-    if name == "drends": result |= {"raw_depth_rmse_mm": math.sqrt(total["depth_sq_raw"] / total["depth_count"]), "fused_depth_rmse_mm": math.sqrt(total["depth_sq_fused"] / total["depth_count"])}
+    if name == "drends":
+        if not total["depth_count"]: raise RuntimeError("empty DRENDS depth validation support")
+        result |= {"raw_depth_rmse_mm": math.sqrt(total["depth_sq_raw"] / total["depth_count"]), "fused_depth_rmse_mm": math.sqrt(total["depth_sq_fused"] / total["depth_count"]), "depth_valid_count": total["depth_count"]}
     return result
 
 
+def evaluate_scared_d2(model, extractor, c):
+    """Use the frozen D2 driver so its strict all-anchor mask stays authoritative."""
+    from model_design.comparison.run_comparison import _scared
+    bundles = []
+    class Adapter:
+        horizon = 4
+        def start(self, frame): return {"disparity": frame["raw"], "support": frame["raw_valid"].bool(), "reset": True, "state_age": 0, "diagnostics": {"update_magnitude": 0.0}}
+        def step(self, frame):
+            from model_design.external_components.bidavideo import temporal_disparity_evidence
+            from model_design.models.codd_style_fusion import build_codd_cues
+            with torch.inference_mode():
+                evidence = temporal_disparity_evidence(frame["raw"], frame["past_disparity"], frame["forward_flow"], frame["backward_flow"], current_valid=frame["raw_valid"], past_valid=frame["past_valid"], current_rgb=frame["current_rgb"], past_rgb=frame["past_rgb"])
+                cues = build_codd_cues(extractor, raw=frame["raw"], aligned_memory=evidence.aligned_past_disparity, current_rgb=frame["current_rgb"], current_right_rgb=frame["current_right_rgb"], past_rgb=frame["past_rgb"], flow_current_to_past=frame["forward_flow"], flow_magnitude=evidence.flow_magnitude, forward_backward_confidence=evidence.forward_backward_confidence, warp_support=evidence.warp_support, aligned_valid=evidence.aligned_validity, include_learned_stereo_evidence=True)
+                output = model(cues, frame["raw"], evidence.aligned_past_disparity); support = frame["raw_valid"].bool() & evidence.aligned_validity.bool() & evidence.warp_support.bool()
+            return {"disparity": output.fused_disparity, "support": support, "reset": bool(frame["reanchor"]), "state_age": int(frame["state_age"]), "diagnostics": {"update_magnitude": float((output.fused_disparity - frame["raw"]).abs()[support].mean()) if bool(support.any()) else 0.0}}
+    _scared(argparse.Namespace(dataset="scared-d2", sequences=list(SCARED_VAL), backbones=list(SEEN_BACKBONES), max_frames=None, smoke=False, device=c.device, flow_batch_size=c.batch_size), Adapter(), bundles.append)
+    total = {"raw": 0., "fused": 0., "count": 0, "harmful": 0}; penalty = MetricConfig().invalid_penalty_px
+    for bundle in bundles:
+        support = np.asarray(bundle["gt_valid"], bool) & np.asarray(bundle["protocol_mask"], bool)
+        raw, fused, gt = np.asarray(bundle["raw_disparity"]), np.asarray(bundle["refined_disparity"]), np.asarray(bundle["gt_disparity"])
+        raw_error = np.where(np.isfinite(raw) & (raw > 0), np.abs(raw - gt), penalty); fused_error = np.where(np.isfinite(fused) & (fused > 0), np.abs(fused - gt), penalty)
+        total["raw"] += float(raw_error[support].sum()); total["fused"] += float(fused_error[support].sum()); total["count"] += int(support.sum()); total["harmful"] += int((support & (fused_error > raw_error + .1)).sum())
+    if not total["count"]: raise RuntimeError("empty strict D2 validation")
+    raw, fused = total["raw"] / total["count"], total["fused"] / total["count"]
+    return {"raw_epe": raw, "fused_epe": fused, "ratio": fused / raw, "gain": raw - fused, "valid_count": total["count"], "harmful_update_rate": total["harmful"] / total["count"], "protocol": "paper_d2_strict_all_anchors"}
+
+
 def save_state(path, payload): atomic(path, payload)
+
+
+def publish_final_bundle(c, audit, summary, final):
+    """Publish checkpoint and required provenance as one directory rename."""
+    if final.exists(): raise FileExistsError(f"refusing to overwrite final artifact: {final}")
+    source = c.output / "checkpoints/best_validation.pt"
+    if not source.is_file(): raise FileNotFoundError(f"missing best validation checkpoint: {source}")
+    final.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=final.parent, prefix=f".{final.name}.") as temporary:
+        stage = Path(temporary)
+        checkpoint = stage / "best_validation.pt"; shutil.copy2(source, checkpoint)
+        if sha256(source) != sha256(checkpoint): raise RuntimeError("final checkpoint copy hash mismatch")
+        dataset = ROOT / "model_design/data/drends_temporal_dataset.py"
+        provenance = {"profile":"h4_scared_drends_augmented", "checkpoint":str(final / "best_validation.pt"), "checkpoint_sha256":sha256(checkpoint), "configuration":vars(c), "configuration_identity":identity(c), "split":audit, "validation":summary, "runner":str(Path(__file__)), "runner_sha256":sha256(Path(__file__)), "drends_dataset":str(dataset), "drends_dataset_sha256":sha256(dataset), "canonical_h4_checkpoint_sha256":sha256(H4_CANONICAL_CHECKPOINT)}
+        if "revalidation" in summary: provenance["revalidation"] = summary["revalidation"]
+        for name, value in (("provenance.json", provenance), ("configuration.json", vars(c)), ("split_audit.json", audit)):
+            save_json(stage / name, value)
+        shutil.copy2(c.output / "training_history.csv", stage / "training_history.csv")
+        os.replace(stage, final)
 
 
 def train(c):
@@ -127,7 +195,12 @@ def train(c):
     final = FINAL_DIR / "best_validation.pt"
     if final.exists() or (c.output / "checkpoints/last.pt").exists(): raise FileExistsError("collision/resume refused for fresh locked run")
     save_json(c.output / "configuration.json", vars(c)); audit = split(c); save_json(c.output / "split_audit.json", audit); save_json(c.output / "status.json", {"state":"caching", "pid":os.getpid(), "updated_unix":time.time()})
-    cache_report = build_raft_cache(c.cache_root, DRENDS_TRAIN + DRENDS_VAL, c.device); save_json(c.output / "cache_summary.json", cache_report)
+    try:
+        cache_report = build_raft_cache(c.cache_root, DRENDS_TRAIN + DRENDS_VAL, c.device)
+    except Exception as error:
+        save_json(c.output / "status.json", {"state":"failed", "phase":"caching", "pid":os.getpid(), "error_type":type(error).__name__, "error":str(error), "updated_unix":time.time()})
+        raise
+    save_json(c.output / "cache_summary.json", cache_report)
     seed_all(c.seed); device = torch.device(c.device)
     scared, drends = make_scared(SCARED_TRAIN, c), DrendsTemporalClipDataset(DRENDS_TRAIN, c.cache_root, clip_length=c.clip_length, coverage_threshold=c.coverage_threshold)
     scared_val, drends_val = make_scared(SCARED_VAL, c), DrendsTemporalClipDataset(DRENDS_VAL, c.cache_root, clip_length=c.clip_length, coverage_threshold=c.coverage_threshold)
@@ -164,13 +237,55 @@ def train(c):
     save_json(c.output / "validation_summary.json", summary)
     if not gate:
         save_json(c.output / "status.json", {"state":"no_go", "pid":os.getpid(), **summary}); raise RuntimeError("NO-GO validation gate; D7/Vid14 remain unopened")
-    FINAL_DIR.mkdir(parents=True, exist_ok=True); atomic_copy(c.output / "checkpoints/best_validation.pt", final)
-    provenance = {"profile":"h4_scared_drends_augmented", "checkpoint":str(final), "checkpoint_sha256":sha256(final), "configuration":vars(c), "split":audit, "validation":summary, "runner":str(Path(__file__)), "runner_sha256":sha256(Path(__file__)), "canonical_h4_checkpoint_sha256":sha256(H4_CANONICAL_CHECKPOINT)}
-    save_json(FINAL_DIR / "provenance.json", provenance); save_json(FINAL_DIR / "configuration.json", vars(c)); save_json(FINAL_DIR / "split_audit.json", audit); shutil.copy2(c.output / "training_history.csv", FINAL_DIR / "training_history.csv"); save_json(c.output / "status.json", {"state":"complete", "pid":os.getpid(), **summary})
+    publish_final_bundle(c, audit, summary, FINAL_DIR)
+    save_json(c.output / "status.json", {"state":"complete", "pid":os.getpid(), **summary})
+
+
+def revalidation_source(c):
+    source, snapshot = c.output / "checkpoints/best_validation.pt", c.output / "source_snapshot.sha256"
+    if not source.is_file() or not snapshot.is_file(): raise FileNotFoundError("revalidation requires saved best_validation.pt and source_snapshot.sha256")
+    if sha256(source) != EXPECTED_BEST_CHECKPOINT_SHA256 or sha256(snapshot) != EXPECTED_TRAINING_SOURCE_SNAPSHOT_SHA256: raise RuntimeError("revalidation source hash mismatch")
+    state, audit = torch.load(source, map_location="cpu", weights_only=False), split(c)
+    if state.get("epoch") != EXPECTED_BEST_EPOCH or state.get("config_identity") != identity(c) or state.get("split") != audit: raise RuntimeError("saved checkpoint epoch/configuration/split mismatch")
+    return state, audit, source, snapshot
+
+
+def revalidate(c):
+    """Re-run only D2-KF4 and Vid13 against the saved best checkpoint."""
+    validate(c)
+    if FINAL_DIR.exists(): raise FileExistsError(f"refusing to overwrite final artifact: {FINAL_DIR}")
+    state, audit, source, snapshot = revalidation_source(c)
+    save_json(c.output / "status.json", {"state":"revalidating", "pid":os.getpid(), "updated_unix":time.time()})
+    device = torch.device(c.device); seed_all(c.seed)
+    drends = DrendsTemporalClipDataset(DRENDS_VAL, c.cache_root, clip_length=c.clip_length, coverage_threshold=c.coverage_threshold)
+    preload = {"drends_validation": drends.preload_frame_data(c.preload_workers)}
+    extractor, adapter = FrozenResNet18Layer1().to(device), BiDAFlowInferenceAdapter("sea_raft", device=device)
+    model = CODDStyleFusionHead(state["cue_channels"]).to(device); model.load_state_dict(state["model"])
+    sc, dr = evaluate_scared_d2(model, extractor, c), evaluate_domain(model, extractor, adapter, drends, c, "drends")
+    gate = sc["ratio"] <= 1 and dr["ratio"] <= 1 and dr["fused_depth_rmse_mm"] <= dr["raw_depth_rmse_mm"]
+    revalidation = {"training_checkpoint": {"path": str(source), "sha256": sha256(source), "epoch": state.get("epoch")}, "training_source_snapshot": {"path": str(snapshot), "sha256": sha256(snapshot)}, "source": {"scared_validation": list(SCARED_VAL), "drends_validation": list(DRENDS_VAL), "preload": preload}, "protocol": {"d2": "dataset_2_keyframe_4", "drends": "Vid13_Pancreas_Med", "support": "gt_valid AND protocol_mask (identical here)", "disparity": "fixed support; MetricConfig.invalid_penalty_px", "depth": "model_design.comparison.drends_evaluation._prediction_depth_mm; fixed gt_valid support; MetricConfig.invalid_penalty_mm"}}
+    summary = {"selection": {"scared": sc, "drends": dr, "macro_ratio": validation_macro(sc, dr)}, "gate": {"passed": gate, "requirements": "ratio<=1 on both validation domains and DRENDS depth RMSE<=raw", "heldout_access": "forbidden unless passed"}, "revalidation": revalidation}
+    save_json(c.output / "revalidation_summary.json", summary)
+    if not gate:
+        save_json(c.output / "status.json", {"state":"no_go", "pid":os.getpid(), **summary}); raise RuntimeError("NO-GO validation gate; D7/Vid14 remain unopened")
+    publish_final_bundle(c, audit, summary, FINAL_DIR)
+    save_json(c.output / "status.json", {"state":"complete", "pid":os.getpid(), **summary}); return True
 
 
 def main():
     c=arguments(); validate(c)
     if c.mode == "dry-run": print(json.dumps({"config":vars(c), "split":split(c), "sampling":{"steps":STEPS_PER_EPOCH,"scared":.75,"drends":.25,"each_scared_backbone":.25}}, default=str)); return
-    train(c)
+    try:
+        (revalidate if c.mode == "revalidate" else train)(c)
+    except Exception as error:
+        if str(error).startswith("NO-GO validation gate"): raise
+        # Cache failures are already labelled more precisely; this covers setup,
+        # preload, train, validation, and publication failures after caching.
+        status = c.output / "status.json"
+        phase = "post_cache"
+        if status.is_file():
+            try: phase = json.loads(status.read_text()).get("phase", "post_cache")
+            except json.JSONDecodeError: phase = "post_cache"
+        save_json(status, {"state":"failed", "phase":phase, "pid":os.getpid(), "error_type":type(error).__name__, "error":str(error), "updated_unix":time.time()})
+        raise
 if __name__ == "__main__": main()

@@ -124,6 +124,61 @@ CUDA_VISIBLE_DEVICES=1 /dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python \
   --output ../results/definitive_temporal_evaluation_csv/canonical_h4_drends_pilot
 ```
 
+## Experimental closure (frozen D2 development)
+
+`experimental_closure.py` adds only predeclared causal blend baselines to the
+same evaluator: fixed H4 weights `0.1/0.2/0.3/0.5`, FB confidence, warped
+recurrent memory, warped raw previous (`H=1`), EMA2/EMA3, the frozen canonical
+H4 head, and a **posthoc GT-only** raw-vs-aligned-memory endpoint oracle.  The
+oracle is never an inference adapter.  All runs use the prediction-independent
+official mask; adapter support remains diagnostic.  No dense predictions are
+saved and D2/D7 never share an aggregate.
+
+The historical v1/v2 freezes are retained for provenance.  The executable gate is
+the immutable v3 manifest at
+`../results/definitive_evaluation/experimental_closure/protocol/freeze_manifest_v3.json`.
+It pins the H4 checkpoint/policy, canonical and closure code, frozen ResNet,
+SEA-RAFT checkpoint+adapter, BiDA pull warp and cue code.  The runner re-hashes
+all of them before evaluation and again before a result becomes `COMPLETE`.
+For a fresh checkout, create it before running anything:
+
+```bash
+/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python \
+  model_design/comparison/experimental_closure.py --write-freeze
+
+# CPU-only compile of existing canonical reports; no inference.
+/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python \
+  model_design/comparison/extract_safety.py \
+  --source ../results/definitive_evaluation/canonical_h4_baseline --split d2 \
+  --output ../results/definitive_evaluation/experimental_closure/static/canonical_d2_safety.csv
+
+# Development evaluation: physical GPU1 is remapped to logical cuda:0.
+CUDA_VISIBLE_DEVICES=1 /dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python \
+  model_design/comparison/experimental_closure.py --dataset scared-d2 --device cuda:0
+```
+
+The full D2 closure always includes frozen-head
+`H={1,2,4,6,8,continuous}` plus all blend baselines.  It changes recurrence
+policy only, never head weights or architecture; horizon adapters are gated
+inside the closure and cannot be selected through the generic evaluator.
+After the complete D2 run, create a small decision JSON containing
+`selected_confirmation_method` (one H4-compatible method) and the SHA-256 of
+`d2/run_manifest.json`.  Promotion verifies both byte hashes and permits only
+that exact selected method on D7:
+
+```bash
+/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python \
+  model_design/comparison/experimental_closure.py --write-promotion-freeze \
+  --decision ../results/definitive_evaluation/experimental_closure/protocol/d2_decision.json
+CUDA_VISIBLE_DEVICES=1 /dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python \
+  model_design/comparison/experimental_closure.py --dataset scared-d7 \
+  --methods <decision-pinned-method> --device cuda:0
+```
+
+`canonical_*_safety.csv` calls the evaluator's zero-threshold
+`CatastrophicFraction` **degraded-frame fraction** (`PositiveFraction`); it is
+not a catastrophic-event claim.
+
 ## Script roles
 
 - `canonical_h4_provenance.py`: required immutable checkpoint/policy provenance.

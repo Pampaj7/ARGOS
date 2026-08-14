@@ -31,7 +31,9 @@ class ScaredDrendsAugmentedH4(CanonicalH4):
         import torch
         from model_design.models.codd_style_fusion import CODDStyleFusionHead, FrozenResNet18Layer1, build_codd_cues
         state = torch.load(CHECKPOINT, map_location="cpu", weights_only=False)
-        if state.get("split") != self._provenance.get("split") or state.get("config") != self._provenance.get("configuration"): raise RuntimeError("checkpoint state provenance mismatch")
+        state_config = state.get("config_identity") or {key: str(value) if isinstance(value, Path) else value for key, value in state.get("config", {}).items()}
+        provenance_config = self._provenance.get("configuration_identity") or self._provenance.get("configuration")
+        if state.get("split") != self._provenance.get("split") or state_config != provenance_config: raise RuntimeError("checkpoint state provenance mismatch")
         self._model = CODDStyleFusionHead(state["cue_channels"]).to(self.device).eval().requires_grad_(False); self._model.load_state_dict(state["model"], strict=True)
         self._extractor = FrozenResNet18Layer1().to(self.device).eval().requires_grad_(False); self._build_cues = build_codd_cues
         return self._model, self._extractor, self._build_cues

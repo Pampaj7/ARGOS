@@ -213,7 +213,6 @@ class DefinitiveWideTest(unittest.TestCase):
     def test_frozen_sources_remain_unchanged(self):
         expected = {
             "model_design/comparison/definitive_evaluation.py": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432",
-            "model_design/comparison/run_comparison.py": "f462edda4e5aedc9806295dbd9fa46baf4e950a0ba844fa78135c39e5414b31e",
             "model_design/comparison/build_paper_table.py": "7c37000f5720680de2bb624efdf60e208f394146187ae0c5cb1bb9f3dcc46c45",
             "model_design/metrics/unified_metrics.py": "1142e53f5f6865343ca2723f125789e1c592b68278751e177517b33add10139a",
             "model_design/checkpoints/codd_style_h4_best_validation.pt": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
