@@ -1,0 +1,2259 @@
+\documentclass[letterpaper,10pt,conference]{ieeeconf}
+
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+
+% ============================================================
+% STEER -- ICRA 2027 DRAFT
+%
+% Working title:
+% STEER: Cross-Backbone Causal Temporal Refinement
+% for Frozen Surgical Stereo
+%
+% IMPORTANT:
+% - Canonical model: seed-0, bounded H=4 operating policy.
+% - H=4 is a frozen risk/gain operating point, NOT the minimum-EPE
+%   horizon on D2.
+% - D2 is development.
+% - D7 is held-out confirmation.
+% - DRENDS zero-shot results use the SCARED-trained canonical model.
+% - Runtime/downstream/clinical claims remain unsupported until tested.
+% ============================================================
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{siunitx}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{balance}
+
+% ============================================================
+% DRAFT HELPERS
+% ============================================================
+
+\newif\ifinternaldraft
+\internaldrafttrue
+% \internaldraftfalse
+
+\newcommand{\TODO}[1]{%
+    \ifinternaldraft
+        \textcolor{red}{\textbf{[TODO: #1]}}%
+    \fi
+}
+
+\newcommand{\NOTE}[1]{%
+    \ifinternaldraft
+        \textcolor{blue}{\textbf{[NOTE: #1]}}%
+    \fi
+}
+
+% ============================================================
+% RED DRAFT MARKERS
+% ============================================================
+% All \TODO{...} blocks are intentionally rendered in red while
+% \internaldrafttrue. They denote experiments/results that are not yet
+% available and MUST NOT be converted into prose claims until verified.
+%
+% ============================================================
+% METHOD / METRIC MACROS
+% ============================================================
+
+\newcommand{\steer}{\textsc{STEER}}
+\newcommand{\raw}{\mathrm{raw}}
+\newcommand{\mem}{\mathrm{mem}}
+\newcommand{\fused}{\mathrm{fused}}
+\newcommand{\warp}{\mathcal{W}}
+
+\newcommand{\EPE}{\mathrm{EPE}}
+\newcommand{\HUR}{\mathrm{HUR}}
+\newcommand{\BUR}{\mathrm{BUR}}
+\newcommand{\HPlus}{H^{+}}
+\newcommand{\BPlus}{B^{+}}
+\newcommand{\Bad}{\mathrm{Bad}}
+\newcommand{\DTCE}{\mathrm{DTCE}}
+\newcommand{\TEPE}{\mathrm{TEPE}}
+\newcommand{\OPW}{\mathrm{OPW}}
+\newcommand{\AURC}{\mathrm{AURC}}
+
+\newcommand{\R}{\mathbb{R}}
+
+% ============================================================
+% TITLE
+% ============================================================
+
+% \NOTE: NAME COLLISION. "STEER" is already used in robotics by
+% "STEER: Flexible Robotic Manipulation via Dense Language Grounding",
+% arXiv:2411.03409 (Nov 2024), which targets the same venue population.
+% No collision was found in the stereo/depth literature. The acronym is
+% also never expanded anywhere in this paper. Rename before submission,
+% or expand it and cite the collision explicitly.
+
+\title{
+\textbf{STEER: Cross-Backbone Causal Temporal Refinement\\
+for Frozen Surgical Stereo}
+}
+
+\author{Anonymous Authors}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+% ============================================================
+% ABSTRACT
+% ============================================================
+
+\begin{abstract}
+
+Dense stereo is attractive for robotic surgery because it provides
+metric geometry without active illumination, yet modern stereo
+estimators are typically applied independently to each frame and can
+therefore fluctuate under specularities, weak texture, tissue
+deformation, tool occlusions, and camera motion.
+We ask whether temporal information can improve frozen stereo
+predictions without modifying the stereo estimator, accessing its
+internal representation, or using future frames.
+
+We present \steer, a causal plug-and-play temporal refiner for frozen
+stereo.
+At each frame, preceding disparity is motion-aligned to the current view
+using frozen SEA-RAFT.
+A shared 142-channel external evidence representation feeds a
+177,338-parameter CODD-inspired reset-and-fusion head that predicts a
+bounded interpolation between the current stereo estimate and aligned
+temporal memory.
+Corrected recurrence is explicitly bounded and periodically re-anchored
+to independently predicted raw geometry.
+
+A controlled development-set closure shows that the learned policy is
+not explained by temporal smoothing:
+on SCARED-C D2, canonical $H=4$ reduces mean EPE by $4.05\%$, compared
+with only $0.59\%$ for the best matched fixed/EMA blend, while direct
+flow-confidence weighting and ungated memory propagation degrade
+accuracy.
+The raw-versus-memory oracle exposes a $12.30\%$ improvement ceiling,
+of which STEER recovers $32.9\%$.
+Continuous corrected-state recurrence increases EPE by $62.69\%$,
+supporting bounded memory.
+
+One frozen $H=4$ checkpoint subsequently improves all five evaluated
+stereo estimators on held-out SCARED-C D7, including CREStereo and
+Fast-FoundationStereo, which were excluded from temporal-head training.
+Mean backbone EPE decreases from $0.4921$ to $0.4696$, while Bad1 and
+disparity RMSE also decrease for every backbone.
+Zero-shot evaluation on five DRENDS recordings ($20{,}929$ frames) with
+three estimators, two of them unseen in training, improves disparity
+EPE, Bad3 and metric depth in all $60$ recording--backbone--metric
+cells, completing the transfer matrix across both the backbone and the
+domain shift.
+We further show that confining the fused output to the support the
+module already declares is load-bearing rather than cosmetic: without
+it, zero-padded out-of-bounds memory turns rare pixels into invalid
+predictions and produces the metric-depth tail previously attributed to
+the external domain.
+
+We additionally introduce a unified refinement-centric evaluation
+framework that jointly measures spatial geometry, multi-horizon
+temporal fidelity, introduced and recovered error, frame-level tails,
+and selective risk under fixed prediction-independent support.
+
+\end{abstract}
+
+
+% ============================================================
+% I. INTRODUCTION
+% ============================================================
+
+\section{Introduction}
+\label{sec:intro}
+
+Metric three-dimensional perception is a fundamental component of
+robot-assisted surgery.
+Dense geometry can support camera navigation, tool--tissue distance
+estimation, augmented reality, deformation analysis, and autonomous
+manipulation.
+Stereo endoscopy is particularly attractive because depth can be
+recovered passively from the images already available on many surgical
+robot platforms.
+
+Surgical stereo nevertheless remains difficult.
+Endoscopic scenes contain weak or repetitive texture, non-Lambertian
+tissue, strong specular highlights, blood, smoke, deformable anatomy,
+rapid viewpoint changes, and frequent tool occlusions
+\cite{allan2021scared,edwards2022servct}.
+Modern stereo estimators such as RAFT-Stereo
+\cite{lipson2021raftstereo}, CREStereo
+\cite{li2022crestereo}, Stereo Anywhere
+\cite{bartolomei2025stereoanywhere}, S$^2$M$^2$
+\cite{min2025s2m2}, and recent foundation models
+\cite{wen2025foundationstereo,wen2026fastfoundationstereo}
+provide increasingly strong frame-wise disparity.
+However, a frame-wise model has no explicit requirement that predictions
+remain coherent over time.
+
+Video stereo methods address this limitation by integrating temporal
+information directly into the model.
+DynamicStereo aggregates spatio-temporal information over stereo video
+\cite{karaev2023dynamicstereo}.
+CODD combines stereo estimation, learned motion, and temporal fusion in
+an online framework \cite{li2023codd}.
+Match Stereo Videos and its plug-in BiDAStabilizer employ bidirectional
+alignment and sequence propagation \cite{jing2024bida}.
+PPMStereo uses learned memory construction for long-range dynamic stereo
+\cite{wang2025ppm}.
+These methods establish the value of temporal information, but commonly
+assume a particular temporal architecture, model-specific
+representations, future observations, or co-design with the stereo
+estimator.
+
+We study a different deployment setting:
+
+\begin{quote}
+\emph{Can one causal temporal module be trained once and attached
+unchanged to heterogeneous frozen stereo estimators?}
+\end{quote}
+
+This formulation matters for robotic systems because the stereo
+backbone and temporal logic can evolve independently.
+A new stereo estimator can replace the previous one without requiring
+the temporal module to access its cost volume, hidden state, confidence
+head, or training pipeline.
+
+Our starting point is the reset-and-fusion principle introduced by CODD
+\cite{li2023codd}.
+We do not claim reset/fusion itself as novel.
+Instead, we retain its useful inductive bias:
+the temporal system should decide whether motion-aligned historical
+geometry should influence the current stereo estimate and constrain the
+correction to a convex interpolation between the two.
+
+We redesign this principle for an external black-box interface.
+The integrated motion pathway is replaced by frozen SEA-RAFT;
+stereo-backbone-specific representations are replaced by a shared
+external evidence space; and the same learned temporal head is evaluated
+unchanged across heterogeneous stereo architectures.
+
+The resulting system has a deliberately constrained structure.
+The current stereo estimate remains an anchor.
+Temporal memory is geometrically aligned before use.
+The learned head controls the amount of intervention, but cannot produce
+a value outside the interval spanned by the current and temporal
+candidates.
+Finally, corrected recurrence is periodically reset to raw stereo
+geometry.
+
+These restrictions raise an important question:
+does the learned head actually provide value, or would simple temporal
+averaging give the same improvement?
+
+We answer this experimentally under a frozen development protocol.
+Matched fixed fusion, EMA, warped-memory propagation, and direct
+forward--backward confidence weighting recover only a small fraction of
+STEER's gain.
+In contrast, a ground-truth oracle shows that the aligned memory contains
+substantially more useful information than the current policy exploits.
+This indicates that the core problem is not obtaining temporal evidence,
+but identifying \emph{where and how much} of it should be used.
+
+A second question is how such intervention should be evaluated.
+Temporal smoothness is not equivalent to temporal correctness:
+a stale prediction can be smooth while being geometrically wrong.
+Likewise, lower mean EPE does not reveal whether refinement introduces
+new bad pixels or rare catastrophic frames.
+We therefore evaluate refinement relative to the frozen upstream
+prediction and explicitly separate geometry, temporal fidelity,
+benefit, harm, and tail behavior.
+
+Our contributions are:
+
+\begin{itemize}
+
+    \item We formulate surgical temporal stereo refinement as a
+    \emph{causal plug-and-play adaptation problem} over frozen,
+    heterogeneous stereo estimators, requiring neither future frames
+    nor access to backbone-specific internal representations.
+
+    \item We introduce \steer, a 177,338-parameter CODD-inspired
+    temporal decision module combining causal SEA-RAFT alignment, a
+    shared 142-channel external evidence space, convex disparity
+    fusion, and bounded corrected-state recurrence.
+
+    \item Through a controlled matched-baseline closure, we show that
+    STEER is not explained by simple temporal smoothing:
+    canonical $H=4$ achieves a $4.05\%$ EPE reduction compared with
+    $0.59\%$ for the best fixed/EMA blend, while unrestricted recurrence
+    fails strongly.
+    An oracle analysis reveals substantial remaining temporal headroom.
+
+    \item A single frozen $H=4$ checkpoint improves all five evaluated
+    stereo estimators on held-out SCARED-C D7, including two
+    architectures excluded from temporal-head training, and shows
+    preliminary zero-shot external-domain transfer on DRENDS with a
+    training-seen backbone.
+
+    \item We introduce a unified evaluation framework for temporal
+    refinement that jointly measures spatial accuracy, multi-horizon
+    temporal fidelity, introduced harm and recovered error, frame-level
+    failure tails, and optional selective risk under fixed,
+    prediction-independent support.
+
+\end{itemize}
+
+
+% ============================================================
+% II. RELATED WORK
+% ============================================================
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Deep Stereo Matching}
+
+Deep stereo matching has progressed from learned matching costs toward
+iterative recurrent estimation and broad-domain zero-shot models.
+RAFT-Stereo adapts recurrent all-pairs field transforms to rectified
+stereo and performs iterative disparity refinement
+\cite{lipson2021raftstereo}.
+CREStereo combines cascaded recurrent estimation with adaptive
+correlation \cite{li2022crestereo}.
+
+Stereo Anywhere combines stereo evidence with monocular foundation-model
+priors \cite{bartolomei2025stereoanywhere}, while FoundationStereo and
+Fast-FoundationStereo target broad cross-domain generalization
+\cite{wen2025foundationstereo,wen2026fastfoundationstereo}.
+S$^2$M$^2$ uses scalable multi-resolution matching
+\cite{min2025s2m2}.
+
+Our work is orthogonal to these developments.
+We neither modify the stereo estimator nor require a particular stereo
+architecture.
+
+
+\subsection{Temporal Stereo and Depth}
+
+CODD estimates temporally consistent online depth by combining stereo,
+motion, and fusion modules and introduced a lightweight reset/fusion
+mechanism for deciding when historical geometry should influence the
+current estimate \cite{li2023codd}.
+
+DynamicStereo jointly processes stereo video using spatio-temporal
+attention \cite{karaev2023dynamicstereo}.
+
+Match Stereo Videos introduces bidirectional adjacent-frame alignment
+and global bidirectional propagation; BiDAStabilizer exposes temporal
+refinement as a plug-in stabilizer for image-based stereo methods
+\cite{jing2024bida}.
+Its future-frame and backward-sequence processing distinguish the full
+formulation from strictly causal robotic deployment.
+
+PPMStereo addresses longer temporal dependencies through learned
+pick-and-play memory construction \cite{wang2025ppm}.
+Its memory operates inside an integrated dynamic-stereo architecture
+rather than through an external interface to arbitrary frozen stereo
+estimators.
+
+Plug-and-play stabilization has also been investigated for monocular
+video depth.
+NVDS and related neural video-depth stabilizers refine outputs from
+single-image depth estimators \cite{wang2023nvds}.
+Monocular relative-depth stabilization and calibrated stereo disparity,
+however, operate in different output spaces.
+
+
+\subsection{Evaluating Temporal Refinement}
+
+Stereo benchmarks predominantly report frame-wise geometric quantities
+such as EPE and bad-pixel rates.
+Video methods additionally report temporal-consistency measures.
+Neither family alone fully characterizes a temporal intervention.
+
+A prediction can become temporally smoother without becoming more
+geometrically correct.
+Conversely, a refiner can reduce average geometric error while
+introducing new failures on initially correct pixels.
+
+Temporal refinement is inherently comparative:
+every refined output is an intervention on an existing upstream
+prediction.
+This motivates explicit measurement of both recovered and introduced
+error.
+
+When a method exposes a confidence or risk score, evaluation further
+connects to selective prediction and reject-option learning
+\cite{geifman2019selectivenet}.
+
+Our contribution is not that every constituent metric is individually
+new.
+Instead, we organize established spatial, temporal, risk, and
+refinement-relative quantities into a common protocol under fixed
+prediction-independent support.
+
+
+\subsection{Surgical Stereo Geometry}
+
+SCARED provides stereo correspondence and reconstruction data for
+endoscopic scenes \cite{allan2021scared}.
+SERV-CT provides CT-derived reference disparities and depths for
+endoscopic 3D reconstruction validation \cite{edwards2022servct}.
+Dynamic surgical reconstruction has also been studied through dedicated
+stereo pipelines \cite{long2021edssr}.
+
+D4D contains deformable surgical sequences with complementary geometric
+acquisition \cite{docea2026d4d}.
+DRENDS targets depth estimation under dynamic robotic endoscopy and
+provides stereo imagery, calibration, and metric depth observations
+under tissue deformation \cite{loza2025drends}.
+
+
+% ============================================================
+% III. METHOD
+% ============================================================
+
+\section{Method}
+\label{sec:method}
+
+\subsection{External Causal Interface}
+
+Let frozen stereo estimator $S$ process the current rectified pair:
+%
+\begin{equation}
+d_t^{\raw},M_t^{\raw}
+=
+S(I_t^L,I_t^R),
+\label{eq:stereo}
+\end{equation}
+%
+where $d_t^{\raw}$ is positive-left disparity and $M_t^{\raw}$ its
+validity mask.
+
+The temporal module never accesses the internal representation of
+$S$.
+It consumes only externally observable quantities:
+RGB, disparity, validity, optical flow, and derived evidence.
+
+At time $t$, the cache contains the preceding left RGB image, preceding
+raw disparity and validity, the previous fused state, and its state age.
+No observation from $t+1$ or later is available.
+
+The goal is
+%
+\begin{equation}
+d_t^{\fused}
+=
+T_\theta
+\left(
+d_t^{\raw},
+m_{t-1},
+I_t^L,
+I_t^R,
+I_{t-1}^L
+\right).
+\label{eq:adapter}
+\end{equation}
+
+
+\subsection{Causal Motion Alignment}
+
+Frozen SEA-RAFT \cite{wang2024searaft} estimates both geometric flow
+directions:
+%
+\begin{align}
+F_{t\rightarrow t-1}
+&=
+F(I_t^L,I_{t-1}^L),
+\\
+F_{t-1\rightarrow t}
+&=
+F(I_{t-1}^L,I_t^L).
+\end{align}
+
+The second direction is used only to measure forward--backward
+reliability.
+Both flows depend exclusively on two already observed images.
+
+Previous geometry is pulled to the current image grid:
+%
+\begin{equation}
+\widetilde m_t(x)
+=
+\warp
+\left(
+m_{t-1},
+F_{t\rightarrow t-1}
+\right)(x)
+=
+m_{t-1}
+\left(
+x+F_{t\rightarrow t-1}(x)
+\right).
+\label{eq:warp}
+\end{equation}
+
+Bilinear sampling with zero padding and
+\texttt{align\_corners=True} is used.
+
+Warp support $S_t$ indicates whether the source coordinate lies inside
+the preceding image.
+Historical validity is sampled using the same grid.
+
+The reverse flow is pulled to the current grid:
+%
+\begin{equation}
+\widetilde F_{t-1\rightarrow t}
+=
+\warp
+\left(
+F_{t-1\rightarrow t},
+F_{t\rightarrow t-1}
+\right).
+\end{equation}
+
+Forward--backward residual is
+%
+\begin{equation}
+e_t^{FB}
+=
+\left\|
+F_{t\rightarrow t-1}
++
+\widetilde F_{t-1\rightarrow t}
+\right\|_2.
+\end{equation}
+
+The corresponding reliability cue is
+%
+\begin{equation}
+C_t^{FB}
+=
+S_t
+\exp
+\left(
+-\frac{e_t^{FB}}
+{
+0.5+
+0.01
+\left(
+\|F_{t\rightarrow t-1}\|_2+
+\|\widetilde F_{t-1\rightarrow t}\|_2
+\right)
+}
+\right).
+\label{eq:fb}
+\end{equation}
+
+Bidirectional \emph{flow estimation} between two already observed
+frames does not constitute bidirectional temporal inference.
+
+
+\subsection{Shared External Evidence}
+
+All stereo estimators are mapped into one common evidence representation:
+%
+\begin{equation}
+C_t
+=
+\Phi
+\left(
+d_t^{\raw},
+\widetilde m_t,
+I_t^L,
+I_t^R,
+I_{t-1}^L,
+F_{t\rightarrow t-1},
+C_t^{FB},
+S_t,
+\widetilde M_t
+\right).
+\end{equation}
+
+The canonical representation consumed by the decision head contains
+142 channels, but the evidence is constructed at two resolutions.
+At the one-quarter-resolution evidence grid, 129 channels encode
+matching/correlation and frozen appearance information.
+These include matching curves around raw and memory disparity,
+disparity and appearance self-correlations, cross-correlations, sampled
+matching-support cues, and 64 frozen ResNet-18 layer-1 channels
+\cite{he2016resnet}.
+
+A separate 13-channel cache-grid group encodes current disparity,
+aligned memory, signed and absolute disagreement, optical-flow
+components, flow magnitude, forward--backward confidence, warp support,
+aligned validity, and RGB evidence.
+The 129-channel quarter-resolution group is brought to the cache-grid
+resolution before concatenation with these 13 channels; hence the
+decision head receives a single 142-channel tensor.
+
+Normalization is fixed before training.
+Disparities are clipped to $[0,64]$ and scaled by $64$;
+signed disparity residuals are clipped to $[-16,16]$ and scaled by
+$16$;
+flow components use $[-32,32]$ and flow magnitude $[0,32]$.
+Frozen image features use ImageNet-normalized RGB.
+
+
+\begin{figure*}[t]
+\centering
+
+\IfFileExists{figures/steer_overview.pdf}{
+\includegraphics[width=0.96\textwidth]{figures/steer_overview.pdf}
+}{
+\fbox{
+\parbox{0.94\textwidth}{
+\centering
+\small
+\vspace{1.5mm}
+Frozen stereo $d_t^{raw}$ + bounded state $m_{t-1}$
+$\rightarrow$ SEA-RAFT alignment
+$\rightarrow \widetilde m_t$
+\\[1.5mm]
+$\downarrow$
+\\[1.5mm]
+142-channel external evidence
+$\rightarrow$ learned reset $\times$ fusion
+$\rightarrow w_t$
+\\[1.5mm]
+$\downarrow$
+\\[1.5mm]
+$d_t^{STEER}=(1-w_t)d_t^{raw}+w_t\widetilde m_t$
+$\rightarrow$ bounded writeback + periodic raw re-anchor
+\vspace{1.5mm}
+}}
+}
+
+\caption{
+STEER uses frozen stereo and frozen motion estimation.
+Only the compact reset-and-fusion decision head is trained.
+}
+\label{fig:overview}
+
+\end{figure*}
+
+
+\subsection{Reset-and-Fusion Decision Head}
+
+The decision structure is inspired by CODD \cite{li2023codd}.
+We do not claim reset/fusion or convex interpolation as novel in
+isolation.
+
+The cache-grid pathway maps the 142-channel input to 24 channels through
+a $3\times3$ convolution, GroupNorm, SiLU, and a residual block.
+A coarse pathway expands to 48 channels at one-quarter resolution,
+followed by three 48-channel residual blocks.
+
+A full-resolution reset branch predicts
+%
+\begin{equation}
+r_t=\sigma(z_t^r),
+\end{equation}
+%
+while the coarse fusion branch predicts
+%
+\begin{equation}
+f_t=
+\uparrow_4[\sigma(z_t^f)].
+\end{equation}
+
+The effective temporal weight is
+%
+\begin{equation}
+w_t=r_tf_t.
+\label{eq:weight}
+\end{equation}
+
+Temporal evidence is only defined where the aligned memory is itself
+usable. We therefore define the per-pixel \emph{support} as the
+conjunction of the current raw validity, the aligned temporal validity,
+and the warp support,
+%
+\begin{equation}
+S_t
+=
+M_t^{\raw}
+\wedge
+\widetilde M_t
+\wedge
+\mathcal{S}_t ,
+\label{eq:support}
+\end{equation}
+%
+and confine the intervention to it. Final disparity is
+%
+\begin{equation}
+\boxed{
+d_t^{\fused}
+=
+\begin{cases}
+(1-w_t)d_t^{\raw}+w_t\widetilde m_t, & S_t=1,\\[2pt]
+d_t^{\raw}, & S_t=0.
+\end{cases}
+}
+\label{eq:fusion}
+\end{equation}
+
+Because $w_t\in[0,1]$, on the support
+%
+\begin{equation}
+\min(d_t^{\raw},\widetilde m_t)
+\leq
+d_t^{\fused}
+\leq
+\max(d_t^{\raw},\widetilde m_t),
+\end{equation}
+%
+and off the support the module is the exact identity on raw geometry.
+
+The refiner therefore cannot synthesize arbitrary disparity outside the
+interval spanned by its two candidates.
+
+Applying \eqref{eq:support} to the output --- rather than only computing
+it --- is a load-bearing part of the contract, not a formality. The
+causal pull-warp uses zero padding, so an out-of-bounds sample returns
+$\widetilde m_t=0$ \emph{exactly}. An unmasked convex blend at such a
+pixel can therefore drive $d_t^{\fused}$ to zero, producing an invalid
+disparity where the frozen stereo estimator produced a valid one, and
+the bounded recurrence of Sec.~\ref{sec:recurrence} then carries that
+zero forward until the next raw re-anchor. Section~\ref{sec:masking}
+quantifies the effect: it is invisible on SCARED-C and dominates the
+external-domain metric-depth tail.
+
+The exact trainable parameter count is 177,338, and masking changes no
+parameter, no threshold, and no training procedure.
+
+Reset output bias is initialized to $-2$, while fusion is initialized
+with zero bias, producing conservative initial temporal intervention.
+
+
+\subsection{Bounded Corrected-State Recurrence}
+\label{sec:recurrence}
+
+After refinement,
+%
+\begin{equation}
+m_t=d_t^{\fused}.
+\end{equation}
+
+This creates the feedback path
+%
+\begin{equation}
+d_{t-1}^{\fused}
+\rightarrow
+\widetilde m_t
+\rightarrow
+d_t^{\fused}
+\rightarrow
+\widetilde m_{t+1}.
+\end{equation}
+
+Continuous propagation can therefore transform previous alignment and
+fusion errors into future evidence.
+
+We explicitly bound corrected-state lifetime.
+On a sequence boundary the first output is raw.
+After a re-anchor, previous raw disparity is used as state.
+Otherwise, the previous fused output is propagated.
+
+The canonical policy permits four corrected-state uses before a raw
+re-anchor.
+Thus $H$ denotes state lifetime rather than a temporal input window.
+
+The method remains one-step causal:
+%
+\begin{equation}
+\{I_{t-1},I_t,m_{t-1}\}
+\rightarrow
+d_t^{\fused}.
+\end{equation}
+
+
+\subsection{Training Objective}
+
+For target disparity $g_t$, define
+%
+\begin{align}
+e_t^{\raw}
+&=
+|d_t^{\raw}-g_t|,
+\\
+e_t^{\mem}
+&=
+|\widetilde m_t-g_t|,
+\\
+\Delta_t
+&=
+e_t^{\mem}-e_t^{\raw}.
+\end{align}
+
+Training support is the intersection of GT coverage, current validity,
+aligned temporal validity, and warp support.
+
+The disparity reconstruction term is
+%
+\begin{equation}
+\mathcal{L}_{disp}
+=
+\mu_M
+\left[
+\operatorname{Huber}_{\delta=1}
+(d_t^{\fused}-g_t)
+\right].
+\end{equation}
+
+Native reset and fusion margins are respectively
+%
+\begin{equation}
+\tau_r^{n}=5\;\mathrm{px},
+\qquad
+\tau_f^{n}=1\;\mathrm{px},
+\end{equation}
+%
+corresponding at cache scale to
+%
+\begin{equation}
+\tau_r^{c}=0.703125,
+\qquad
+\tau_f^{c}=0.140625.
+\end{equation}
+
+Define
+%
+\begin{align}
+R^+ &= M\cap\{\Delta>\tau_r^c\},\\
+R^- &= M\cap\{\Delta<-\tau_r^c\},
+\end{align}
+%
+and
+%
+\begin{align}
+F^+ &= M\cap\{\Delta>\tau_f^c\},\\
+F^- &= M\cap\{\Delta<-\tau_f^c\},\\
+F^0 &= M\cap\{|\Delta|\leq\tau_f^c\}.
+\end{align}
+
+The implemented losses are
+%
+\begin{align}
+\mathcal{L}_{reset}
+&=
+\mu_{R^+}[r_t]
++
+\mu_{R^-}[1-r_t],
+\\
+\mathcal{L}_{fusion}
+&=
+\mu_{F^+}[f_t]
++
+\mu_{F^-}[1-f_t]
++
+0.2\mu_{F^0}[|f_t-0.5|].
+\end{align}
+
+The full objective is
+%
+\begin{equation}
+\boxed{
+\mathcal{L}
+=
+\mathcal{L}_{disp}
++
+\mathcal{L}_{reset}
++
+\mathcal{L}_{fusion}.
+}
+\end{equation}
+
+No explicit temporal-consistency objective is used.
+
+
+% ============================================================
+% IV. EXPERIMENTAL PROTOCOL
+% ============================================================
+
+\section{Experimental Protocol}
+\label{sec:experimental}
+
+\subsection{Canonical Training}
+
+The canonical temporal refiner is trained on temporally curated SCARED-C
+data derived from SCARED \cite{allan2021scared}.
+
+The local partition is
+%
+\begin{equation}
+\text{train}=\{D1,D3,D6\},
+\qquad
+\text{development}=D2,
+\qquad
+\text{held-out}=D7.
+\end{equation}
+
+Training uses frozen predictions from:
+
+\begin{itemize}
+    \item S$^2$M$^2$-S \cite{min2025s2m2};
+    \item RAFT-Stereo \cite{lipson2021raftstereo};
+    \item Stereo Anywhere \cite{bartolomei2025stereoanywhere}.
+\end{itemize}
+
+CREStereo \cite{li2022crestereo} and Fast-FoundationStereo
+\cite{wen2026fastfoundationstereo} are excluded from temporal-head
+training.
+
+No backbone identity is given to STEER.
+
+
+\begin{table}[t]
+\centering
+\caption{Canonical STEER training configuration.}
+\label{tab:train}
+\small
+\begin{tabular}{ll}
+\toprule
+Setting & Value \\
+\midrule
+Train / dev. / held out & D1,D3,D6 / D2 / D7 \\
+Training frames & 8,616 \\
+Causal pairs & 8,606 \\
+Seen backbones & 3 \\
+Clip policy & non-overlap, $H=4$ \\
+Batch size & 4 \\
+Epochs & 12 \\
+Optimizer & AdamW \\
+Learning rate & $2\times10^{-4}$ \\
+Weight decay & $10^{-4}$ \\
+Gradient clipping & 1.0 \\
+Trainable parameters & 177,338 \\
+Model selection & development fused EPE \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{External Evaluation}
+
+\paragraph{DRENDS.}
+DRENDS contains dynamic robotic-endoscopy sequences with stereo imagery,
+calibration, and metric geometry \cite{loza2025drends}.
+We report five curated recordings ---
+\texttt{Vid10\_Liver\_Med}, \texttt{Vid11\_Liver\_High},
+\texttt{Vid12\_Pancreas\_Ext}, \texttt{Vid13\_Pancreas\_Med} and
+\texttt{Vid14\_Pancreas\_High} --- evaluated with three stereo
+estimators for $20{,}929$ frames in total.
+The zero-shot claim applies only to the SCARED-trained canonical
+checkpoint: no DRENDS data enters training, checkpoint selection or
+threshold calibration.
+
+Disparity reference is derived from metric ToF geometry through stereo
+calibration.
+It is therefore useful metric evidence but not independent stereo
+ground truth, and the ToF reference itself is temporally filtered.
+
+\paragraph{D4D.}
+D4D contains deformable surgical stereo sequences and structured-light
+observations \cite{docea2026d4d}.
+Because the current geometric scale contract remains unresolved, we use
+D4D only for no-reference temporal diagnostics.
+
+\paragraph{SERV-CT.}
+SERV-CT provides calibrated stereo pairs and CT-derived reference
+geometry \cite{edwards2022servct}.
+The evaluated pairs are non-consecutive, so temporal refinement is
+marked not applicable.
+
+
+% ============================================================
+% UNIFIED EVALUATION
+% ============================================================
+
+\subsection{Unified Temporal-Refinement Evaluation}
+
+A central requirement is that evaluation support cannot depend on the
+prediction:
+%
+\begin{equation}
+M_{\mathrm{eval}}
+=
+M_{\mathrm{GT}}
+\cap
+M_{\mathrm{protocol}}.
+\end{equation}
+
+Invalid predictions on valid support are penalized rather than silently
+removed.
+
+The framework evaluates five complementary dimensions.
+
+\paragraph{Spatial geometry.}
+For disparity we report EPE/MAE, median, RMSE, P90/P95/P99, maximum,
+invalid rate, and Bad-$1/3/5$.
+For metric depth we additionally report Bad-$2/5/10$ mm, AbsRel, SqRel,
+and $\delta_{1,2,3}$.
+
+\paragraph{Temporal fidelity.}
+At horizons $k\in\{1,2,4,8\}$ the framework defines grid-based
+temporal change error and, when correspondence is available,
+motion-compensated $\TEPE_{\mathrm{corr}}$ or warped depth DTCE.
+Pure prediction consistency can additionally be measured using OPW.
+Estimated-flow correspondences are explicitly marked as
+flow-conditioned proxies.
+
+\TODO{
+TEMPORAL-METRIC IMPLEMENTATION AUDIT:
+the current definitive SCARED-C artifacts contain DTCE_grid and Drift.
+Before submission, verify whether TEPE_corr and OPW were actually
+executed and persisted elsewhere. If not, describe them as supported
+framework metrics rather than reported experimental results.
+}
+
+\paragraph{Intervention harm and benefit.}
+For
+%
+\begin{equation}
+\delta e=e^{\fused}-e^{\raw},
+\end{equation}
+%
+we measure
+%
+\begin{align}
+\HPlus &= \mathbb{E}[\max(\delta e,0)],\\
+\BPlus &= \mathbb{E}[\max(-\delta e,0)],\\
+\HUR &= P(\delta e>0),\\
+\BUR &= P(\delta e<0).
+\end{align}
+
+For each bad-pixel threshold $\tau$ we additionally report
+NewBad, RecoveredBad, bad-rate delta, and identity preservation.
+
+\paragraph{Frame-level tails.}
+For each frame,
+%
+\begin{equation}
+D_t
+=
+\frac{1}{|M_t|}
+\sum_{x\in M_t}
+(e_t^{\fused}(x)-e_t^{\raw}(x)).
+\end{equation}
+
+We retain mean, median, P95, P99, worst degradation, and the fraction
+of degraded frames.
+
+\paragraph{Selective risk.}
+When a risk score is available, the same framework supports
+risk--coverage analysis, $\AURC$, oracle/excess $\AURC$, AUROC, AUPRC,
+Brier, NLL, and ECE \cite{geifman2019selectivenet}.
+
+Primary aggregation is equal-sequence macro averaging.
+Pixel-weighted micro statistics are retained secondarily.
+
+
+% ============================================================
+% V. RESULTS
+% ============================================================
+
+\section{Results}
+\label{sec:results}
+
+
+\subsection{Does the Learned Temporal Policy Matter?}
+
+We first isolate the contribution of the learned decision policy on D2.
+All variants use the same frozen stereo predictions, temporal alignment,
+support contract, and evaluation implementation.
+Only the temporal policy is changed.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{
+SCARED-C D2 matched temporal-policy closure.
+Raw EPE is $0.276202$.
+Positive reduction denotes improvement.
+}
+\label{tab:closure}
+\begin{tabular}{lrr}
+\toprule
+Method & EPE & Reduction \\
+\midrule
+STEER $H=6$ & \textbf{0.264656} & 4.18\% \\
+STEER $H=8$ & 0.264912 & 4.09\% \\
+STEER $H=4$ & 0.265028 & 4.05\% \\
+STEER $H=2$ & 0.267265 & 3.24\% \\
+STEER $H=1$ & 0.269001 & 2.61\% \\
+\midrule
+Fixed $w=0.5$ & 0.274562 & 0.59\% \\
+EMA2 & 0.274562 & 0.59\% \\
+Fixed $w=0.3$ & 0.274852 & 0.49\% \\
+Fixed $w=0.2$ & 0.275229 & 0.35\% \\
+EMA3 & 0.275386 & 0.30\% \\
+Fixed $w=0.1$ & 0.275684 & 0.19\% \\
+Warped raw previous & 0.276298 & $-0.03\%$ \\
+FB confidence weight & 0.282182 & $-2.17\%$ \\
+Warped recurrent $w=1$ & 0.286035 & $-3.56\%$ \\
+Continuous recurrence & 0.449349 & $-62.69\%$ \\
+\midrule
+Oracle raw/memory & 0.242223 & 12.30\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The canonical learned policy obtains
+%
+\begin{equation}
+\Delta_{\mathrm{STEER}}
+=
+0.276202-0.265028
+=
+0.011174\;\mathrm{px}.
+\end{equation}
+
+The best matched fixed fusion obtains only
+%
+\begin{equation}
+\Delta_{\mathrm{fixed}}
+=
+0.276202-0.274562
+=
+0.001640\;\mathrm{px}.
+\end{equation}
+
+Therefore,
+%
+\begin{equation}
+\boxed{
+\frac{
+\Delta_{\mathrm{STEER}}
+}{
+\Delta_{\mathrm{fixed}}
+}
+\approx
+6.8
+}
+\end{equation}
+%
+and the learned decision policy recovers almost seven times the
+geometric gain of the best fixed temporal blend.
+
+Direct forward--backward confidence is particularly informative:
+although $C^{FB}$ is one input cue to STEER, using it directly as the
+fusion weight worsens EPE by $2.17\%$.
+Thus motion reliability is useful evidence but insufficient as a
+decision rule.
+
+Similarly, directly propagating aligned memory or using continuous
+corrected recurrence degrades performance.
+The improvement is therefore not explained by motion alignment alone,
+temporal averaging, or generic smoothing.
+
+Under the implemented one-step update definition, EMA2 is algebraically
+equivalent to fixed $w=0.5$; their identical outputs are therefore
+expected and should not be interpreted as two independent confirmations.
+
+
+\subsection{Available Temporal Headroom}
+
+The pixelwise oracle chooses, using ground truth, the better of current
+raw disparity and aligned temporal memory.
+
+It reaches
+%
+\begin{equation}
+0.276202
+\rightarrow
+0.242223,
+\end{equation}
+%
+corresponding to a potential $12.30\%$ reduction.
+
+The oracle gain is
+%
+\begin{equation}
+\Delta_{\mathrm{oracle}}
+=
+0.033979\;\mathrm{px}.
+\end{equation}
+
+Canonical $H=4$ therefore captures
+%
+\begin{equation}
+\boxed{
+\frac{
+0.011174
+}{
+0.033979
+}
+=
+32.9\%
+}
+\end{equation}
+%
+of the available raw-versus-memory oracle improvement.
+
+This exposes an important asymmetry:
+the aligned memory already contains considerable useful information,
+but identifying where to use it remains the main unresolved problem.
+
+
+\subsection{Why $H=4$? Risk--Gain Rather Than Minimum EPE}
+
+The lowest development EPE occurs at $H=6$, not $H=4$:
+%
+\begin{equation}
+0.264656
+\quad\text{vs.}\quad
+0.265028.
+\end{equation}
+
+The absolute difference is only
+%
+\begin{equation}
+0.000372\;\mathrm{px},
+\end{equation}
+%
+approximately $0.14\%$ of the $H=4$ EPE.
+
+However, longer state lifetime increases intervention risk.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{
+D2 risk--gain comparison for the strongest bounded horizons.
+}
+\label{tab:horizon}
+\begin{tabular}{lrrrrr}
+\toprule
+& EPE & Deg. frames & HUR & BUR & $B^+/H^+$ \\
+\midrule
+$H=4$ & 0.265028 & \textbf{41.46\%} & \textbf{0.4048} & \textbf{0.5074} & \textbf{2.53} \\
+$H=6$ & \textbf{0.264656} & 42.18\% & 0.4053 & 0.5065 & 2.30 \\
+$H=8$ & 0.264912 & 42.18\% & 0.4068 & 0.5047 & 2.04 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Tail behaviour also favours $H=4$:
+%
+\begin{align}
+P95(D_t):
+&\quad
+0.01715,\;
+0.02037,\;
+0.02441,
+\\
+\mathrm{NewBad1}:
+&\quad
+0.0467\%,\;
+0.0676\%,\;
+0.1282\%
+\end{align}
+%
+for $H=4,6,8$, respectively.
+
+We therefore do not claim that four recurrent uses minimize
+development EPE.
+Instead, $H=4$ is the frozen risk--gain operating point:
+it sacrifices $0.000372$ px relative to the minimum-EPE $H=6$ policy
+while reducing intervention tails.
+
+
+\subsection{Why Recurrence Must Be Bounded}
+
+Continuous corrected-state recurrence changes mean EPE from
+%
+\begin{equation}
+0.276202
+\rightarrow
+0.449349,
+\end{equation}
+%
+corresponding to a $62.69\%$ increase in error.
+
+This demonstrates that, for the implemented recurrent state,
+continuously writing corrected disparity back into memory accumulates
+alignment and fusion errors.
+
+Periodic raw re-anchoring is therefore not a minor implementation
+detail but an essential structural component.
+
+This result does not imply that every possible continuous recurrent
+architecture must fail.
+
+
+\subsection{Cross-Backbone Development Behaviour}
+
+Canonical $H=4$ improves all five stereo estimators in mean D2 EPE.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Canonical $H=4$ D2 gain by upstream stereo estimator.}
+\label{tab:d2_backbones}
+\begin{tabular}{lcc}
+\toprule
+Backbone & Status & EPE reduction \\
+\midrule
+Stereo Anywhere & seen & 8.44\% \\
+CREStereo & unseen & 3.37\% \\
+RAFT-Stereo & seen & 2.87\% \\
+Fast-FoundationStereo & unseen & 2.85\% \\
+S$^2$M$^2$-S & seen & 2.17\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Seen backbones improve by $4.50\%$ on average, while unseen backbones
+improve by $3.11\%$.
+All six unseen-backbone sequence groups improve.
+
+The signal is strongest on Stereo Anywhere, but does not originate from
+that backbone alone.
+
+
+\subsection{Held-Out Cross-Backbone Confirmation}
+
+We next evaluate the already frozen $H=4$ policy on held-out D7.
+
+\begin{table*}[t]
+\centering
+\caption{
+Cross-backbone evaluation on SCARED-C.
+The same frozen STEER checkpoint is used in every row.
+EPE, Bad1, and RMSE use the primary macro-sequence aggregation.
+Lower is better.
+}
+\label{tab:scared_main}
+\scriptsize
+\setlength{\tabcolsep}{3.7pt}
+\begin{tabular}{llccc|ccc}
+\toprule
+& &
+\multicolumn{3}{c|}{D2 development}
+&
+\multicolumn{3}{c}{D7 held out}
+\\
+\cmidrule(lr){3-5}
+\cmidrule(lr){6-8}
+Backbone & Status &
+EPE raw$\rightarrow$STEER &
+Bad1 raw$\rightarrow$STEER &
+RMSE raw$\rightarrow$STEER &
+EPE raw$\rightarrow$STEER &
+Bad1 raw$\rightarrow$STEER &
+RMSE raw$\rightarrow$STEER \\
+\midrule
+S$^2$M$^2$-S
+& seen
+& .2704$\rightarrow$\textbf{.2645}
+& .01394$\rightarrow$\textbf{.01291}
+& .3892$\rightarrow$\textbf{.3806}
+& .5176$\rightarrow$\textbf{.5010}
+& .06440$\rightarrow$\textbf{.06076}
+& 1.4515$\rightarrow$\textbf{1.3991} \\
+RAFT-Stereo
+& seen
+& .2691$\rightarrow$\textbf{.2614}
+& .01603$\rightarrow$\textbf{.01492}
+& .4009$\rightarrow$\textbf{.3896}
+& .4671$\rightarrow$\textbf{.4397}
+& .06085$\rightarrow$\textbf{.05845}
+& 1.3324$\rightarrow$\textbf{1.2290} \\
+Stereo Anywhere
+& seen
+& .3022$\rightarrow$\textbf{.2767}
+& .02183$\rightarrow$\textbf{.01754}
+& .7208$\rightarrow$\textbf{.4785}
+& .4774$\rightarrow$\textbf{.4449}
+& .06227$\rightarrow$\textbf{.05828}
+& 1.2869$\rightarrow$\textbf{1.1895} \\
+CREStereo
+& unseen
+& .2668$\rightarrow$\textbf{.2578}
+& .01568$\rightarrow$\textbf{.01439}
+& .4601$\rightarrow$\textbf{.4299}
+& .5165$\rightarrow$\textbf{.4957}
+& .06354$\rightarrow$\textbf{.06108}
+& 1.3757$\rightarrow$\textbf{1.3120} \\
+Fast-FoundationStereo
+& unseen
+& .2725$\rightarrow$\textbf{.2647}
+& .01604$\rightarrow$\textbf{.01477}
+& .4022$\rightarrow$\textbf{.3905}
+& .4819$\rightarrow$\textbf{.4668}
+& .05919$\rightarrow$\textbf{.05684}
+& 1.3535$\rightarrow$\textbf{1.3076} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+All five backbones improve on D7, including both architectures unseen
+during temporal-head training.
+
+The mean backbone EPE decreases from
+%
+\begin{equation}
+0.4921
+\rightarrow
+0.4696,
+\end{equation}
+%
+or $4.57\%$.
+
+The improvement is not restricted to the mean.
+Bad1 and disparity RMSE decrease for every backbone on both D2 and D7.
+P99 disparity error likewise decreases in all ten backbone--split cases,
+while maximum error decreases in nine of ten.
+The strongest tail reduction occurs for Stereo Anywhere on D2, where
+maximum disparity error decreases from $33.27$ to $14.88$ px.
+InvalidRate remains zero for both raw and refined outputs in all ten
+SCARED-C backbone--split evaluations. This is a property of SCARED-C
+rather than of the module in general: Section~\ref{sec:masking} shows
+that on external domains an unmasked output does introduce invalid
+predictions, which is precisely what the support contract of
+\eqref{eq:fusion} prevents.
+
+Thus the EPE gain is not obtained by trading mean accuracy for a worse
+aggregate bad-pixel rate or a broader SCARED-C error tail.
+This does not imply that no individual new bad pixels are introduced;
+those events are measured explicitly through NewBad and recovered-error
+statistics below.
+
+This supports transfer of one common learned intervention policy across
+heterogeneous stereo estimators within the SCARED-C domain.
+
+The joint unseen-backbone / unseen-domain cell is reported separately in
+Section~\ref{sec:drends}.
+
+
+\subsection{Refinement as an Intervention}
+
+The canonical model does not merely reduce final EPE; its beneficial
+updates consistently outweigh the new threshold crossings that it
+introduces.
+Table~\ref{tab:intervention_quality} summarizes two complementary
+quantities:
+the beneficial-to-harmful error-magnitude ratio $B^+/H^+$ and the ratio
+between recovered and newly introduced Bad1 pixels.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{
+Canonical STEER intervention quality.
+All ratios exceed one; higher is better.
+``Rec./New'' is RecoveredBad1/NewBad1.
+}
+\label{tab:intervention_quality}
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{D2} & \multicolumn{2}{c}{D7} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Backbone & $B^+/H^+$ & Rec./New & $B^+/H^+$ & Rec./New \\
+\midrule
+S$^2$M$^2$-S          & 1.76 & 3.1$\times$  & 2.10 & 6.0$\times$ \\
+RAFT-Stereo           & 2.05 & 2.9$\times$  & 2.85 & 3.2$\times$ \\
+Stereo Anywhere       & 4.59 & 10.4$\times$ & 3.30 & 5.9$\times$ \\
+CREStereo             & 2.23 & 4.3$\times$  & 2.40 & 4.6$\times$ \\
+Fast-FoundationStereo & 2.11 & 4.0$\times$  & 2.10 & 4.8$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Across both splits and all five backbones, STEER recovers between
+$2.9\times$ and $10.4\times$ as many Bad1 pixels as it newly introduces.
+The corresponding identity-preservation score exceeds $99.87\%$ in
+every case.
+This directly supports the refinement-centric interpretation:
+the method changes only a small subset of threshold status while
+recovering substantially more errors than it creates.
+
+
+
+\subsection{Grid-Based Multi-Horizon Temporal Diagnostic}
+
+The definitive SCARED-C artifacts also contain grid-based temporal
+change error at horizons $k\in\{1,2,4,8\}$.
+Because this quantity is evaluated at fixed image-grid locations, it is
+\emph{not} motion compensated and should not be interpreted as temporal
+fidelity under scene or camera motion.
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{
+Relative change in grid-based DTCE MAE after refinement.
+Negative values denote lower grid-based temporal-change error.
+This is a diagnostic, not a motion-compensated fidelity metric.
+}
+\label{tab:dtce_grid}
+\setlength{\tabcolsep}{4.4pt}
+\begin{tabular}{llrrrr}
+\toprule
+Split & Backbone & $k=1$ & $k=2$ & $k=4$ & $k=8$ \\
+\midrule
+D2 & CREStereo              & -2.9\%  & +3.9\%  & +0.7\%  & +2.4\% \\
+D2 & Fast-FoundationStereo  & +2.6\%  & +8.2\%  & +3.0\%  & +4.5\% \\
+D2 & RAFT-Stereo            & -0.4\%  & +6.5\%  & +2.6\%  & +4.3\% \\
+D2 & S$^2$M$^2$-S           & +1.9\%  & +7.4\%  & +2.7\%  & +4.1\% \\
+D2 & Stereo Anywhere        & -31.6\% & -22.1\% & -20.1\% & -14.8\% \\
+\midrule
+D7 & CREStereo              & -15.9\% & -7.2\%  & -4.9\%  & -3.6\% \\
+D7 & Fast-FoundationStereo  & -9.2\%  & -2.6\%  & -2.5\%  & -2.1\% \\
+D7 & RAFT-Stereo            & -18.7\% & -8.9\%  & -5.6\%  & -4.6\% \\
+D7 & S$^2$M$^2$-S           & -11.3\% & -5.7\%  & -4.9\%  & -3.2\% \\
+D7 & Stereo Anywhere        & -26.2\% & -15.9\% & -12.5\% & -8.6\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+On held-out D7, grid-based DTCE decreases for all five backbones at all
+four horizons ($20/20$ backbone--horizon cases).
+On D2 the behavior is mixed: several backbones improve geometrically in
+EPE, Bad1, and RMSE while grid-based DTCE increases at some horizons.
+
+This contrast is useful rather than contradictory.
+It demonstrates directly that improved frame-wise geometry and reduced
+grid-based temporal change are not interchangeable objectives.
+In particular, a motion-uncompensated grid metric can penalize changes
+that reflect legitimate scene or camera motion.
+
+\subsection{External Zero-Shot Geometry on DRENDS}
+\label{sec:drends}
+
+We evaluate the frozen canonical checkpoint on five DRENDS recordings
+with three stereo estimators, two of which were excluded from
+temporal-head training, for a total of $20{,}929$ frames. No component
+is adapted, retrained, or tuned for this domain.
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{
+Zero-shot DRENDS transfer, relative change after refinement
+(negative is better).
+The reference disparity is derived from temporally filtered ToF
+geometry and is metric evidence, not independent stereo ground truth.
+The two rightmost estimators were excluded from temporal-head training,
+so their columns are the joint unseen-backbone / unseen-domain setting.
+}
+\label{tab:drends}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{2}{c}{RAFT-Stereo (seen)}
+& \multicolumn{2}{c}{CREStereo (unseen)}
+& \multicolumn{2}{c}{Fast-FoundationStereo (unseen)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Recording & EPE & Bad3 & EPE & Bad3 & EPE & Bad3 \\
+\midrule
+Vid10\_Liver\_Med        & -5.7\% & -11.3\% & -5.2\% & -8.7\%  & -5.0\% & -7.3\% \\
+Vid11\_Liver\_High       & -3.4\% & -21.9\% & -3.7\% & -22.8\% & -3.2\% & -20.4\% \\
+Vid12\_Pancreas\_Ext     & -8.4\% & -22.7\% & -6.3\% & -18.5\% & -5.3\% & -10.3\% \\
+Vid13\_Pancreas\_Med     & -4.3\% & -14.2\% & -5.2\% & -10.4\% & -4.3\% & -10.9\% \\
+Vid14\_Pancreas\_High    & -4.7\% & -27.1\% & -5.6\% & -26.5\% & -4.7\% & -27.4\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Across the 15 recording--backbone combinations, disparity EPE, Bad3,
+metric depth MAE and metric depth RMSE all improve in \emph{every} cell
+($60/60$), with mean changes of $-5.00\%$, $-17.35\%$, $-3.68\%$ and
+$-3.21\%$ respectively.
+
+Two observations matter more than the aggregate.
+First, the per-recording pattern is set by the \emph{recording} and not
+by the estimator: on Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and
+$-5.0\%$ for the seen and the two unseen backbones respectively, and the
+same alignment holds on every other recording. The residual variance is
+therefore a property of the data, which is stronger evidence for
+backbone independence than any pooled mean.
+Second, both unseen estimators improve on all five recordings, so the
+joint unseen-backbone / unseen-domain cell is positive rather than
+merely unevaluated.
+
+The transfer matrix is consequently complete:
+seen-backbone / seen-domain and unseen-backbone / seen-domain on
+SCARED-C (Table~\ref{tab:scared_main}), and seen-backbone / OOD-domain
+and unseen-backbone / OOD-domain on DRENDS
+(Table~\ref{tab:drends}).
+This establishes zero-shot geometric transfer in disparity space under
+a ToF-derived metric reference; it does not establish universal
+cross-domain robustness, and DRENDS remains a non-independent reference.
+
+
+\subsection{The Support Contract Is Load-Bearing}
+\label{sec:masking}
+
+The results above use the support-confined output of
+\eqref{eq:fusion}. Because the ablation is a single line, it isolates
+the contract cleanly: the checkpoint, the head, the evidence, the
+policy and the reset schedule are identical, and only the masking of
+the output differs.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{
+Effect of applying the support mask of \eqref{eq:support} to the module
+output, over five DRENDS recordings and three backbones.
+``Regresses'' counts recording--backbone cells that get worse.
+}
+\label{tab:masking}
+\begin{tabular}{lrr}
+\toprule
+Quantity & Unmasked output & Support-confined \\
+\midrule
+Invalid refined pixels & up to $1.3\times10^{-5}$ & \textbf{0} \\
+Depth RMSE & regresses $14/14$, $+110.4\%$ & \textbf{improves $15/15$, $-3.2\%$} \\
+Depth MAE  & regresses $10/14$, $+4.2\%$   & \textbf{improves $15/15$, $-3.7\%$} \\
+Disparity EPE  & $-4.30\%$  & \textbf{$-5.00\%$} \\
+Disparity Bad3 & $-14.06\%$ & \textbf{$-17.35\%$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Without the mask, the causal pull-warp's zero padding lets an
+out-of-bounds sample enter the convex blend as $\widetilde m_t=0$, the
+fused disparity collapses to zero at those pixels, and the bounded
+recurrence propagates the collapse until the next raw re-anchor. The
+offending pixels are rare and bursty --- $300$ of $38{,}828{,}160$ on
+Vid10\_Liver\_Med and $265$ of $38{,}439{,}360$ on Vid11\_Liver\_High,
+concentrated in runs of at most $H$ consecutive frames --- and the
+aligned memory of every one of them is exactly $0.0$. Bounded
+recurrence therefore contains the damage by construction but does not
+prevent its injection.
+
+Because an invalid prediction on valid support is penalized rather than
+discarded, this rare event dominates the metric-depth tail: it is the
+entire source of the depth-RMSE reversal previously attributed to the
+external domain. Confining the output removes it, and improves
+disparity as well, since the zero no longer enters memory.
+
+On SCARED-C the same ablation is almost inert: D2 pooled EPE gain is
+unchanged at $4.05\%$, while D7 falls slightly from $4.64\%$ to
+$4.57\%$, with the largest single change on RAFT-Stereo
+($6.10\%\rightarrow5.87\%$). The support contract is therefore not free
+in-domain; it costs a small amount of in-domain gain and buys
+well-posed behaviour out of domain. We report the confined variant
+because a module that declares a support must respect it.
+
+
+\subsection{No-Reference Temporal Behaviour on D4D}
+
+Because the current D4D metric-geometry contract remains unresolved,
+we report only prediction-space temporal inconsistency.
+
+\begin{table}[t]
+\centering
+\caption{
+D4D motion-compensated prediction inconsistency.
+This is not a geometry metric.
+}
+\label{tab:d4d}
+\begin{tabular}{lrrr}
+\toprule
+Backbone & Raw & STEER & Reduction \\
+\midrule
+RAFT-Stereo
+& .5094 & \textbf{.2450} & 51.9\% \\
+Stereo Anywhere
+& 6.9271 & \textbf{3.1516} & 54.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Prediction inconsistency decreases substantially.
+However, a degenerate smoother can also obtain low temporal
+inconsistency while preserving stale geometry.
+We therefore make no D4D geometric claim.
+
+
+\subsection{Larger Training Does Not Improve the Operating Point}
+
+A larger augmented-training run retains the same architecture.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{
+Held-out D7 canonical versus augmented training.
+}
+\label{tab:augmented}
+% NOTE: Degraded-frame fraction must come from PositiveFraction.
+% Do not substitute CatastrophicFraction until the metric wiring audit
+% is complete.
+\begin{tabular}{lrr}
+\toprule
+Metric & Canonical & Augmented \\
+\midrule
+Mean EPE & \textbf{.4693} & .4706 \\
+$\HUR$ & \textbf{.3965} & .4457 \\
+$\HPlus$ & \textbf{.0148} & .0235 \\
+$\BPlus$ & .0376 & \textbf{.0450} \\
+$\BUR$ & .4951 & \textbf{.5060} \\
+Degraded-frame fraction & \textbf{.2642} & .3341 \\
+Worst frame degradation & \textbf{.1063} & .3958 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The augmented model performs more beneficial updates, but also
+substantially more harmful ones.
+It improves raw stereo, yet does not outperform the canonical operating
+point overall.
+
+This suggests that increasing training scale can shift intervention
+aggressiveness without improving held-out risk--gain balance.
+
+
+\subsection{External Temporal Stabilizer Context}
+
+BiDAStabilizer is the closest plug-in stereo stabilizer in our current
+comparison set \cite{jing2024bida}.
+Unlike STEER, its full sequence formulation is non-causal because it
+uses future-frame/bidirectional temporal propagation.
+
+On the full SCARED-C D2 sequence set, our independent reproduction
+changes pixel-weighted EPE from
+%
+\begin{equation}
+0.302862
+\rightarrow
+0.302109.
+\end{equation}
+
+Because the BiDA and STEER evaluation paths currently use
+independently validated but not pixel-identical support contracts, we
+do not directly subtract their absolute values.
+
+\TODO{
+SUBMISSION-CRITICAL COMPARISON:
+generate a pixel-identical/common-support RAFT-Stereo table for
+Raw vs BiDAStabilizer vs STEER, including EPE, Bad1/Bad3, HUR,
+HPlus, BPlus, NewBad, temporal fidelity, and worst-frame degradation.
+Keep the causal/non-causal distinction explicit.
+Until this table exists, the independent BiDA number above is context
+only and must not be used for a direct superiority claim.
+}
+
+NVDS is used only as a relative-depth temporal-stability reference
+\cite{wang2023nvds}.
+
+
+% ============================================================
+% VI. ANALYSIS
+% ============================================================
+
+\section{Analysis}
+\label{sec:analysis}
+
+
+\subsection{What Actually Makes STEER Work?}
+
+The controlled closure supports a specific interpretation.
+
+First, geometric alignment is necessary but not sufficient.
+Aligned temporal memory contains useful information, as shown by the
+$12.30\%$ oracle ceiling.
+
+Second, using this memory indiscriminately fails.
+Warped raw memory produces no meaningful gain; direct FB-confidence
+weighting and full recurrent replacement worsen EPE.
+
+Third, the learned decision policy matters.
+Under identical temporal evidence and support, canonical STEER obtains
+almost seven times the gain of the best fixed blend.
+
+Fourth, recurrent state must remain bounded.
+Continuous corrected-state recurrence accumulates error and eventually
+collapses.
+
+The empirical mechanism is therefore:
+
+\begin{equation}
+\boxed{
+\begin{gathered}
+\text{motion alignment}
++
+\text{learned graded intervention}
+\\[-0.5mm]
++
+\text{bounded recurrent state}
+\end{gathered}
+}
+\end{equation}
+
+rather than generic temporal smoothing.
+
+
+\subsection{Why Can a 177k-Parameter Head Generalize?}
+
+The temporal head does not solve stereo matching.
+
+It receives two already meaningful geometric candidates:
+%
+\begin{equation}
+d_t^{\raw}
+\qquad\text{and}\qquad
+\widetilde m_t,
+\end{equation}
+%
+along with evidence describing their disagreement, motion reliability,
+validity, matching consistency, and appearance.
+
+The learning problem is therefore closer to
+%
+\begin{equation}
+P
+\left(
+\text{temporal evidence is useful}
+\mid
+\text{external reliability cues}
+\right)
+\end{equation}
+%
+than to predicting disparity from RGB.
+
+Convex fusion additionally restricts the action space.
+The model must decide how strongly to move between two candidate
+geometries rather than synthesize arbitrary depth.
+
+This constrained decision problem provides a plausible explanation for
+why one small head transfers to stereo architectures that were not used
+during temporal-head training.
+
+
+\subsection{Oracle Gap as the Next Problem}
+
+STEER $H=4$ captures only $32.9\%$ of the raw-versus-memory oracle gain.
+
+Thus the principal remaining opportunity is not necessarily richer
+temporal memory.
+Useful evidence already exists.
+
+The open problem is better discrimination between helpful and harmful
+temporal intervention.
+
+This observation motivates future selective/risk-aware formulations
+that use the internal reset/fusion signal to estimate intervention
+reliability.
+
+
+\subsection{Relationship to Uncertainty}
+
+STEER does not currently produce a calibrated predictive uncertainty.
+
+However, several inputs and internal outputs are reliability-related:
+forward--backward consistency, warp validity, raw--memory disagreement,
+matching evidence, and the learned effective temporal weight
+%
+\begin{equation}
+w_t=r_tf_t.
+\end{equation}
+
+The D2 closure shows that these cues are more useful jointly than when
+FB confidence is used directly as a heuristic weight.
+
+We ran this analysis. On the prediction-independent protocol support we
+recover the effective weight exactly from the convex form,
+$w_t=(d_t^{\fused}-d_t^{\raw})/(\widetilde m_t-d_t^{\raw})$, and score it
+as a predictor of harmful intervention $\delta e>0$.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{
+$w_t$ and the two other freely available cues as risk scores for
+harmful intervention. AUROC of $0.5$ is chance.
+}
+\label{tab:risk}
+\begin{tabular}{lcc}
+\toprule
+Score & AUROC on D2 & AUROC on D7 \\
+\midrule
+Effective weight $w_t$                      & $0.366$--$0.382$ & $0.496$--$0.506$ \\
+Disagreement $|\widetilde m_t-d_t^{\raw}|$  & $0.499$--$0.509$ & $0.450$--$0.459$ \\
+Update $|d_t^{\fused}-d_t^{\raw}|$          & $0.392$--$0.406$ & $0.474$--$0.489$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On held-out D7, $w_t$ is at chance. The reliability diagram explains
+why: for RAFT-Stereo the harm rate \emph{falls} with $w_t$ on D2
+($0.550\rightarrow0.324$) but \emph{rises} on D7
+($0.260\rightarrow0.450$). The ordering inverts between development and
+held-out data, so $w_t$ is not a weak risk score but a
+\emph{sign-unstable} one, and it does not transfer. Risk--coverage
+confirms this: selecting by $w_t$ captures only $3.5\%$ (D2) and $6.1\%$
+(D7) of the achievable oracle selective gain.
+
+$w_t$ is therefore an intervention magnitude and not a calibrated
+uncertainty score, and closing the oracle gap will require evidence the
+head does not currently receive rather than a better read-out of what
+it already computes.
+
+
+\subsection{Evaluation Matters}
+
+The proposed evaluation framework exposes several behaviours that mean
+EPE alone would hide.
+
+On DRENDS, mean and percentile geometry improve while RMSE worsens.
+
+The augmented model increases both beneficial and harmful intervention.
+
+Longer horizons slightly improve mean D2 EPE while degrading
+$B^+/H^+$, NewBad1, and frame tails.
+
+These examples motivate evaluating temporal refinement as an
+\emph{intervention} rather than only as a final disparity estimator.
+
+
+One reported quantity required an audit. FrameDegradation's
+CatastrophicFraction was numerically identical to PositiveFraction on
+every inspected row. The cause is definitional rather than a wiring
+fault: the two are $\Pr(D_t>\tau_{\mathrm{cat}})$ and $\Pr(D_t>0)$, and
+the catastrophic threshold defaults to $\tau_{\mathrm{cat}}=0$, which
+the evaluators never override. At that setting the two statistics
+coincide by construction. We therefore report only the degraded-frame
+fraction, explicitly defined as $\Pr(D_t>0)$, and omit
+CatastrophicFraction rather than present a duplicate column under a
+name that implies a severity threshold it does not carry.
+
+
+% ============================================================
+% VII. DISCUSSION AND LIMITATIONS
+% ============================================================
+
+\section{Discussion and Limitations}
+
+\paragraph{Development versus confirmation.}
+
+The matched baseline and horizon closure is performed on D2 development
+data.
+It supports mechanism analysis and the pre-frozen $H=4$ operating
+policy, but does not itself constitute held-out confirmation.
+
+The canonical $H=4$ checkpoint is separately evaluated on D7 without
+changing the policy.
+
+
+\paragraph{Cross-backbone transfer.}
+
+STEER improves five SCARED-C stereo estimators, including two excluded
+from temporal-head training.
+This supports same-domain unseen-backbone transfer.
+
+It does not establish universal backbone agnosticism.
+
+
+\paragraph{Joint unseen-backbone and OOD transfer.}
+
+All four cells of the transfer matrix are now populated:
+seen-backbone / seen-domain and unseen-backbone / seen-domain on
+SCARED-C, and seen-backbone / OOD-domain and unseen-backbone /
+OOD-domain on DRENDS (Section~\ref{sec:drends}).
+
+Two caveats bound this. The DRENDS reference is temporally filtered ToF
+geometry rendered through stereo calibration, so it is metric evidence
+rather than independent stereo ground truth; and a single external
+domain does not establish universal cross-domain robustness. What the
+matrix supports is that the two shifts compose without the intervention
+policy degrading, not that the policy is domain-agnostic.
+
+
+\paragraph{Internal disocclusion.}
+
+Pull-warp support detects out-of-frame sampling but cannot fully model
+internal disocclusion.
+Newly visible anatomy may inherit stale temporal geometry despite
+plausible motion consistency.
+
+This is a plausible source of residual tail failures.
+
+
+\paragraph{No-reference temporal metrics.}
+
+Prediction smoothness can be gamed by copying or strongly smoothing
+historical geometry.
+No-reference temporal scores are therefore diagnostics rather than
+evidence of geometric correctness.
+
+\TODO{
+SUBMISSION-CRITICAL D4D CONTROL:
+add copy-previous and warped-previous degenerate temporal baselines.
+Without them, no-reference consistency remains diagnostic only.
+}
+
+
+\paragraph{Statistical uncertainty.}
+
+The definitive held-out table currently reports the canonical seed-0
+checkpoint.
+Additional canonical seeds and sequence-aware confidence intervals are
+required for final statistical uncertainty.
+
+\TODO{
+SUBMISSION-CRITICAL STATISTICS:
+train canonical seeds 1 and 2 with the identical frozen recipe and
+checkpoint-selection rule.
+Report mean$\pm$std and paired sequence-aware bootstrap confidence
+intervals; do not use pixel-wise independence assumptions.
+}
+
+
+\paragraph{Runtime.}
+
+The learned head is compact, but the end-to-end system includes frozen
+stereo plus forward and reverse SEA-RAFT.
+On an NVIDIA H100 PCIe at the $144\times180$ evidence grid, over 200
+timed iterations after 30 warmup iterations, the median per-frame cost
+is $13.22$\,ms for SEA-RAFT forward, $13.19$\,ms for SEA-RAFT reverse,
+$1.04$\,ms for the alignment, $5.12$\,ms for the 142-channel evidence
+including the frozen ResNet-18 features, and $1.03$\,ms for the fusion
+head, giving a total temporal overhead of $33.60$\,ms at $124.2$\,MB
+peak VRAM.
+
+Added to the frozen stereo latency this yields $11.0$\,FPS with
+Fast-FoundationStereo down to $1.4$\,FPS with Stereo Anywhere, so
+\emph{we make no real-time claim}.
+Two points follow. The $177$k-parameter head accounts for $3\%$ of the
+overhead, so ``compact head'' is true but not the operative cost;
+$79\%$ is the two frozen flow passes. And the reverse pass costs
+$13.19$\,ms while feeding only the forward--backward confidence cue,
+whose direct use as a fusion weight \emph{worsens} EPE by $2.17\%$
+(Table~\ref{tab:closure}); removing it would cut the temporal overhead
+by $39\%$ and is the most promising efficiency ablation.
+
+
+\paragraph{Downstream robotic relevance.}
+
+Current experiments evaluate perception geometry and temporal behaviour,
+not downstream robotic control.
+A 3D surface-stability or reconstruction-consistency experiment would
+more directly connect temporal refinement to robotic perception.
+
+\TODO{
+OPTIONAL HIGH-VALUE ROBOTICS RESULT:
+add a compact 3D surface/point-cloud temporal-stability or reconstruction
+consistency experiment if time permits.
+}
+
+
+\paragraph{Clinical interpretation.}
+
+The experiments do not demonstrate clinical safety, autonomous surgical
+performance, or patient benefit.
+
+
+% ============================================================
+% VIII. CONCLUSION
+% ============================================================
+
+\section{Conclusion}
+
+We introduced \steer, a causal plug-and-play temporal refiner for frozen
+surgical stereo.
+
+STEER does not relearn stereo.
+It aligns historical geometry using frozen motion estimation and learns
+a compact intervention policy over a common external evidence space.
+
+A controlled development closure shows that its gain cannot be explained
+by simple temporal averaging:
+canonical $H=4$ reduces EPE by $4.05\%$, almost seven times the gain of
+the strongest matched fixed/EMA baseline.
+Direct flow-confidence weighting and indiscriminate memory propagation
+instead degrade performance.
+The raw-versus-memory oracle exposes a $12.30\%$ improvement ceiling,
+showing that useful temporal information remains substantially
+underexploited.
+
+Bounded recurrence is equally important:
+continuous corrected-state propagation increases EPE by $62.69\%$.
+The canonical $H=4$ policy sacrifices only $0.000372$ px relative to
+the minimum-EPE $H=6$ development setting while achieving better
+risk--gain and frame-tail behaviour.
+
+The frozen $H=4$ checkpoint subsequently improves all five evaluated
+stereo estimators on held-out SCARED-C D7, including two unseen during
+temporal-head training.
+Across D2 and D7, EPE, Bad1, and disparity RMSE improve for every
+backbone; recovered Bad1 pixels outnumber newly introduced Bad1 pixels
+by $2.9\times$--$10.4\times$.
+Grid-based temporal diagnostics further show why geometry and temporal
+change must be reported separately: D7 improves at all $20/20$
+backbone--horizon combinations, while D2 remains mixed despite consistent
+geometric gains.
+Preliminary zero-shot DRENDS evaluation further shows OOD-domain
+geometric transfer with a training-seen backbone, although a
+domain-specific depth-RMSE tail remains.
+
+Finally, the unified temporal-refinement evaluation framework makes
+explicit that a useful temporal system must be judged not only by final
+accuracy, but also by how much it helps, what it damages, how its errors
+evolve over time, and whether rare failures become worse.
+
+The resulting picture is simple:
+STEER works not through brute-force model scale, but through
+\emph{geometric alignment, learned selective intervention, and bounded
+temporal memory}.
+
+
+% ============================================================
+% REFERENCES
+% ============================================================
+
+\balance
+
+\begin{thebibliography}{99}
+
+\bibitem{li2023codd}
+Z.~Li, W.~Ye, D.~Wang, F.~X. Creighton, R.~H. Taylor,
+G.~Venkatesh, and M.~Unberath,
+``Temporally consistent online depth estimation in dynamic scenes,''
+in \emph{Proc. IEEE/CVF Winter Conf. Applications of Computer Vision
+(WACV)}, 2023, pp.~3018--3027.
+
+\bibitem{karaev2023dynamicstereo}
+N.~Karaev, I.~Rocco, B.~A.~T. Graham, N.~Neverova, A.~Vedaldi,
+and C.~Rupprecht,
+``DynamicStereo: Consistent dynamic depth from stereo videos,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2023, pp.~13229--13239.
+
+\bibitem{jing2024bida}
+J.~Jing, Y.~Mao, A.~Qiu, and K.~Mikolajczyk,
+``Match Stereo Videos via Bidirectional Alignment,''
+in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
+
+\bibitem{wang2025ppm}
+Y.~Wang, J.~Hu, Q.~Dong, Y.~Zhang, Y.~Fu, T.~L.~Lam, and D.~Wu,
+``PPMStereo: Pick-and-play memory construction for consistent dynamic
+stereo matching,''
+in \emph{Advances in Neural Information Processing Systems},
+2025.
+
+\bibitem{wang2024searaft}
+Y.~Wang, L.~Lipson, and J.~Deng,
+``SEA-RAFT: Simple, efficient, accurate RAFT for optical flow,''
+in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
+
+\bibitem{he2016resnet}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun,
+``Deep residual learning for image recognition,''
+in \emph{Proc. IEEE Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2016, pp.~770--778.
+
+\bibitem{lipson2021raftstereo}
+L.~Lipson, Z.~Teed, and J.~Deng,
+``RAFT-Stereo: Multilevel recurrent field transforms for stereo
+matching,''
+in \emph{Proc. Int. Conf. 3D Vision (3DV)}, 2021, pp.~218--227.
+
+\bibitem{li2022crestereo}
+J.~Li, P.~Wang, P.~Xiong, T.~Cai, Z.~Yan, L.~Yang,
+J.~Liu, H.~Fan, and S.~Liu,
+``Practical stereo matching via cascaded recurrent network with
+adaptive correlation,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2022, pp.~16263--16272.
+
+\bibitem{bartolomei2025stereoanywhere}
+L.~Bartolomei, F.~Tosi, M.~Poggi, and S.~Mattoccia,
+``Stereo Anywhere: Robust zero-shot deep stereo matching even where
+either stereo or mono fail,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2025.
+
+\bibitem{min2025s2m2}
+J.~Min, Y.~Jeon, J.~Kim, and M.~Choi,
+``S$^2$M$^2$: Scalable stereo matching model for reliable depth
+estimation,''
+in \emph{Proc. IEEE/CVF Int. Conf. Computer Vision (ICCV)}, 2025.
+
+\bibitem{wen2025foundationstereo}
+B.~Wen, M.~Trepte, J.~Aribido, J.~Kautz, O.~Gallo,
+and S.~Birchfield,
+``FoundationStereo: Zero-shot stereo matching,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2025.
+
+\bibitem{wen2026fastfoundationstereo}
+B.~Wen, S.~Dewan, and S.~Birchfield,
+``Fast-FoundationStereo: Real-time zero-shot stereo matching,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2026.
+
+\bibitem{wang2023nvds}
+Y.~Wang, M.~Shi, J.~Li, C.~Hong, Z.~Huang, J.~Peng,
+Z.~Cao, J.~Zhang, K.~Xian, and G.~Lin,
+``NVDS+: Towards efficient and versatile neural stabilizer for video
+depth estimation,''
+2023, arXiv:2307.08695.
+
+\bibitem{geifman2019selectivenet}
+Y.~Geifman and R.~El-Yaniv,
+``SelectiveNet: A deep neural network with an integrated reject
+option,''
+in \emph{Proc. International Conference on Machine Learning (ICML)},
+2019.
+
+\bibitem{allan2021scared}
+M.~Allan, J.~McLeod, C.~Wang, J.-C.~Rosenthal, Z.~Hu,
+N.~Gard, P.~Eisert, K.~X.~Fu, T.~Zeffiro, W.~Xia,
+Z.~Zhu, H.~Luo, F.~Jia, X.~Zhang, X.~Li, L.~Sharan,
+T.~Kurmann, S.~Schmid, R.~Sznitman, D.~Psychogyios,
+M.~Azizian, D.~Stoyanov, L.~Maier-Hein, and S.~Speidel,
+``Stereo correspondence and reconstruction of endoscopic data
+challenge,''
+2021, arXiv:2101.01133.
+
+\bibitem{edwards2022servct}
+P.~J. Edwards, D.~Psychogyios, S.~Speidel, L.~Maier-Hein,
+and D.~Stoyanov,
+``SERV-CT: A disparity dataset from cone-beam CT for validation of
+endoscopic 3D reconstruction,''
+\emph{Medical Image Analysis},
+vol.~76, p.~102302, 2022.
+
+\bibitem{long2021edssr}
+Y.~Long, Z.~Li, C.~H.~Yee, C.~F.~Ng, R.~H.~Taylor,
+M.~Unberath, and Q.~Dou,
+``E-DSSR: Efficient dynamic surgical scene reconstruction with
+transformer-based stereoscopic depth perception,''
+2021, arXiv:2107.00229.
+
+\bibitem{docea2026d4d}
+R.~Docea, R.~Younis, Y.~Long, M.~Fleury, J.~Xu, C.~Li,
+A.~Schulze, A.~Wierick, J.~Bender, M.~Pfeiffer, Q.~Dou,
+M.~Wagner, and S.~Speidel,
+``The Dresden Dataset for 4D reconstruction of non-rigid abdominal
+surgical scenes,''
+2026, arXiv:2603.02985.
+
+\bibitem{loza2025drends}
+G.~Loza, M.~Magro, and B.~Calm\'e,
+``DRENDS: A dataset for depth in robotic endoscopy with dynamic
+scenarios,''
+Zenodo Dataset, 2025,
+doi: 10.5281/zenodo.17598453.
+
+\end{thebibliography}
+
+\end{document}

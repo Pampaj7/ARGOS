@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-08-15T21:30:00+02:00",
+  "objective": "Quantify seed variance of the canonical H4 operating point. The held-out D7 table currently reports seed 0 only; per-backbone gains of 2-3% on a single seed cannot support a submission claim.",
+  "deviation_from_locked_recipe": {
+    "field": "seed",
+    "locked_value": 0,
+    "new_values": [1, 2],
+    "everything_else": "unchanged",
+    "rationale": "A seed is the only degree of freedom that must vary to estimate run-to-run variance. Changing anything else would make the runs non-comparable to the canonical checkpoint."
+  },
+  "unchanged_and_verified_at_launch": {
+    "train_dataset_ids": [1, 3, 6],
+    "validation_dataset_ids": [2],
+    "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "clip_length": 4,
+    "memory_state": "recurrent",
+    "epochs": 12,
+    "batch_size": 4,
+    "learning_rate": 0.0002,
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "scheduler": null,
+    "gradient_clip_norm": 1.0,
+    "mixed_precision_cuda": true,
+    "coverage_threshold": 0.5,
+    "tau_reset_native_px": 5.0,
+    "tau_fusion_native_px": 1.0,
+    "alpha_reg": 0.2,
+    "learned_stereo_evidence": true,
+    "checkpoint_selection_rule": "best development (D2) fused EPE, identical to seed 0"
+  },
+  "protocol": {
+    "implementation": "model_design/train_seed.py, a sibling of train.py that reuses its metadata(), verify_sources(), validate_output() and config() unchanged and overrides only the seed field",
+    "train_py_modified": false,
+    "train_py_sha256_must_be_unchanged": true,
+    "output_directories": [
+      "model_design/training_runs/canonical_h4_seed_1",
+      "model_design/training_runs/canonical_h4_seed_2"
+    ],
+    "evaluation": "each resulting checkpoint is evaluated with the frozen support-masked module on SCARED-C D2 and D7 using the unmodified definitive protocol; no threshold, policy or selection rule is re-tuned",
+    "reporting_rule": "report mean and standard deviation across seeds 0, 1, 2 plus paired sequence-aware bootstrap confidence intervals; sequences are the resampling unit, never pixels"
+  },
+  "declared_before_seeing_results": {
+    "primary_endpoint": "held-out D7 macro-sequence EPE gain versus raw, per backbone and pooled",
+    "secondary_endpoints": ["Bad1", "Bad3", "disparity RMSE", "B+/H+", "NewBad1"],
+    "success_criterion": "none - this is a variance estimate, not a selection experiment. No seed will be chosen or discarded on the basis of its result, and the canonical seed-0 checkpoint remains the reported model.",
+    "failure_disclosure": "if seed variance is large enough to overlap zero gain on any backbone, that is reported as such and the corresponding claim is weakened"
+  },
+  "prohibited": [
+    "selecting the best seed",
+    "re-tuning any threshold after seeing the seed results",
+    "changing the checkpoint-selection rule",
+    "using D7 for any decision other than the final reported numbers"
+  ]
+}
