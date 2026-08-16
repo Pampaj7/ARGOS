@@ -302,7 +302,7 @@ development and held-out data.
 
 \paragraph{Deep stereo matching.}
 Stereo has moved from cost-volume regression to iterative recurrent
-estimation \cite{lipson2021raftstereo,xu2023igev,li2022crestereo} and
+estimation \cite{lipson2021raftstereo,li2022crestereo} and
 broad-domain zero-shot models \cite{bartolomei2025stereoanywhere,%
 min2025s2m2,wen2025foundationstereo,wen2026fastfoundationstereo}. Our work
 is orthogonal: we neither modify the estimator nor assume an
@@ -342,7 +342,7 @@ mean error can hide newly created failures. Recovered and introduced
 error must therefore both be measured, which connects to selective
 prediction \cite{geifman2019selectivenet} and to the uncertainty
 literature asking when a prediction should be trusted
-\cite{kendall2017uncertainties,poggi2020uncertainty}. Our contribution
+\cite{poggi2020uncertainty}. Our contribution
 is not a new metric but a common protocol under fixed,
 prediction-independent support.
 
@@ -1102,31 +1102,38 @@ no D4D geometric claim.
 
 \section{Analysis}
 
-The closure isolates four requirements. Geometric alignment is necessary
-but not sufficient: the aligned memory carries a $12.30\%$ oracle ceiling,
-yet using it indiscriminately fails --- warped raw memory yields no
-meaningful gain, and both direct FB-confidence weighting and full
-recurrent replacement worsen EPE. Under identical evidence and support the
-learned policy obtains almost seven times the gain of the best fixed
-blend, and the state must stay bounded because continuous propagation
-collapses. The mechanism is alignment plus learned graded intervention
-plus bounded recurrence, not smoothing. The parameter count follows: the
-head never solves stereo matching, receiving two already meaningful
-candidates and evidence about their disagreement, with convex fusion
-restricting it to a position between them. Two limits are worth stating.
-TETHER
-captures $32.9\%$ of the raw-versus-memory oracle gain and $30.1\%$ of the
-continuous oracle its action space could reach, so the open problem is
-deciding \emph{where} to intervene, not obtaining temporal evidence. And
-the effective fusion weight $w_t$, recovered exactly from the convex form,
-scores AUROC $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7
-as a predictor of harmful intervention: it is an intervention magnitude,
-not an uncertainty. This does not contradict the
-intervention ratios above, since the aggregate gain factorises
-exactly into a count and a magnitude term ($B^+/H^+=2.839=1.642\times1.728$
-on D7), neither of which requires $w_t$ to rank anything: the policy is
-reliably good on average and uninformative per pixel, which makes the
-oracle gap a ranking problem rather than a thresholding one.
+The closure isolates four requirements. Alignment is necessary but not
+sufficient: the aligned memory carries a $12.30\%$ oracle ceiling, yet
+using it indiscriminately fails --- warped raw memory yields no gain, and
+both FB-confidence weighting and full recurrent replacement worsen EPE.
+Under identical evidence and support the learned policy obtains almost
+seven times the gain of the best fixed blend, and the state must stay
+bounded because continuous propagation collapses. The mechanism is
+alignment plus learned graded intervention plus bounded recurrence, not
+smoothing. The parameter count follows: the head never solves stereo matching, it
+receives two already meaningful candidates and chooses between them.
+
+A pre-registered ablation of that constraint --- $49$ parameters letting
+the output leave the interval --- beats canonical on held-out Bad1
+($6.02\%$ against $4.78\%$), Bad3, RMSE and worst case, while mean EPE
+gain collapses from $4.57\%$ to $0.05\%$ and turns negative on three of
+five backbones. Improving RMSE rules out occasional large failure: it is
+broad degradation of pixels already close. The constraint buys mean
+accuracy, not safety from large corrections, and we withdraw the
+attribution of transfer to it.
+
+Two limits are worth stating.
+TETHER captures $32.9\%$ of the raw-versus-memory oracle gain and
+$30.1\%$ of the continuous oracle its action space could reach, so the
+open problem is deciding \emph{where} to intervene. And the effective
+weight $w_t$, recovered from the convex form, scores AUROC
+$0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7 as a predictor
+of harmful intervention: an intervention magnitude, not an uncertainty.
+That does not contradict the intervention ratios above, because the gain
+factorises exactly into a count and a magnitude term
+($B^+/H^+=2.839=1.642\times1.728$ on D7), neither needing $w_t$ to rank
+anything. The policy is reliably good on average and uninformative per
+pixel, which makes the oracle gap a ranking problem.
 
 
 % ============================================================
@@ -1139,31 +1146,29 @@ oracle gap a ranking problem rather than a thresholding one.
 The matched-baseline and horizon closure is development work on D2: it
 supports mechanism analysis and the pre-frozen $H=4$ operating point, not
 confirmation. The frozen checkpoint is evaluated on D7 without changing
-the policy. Transfer is demonstrated along the backbone axis, the domain
-axis and their combination, but a single external domain does not
-establish universal cross-domain robustness, and DRENDS supplies a
-temporally filtered ToF reference rather than independent stereo ground
-truth. Per-backbone D7 margins come from one canonical seed and the three-seed
-study bounds only the pooled effect, so individual backbone rows are not
-separated from one another.
+the policy. Transfer is demonstrated along both axes and their combination, but one
+external domain does not establish universal robustness, and DRENDS
+supplies a temporally filtered ToF reference rather than independent
+stereo ground truth. Per-backbone D7 margins come from one seed and the
+three-seed study bounds only the pooled effect, so individual rows are
+not separated from one another.
 
 \paragraph{What the metrics cannot say.}
 No-reference temporal consistency is gameable --- replaying warped
 history scores exactly zero --- so we make no D4D geometric claim.
-Pull-warp support detects out-of-frame sampling but cannot model internal
+Pull-warp support detects out-of-frame sampling but not internal
 disocclusion, so newly visible anatomy may inherit stale geometry despite
-plausible motion consistency; this remains a plausible source of residual
-tails.
+plausible motion consistency.
 
 \paragraph{Cost and scope.}
 The head is compact but the deployed system also runs frozen stereo and
-two SEA-RAFT passes: $33.60$\,ms of temporal overhead at $124.2$\,MB peak
-VRAM on an H100. The frozen estimator dominates that budget by up to an
-order of magnitude, so end-to-end rate is set by the backbone, from
-$11.0$\,FPS on Fast-FoundationStereo (overhead $36.9\%$ of the total) to
-$1.4$\,FPS on StereoAnywhere (overhead $4.6\%$). \emph{No real-time claim
-is made.} The experiments evaluate perception geometry, not downstream
-control, and demonstrate neither clinical safety nor patient benefit.
+two SEA-RAFT passes: $33.60$\,ms overhead at $124.2$\,MB peak VRAM on an
+H100. The frozen estimator dominates that budget by up to an order of
+magnitude, so the end-to-end rate is set by the backbone, from $11.0$\,FPS
+on Fast-FoundationStereo (overhead $36.9\%$) to $1.4$\,FPS on
+StereoAnywhere ($4.6\%$). \emph{No real-time claim is made.} We evaluate
+perception geometry, not downstream control, and demonstrate neither
+clinical safety nor patient benefit.
 
 
 \section{Conclusion}
@@ -1347,12 +1352,6 @@ scenarios,''
 Zenodo Dataset, 2025,
 doi: 10.5281/zenodo.17598453.
 
-\bibitem{xu2023igev}
-G.~Xu, X.~Wang, X.~Ding, and X.~Yang,
-``Iterative geometry encoding volume for stereo matching,''
-in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2023.
-
 \bibitem{teed2020raft}
 Z.~Teed and J.~Deng,
 ``RAFT: Recurrent all-pairs field transforms for optical flow,''
@@ -1375,12 +1374,6 @@ M.~Poggi, A.~Tonioni, F.~Tosi, S.~Mattoccia, and L.~Di~Stefano,
 ``Continual adaptation for deep stereo,''
 \emph{IEEE Trans. Pattern Analysis and Machine Intelligence},
 vol.~44, no.~9, 2022.
-
-\bibitem{kendall2017uncertainties}
-A.~Kendall and Y.~Gal,
-``What uncertainties do we need in Bayesian deep learning for computer
-vision?,''
-in \emph{Advances in Neural Information Processing Systems}, 2017.
 
 \bibitem{poggi2020uncertainty}
 M.~Poggi, F.~Aleotti, F.~Tosi, and S.~Mattoccia,
