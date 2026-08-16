@@ -47,6 +47,7 @@ included for that reason.
 
 % ============================================================
 \section{Complete Matched-Baseline Closure}
+\label{sec:closure}
 % ============================================================
 
 Table~\ref{sup:closure} lists all fifteen policies of the D2 closure.
@@ -394,6 +395,7 @@ improving held-out risk--gain balance.
 
 % ============================================================
 \section{External Stabiliser Context}
+\label{sec:bida}
 % ============================================================
 
 BiDAStabilizer \cite{jing2024bida} is the closest plug-in stabiliser in
@@ -407,6 +409,89 @@ use independently validated but not pixel-identical support contracts,
 and the raw EPE differs between them ($0.3029$ against $0.2762$), so the
 absolute values are not subtractable. A common-support table is the
 correct way to make this comparison and we have not produced one.
+
+% ============================================================
+\section{Acquisition Audit of the Comparison Set}
+% ============================================================
+
+The main paper states that no published method in our category can be run
+head-to-head. That is a strong claim, so we record what was attempted, on
+which date, and with what response. Everything below was checked on
+16 August 2026 from the same host and the same session; the same
+\texttt{curl} reached \texttt{huggingface.co} and \texttt{archive.org}
+throughout, so a failure below is the resource's, not our network's.
+
+\begin{table}[!htb]
+\centering
+\caption{What is actually obtainable. ``Category'' is causal $+$ black-box
+$+$ attached to a frozen stereo network, which is our setting.}
+\label{tab:acquisition}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{tabular}{@{}llcc@{}}
+\toprule
+Method & Venue & Code & Weights \\
+\midrule
+StereoDiffusion \cite{xu2024stereodiffusion} & MICCAI'24 & none & none \\
+Neural Disp.\ Refinement \cite{aleotti2021ndr} & 3DV'21 & yes & deleted \\
+Lai et al. \cite{lai2018blind} & ECCV'18 & yes & host dead \\
+TC-Stereo \cite{zeng2024tcstereo} & ECCV'24 & yes & yes \\
+BiDAStabilizer \cite{jing2024bida} & ECCV'24 & yes & yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{StereoDiffusion.} The only published method in our exact
+category. Its repository has one commit, $7.43$\,KiB of git objects, and
+contains a \texttt{.gitignore}, a \texttt{LICENSE} and a twelve-byte
+\texttt{README.md}. \texttt{git ls-remote --heads} shows only
+\texttt{main}. There is no implementation to run.
+
+\paragraph{Neural Disparity Refinement.} Same input contract as ours
+(RGB plus a black-box disparity), spatial only. The code clones and
+imports. Both released Google Drive identifiers return HTTP 404 from
+\texttt{drive.usercontent.google.com/download}, from
+\texttt{docs.google.com/uc}, \emph{and} from the plain
+\texttt{drive.google.com/file/d/.../view} landing page. A file that
+exists but is access-restricted answers 403 or serves an interstitial;
+404 on the landing page means the object is gone. Hugging Face model
+search returns nothing for ``neural disparity refinement'' or
+``disparity refinement''; the GitHub releases API for the official
+repository returns an empty list; Zenodo returns zero records;
+ModelScope has no such model.
+
+\paragraph{Lai et al.} The natural task-agnostic baseline: model-agnostic
+and causal at inference. Its
+\texttt{pretrained\_models/download\_models.sh} points at
+\texttt{vllab.ucmerced.edu}, which answers 200 for the directory listing
+and 404 for every checkpoint. The Wayback CDX index holds the project
+page, its stylesheets and the $34$\,MB supplementary PDF, and zero
+captures of \texttt{ECCV18\_blind\_consistency.pth} or its optimiser
+file --- web crawlers archive HTML and skip large binaries. No Hugging
+Face mirror and no GitHub release exists.
+
+\paragraph{TC-Stereo.} Obtainable and loadable: we found a configuration
+that matches all three released checkpoints with zero missing and zero
+unexpected keys ($16.7$\,M parameters). Its blocker is scientific. The
+temporal branch warps the previous disparity by a rigid $6$-DoF
+reprojection assembled from per-frame camera pose, intrinsics and
+baseline. SCARED-C provides no per-frame pose, and deformable tissue
+violates the rigid-scene assumption independently of that. We therefore
+disable the temporal branch, which reduces the network to its
+single-frame stereo path, and report it as an integrated-architecture
+reference rather than as a temporal competitor. The run manifest records
+the disabled branch and this reason.
+
+\paragraph{Deep Video Prior.} Excluded on definition rather than on
+availability: it performs per-video test-time training over an entire
+clip, so it is not causal under any configuration.
+
+The practical consequence is that our comparison budget goes where a
+comparison is actually possible: BiDAStabilizer on a common support
+(Section~\ref{sec:bida}), TC-Stereo as the integrated reference, and the
+matched-baseline closure of Section~\ref{sec:closure}, in which every
+degenerate temporal policy shares our alignment, our support contract and
+our evaluation code and differs only in the decision rule.
 
 % ============================================================
 \section{A Metric Field We Do Not Report}
@@ -424,6 +509,22 @@ defined explicitly as $\Pr(D_t>0)$.
 \bibitem{jing2024bida}
 J.~Jing, Y.~Mao, A.~Qiu, and K.~Mikolajczyk,
 ``Match Stereo Videos via Bidirectional Alignment,''
+in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
+\bibitem{xu2024stereodiffusion}
+H.~Xu, C.~Xu, and S.~Giannarou,
+``StereoDiffusion: Temporally consistent stereo depth estimation with diffusion models,''
+in \emph{Proc. MICCAI}, 2024.
+\bibitem{aleotti2021ndr}
+F.~Aleotti \emph{et al.},
+``Neural disparity refinement for arbitrary resolution stereo,''
+in \emph{Proc. Int. Conf. 3D Vision (3DV)}, 2021.
+\bibitem{lai2018blind}
+W.-S.~Lai \emph{et al.},
+``Learning blind video temporal consistency,''
+in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2018.
+\bibitem{zeng2024tcstereo}
+Z.~Zeng \emph{et al.},
+``Temporally consistent stereo matching,''
 in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
 \end{thebibliography}
 
