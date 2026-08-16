@@ -1,0 +1,430 @@
+\documentclass[letterpaper,10pt,conference]{ieeeconf}
+
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+
+% ============================================================
+% TETHER -- SUPPLEMENTARY MATERIAL
+%
+% Everything measured but cut from the 8-page submission.
+% Every number here was produced by the same frozen checkpoint and the
+% same evaluation code as the main paper; nothing was retrained or
+% retuned to produce this document.
+% ============================================================
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{url}
+
+\newcommand{\steer}{\textsc{TETHER}}
+\newcommand{\raw}{\mathrm{raw}}
+\newcommand{\mem}{\mathrm{mem}}
+\newcommand{\fused}{\mathrm{fused}}
+\newcommand{\TEPE}{\mathrm{TEPE}}
+
+\title{\textbf{TETHER: Supplementary Material}}
+\author{Anonymous Authors}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+This document reports measurements that did not fit the page limit. It
+adds no claim to the main paper. Two of its sections
+(Sec.~\ref{sup:tepe} and Sec.~\ref{sup:3d}) contain results that
+\emph{qualify} the main claims rather than strengthen them, and they are
+included for that reason.
+\end{abstract}
+
+% ============================================================
+\section{Complete Matched-Baseline Closure}
+% ============================================================
+
+Table~\ref{sup:closure} lists all fifteen policies of the D2 closure.
+The main paper reports a representative subset. Every row shares the
+bounded state machine, the raw re-anchor schedule, the SEA-RAFT
+alignment, the support definition and the fusion form; only the blending
+weight differs, and all 225 reports (15 methods $\times$ 5 backbones
+$\times$ 3 sequences) come from a single run under one frozen protocol.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Full SCARED-C D2 matched temporal-policy closure.
+Raw EPE is $0.276202$. Positive reduction denotes improvement.}
+\label{sup:closure}
+\begin{tabular}{lrr}
+\toprule
+Method & EPE & Reduction \\
+\midrule
+\steer{} $H=6$ & \textbf{0.264656} & 4.18\% \\
+\steer{} $H=8$ & 0.264912 & 4.09\% \\
+\steer{} $H=4$ & 0.265028 & 4.05\% \\
+\steer{} $H=2$ & 0.267265 & 3.24\% \\
+\steer{} $H=1$ & 0.269001 & 2.61\% \\
+\midrule
+Fixed $w=0.5$ & 0.274562 & 0.59\% \\
+EMA2          & 0.274562 & 0.59\% \\
+Fixed $w=0.3$ & 0.274852 & 0.49\% \\
+Fixed $w=0.2$ & 0.275229 & 0.35\% \\
+EMA3          & 0.275386 & 0.30\% \\
+Fixed $w=0.1$ & 0.275684 & 0.19\% \\
+Warped raw previous    & 0.276298 & $-0.03\%$ \\
+FB confidence weight   & 0.282182 & $-2.17\%$ \\
+Warped recurrent $w=1$ & 0.286035 & $-3.56\%$ \\
+Continuous recurrence  & 0.449349 & $-62.69\%$ \\
+\midrule
+Oracle raw/memory & 0.242223 & 12.30\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{An identity worth stating.}
+\texttt{EMA2} and \texttt{Fixed} $w=0.5$ are the same policy under two
+names, and \texttt{EMA3} is $w=2/3$: under a recurrent state a fixed
+convex weight \emph{is} an exponential moving average. The baseline
+family is therefore five fixed weights
+$w\in\{0.1,0.2,0.3,0.5,2/3\}$ over the shared bounded state, not two
+independent families. We state this because two nominally different
+baselines producing an identical number otherwise reads as a bug.
+
+% ============================================================
+\section{The Oracle Ceiling Is Not the One We Report Against}
+% ============================================================
+
+The oracle of the main paper selects, per pixel, the better of raw
+disparity and aligned memory. It is therefore the ceiling of
+$w\in\{0,1\}$, whereas \steer{} acts on $w\in[0,1]$, whose ceiling is
+the continuous oracle
+$w^{\star}=\mathrm{clip}\big((g-d^{\raw})/(\widetilde m-d^{\raw}),0,1\big)$.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Binary versus continuous oracle on D2, per backbone.}
+\label{sup:oracle}
+\begin{tabular}{lrrrr}
+\toprule
+Backbone & raw & \steer & $\{0,1\}$ & $[0,1]$ \\
+\midrule
+S$^2$M$^2$-S          & .2949 & .2850 & .2634 & .2610 \\
+RAFT-Stereo           & .3022 & .2914 & .2687 & .2658 \\
+Stereo Anywhere       & .3189 & .2964 & .2747 & .2720 \\
+CREStereo             & .2943 & .2832 & .2610 & .2582 \\
+Fast-FoundationStereo & .3037 & .2930 & .2715 & .2688 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The correction is real but small. Only $6.1\%$ of D2 pixels have the
+ground truth bracketed by the two candidates ($11$--$14\%$ on D7), so the
+two ceilings nearly coincide and the recovered fraction falls from
+$32.9\%$ to $30.1\%$. We report it because the published figure is
+measured against a ceiling the method cannot actually be limited by, not
+because it changes the conclusion.
+
+% ============================================================
+\section{Motion-Compensated Multi-Horizon Fidelity}
+\label{sup:tepe}
+% ============================================================
+
+$\TEPE_{\mathrm{corr}}$ and OPW require a correspondence field, supplied
+here from the same SEA-RAFT flows used for warping. Table~\ref{sup:tepe}
+gives the relative change after refinement.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{$\TEPE_{\mathrm{corr}}$ (top) and OPW (bottom), relative change
+after refinement. Negative is better.}
+\label{sup:tepetab}
+\begin{tabular}{llrrrr}
+\toprule
+Split & Backbone & $k{=}1$ & $k{=}2$ & $k{=}4$ & $k{=}8$ \\
+\midrule
+\multicolumn{6}{l}{\emph{$\TEPE_{\mathrm{corr}}$}}\\
+D2 & S$^2$M$^2$-S          & +24.5\% & +40.1\% & +12.9\% & +19.7\% \\
+D2 & RAFT-Stereo           & +24.8\% & +41.1\% & +16.6\% & +23.8\% \\
+D2 & Stereo Anywhere       & +14.5\% & +31.1\% &  +8.5\% & +16.4\% \\
+D2 & CREStereo             & +22.2\% & +39.7\% & +15.3\% & +24.3\% \\
+D2 & Fast-FoundationStereo & +35.9\% & +52.3\% & +21.1\% & +27.8\% \\
+D7 & S$^2$M$^2$-S          & -23.7\% & -21.0\% & -17.4\% & -12.7\% \\
+D7 & RAFT-Stereo           & -12.2\% &  -6.1\% &  -5.6\% &  -5.7\% \\
+D7 & Stereo Anywhere       & -10.3\% &  -4.8\% &  -5.3\% &  -5.7\% \\
+D7 & CREStereo             & -13.6\% &  -6.8\% &  -6.7\% &  -6.4\% \\
+D7 & Fast-FoundationStereo & -10.9\% &  -4.9\% &  -5.6\% &  -6.2\% \\
+\midrule
+\multicolumn{6}{l}{\emph{OPW}}\\
+D2 & S$^2$M$^2$-S          &  -8.7\% &  -3.5\% &  -1.8\% &  -1.2\% \\
+D2 & RAFT-Stereo           &  -8.5\% &  -3.4\% &  -1.7\% &  -1.1\% \\
+D2 & Stereo Anywhere       & -12.9\% &  -5.8\% &  -3.0\% &  -1.8\% \\
+D2 & CREStereo             &  -9.5\% &  -3.8\% &  -1.8\% &  -1.2\% \\
+D2 & Fast-FoundationStereo &  -7.3\% &  -3.1\% &  -1.6\% &  -1.2\% \\
+D7 & S$^2$M$^2$-S          & -29.8\% & -22.8\% & -13.5\% &  -7.6\% \\
+D7 & RAFT-Stereo           & -18.5\% & -10.2\% &  -5.1\% &  -3.4\% \\
+D7 & Stereo Anywhere       & -18.1\% &  -9.9\% &  -5.1\% &  -3.4\% \\
+D7 & CREStereo             & -20.3\% & -11.1\% &  -5.9\% &  -3.8\% \\
+D7 & Fast-FoundationStereo & -18.5\% & -10.0\% &  -5.2\% &  -3.6\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On held-out D7 both improve in all $20/20$ backbone--horizon cases. On
+development D2 they disagree: OPW improves everywhere while
+$\TEPE_{\mathrm{corr}}$ degrades everywhere.
+
+This rules out a convenient explanation. One might attribute a rising
+temporal-error metric to a grid metric penalising legitimate scene
+motion, but $\TEPE_{\mathrm{corr}}$ \emph{is} motion compensated and
+still degrades on D2. The two ask different questions: OPW asks whether
+consecutive predictions agree with each other, $\TEPE_{\mathrm{corr}}$
+whether the predicted temporal change matches the true one. On the split
+used to select the operating point, the module therefore becomes more
+self-consistent while tracking the true change less faithfully. We
+report this against our own interest.
+
+% ============================================================
+\section{Forensics of the Support Violation}
+% ============================================================
+
+The main paper states that an unmasked output lets zero-padded
+out-of-bounds memory become an invalid prediction. The supporting
+measurement is below: every offending pixel has an aligned memory of
+\emph{exactly} zero, and the offenders arrive in bursts no longer than
+the state lifetime, so bounded recurrence contains the damage it cannot
+prevent.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Invalid refined pixels under the unmasked output, and the state
+age at which they occur.}
+\label{sup:forensics}
+\begin{tabular}{lrr}
+\toprule
+& Vid10\_Liver\_Med & Vid11\_Liver\_High \\
+\midrule
+Support pixels        & 38{,}828{,}160 & 38{,}439{,}360 \\
+Invalid (unmasked)    & 300 & 265 \\
+Invalid (support-confined) & \textbf{0} & \textbf{0} \\
+Frames affected       & 10 & 3 \\
+Aligned memory, min/max & $0.0$ / $0.0$ & $0.0$ / $0.0$ \\
+Non-finite memory     & 0 & 0 \\
+State age 1/2/3/4     & 10/103/135/52 & 0/182/72/11 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Because an invalid prediction on valid support is penalised rather than
+discarded, at $10^{4}$\,mm per pixel, a few hundred pixels out of
+$38.8$~million decide the external-domain metric-depth verdict.
+
+% ============================================================
+\section{Per-Recording DRENDS Transfer}
+% ============================================================
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Zero-shot DRENDS, relative change after refinement, all metrics
+and all five recordings. Negative is better.}
+\label{sup:drends}
+\begin{tabular}{llrrrr}
+\toprule
+Backbone & Recording & EPE & Bad3 & d.MAE & d.RMSE \\
+\midrule
+RAFT-Stereo & Vid10 & -5.7\% & -11.3\% & -3.8\% & -3.4\% \\
+(seen)      & Vid11 & -3.4\% & -21.9\% & -2.5\% & -1.5\% \\
+            & Vid12 & -8.4\% & -22.7\% & -6.7\% & -6.0\% \\
+            & Vid13 & -4.3\% & -14.2\% & -3.2\% & -3.0\% \\
+\midrule
+CREStereo   & Vid10 & -5.2\% &  -8.7\% & -3.4\% & -3.2\% \\
+(unseen)    & Vid11 & -3.7\% & -22.8\% & -2.7\% & -1.8\% \\
+            & Vid12 & -6.3\% & -18.5\% & -4.8\% & -4.3\% \\
+            & Vid13 & -5.2\% & -10.4\% & -3.6\% & -3.3\% \\
+            & Vid14 & -5.6\% & -26.5\% & -4.4\% & -4.1\% \\
+\midrule
+Fast-Found. & Vid10 & -5.0\% &  -7.3\% & -3.0\% & -2.9\% \\
+(unseen)    & Vid11 & -3.2\% & -20.4\% & -2.3\% & -1.4\% \\
+            & Vid12 & -5.3\% & -10.3\% & -4.4\% & -3.6\% \\
+            & Vid13 & -4.3\% & -10.9\% & -3.0\% & -2.9\% \\
+            & Vid14 & -4.7\% & -27.4\% & -3.8\% & -3.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All 60 recording--backbone--metric cells improve. The per-recording
+pattern is set by the recording and not by the estimator: on Vid10 the
+EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ for the seen and the two
+unseen backbones. That alignment, rather than the pooled mean, is what
+supports backbone independence.
+
+% ============================================================
+\section{Stage-Wise Runtime}
+% ============================================================
+
+NVIDIA H100 PCIe, PyTorch 2.5.1+cu121, $144\times180$ evidence grid, 200
+timed iterations after 30 warmup iterations.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Per-stage temporal overhead.}
+\label{sup:runtime}
+\begin{tabular}{lrr}
+\toprule
+Stage & median (ms) & p95 (ms) \\
+\midrule
+SEA-RAFT forward & 13.222 & 13.289 \\
+SEA-RAFT reverse & 13.191 & 13.268 \\
+Alignment        & 1.038  & 1.057 \\
+142-channel evidence & 5.122 & 5.156 \\
+Fusion head      & \textbf{1.027} & 1.043 \\
+\midrule
+Total overhead   & \textbf{33.601} & \\
+Peak VRAM        & \multicolumn{2}{r}{\textbf{124.2\,MB}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two observations. The $177$k-parameter head costs $1.03$\,ms, $3\%$ of
+the overhead: ``compact head'' is true but not the operative cost, since
+$79\%$ is the two frozen flow passes. And the reverse pass costs
+$13.19$\,ms while feeding only the forward--backward confidence cue,
+whose direct use as a fusion weight worsens EPE by $2.17\%$
+(Table~\ref{sup:closure}); removing it would cut overhead by $39\%$ and
+is the most promising efficiency ablation we have not run.
+
+% ============================================================
+\section{Three-Dimensional Surface Consistency}
+\label{sup:3d}
+% ============================================================
+
+SCARED-C provides no per-frame camera pose, so global reconstruction
+drift cannot be measured. We instead back-project each frame's disparity
+to a metric cloud and compare it against the previous frame's cloud
+pulled through the same SEA-RAFT correspondence: frame-to-frame surface
+stability, not reconstruction drift.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Frame-to-frame 3D surface stability on D2, pooled means.
+GT is the floor set by real scene and camera motion.}
+\label{sup:3dtab}
+\begin{tabular}{lrrr}
+\toprule
+Backbone & raw & refined & GT \\
+\midrule
+\multicolumn{4}{l}{\emph{point-to-point distance [mm]}}\\
+S$^2$M$^2$-S          & 0.5016 & 0.4978 & 0.4758 \\
+RAFT-Stereo           & 0.5085 & 0.5034 & 0.4758 \\
+Stereo Anywhere       & 0.5060 & 0.4996 & 0.4758 \\
+CREStereo             & 0.5065 & 0.5004 & 0.4758 \\
+Fast-FoundationStereo & 0.4890 & 0.4902 & 0.4758 \\
+\midrule
+\multicolumn{4}{l}{\emph{surface-normal angle [deg]}}\\
+S$^2$M$^2$-S          & 4.4878 & 4.3241 & 5.8586 \\
+RAFT-Stereo           & 5.1443 & 4.7297 & 5.8586 \\
+Stereo Anywhere       & 5.4499 & 4.8516 & 5.8586 \\
+CREStereo             & 5.6006 & 4.9958 & 5.8586 \\
+Fast-FoundationStereo & 3.7381 & 3.8742 & 5.8586 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Excess over the GT floor falls on four backbones of five, for instance
+$0.0326 \rightarrow 0.0276$\,mm on RAFT-Stereo, and rises slightly on
+Fast-FoundationStereo. The effect is real but of the order of
+$0.005$\,mm, which is why it does not appear in the paper.
+
+The normal metric carries a caveat that removes its floor entirely: GT
+normals are \emph{noisier} than every prediction ($5.86^\circ$ against
+$3.74$--$5.60^\circ$), because the pseudo-ground-truth is sparse and
+central differences amplify it. Predictions smoother than the reference
+cannot be scored against that reference, so the normal column should be
+read as a relative comparison between raw and refined only.
+
+Further assumptions a reader may wish to challenge: the principal point
+is taken at the image centre with $f_y=f_x$, since the SCARED-C manifest
+carries only $f_x$ and the baseline; flow correspondence stands in for
+true scene-point correspondence, gated by forward--backward consistency
+at library defaults; and both clouds live in their own camera frames, so
+the measure mixes surface change with rigid camera motion, a component
+the GT floor absorbs but does not isolate.
+
+% ============================================================
+\section{Larger Training Does Not Move the Operating Point}
+% ============================================================
+
+An augmented-training run keeps the architecture and enlarges the data.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{Held-out D7, canonical versus augmented training.}
+\label{sup:augmented}
+\begin{tabular}{lrr}
+\toprule
+Metric & Canonical & Augmented \\
+\midrule
+Mean EPE & \textbf{.4693} & .4706 \\
+HUR & \textbf{.3965} & .4457 \\
+$H^{+}$ & \textbf{.0148} & .0235 \\
+$B^{+}$ & .0376 & \textbf{.0450} \\
+BUR & .4951 & \textbf{.5060} \\
+Degraded-frame fraction & \textbf{.2642} & .3341 \\
+Worst frame degradation & \textbf{.1063} & .3958 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The augmented model performs more beneficial updates and substantially
+more harmful ones. Scale shifts intervention aggressiveness without
+improving held-out risk--gain balance.
+
+% ============================================================
+\section{External Stabiliser Context}
+% ============================================================
+
+BiDAStabilizer \cite{jing2024bida} is the closest plug-in stabiliser in
+our comparison set. Its full formulation is non-causal, using
+future-frame bidirectional propagation. On the full SCARED-C D2 sequence
+set our independent reproduction moves pixel-weighted EPE from
+$0.302862$ to $0.302109$.
+
+We deliberately draw no comparison from this. The two evaluation paths
+use independently validated but not pixel-identical support contracts,
+and the raw EPE differs between them ($0.3029$ against $0.2762$), so the
+absolute values are not subtractable. A common-support table is the
+correct way to make this comparison and we have not produced one.
+
+% ============================================================
+\section{A Metric Field We Do Not Report}
+% ============================================================
+
+FrameDegradation's CatastrophicFraction was numerically identical to
+PositiveFraction on every inspected row. The cause is definitional:
+the two are $\Pr(D_t>\tau_{\mathrm{cat}})$ and $\Pr(D_t>0)$, and the
+catastrophic threshold defaults to $\tau_{\mathrm{cat}}=0$, which the
+evaluators never override. At that setting they coincide by
+construction. We therefore report only the degraded-frame fraction,
+defined explicitly as $\Pr(D_t>0)$.
+
+\begin{thebibliography}{9}
+\bibitem{jing2024bida}
+J.~Jing, Y.~Mao, A.~Qiu, and K.~Mikolajczyk,
+``Match Stereo Videos via Bidirectional Alignment,''
+in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
+\end{thebibliography}
+
+\end{document}

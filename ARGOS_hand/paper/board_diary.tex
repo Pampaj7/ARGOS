@@ -14360,6 +14360,50 @@ already computes the SEA-RAFT flows used for warping, so passing them
 would upgrade the multi-horizon temporal section from a disclaimed
 grid diagnostic to genuine motion-compensated fidelity.
 
+\paragraph{Degenerate D4D controls: the metric is won by doing nothing.}
+Two controls were added in
+\texttt{model\_design/comparison/degenerate\_policies.py}, alongside the
+pinned \texttt{experimental\_policies.py} rather than inside it.
+Over 504 frames the raw inconsistency of $3.7182$ becomes $1.7128$ under
+STEER ($53.9\%$), $0.0986$ under copy-previous ($97.3\%$), and
+\emph{exactly} $0.0000$ under warped-previous ($100\%$).
+
+Warped-previous is zero by construction: its output \emph{is} the
+motion-compensated previous frame, so it is trivially consistent with
+the motion-compensated previous frame. The ordering on this metric is
+therefore inverted with respect to geometric quality --- the two
+policies that discard current stereo evidence beat the one that uses it.
+The paper now reports the controls next to the metric, so no reduction
+figure can be misread as accuracy.
+
+\paragraph{TEPE\_corr and OPW now computed.}
+\texttt{scripts/evaluate\_temporal\_corrected.py} assembles the
+\texttt{alignment\_by\_horizon} contract from the SEA-RAFT flows the
+driver already produces. The convention was read off the consumer rather
+than guessed: \texttt{flow\_t\_to\_tk[:, i]} is applied as
+\texttt{warp\_with\_flow(x[:, i+k], flow)}, so it lives on frame $i$ and
+pulls $i+k$, which is the \emph{backward} member of the pair.
+On a 40-frame smoke with S$^2$M$^2$-S, TEPE\_corr improves
+$0.03030 \rightarrow 0.02454$ ($-19.0\%$) and OPW
+$0.03288 \rightarrow 0.02676$ ($-18.6\%$). Full D2 and D7 runs are in
+flight.
+
+\paragraph{3D surface consistency, first numbers.}
+\texttt{scripts/evaluate\_3d\_consistency.py} measures frame-to-frame
+surface stability without camera pose, which SCARED-C does not provide:
+each frame's disparity is back-projected to a metric cloud and compared
+against the previous frame's cloud pulled through the same SEA-RAFT
+correspondence. On a 12-frame smoke, point-to-point drift is
+$0.4896$\,mm raw, $0.4471$\,mm refined and $0.4040$\,mm for GT, so the
+\emph{excess over the GT floor} halves ($0.0855 \rightarrow 0.0431$\,mm).
+
+One caveat found immediately: GT surface normals are \emph{noisier} than
+both predictions ($11.83^\circ$ versus $5.04^\circ$ raw and
+$4.24^\circ$ refined), because the pseudo-GT is sparse and central
+differences amplify it. The GT-floor interpretation is therefore valid
+for the point-to-point metric and \emph{not} for the normal metric,
+which must be reported without it.
+
 \paragraph{Stale TODO closed.}
 The request to extend DRENDS to three further sequences was superseded
 by the five-recording, three-backbone run already reported.
