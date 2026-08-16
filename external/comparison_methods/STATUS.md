@@ -56,19 +56,38 @@ Working load configuration, found by search (0 missing / 0 unexpected keys):
 Checkpoint is nested under the "model" key. 16.7M parameters.
 Imports cleanly in the argos env despite requirements pinning torch 2.0.1.
 
-BLOCKER, and it is a scientific one rather than an engineering one. Its
-temporal propagation (core/tc_stereo.py:119-137) requires `params` carrying
+Its temporal propagation (core/tc_stereo.py:119-137) requires `params` carrying
 per-frame camera poses `T` and `previous_T`, intrinsics `K` and `baseline`,
 and warps the previous disparity by
 `relative_T = cal_relative_transformation(previous_T, T)` — a rigid 6-DoF
-reprojection, not optical flow. That assumes (a) known ego-motion per frame,
-which SCARED-C does not provide, and (b) a RIGID scene, which deformable
-surgical tissue violates by construction. Running it with `params=None` on
-every frame is possible but degenerates it to a single-frame stereo network,
-which is not the method.
-=> Not a fair or even feasible temporal comparison on surgical data. This is
-   a real structural difference worth stating in the paper: rigid-motion
-   reprojection versus optical-flow alignment.
+reprojection, not optical flow.
+
+CORRECTION (2026-08-16, later the same day). We first recorded that SCARED-C
+could not supply those poses and that deformable tissue broke the rigid-scene
+assumption. BOTH CLAIMS WERE WRONG for this dataset, and the error was ours to
+catch since we curated the data:
+
+  - SCARED-C EXISTS BECAUSE of the pose problem. It replaces SCARED's
+    kinematics-propagated poses (inaccurate: the da Vinci is cable-driven)
+    with COLMAP-re-estimated ones, metric-scaled against the structured-light
+    keyframe. Verified locally: dataset/SCARED-C/raw/dataset_2/keyframe_2/
+    ships data/frame_data.tar.gz with 1033 per-frame 4x4 camera-pose JSONs —
+    exactly the frames in our frozen boundary — plus intrinsics_colmap.yaml
+    (K, 1280x1024) and endoscope_calibration.yaml (stereo -> baseline). Our
+    own DATASET_CARD.md documented this the whole time.
+  - SCARED is EX-VIVO. The tissue is static and the endoscope moves, so the
+    rigid-scene assumption is approximately correct here. The deformability
+    objection applies to DRENDS dynamic scenarios and to D4D, not to SCARED.
+
+So TC-Stereo's temporal path IS runnable on SCARED-C with data already on
+disk. What survives, and is the better argument, is a difference in required
+inputs: TC-Stereo consumes per-frame 6-DoF pose, intrinsics and baseline;
+TETHER consumes RGB, disparity and validity. In a deployment where pose is
+unreliable — which is the very reason SCARED-C had to be built — that is a
+real structural advantage, not a convenience.
+=> Runnable as a temporal method on SCARED-C, but only with privileged pose
+   input. The paper states the input-requirement difference rather than an
+   impossibility claim, and lists the temporal comparison as available work.
 
 RESOLUTION (2026-08-16). We run it the only way the data permits and report it as
 what it is. `scripts/run_tcstereo_reference.py` drives TC-Stereo with `params=None`

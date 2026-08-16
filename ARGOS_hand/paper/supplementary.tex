@@ -517,15 +517,27 @@ Face mirror and no GitHub release exists.
 
 \paragraph{TC-Stereo.} Obtainable and loadable: we found a configuration
 that matches all three released checkpoints with zero missing and zero
-unexpected keys ($16.7$\,M parameters). Its blocker is scientific. The
-temporal branch warps the previous disparity by a rigid $6$-DoF
-reprojection assembled from per-frame camera pose, intrinsics and
-baseline. SCARED-C provides no per-frame pose, and deformable tissue
-violates the rigid-scene assumption independently of that. We therefore
-disable the temporal branch, which reduces the network to its
-single-frame stereo path, and report it as an integrated-architecture
-reference rather than as a temporal competitor. The run manifest records
-the disabled branch and this reason.
+unexpected keys ($16.7$\,M parameters). Its temporal branch warps the
+previous disparity by a rigid $6$-DoF reprojection assembled from
+per-frame camera pose, intrinsics and baseline.
+
+We initially recorded that SCARED-C could not supply those poses. That
+was wrong, and we correct it here: SCARED-C exists precisely because
+SCARED's kinematics-propagated poses were too inaccurate, and it ships
+COLMAP-re-estimated per-frame poses together with refined intrinsics
+(\texttt{frame\_data.tar.gz}, \texttt{intrinsics\_colmap.yaml}). The
+rigid-scene assumption is also reasonable on this data, which is ex-vivo:
+the tissue is static and the endoscope moves. TC-Stereo's temporal path
+is therefore runnable on SCARED-C, and the row below --- with the branch
+disabled --- understates it a second time.
+
+What remains true, and is the point worth making, is a difference in what
+each method requires. TC-Stereo consumes per-frame $6$-DoF pose,
+intrinsics and baseline; TETHER consumes RGB, disparity and validity. On
+deformable data the rigid reprojection also stops being well-posed, which
+is where our optical-flow alignment still applies. We report the
+single-frame row as an integrated-architecture reference, and note the
+temporal comparison as available future work rather than as impossible.
 
 \paragraph{Deep Video Prior.} Excluded on definition rather than on
 availability: it performs per-video test-time training over an entire

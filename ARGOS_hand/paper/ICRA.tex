@@ -330,11 +330,11 @@ We are aware of no runnable published method in this exact setting ---
 causal, black-box, frozen weights. The closest, StereoDiffusion
 \cite{xu2024stereodiffusion}, ships no implementation. Of the rest, \cite{aleotti2021ndr} and
 \cite{lai2018blind} publish code whose weights are no longer retrievable,
-and TC-Stereo's temporal path warps by a rigid transform driven by
-per-frame pose, which SCARED-C cannot supply and deformable tissue
-violates. We therefore compare against the one runnable published
-method, BiDAStabilizer (Sec.~\ref{sec:bida}), noting that it sees the
-future and we do not.
+and TC-Stereo warps its temporal state by a rigid reprojection needing
+per-frame pose, intrinsics and baseline --- privileged inputs our
+interface does not assume. We therefore compare against the one runnable
+published method under our own constraints, BiDAStabilizer
+(Sec.~\ref{sec:bida}), noting that it sees the future and we do not.
 
 \paragraph{Evaluating temporal refinement.}
 Stereo benchmarks report frame-wise geometry and video methods add
