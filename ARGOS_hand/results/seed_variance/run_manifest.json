@@ -1,6 +1,6 @@
 {
   "project": "ARGOS v2",
-  "generated_at": "2026-08-16T01:28:40.447363+00:00",
+  "generated_at": "2026-08-16T02:32:54.588561+00:00",
   "purpose": "seed variance and paired sequence-level bootstrap for the canonical H=4 point",
   "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/multiseed_preregister.json",
   "prohibitions_honoured": [
@@ -11,7 +11,8 @@
   ],
   "seed_runs": {
     "0": "0=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/scared_masked",
-    "1": "1=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/seed_eval/seed_1"
+    "1": "1=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/seed_eval/seed_1",
+    "2": "2=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/seed_eval/seed_2"
   },
   "primary_endpoint": "Bad1",
   "resampling_unit": "sequence",
@@ -20,7 +21,8 @@
   "sequences_common_to_all_seeds": 35,
   "sequences_dropped_per_seed": {
     "0": [],
-    "1": []
+    "1": [],
+    "2": []
   },
   "seed_handling": "seeds averaged inside each bootstrap resample; no seed selected"
 }

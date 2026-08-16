@@ -494,6 +494,67 @@ degenerate temporal policy shares our alignment, our support contract and
 our evaluation code and differs only in the decision rule.
 
 % ============================================================
+\section{Seed Study in Full}
+% ============================================================
+
+Pre-registered before any seed result existed. The seed is the only field
+that varies from the locked recipe; the training script is a sibling of
+\texttt{train.py} that reuses its guards and overrides only that field.
+Sequences are the resampling unit for the paired bootstrap, seeds are
+averaged inside each resample, and four things were prohibited in advance:
+selecting the best seed, re-tuning any threshold after seeing seed
+results, changing the checkpoint-selection rule, and using D7 for any
+decision other than the final reported numbers.
+
+\begin{table}[!htb]
+\centering
+\caption{Relative Bad1 reduction (\%) per backbone over three seeds, with
+the paired sequence-level bootstrap interval and the fraction of
+resamples in which refinement failed to help.}
+\label{tab:seeds_full}
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{tabular}{@{}llrrrrcr@{}}
+\toprule
+Split & Backbone & s0 & s1 & s2 & mean\,$\pm$\,std & CI$_{95}$ & $p$ \\
+\midrule
+D2 & CREStereo      &  8.26 &  6.62 &  3.57 & $6.15\pm2.38$ & $[0.69,12.74]$ & .000 \\
+D2 & Fast-Found.    &  7.91 &  5.74 &  2.65 & $5.43\pm2.64$ & $[0.63,12.86]$ & .000 \\
+D2 & RAFT-Stereo    &  6.95 &  5.40 &  3.00 & $5.12\pm1.99$ & $[-0.12,12.43]$ & .035 \\
+D2 & S$^2$M$^2$-S   &  7.40 &  6.70 &  4.45 & $6.18\pm1.54$ & $[-0.31,12.32]$ & .038 \\
+D2 & StereoAnywhere & 19.65 & 15.95 & 12.43 & $16.01\pm3.61$ & $[13.89,19.26]$ & .000 \\
+\midrule
+D7 & CREStereo      & 3.86 & 4.51 & 4.32 & $4.23\pm0.33$ & $[2.68,7.27]$ & .000 \\
+D7 & Fast-Found.    & 3.97 & 4.08 & 3.76 & $3.93\pm0.16$ & $[1.60,8.58]$ & .000 \\
+D7 & RAFT-Stereo    & 3.95 & 5.35 & 4.99 & $4.77\pm0.73$ & $[3.27,7.72]$ & .000 \\
+D7 & S$^2$M$^2$-S   & 5.66 & 6.25 & 6.05 & $5.99\pm0.30$ & $[1.50,13.17]$ & .000 \\
+D7 & StereoAnywhere & 6.40 & 7.07 & 6.73 & $6.73\pm0.33$ & $[5.66,12.12]$ & .000 \\
+\midrule
+\multicolumn{2}{@{}l}{Pooled, 35 sequences} & 5.79 & 6.00 & 5.28 & $5.69\pm0.37$ & $[4.11,8.02]$ & .000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two features of this table are worth stating plainly rather than leaving
+for a reader to find.
+
+First, three D2 rows have intervals that touch or cross zero. That is a
+property of the split, not of the method: D2 contributes three sequences,
+and a three-sequence bootstrap is genuinely wide. We prefer reporting it
+to quietly resampling pixels, which would have produced narrow intervals
+with no statistical meaning. Held-out D7 contributes four sequences and
+every one of its rows is strictly positive at $p=.000$ on both metrics.
+
+Second, the seed ordering differs between splits in a way that is not
+noise. Pooled per split, the D2 Bad1 reduction falls monotonically across
+seeds --- $10.78$, $8.67$, $5.75$ --- while D7 gives $4.78$, $5.47$,
+$5.19$, in which seed $0$ is the \emph{weakest}. Ten of ten per-backbone
+comparisons follow the same direction. Our checkpoint-selection rule
+picks best D2 fused EPE, so seed $0$ is by construction the run that
+looked best on D2; the D2 margin therefore carries selection optimism and
+the held-out margin does not.
+
+% ============================================================
 \section{A Metric Field We Do Not Report}
 % ============================================================
 

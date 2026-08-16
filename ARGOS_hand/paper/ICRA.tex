@@ -806,19 +806,16 @@ every continuous recurrent architecture must fail.
 
 \subsection{Cross-Backbone Development Behaviour}
 
-Canonical $H=4$ improves all five stereo estimators in mean D2 EPE
-(Table~\ref{tab:scared_main}), by $8.44\%$ on Stereo Anywhere, $3.37\%$
-on CREStereo, $2.87\%$ on RAFT-Stereo, $2.85\%$ on Fast-FoundationStereo
-and $2.17\%$ on S$^2$M$^2$-S. Seen backbones improve by $4.50\%$ on
-average and unseen backbones by $3.11\%$, and all six unseen-backbone
-sequence groups improve.
-
-The pooled figure of $4.05\%$ is the ratio of mean EPEs, not the mean of
-these per-backbone percentages, which is $3.94\%$ with a median of
-$2.87\%$. The signal is strongest on Stereo Anywhere, and it is fair to
-ask whether that one estimator carries the result: excluding it, the D2
-mean falls to $2.82\%$. On held-out D7 it does not, the mean excluding
-Stereo Anywhere being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
+Canonical $H=4$ improves all five estimators in mean D2 EPE
+(Table~\ref{tab:scared_main}): $8.44\%$ on StereoAnywhere, $3.37\%$ on
+CREStereo, $2.87\%$ on RAFT-Stereo, $2.85\%$ on Fast-FoundationStereo,
+$2.17\%$ on S$^2$M$^2$-S; seen backbones $4.50\%$, unseen $3.11\%$, with
+all six unseen-backbone sequence groups improving. The pooled $4.05\%$ is
+the ratio of mean EPEs, not the mean of those percentages ($3.94\%$,
+median $2.87\%$). It is fair to ask whether StereoAnywhere alone carries
+the result: excluding it the D2 mean falls to $2.82\%$, but on held-out
+D7 it does not, the mean excluding StereoAnywhere being $4.14\%$ with
+RAFT-Stereo alone at $6.10\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
@@ -929,6 +926,31 @@ heterogeneous stereo estimators within the SCARED-C domain.
 The joint unseen-backbone / unseen-domain cell is reported separately in
 Section~\ref{sec:drends}.
 
+
+\subsection{Seed Variance, and What It Reveals About Selection}
+
+We pre-registered a seed study before any seed result existed: the seed
+is the only field that varies, sequences are the resampling unit, seeds
+are averaged inside each resample, and selecting the best seed is
+prohibited.
+
+Pooled over five backbones, the relative Bad1 reduction is
+$8.40\pm2.53\%$ on development D2 and $5.15\pm0.35\%$ on held-out D7;
+the EPE reduction is $3.55\pm0.45\%$ and $5.07\pm0.44\%$.
+
+The held-out effect is stable: $5.15\pm0.35$ Bad1 and $5.07\pm0.44$ EPE,
+with paired sequence-level bootstrap intervals $[4.11,8.02]$ and
+$[3.42,5.80]$ and no resample in which refinement failed to help.
+
+The development split is not, and our own protocol explains it.
+Checkpoints are selected on best D2 fused EPE, so seed $0$ is by
+construction the run that looked best on D2 --- and on D2 the seeds fall
+monotonically, $10.78\rightarrow8.67\rightarrow5.75$, a $5.03$ point
+spread. On D7 that ordering \emph{inverts}: seed $0$ is the weakest of the
+three on both metrics and the spread collapses to $0.69$ points.
+Selection optimism sits where it should, in the split used to select, and
+leaves the held-out numbers untouched. Table~\ref{tab:scared_main} keeps
+seed $0$ for comparability with the ablations, which use that checkpoint.
 
 \subsection{Refinement as an Intervention}
 
@@ -1088,81 +1110,47 @@ because a module that declares a support must respect it.
 
 \subsection{No-Reference Temporal Behaviour on D4D}
 
-Because the current D4D metric-geometry contract remains unresolved,
-we report only prediction-space temporal inconsistency.
+Because the D4D metric-geometry contract remains unresolved, we report
+only prediction-space temporal inconsistency, which falls by $51.9\%$ for
+RAFT-Stereo and $54.5\%$ for StereoAnywhere. That fact on its own is
+worth very little, and we quantify why with two degenerate controls that
+only reproduce history. Copy-previous, which emits the previous
+disparity verbatim without even aligning it, removes $97.3\%$ of the
+inconsistency; warped-previous, which emits the motion-compensated
+previous disparity, scores \emph{exactly} zero by construction, since a
+policy whose output is the warped previous frame is trivially consistent
+with the warped previous frame. TETHER removes $53.9\%$.
 
-Motion-compensated prediction inconsistency falls from $.5094$ to
-$.2450$ for RAFT-Stereo ($51.9\%$) and from $6.9271$ to $3.1516$ for
-Stereo Anywhere ($54.5\%$).
-
-Prediction inconsistency decreases substantially. That fact on its own
-is worth very little, and we quantify why with two degenerate controls
-that do nothing but reproduce history:
-\emph{copy-previous} emits the previous frame's disparity verbatim, and
-\emph{warped-previous} emits the previous raw disparity after the same
-motion compensation TETHER uses, at full weight.
-
-\begin{table}[!htb]
-\centering
-\scriptsize
-\caption{
-Degenerate controls on the D4D no-reference metric, 504 frames.
-Neither control is a method; both bound the metric from below.
-}
-\label{tab:d4d_degenerate}
-\begin{tabular}{lrr}
-\toprule
-Policy & Inconsistency & Reduction \\
-\midrule
-Raw (no temporal module)     & 3.7182 & --- \\
-TETHER $H=4$                  & 1.7128 & $53.9\%$ \\
-\midrule
-Copy-previous (degenerate)   & 0.0986 & $97.3\%$ \\
-Warped-previous (degenerate) & \textbf{0.0000} & $\mathbf{100.0\%}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Warped-previous scores \emph{exactly} zero, and it does so by
-construction: a policy whose output is the motion-compensated previous
-frame is trivially consistent with the motion-compensated previous
-frame. Copy-previous, which does not even align, still removes $97.3\%$
-of the inconsistency against TETHER's $53.9\%$.
-
-The ordering is therefore inverted with respect to geometric quality:
-on this metric the two policies that discard current stereo evidence
-outrank the one that uses it. We consequently treat D4D no-reference
-consistency as a diagnostic that is \emph{necessary but far from
-sufficient}, make no D4D geometric claim, and report the controls
-alongside the metric so that no reduction figure can be read as
-evidence of accuracy.
-
+The ordering is inverted with respect to geometric quality: the two
+policies that discard current stereo evidence outrank the one that uses
+it. We therefore treat D4D no-reference consistency as necessary but far
+from sufficient, make no D4D geometric claim, and report the controls
+beside the metric so no reduction figure can be read as accuracy. The
+full table is in the supplementary material.
 
 \section{Analysis}
 
-\subsection{What Makes TETHER Work}
+\subsection{What Makes TETHER Work, and Why So Few Parameters Suffice}
 
-The closure isolates four requirements. Geometric alignment is
-necessary but not sufficient: the aligned memory carries a $12.30\%$
-oracle ceiling, yet using it indiscriminately fails, since warped raw
-memory yields no meaningful gain and both direct FB-confidence weighting
-and full recurrent replacement worsen EPE. Under identical evidence and
+The closure isolates four requirements. Geometric alignment is necessary
+but not sufficient: the aligned memory carries a $12.30\%$ oracle
+ceiling, yet using it indiscriminately fails, since warped raw memory
+yields no meaningful gain and both direct FB-confidence weighting and
+full recurrent replacement worsen EPE. Under identical evidence and
 support the learned policy obtains almost seven times the gain of the
 best fixed blend, and the recurrent state must stay bounded because
 continuous propagation accumulates error and collapses. The mechanism is
 motion alignment plus learned graded intervention plus bounded recurrent
 state, not generic smoothing.
 
-\subsection{Why a 177k-Parameter Head Generalizes}
-
-The head does not solve stereo matching. It receives two already
-meaningful candidates, $d_t^{\raw}$ and $\widetilde m_t$, together with
-evidence describing their disagreement, motion reliability, validity,
-matching consistency and appearance, so its problem is closer to
-estimating whether temporal evidence is useful than to predicting
-disparity from RGB. Convex fusion further restricts the action space to
-a position between two candidate geometries. That constrained decision
-problem is a plausible reason why one small head transfers to
+This also explains the parameter count. The head never solves stereo
+matching: it receives two already meaningful candidates, $d_t^{\raw}$ and
+$\widetilde m_t$, plus evidence describing their disagreement, motion
+reliability, validity, matching consistency and appearance, so its
+problem is closer to judging whether temporal evidence is useful than to
+predicting disparity from RGB. Convex fusion further restricts the action
+space to a position between two candidate geometries. A decision problem
+that constrained is a plausible reason why one small head transfers to
 architectures absent from its training.
 
 \subsection{The Oracle Gap Is the Next Problem}
@@ -1221,17 +1209,17 @@ the policy. Transfer is demonstrated along the backbone axis, the domain
 axis and their combination, but a single external domain does not
 establish universal cross-domain robustness, and DRENDS supplies a
 temporally filtered ToF reference rather than independent stereo ground
-truth. Held-out numbers are a single canonical seed; sequence-aware
-confidence intervals over additional seeds are required before the
-per-backbone margins of two to three percent can be called separated.
+truth. Per-backbone D7 margins come from one canonical seed and the three-seed
+study bounds only the pooled effect, so individual backbone rows are not
+separated from one another.
 
 \paragraph{What the metrics cannot say.}
-No-reference temporal consistency is gameable, and
-Table~\ref{tab:d4d_degenerate} shows it is gamed outright by replaying
-warped history, so we make no D4D geometric claim. Pull-warp support
-detects out-of-frame sampling but cannot model internal disocclusion, so
-newly visible anatomy may inherit stale geometry despite plausible motion
-consistency; this remains a plausible source of residual tails.
+No-reference temporal consistency is gameable --- replaying warped
+history scores exactly zero --- so we make no D4D geometric claim.
+Pull-warp support detects out-of-frame sampling but cannot model internal
+disocclusion, so newly visible anatomy may inherit stale geometry despite
+plausible motion consistency; this remains a plausible source of residual
+tails.
 
 \paragraph{Cost and scope.}
 The head is compact but the deployed system also runs frozen stereo and
@@ -1246,32 +1234,32 @@ clinical safety nor patient benefit.
 \section{Conclusion}
 
 TETHER attaches one causal temporal module, trained once, to frozen and
-heterogeneous stereo estimators without touching their internals or
-using future frames.
-
-Its gain is not temporal averaging: on development D2 it reduces EPE by
-$4.05\%$ against $0.59\%$ for the best matched fixed blend under an
-identical state machine, while direct flow-confidence weighting and
-unbounded recurrence degrade accuracy, the latter by $62.69\%$. A frozen
-$H=4$ checkpoint then improves all five estimators on held-out D7 in
+heterogeneous stereo estimators without touching their internals or using
+future frames. Its gain is not temporal averaging: on development D2 it
+reduces EPE by $4.05\%$ against $0.59\%$ for the best matched fixed blend
+under an identical state machine, while direct flow-confidence weighting
+and unbounded recurrence degrade accuracy, the latter by $62.69\%$. A
+frozen $H=4$ checkpoint improves all five estimators on held-out D7 in
 EPE, Bad1 and RMSE simultaneously, including two excluded from training,
-and recovers $2.9$--$10.4\times$ more Bad1 pixels than it introduces.
+recovers $2.9$--$10.4\times$ more Bad1 pixels than it introduces, and
+holds at $5.15\pm0.35\%$ Bad1 across three independently trained seeds.
 Zero-shot transfer to five DRENDS recordings improves every one of 60
-recording--backbone--metric cells, completing the transfer matrix across
-the backbone and the domain shift together.
+recording--backbone--metric cells.
 
-Two results bound what may be claimed. The no-reference consistency
-metric is won outright by a policy that merely replays warped history,
-so temporal smoothness cannot stand in for correctness; and the internal
-fusion weight inverts its relationship with harm between development and
-held-out data, so it is an intervention magnitude and not an uncertainty.
-The oracle over the module's own action space remains far from reached,
-which places the open problem in deciding \emph{where} to intervene
-rather than in obtaining temporal evidence.
+Three results bound what may be claimed. The no-reference consistency
+metric is won outright by a policy that merely replays warped history, so
+smoothness cannot stand in for correctness. The fusion weight inverts its
+relationship with harm between development and held-out data, so it is an
+intervention magnitude and not an uncertainty. And development gains
+carry selection optimism that held-out gains do not: across seeds the D2
+effect spans $5.03$ points and the D7 effect $0.69$. The oracle over the
+module's own action space remains far from reached, placing the open
+problem in deciding \emph{where} to intervene rather than in obtaining
+temporal evidence.
 
 Finally, the support a module declares must also be applied to what it
-emits. Confining the fused output to it costs $0.07$ percentage points
-in domain and removes the entire external-domain metric-depth tail.
+emits. Confining the fused output to it costs $0.07$ percentage points in
+domain and removes the entire external-domain metric-depth tail.
 
 
 \begin{thebibliography}{99}

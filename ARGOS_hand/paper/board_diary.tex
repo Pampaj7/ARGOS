@@ -14584,5 +14584,64 @@ indistinguishable by filename, and the older one sorts first. The manifests
 disambiguate them; directory names do not.
 
 
+
+\section*{Three Seeds, and a Selection Effect We Can Measure}
+
+Seed 2 landed. The full pre-registered analysis now runs on seeds
+$0,1,2$: pooled Bad1 reduction $5.69\pm0.37\%$ over 35 sequences, paired
+sequence-level bootstrap $[4.11,8.02]$, $p=.000$; pooled EPE
+$4.62\pm0.18\%$, $[3.42,5.80]$.
+
+Split apart, the two halves behave completely differently:
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& seed 0 & seed 1 & seed 2 & spread \\
+\midrule
+D2 Bad1 & 10.78 & 8.67 & 5.75 & 5.03 \\
+D7 Bad1 &  4.78 & 5.47 & 5.19 & 0.69 \\
+D2 EPE  &  4.05 & 3.43 & 3.17 & 0.88 \\
+D7 EPE  &  4.57 & 5.25 & 5.38 & 0.81 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+On D2 seed 0 is best and the sequence is monotone. On D7 seed 0 is
+\emph{worst} on both metrics. Ten of ten per-backbone comparisons agree.
+This is the signature of our own checkpoint-selection rule, which picks
+best D2 fused EPE: seed 0 is by construction the run that looked best on
+the split it was selected on. The development margin carries selection
+optimism; the held-out margin, which is what the paper claims, does not.
+
+We could have buried this. Reporting it is better: it converts a
+reviewer's likely objection --- ``your development gains look
+suspiciously large'' --- into a measured quantity with the right sign.
+
+\paragraph{What it cost the manuscript.} Adding the subsection pushed the
+paper to nine pages. Getting back to eight took four passes: merging
+``What Makes TETHER Work'' with the $177$k-parameter subsection,
+compressing the D4D degenerate section into prose with its table moved to
+the supplementary, tightening Cross-Backbone Development Behaviour, and
+finally dropping the seed table itself in favour of four inline
+mean$\pm$std figures. The last one was the right call and should have
+been the first: the table held twelve numbers the prose already stated.
+
+One stale sentence died in the process, which is the point of doing this
+before submission. Discussion still read ``held-out numbers are a single
+canonical seed; sequence-aware confidence intervals over additional seeds
+are required before the per-backbone margins of two to three percent can
+be called separated.'' Half of that is now false. It has been replaced by
+what is still true: the three-seed study bounds the pooled effect, so
+individual backbone rows remain unseparated from one another.
+
+The full per-backbone seed table, including the three D2 rows whose
+intervals cross zero, is in the supplementary. Those wide intervals are a
+property of a three-sequence split, not of the method, and we prefer them
+to the narrow and meaningless intervals that resampling pixels would have
+produced.
+
+
 \end{document}
 
