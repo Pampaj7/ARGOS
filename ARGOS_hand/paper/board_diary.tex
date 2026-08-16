@@ -14429,5 +14429,79 @@ by the five-recording, three-backbone run already reported.
     rises).
 \end{itemize}
 
+
+\section*{Night of 15--16 August: The Comparison That Does Not Exist}
+
+The standing objection was the sharpest one available to a reviewer: TETHER
+is never compared to another method. We went looking for one. The honest
+answer is that in our exact category --- causal, black-box, attached to a
+frozen surgical stereo network --- no runnable published method exists, and
+we can now say so with receipts rather than with a shrug.
+
+\paragraph{StereoDiffusion (MICCAI 2024).} The only paper in our category:
+causal, black-box, frozen stereo, surgical, evaluated on SCARED. Its
+repository has a single commit, $7.43$\,KiB of git objects, and contains a
+\texttt{.gitignore}, a \texttt{LICENSE} and a twelve-byte \texttt{README.md}.
+No code, no weights, no other branch. There is nothing to run.
+
+\paragraph{Neural Disparity Refinement (3DV 2021 / TPAMI 2024).} Same input
+contract as ours, spatial only. The code clones fine; the weights do not
+exist any more. Both released Google Drive IDs return HTTP 404 from the
+download endpoint \emph{and} from the plain file-view page --- a restricted
+file answers 403 or an interstitial, so 404 on the view page means deleted.
+\texttt{docs.google.com/uc} agrees. Hugging Face has no mirror; the GitHub
+releases API returns an empty list. Our network is not the obstacle: the same
+\texttt{curl} reached huggingface.co and archive.org in the same session.
+
+\paragraph{Lai et al.\ (ECCV 2018).} The natural task-agnostic baseline. Its
+download script points at \texttt{vllab.ucmerced.edu}, which answers $200$ for
+the directory and $404$ for every model file. The Wayback CDX index has
+captures of the project page, its stylesheets and the $34$\,MB supplementary
+PDF, and zero captures of \texttt{ECCV18\_blind\_consistency.pth} --- crawlers
+archive HTML and skip large binaries. No Hugging Face mirror, no GitHub
+release. The hosting rotted and nothing caught it.
+
+\paragraph{TC-Stereo (ECCV 2024), and what we did about it.} This one loads.
+We found a configuration that matches all three released checkpoints with zero
+missing and zero unexpected keys, and it imports cleanly in our environment.
+The blocker is scientific, not technical. Its temporal propagation warps the
+previous disparity by a rigid $6$-DoF reprojection built from per-frame camera
+pose, intrinsics and baseline. SCARED-C supplies no per-frame pose, and
+deformable tissue violates the rigid-scene assumption regardless --- so its
+temporal path is not merely unavailable on our data, it is the wrong model of
+the scene. Running it with \texttt{params=None} is possible but degenerates it
+to a single-frame stereo network.
+
+So we ran exactly that, and labelled it honestly.
+\texttt{scripts/run\_tcstereo\_reference.py} drives TC-Stereo over the
+\emph{same} frozen NPZ boundary the BiDAStabilizer comparison consumed, so the
+frames, the crops and the ground truth are bit-identical across methods. The
+row it produces is an integrated-architecture reference --- $16.7$\,M
+parameters, trained end to end, evaluated zero-shot --- not a temporal rival,
+and the manifest records the disabled temporal path and the reason. It answers
+the one question our own ablations cannot: whether one should simply use a
+newer integrated network instead of refining a frozen one.
+
+\paragraph{What went into the paper.} A new Related Work paragraph, ``The
+comparison that does not exist'', with five citations. It cost a page, and the
+page came back out of the external-interface, support-contract, closure and
+evaluation subsections without dropping a single result or table. The
+submission is at eight pages including the bibliography, which is the hard
+constraint.
+
+\paragraph{Seed variance, pre-registered.} \texttt{scripts/aggregate\_seeds.py}
+implements the reporting rule written down before any seed result existed:
+mean and standard deviation across seeds $0,1,2$, plus a paired bootstrap in
+which \emph{sequences}, never pixels, are the resampling unit. Pixels inside
+one endoscopic sequence are not independent samples and resampling them would
+manufacture significance. Seeds are averaged inside each resample, so seed
+choice is part of the method rather than a free parameter --- which is what the
+pre-registered prohibition on selecting the best seed actually requires. Run on
+seed $0$ alone as a plumbing check, the pooled D2$+$D7 Bad1 reduction is
+$5.79\%$ with a $95\%$ interval of $[4.15, 8.35]$ and no resample in which
+refinement failed to help. The real three-seed number replaces it when seeds
+$1$ and $2$ finish.
+
+
 \end{document}
 
