@@ -28,8 +28,6 @@
 \usepackage{bm}
 
 \usepackage{graphicx}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
 
 % Float placement: the defaults defer nearly every float to the end when a
 % short paper carries five tables and two figures.
@@ -299,95 +297,6 @@ development and held-out data.
 % II. RELATED WORK
 % ============================================================
 
-\begin{figure*}[!t]
-\centering
-\begin{tikzpicture}[x=1mm, y=1mm,
-  every node/.style={font=\scriptsize},
-  frm/.style={draw=black!40, fill=black!5, rounded corners=0.8pt,
-              minimum width=5.4mm, minimum height=4mm, inner sep=0pt, font=\tiny},
-  dsp/.style={frm, fill=blue!6, draw=blue!35},
-  froz/.style={draw=black!45, fill=black!8, rounded corners=1.2pt,
-               inner xsep=2pt, inner ysep=2.2pt, font=\scriptsize},
-  trn/.style={draw=orange!75!black, fill=orange!22, rounded corners=1.2pt,
-              line width=0.6pt, inner xsep=2pt, inner ysep=2.2pt, font=\scriptsize},
-  ours/.style={trn, line width=0.9pt},
-  fwd/.style={->, >={Stealth[length=1.2mm]}, line width=0.4pt, draw=black!55},
-  past/.style={->, >={Stealth[length=1.3mm]}, line width=0.5pt, draw=teal!75!black},
-  futr/.style={->, >={Stealth[length=1.3mm]}, line width=0.5pt, draw=red!70!black},
-  pcap/.style={font=\scriptsize, align=center},
-  tag/.style={font=\tiny, inner sep=0.8pt}]
-
-% Frames on top, disparities at the bottom; every panel shares the same
-% vertical span so the four captions sit on one line.
-\def\frames#1{%
-  \node[frm] (#1f0) at (0,7)  {$t{-}1$};
-  \node[frm] (#1f1) at (7.5,7)  {$t$};
-  \node[frm] (#1f2) at (15,7) {$t{+}1$};}
-\def\disps#1#2{%
-  \node[dsp] (#1d0) at (0,#2)  {};
-  \node[dsp] (#1d1) at (7.5,#2)  {};
-  \node[dsp] (#1d2) at (15,#2) {};}
-
-% ---------- (a) frame-wise
-\begin{scope}[shift={(0,0)}]
-  \frames{a}
-  \node[froz] (am) at (7.5,-1) {stereo net};
-  \foreach \i in {0,1,2} { \draw[fwd] (af\i) -- (am); }
-  \disps{a}{-9}
-  \foreach \i in {0,1,2} { \draw[fwd] (am) -- (ad\i); }
-  \node[pcap] at (7.5,-15) {(a) frame-wise\\[-1pt] \tiny no temporal reasoning};
-\end{scope}
-
-% ---------- (b) integrated video stereo
-\begin{scope}[shift={(43,0)}]
-  \frames{b}
-  \node[trn] (bm) at (7.5,-1) {video stereo net};
-  \foreach \i in {0,1,2} { \draw[fwd] (bf\i) -- (bm); }
-  \disps{b}{-9}
-  \foreach \i in {0,1,2} { \draw[fwd] (bm) -- (bd\i); }
-  \draw[past] (bm.west) ++(-0.5,1.4) -- ++(-5,0) -- ++(0,-2.8) -- ++(5,0);
-  \node[pcap] at (7.5,-15) {(b) integrated video\\[-1pt] \tiny estimator replaced or retrained};
-\end{scope}
-
-% ---------- (c) bidirectional plug-in
-\begin{scope}[shift={(90,0)}]
-  \frames{c}
-  \node[froz] (cm) at (7.5,1.5) {frozen stereo};
-  \foreach \i in {0,1,2} { \draw[fwd] (cf\i) -- (cm); }
-  \node[trn] (cs) at (7.5,-4.5) {stabiliser};
-  \draw[fwd] (cm) -- (cs);
-  \disps{c}{-11}
-  \foreach \i in {0,1,2} { \draw[fwd] (cs) -- (cd\i); }
-  \draw[past] (cs.west) ++(-0.4,0.9) -- ++(-4.5,0) -- ++(0,-1.8) -- ++(4.5,0);
-  \draw[futr] (cs.east) ++(0.4,0.9) -- ++(4.5,0) -- ++(0,-1.8) -- ++(-4.5,0);
-  \node[tag, text=red!70!black] at (19.5,2.2) {future};
-  \node[pcap] at (7.5,-15) {(c) bidirectional plug-in\\[-1pt] \tiny frozen estimator, reads ahead};
-\end{scope}
-
-% ---------- (d) ours
-\begin{scope}[shift={(137,0)}]
-  \frames{d}
-  \node[froz] (dm) at (7.5,1.5) {frozen stereo};
-  \foreach \i in {0,1,2} { \draw[fwd] (df\i) -- (dm); }
-  \node[ours] (ds) at (7.5,-4.5) {TETHER, $177$k};
-  \draw[fwd] (dm) -- (ds);
-  \disps{d}{-11}
-  \foreach \i in {0,1,2} { \draw[fwd] (ds) -- (dd\i); }
-  \draw[past] (ds.west) ++(-0.4,0.9) -- ++(-4.5,0) -- ++(0,-1.8) -- ++(4.5,0);
-  \node[tag, text=teal!75!black] at (-5.5,2.2) {past only};
-  \node[pcap] at (7.5,-15) {(d) ours: causal plug-in\\[-1pt] \tiny frozen estimator, past only};
-\end{scope}
-\end{tikzpicture}
-\caption{
-Where TETHER sits. Grey is frozen, orange is trained, teal arrows read
-the past and the red arrow reads the future. Integrated video methods (b)
-buy consistency by replacing or retraining the estimator; plug-in
-stabilisers (c) keep it frozen but propagate bidirectionally, which a
-live system cannot do. TETHER (d) is the remaining cell.
-}
-\label{fig:taxonomy}
-\end{figure*}
-
 \section{Related Work}
 \label{sec:related}
 
@@ -400,8 +309,8 @@ is orthogonal: we neither modify the estimator nor assume an
 architecture.
 
 \paragraph{Temporal stereo and depth.}
-Fig.~\ref{fig:taxonomy} places the families. CODD introduced the
-reset/fusion mechanism we build on \cite{li2023codd}; DynamicStereo
+CODD introduced the reset/fusion mechanism we build on
+\cite{li2023codd}; DynamicStereo
 \cite{karaev2023dynamicstereo}, PPMStereo \cite{wang2025ppm} and
 TC-Stereo \cite{zeng2024tcstereo} follow, all co-designed with the
 estimator, so a new backbone means a new temporal model. Match Stereo
@@ -450,68 +359,25 @@ which is why we treat refinement as an intervention on that geometry.
 
 \section{Method}
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
 \centering
-\begin{tikzpicture}[x=1mm, y=1mm,
-  every node/.style={font=\scriptsize},
-  box/.style={draw=black!55, rounded corners=1.2pt, align=center,
-              inner xsep=2.2pt, inner ysep=2.4pt, line width=0.35pt},
-  frozen/.style={box, fill=black!7, draw=black!45},
-  learn/.style={box, fill=orange!22, draw=orange!75!black, line width=0.7pt},
-  act/.style={box, fill=blue!7, draw=blue!45},
-  rawflow/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=teal!75!black},
-  memflow/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=violet!70},
-  ctrl/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=black!65},
-  fb/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=black!45, dashed},
-  tag/.style={font=\tiny, inner sep=1pt}]
-
-% ---- frozen networks and the cache
-\node[frozen] (stereo) at (4,32)  {frozen stereo $S$};
-\node[frozen] (flow)   at (38,32) {frozen SEA-RAFT};
-\node[frozen] (mem)    at (62,23) {$m_{t-1}$};
-\node[act]    (warp)   at (38,23) {pull-warp};
-\node[tag] at (4,37)  {$I_t^L,\,I_t^R$};
-\node[tag] at (38,37) {$I_t^L,\,I_{t-1}^L$};
-
-% ---- the learned path
-\node[act]   (ev)   at (15,14)   {external evidence, $142$\,ch};
-\node[learn] (head) at (15,6.5)  {fusion head, $177$k};
-\node[act]   (mix)  at (15,-1.5) {convex blend};
-\node[act]   (mask) at (15,-9.5) {confine to support};
-
-% ---- current stereo estimate (teal): into the evidence, and into the blend
-\draw[rawflow] (stereo.south) -- node[tag,left,pos=.6]{$d_t^{\raw}$} (ev.north west);
-\draw[rawflow] (stereo.west) -- ++(-3.5,0) |- (mix.west);
-
-% ---- aligned memory (violet): into the evidence, and into the blend
-\draw[memflow] (mem) -- (warp);
-\draw[memflow] (warp.south west) -- node[tag,above left,pos=.65]{$\widetilde m_t$} (ev.north east);
-\draw[memflow] (warp.south) -- ++(0,-21.5) -- (mix.east);
-
-% ---- control path
-\draw[ctrl] (flow) -- (warp);
-\draw[ctrl] (ev) -- (head);
-\draw[ctrl] (head) -- node[tag,right]{$w_t$} (mix);
-\draw[ctrl] (mix) -- (mask);
-\draw[ctrl] (mask.south) -- ++(0,-4) node[tag,right,xshift=0.4mm]{$d_t^{\fused}$};
-
-% ---- bounded recurrence: the confined output returns to the cache
-\draw[fb] (mask.south) ++(0,-4) -- ++(0,-2) -| (62,-6) -- (mem.south);
-\node[tag, align=right, text=black!55, anchor=east] at (58,9)
-  {re-anchor to $d_{t-1}^{\raw}$\\ every $H{=}4$};
-\end{tikzpicture}
+\includegraphics[width=\textwidth]{figure_assets/Temporal_consistency_taxonomy.pdf}
 \caption{
-TETHER reads only externally observable quantities. Grey boxes are frozen
-and never modified; the orange box is the only trained component. The two
-candidate geometries reach the blend by separate paths --- the current
-stereo estimate in teal, the motion-aligned memory in violet --- and the
-head contributes only the scalar $w_t$ that places the output between
-them. That output is confined to the support the module declares, and the
-recurrent state is re-anchored to independently predicted raw geometry
-every $H$ frames. No future frame is used.
+TETHER at three scales. \textbf{(a)} Bounded recurrence. Temporal memory
+carries the \emph{fused} disparity forward, and every $H{=}4$ frames the
+chain is cut and re-tied to raw geometry the frozen network produced
+independently (teal). The five frames are consecutive and the two
+disparity rows share one colour scale: they differ by $0.108$\,px on
+average, because the intervention is sub-pixel by design.
+Fig.~\ref{fig:trace} shows where that accumulates into a measurable gain.
+\textbf{(b)} One time step. Dashed grey is frozen; the single orange block
+is the only trained component, and it emits one scalar $w_t$ rather than
+geometry. \textbf{(c)} The evidence space: none of the $142$ channels
+carries ground truth, backbone identity or a future frame, which is what
+lets one head serve heterogeneous estimators.
 }
 \label{fig:system}
-\end{figure}
+\end{figure*}
 
 \label{sec:method}
 
@@ -582,15 +448,11 @@ S_t,
 \right).
 \end{equation}
 
-The head consumes a single 142-channel tensor built at two resolutions.
-At quarter resolution, 129 channels carry matching and frozen appearance
-information: matching curves around raw and memory disparity, disparity
-and appearance self- and cross-correlations, sampled matching-support
-cues, and 64 frozen ResNet-18 layer-1 channels \cite{he2016resnet}.
-These are upsampled to the cache grid and concatenated with 13 cache-grid
-channels holding current disparity, aligned memory, signed and absolute
-disagreement, flow components and magnitude, forward--backward
-confidence, warp support, aligned validity and RGB evidence.
+The head consumes a single 142-channel tensor built at two resolutions,
+itemised in Fig.~\ref{fig:system}(c): 129 quarter-resolution channels of
+matching and frozen appearance evidence, including 64 frozen ResNet-18
+layer-1 channels \cite{he2016resnet}, upsampled and concatenated with 13
+cache-grid channels of disparity, motion and RGB.
 
 Normalisation is fixed before training: disparities clipped to $[0,64]$
 and scaled by $64$, signed residuals clipped to $[-16,16]$ and scaled by
