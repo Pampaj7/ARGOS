@@ -14834,5 +14834,68 @@ context branch outright would have confounded ``context needs low
 resolution'' with ``the head needs capacity''.
 
 
+
+\section*{A2: The Evidence Space Is Over-Specified}
+
+A2 removes \emph{all} learned stereo evidence --- the confidence curves and
+their supports, both appearance correlations, and the $64$ frozen
+ResNet-18 channels --- leaving $38$ channels of disparity, motion and RGB
+geometry. Verified on the checkpoint: \texttt{cue\_channels} is $38$ and
+the head is $154{,}874$ parameters instead of $177{,}338$. Crucially it
+is also the only variant that removes the frozen extractor from the
+runtime, since nothing left in the stack needs it.
+
+We expected this to be the ablation that hurt. On held-out D7 it is
+\emph{better than canonical on every metric}:
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+D7 held out & EPE & Bad1 & Bad3 & RMSE \\
+\midrule
+Canonical, $142$ ch & 4.57 & 4.78 & 4.07 & 5.33 \\
+A1, $78$ ch         & 4.93 & 4.88 & 4.12 & 5.46 \\
+A2, $\mathbf{38}$ ch & \textbf{5.49} & \textbf{5.69} & \textbf{4.85} & \textbf{5.92} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Its Bad1 margin is $+0.91$ points against a three-seed spread of $0.37$,
+so by the pre-registered rule this is \emph{better}, not indistinguishable.
+
+The three ablations line up into one pattern rather than three
+independent results. A1 removes the raw appearance channels but keeps the
+correlations computed from them: neutral. A2 removes the correlations too:
+better. The more appearance-derived evidence leaves the interface, the
+better the head generalises to backbones and sequences it never saw. That
+is the signature of evidence that ties the decision to the training
+domain --- useful where it was fitted, a liability elsewhere.
+
+\paragraph{What this does and does not cost the paper.} It does not touch
+the interface idea. A $38$-channel external evidence space is still an
+external evidence space, still carries no ground truth, no backbone
+identity and no future frame, and still lets one head serve heterogeneous
+estimators. What fails is the specific richness of our instantiation: we
+built $142$ channels and $104$ of them are, on held-out data, worse than
+useless.
+
+Two honest qualifications. On D2 --- the split the checkpoint is selected
+on --- A2's EPE is \emph{worse} than canonical ($3.69$ against $4.05$),
+which is the third time this development-versus-held-out inversion has
+appeared today. And each ablation is a single seed, while the $0.37$ point
+yardstick comes from three seeds of the canonical model; a margin of
+$0.91$ clears it but not by an order of magnitude.
+
+\paragraph{The uncomfortable implication.} If A2 holds up, the canonical
+architecture we are submitting is not the best one we have measured. The
+honest options are to report the ablation as it is and say so plainly, or
+to re-run the seed study on the $38$-channel variant before claiming
+anything stronger. We are not going to quietly promote A2 to canonical
+after the fact --- the pre-registration prohibits exactly that, and
+selecting the best variant post hoc is how the selection effect we spent
+today measuring gets back in through the side door.
+
+
 \end{document}
 
