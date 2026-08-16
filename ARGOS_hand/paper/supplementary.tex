@@ -98,6 +98,45 @@ $w\in\{0.1,0.2,0.3,0.5,2/3\}$ over the shared bounded state, not two
 independent families. We state this because two nominally different
 baselines producing an identical number otherwise reads as a bug.
 
+\subsection*{The Horizon Sweep, With Its Risk Side}
+
+The main paper states that $H=4$ is a risk--gain operating point rather
+than the EPE minimum, and points here for the sweep. The closure table
+above gives the EPE column; this is the same sweep with the intervention
+statistics that motivated the choice.
+
+\begin{table}[!ht]
+\centering
+\footnotesize
+\caption{Bounded horizon on D2. Lower EPE is better; higher $B^+/H^+$ and
+lower NewBad1 are better.}
+\label{sup:horizons}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+$H$ & EPE & $B^+/H^+$ & NewBad1 (\%) \\
+\midrule
+1 & 0.269001 & 2.39 & 0.0361 \\
+2 & 0.267265 & 2.50 & 0.0381 \\
+4 & 0.265028 & \textbf{2.53} & 0.0467 \\
+6 & \textbf{0.264656} & 2.30 & 0.0676 \\
+8 & 0.264912 & 2.04 & 0.1282 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two columns disagree, and that disagreement is the whole reason the
+operating point is not simply the EPE minimum. EPE bottoms out at $H=6$,
+by $0.14\%$ over $H=4$. Over the same step the beneficial-to-harmful
+magnitude ratio falls from $2.53$ to $2.30$ and then to $2.04$, while
+newly introduced Bad1 pixels rise from $0.0467\%$ to $0.0676\%$ to
+$0.1282\%$ --- nearly tripling between $H=4$ and $H=8$. Letting the
+corrected state live longer buys a sliver of mean accuracy and pays for
+it in intervention risk.
+
+$H=4$ was frozen on this trade before the held-out split was opened. We
+report it as a choice rather than as an optimum, because on the metric
+most papers would quote it is not one.
+
 % ============================================================
 \section{The Oracle Ceiling Is Not the One We Report Against}
 % ============================================================
