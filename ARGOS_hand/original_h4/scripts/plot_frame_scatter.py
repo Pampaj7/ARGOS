@@ -54,7 +54,7 @@ def main() -> None:
 
     scale = 100.0 if args.metric.startswith("Bad") else 1.0
     unit = "%" if scale == 100.0 else "px"
-    figure, axes = plt.subplots(1, 2, figsize=(args.width_in, args.width_in * 0.46))
+    figure, axes = plt.subplots(1, 2, figsize=(args.width_in, args.width_in * 0.42))
     summary = {}
 
     for ax, (split, label) in zip(axes, SPLITS):

@@ -318,11 +318,11 @@ its hidden state. Match Stereo Videos exposes BiDAStabilizer as a plug-in
 consumes future frames. A parallel line enforces consistency on monocular video depth, by
 test-time optimisation over a whole clip
 \cite{luo2020cvd} or by video diffusion and temporal
-heads \cite{hu2025depthcrafter,chen2025vda}; NVDS stabilises monocular
+heads \cite{hu2025depthcrafter}; NVDS stabilises monocular
 relative depth \cite{wang2023nvds}. All operate on a different output
 space and none is causal at clip level. A further line achieves temporal
 robustness by adapting the stereo network's weights online
-\cite{tonioni2019madnet,tonioni2019adapt,poggi2022continual}, which is
+\cite{tonioni2019madnet,poggi2022continual}, which is
 the opposite of the constraint we adopt.
 
 \paragraph{What can actually be compared.}
@@ -958,14 +958,13 @@ the held-out numbers untouched.
 \includegraphics[width=\columnwidth]{frame_scatter.pdf}
 \caption{
 Per-frame Bad1, raw against refined, for \emph{every} scored frame of
-each split --- five backbones and all sequences pooled, no selection.
-Points below the diagonal are improved frames. On held-out D7 half of all
-frames improve against $13\%$ worsened, and the worsened band hugs the
-diagonal while the improved mass extends far from it: the frame-level
-form of the count-versus-magnitude asymmetry behind $B^+/H^+$. Raw and
-refined disparity \emph{maps} are not shown because the intervention is
-sub-pixel on disparities of about $8$\,px, so at an honest colour scale
-they are indistinguishable.
+each split --- five backbones, all sequences, no selection. Points below
+the diagonal are improved frames. On held-out D7 half improve against
+$13\%$ worsened, and the worsened band hugs the diagonal while the
+improved mass extends far from it: the frame-level form of the
+count-versus-magnitude asymmetry behind $B^+/H^+$. Disparity \emph{maps}
+are not shown --- the intervention is sub-pixel on disparities of about
+$8$\,px, so at an honest colour scale they are indistinguishable.
 }
 \label{fig:trace}
 \end{figure}
@@ -1100,9 +1099,9 @@ DRENDS remains a non-independent reference.
 \label{sec:masking}
 
 The results above use the support-confined output of \eqref{eq:fusion}.
-The ablation is a single line, so it isolates the contract cleanly:
-checkpoint, head, evidence, policy and reset schedule are identical and
-only the masking differs.
+The ablation is a single line, isolating the contract cleanly: checkpoint,
+head, evidence, policy and reset schedule identical, only the masking
+differs.
 
 \begin{table}[!htb]
 \centering
@@ -1131,18 +1130,17 @@ $\widetilde m_t=0$, the fused disparity collapses there, and bounded
 recurrence carries the collapse to the next re-anchor. The offenders are
 rare and bursty --- $300$ of $38.8$M on Vid10\_Liver\_Med, $265$ of
 $38.4$M on Vid11\_Liver\_High, in runs of at most $H$ frames --- and the
-aligned memory of every one is exactly $0.0$. Because an invalid prediction on
-valid support is penalised rather than discarded, those few hundred
-pixels are the entire source of the depth tail previously attributed to
-the external domain. Confining the output removes it and improves
-disparity too, since the zero no longer enters memory.
+aligned memory of every one is exactly $0.0$. Because an invalid prediction on valid support is penalised rather than
+discarded, those few hundred pixels are the entire source of the depth
+tail previously attributed to the external domain; confining the output
+removes it and improves disparity too, since the zero no longer enters
+memory.
 
-On SCARED-C the same ablation is nearly inert: D2 is unchanged at
-$4.05\%$ and D7 falls from $4.64\%$ to $4.57\%$, the largest single
-change being RAFT-Stereo ($6.10\%\rightarrow5.87\%$). The contract is
-therefore not free in domain; it costs a little in-domain gain and buys
-well-posed behaviour out of domain. We report the confined variant
-because a module that declares a support must respect it.
+On SCARED-C the same ablation is nearly inert: D2 unchanged at $4.05\%$,
+D7 from $4.64\%$ to $4.57\%$. The contract is therefore not free --- it
+costs a little in-domain gain and buys well-posed behaviour out of
+domain --- and it is almost invisible to anyone validating in domain
+only, which is what makes it worth stating.
 
 
 \subsection{No-Reference Temporal Behaviour on D4D}
@@ -1236,20 +1234,22 @@ holds at $5.15\pm0.35\%$ Bad1 across three independently trained seeds.
 Zero-shot transfer to five DRENDS recordings improves every one of 60
 recording--backbone--metric cells.
 
-Three results bound what may be claimed. The no-reference consistency
+Four results bound what may be claimed. The no-reference consistency
 metric is won outright by a policy that merely replays warped history, so
 smoothness cannot stand in for correctness. The fusion weight inverts its
-relationship with harm between development and held-out data, so it is an
-intervention magnitude and not an uncertainty. And development gains
-carry selection optimism that held-out gains do not: across seeds the D2
-effect spans $5.03$ points and the D7 effect $0.69$. The oracle over the
-module's own action space remains far from reached, placing the open
-problem in deciding \emph{where} to intervene rather than in obtaining
-temporal evidence.
+relation to harm between development and held-out data, so it is an
+intervention magnitude, not an uncertainty. Development gains carry
+selection optimism that held-out gains do not: across seeds the D2 effect
+spans $5.03$ points, the D7 effect $0.69$. And a module that declares a
+support must apply it to what it emits --- a contract whose violation is
+almost invisible in domain and costs the whole metric-depth tail out of
+it, a general hazard for flow-aligned plug-in modules rather than a
+property of ours.
 
-Finally, the support a module declares must also be applied to what it
-emits. Confining the fused output to it costs $0.07$ percentage points in
-domain and removes the entire external-domain metric-depth tail.
+What remains open is where to intervene: the oracle over the module's own
+action space is far from reached, and the weight the head computes is a
+magnitude rather than a ranking, so closing that gap needs evidence this
+interface does not yet carry.
 
 
 \begin{thebibliography}{99}
@@ -1422,19 +1422,6 @@ W.~Hu \emph{et al.},
 open-world videos,''
 in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
 (CVPR)}, 2025.
-
-\bibitem{chen2025vda}
-S.~Chen \emph{et al.},
-``Video Depth Anything: Consistent depth estimation for super-long
-videos,''
-in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2025.
-
-\bibitem{tonioni2019adapt}
-A.~Tonioni \emph{et al.},
-``Learning to adapt for stereo,''
-in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2019.
 
 \bibitem{poggi2022continual}
 M.~Poggi, A.~Tonioni, F.~Tosi, S.~Mattoccia, and L.~Di~Stefano,
