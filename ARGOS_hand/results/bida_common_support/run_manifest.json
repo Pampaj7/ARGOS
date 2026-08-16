@@ -1,0 +1,32 @@
+{
+  "project": "ARGOS v2",
+  "generated_at": "2026-08-16T03:56:47.632659+00:00",
+  "purpose": "Raw / BiDAStabilizer / TETHER on identical inputs and identical support",
+  "input_boundary": "/dtu/p1/leopam/ARGOS/ARGOS_hand/external_comparison/results/bidastabilizer_raftstereo_robust/d2_full",
+  "module": "model_design.comparison.canonical_h4_masked:factory",
+  "module_provenance": {
+    "module": "canonical_h4_masked",
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt",
+    "checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+    "policy": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_policy.json",
+    "policy_sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d",
+    "code": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/canonical_h4.py",
+    "code_sha256": "4148ee8b4b6d6662c1519bfdf9e850868d0fe7bb923d34617ccfaf6f757593c8",
+    "reset_protocol": "fixed H=4; raw t-1 after re-anchor; preceding fused otherwise",
+    "variant_of": "canonical_h4",
+    "variant_code": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/canonical_h4_masked.py",
+    "variant_code_sha256": "5f9e7463933422229a709b3d3ccfca443d10534aa1e0124dc7efa2e9f42a016a",
+    "variant_change": "fused = where(support, fused, raw); matches experimental_policies.py",
+    "checkpoint_modified": false,
+    "head_modified": false
+  },
+  "stereo_backbone": "RAFT-Stereo robust, as consumed by the BiDAStabilizer reproduction",
+  "support": "GT coverage AND raw validity; prediction-independent",
+  "invalid_penalty_px": 1000.0,
+  "causality": {
+    "bidastabilizer": "bidirectional, uses future frames",
+    "tether": "strictly causal"
+  },
+  "training_performed": false,
+  "threshold_tuning_performed": false
+}

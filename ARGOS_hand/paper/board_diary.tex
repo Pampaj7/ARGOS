@@ -14669,5 +14669,57 @@ $0.276202$ in both runs and the reduction is $4.05\%$ in both, so no other
 figure in the paper depends on the choice.
 
 
+
+\section*{The Comparison Exists Now}
+
+BiDAStabilizer finished on all three D2 sequences at common support. This
+is the number the whole night was for.
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lcrrrr@{}}
+\toprule
+Method & Causal & EPE & Bad1 & Bad3 & RMSE \\
+\midrule
+Raw RAFT-Stereo & --- & .30286 & 2.087 & .186 & .44842 \\
+BiDAStabilizer  & no  & .30211 & 1.987 & .171 & .44026 \\
+TETHER          & yes & \textbf{.28899} & \textbf{1.826} & \textbf{.157} & \textbf{.42562} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Same $4249$ frames, same frozen RAFT-Stereo robust predictions, same
+prediction-independent support, $18.0$M pixels. TETHER wins every metric
+and is the only causal entry: $-4.58\%$ EPE, $-12.53\%$ Bad1, $-15.52\%$
+Bad3 against raw, where the bidirectional baseline manages $-0.25\%$,
+$-4.83\%$, $-8.32\%$.
+
+Worth remembering how close this came to being meaningless. The first
+comparison we had was not a comparison: the published reproduction ran
+RAFT-Stereo \emph{robust} and we ran \emph{middlebury}, and the two were
+scored under different support contracts --- raw EPE $0.3029$ against
+$0.2762$. Subtracting those would have produced a confident number with
+no content. The fix was to stop generating our own inputs and read the
+stored NPZ boundary the reproduction had already written, so the RGB and
+the disparity BiDAStabilizer consumed are the same arrays ours consumes.
+
+\paragraph{The cell we do not like.} One sequence of three favours
+BiDAStabilizer on all three metrics, and on it our EPE is $0.27\%$
+\emph{worse} than raw. It goes in the paper. With three sequences a
+single sequence-level disagreement is well inside what the split can
+produce, and a method allowed to look ahead ought to win somewhere; the
+claim the table supports is the pooled one. Hiding it would have been
+both dishonest and, given that a reviewer can run the same three
+sequences, stupid.
+
+\paragraph{Page budget, again.} The subsection plus table cost a full
+page. Recovered by: deleting the CatastrophicFraction derivation from the
+main text, where it duplicated the supplementary verbatim; folding the
+``Selective risk'' capability list into one sentence; compressing D4D a
+second time; and tightening the $H=4$, recurrence and cross-backbone
+prose. Nothing was dropped that is not still stated somewhere. Eight
+pages, comparison table included.
+
+
 \end{document}
 

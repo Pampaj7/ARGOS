@@ -319,20 +319,17 @@ temporal robustness by adapting the stereo network's weights online
 \cite{tonioni2019madnet}, which is the opposite of the constraint we
 adopt.
 
-\paragraph{The comparison that does not exist.}
+\paragraph{What can actually be compared.}
 Our setting --- causal, black-box, frozen weights --- admits, to our
-knowledge, one published method: StereoDiffusion refines flow-warped
-disparity from an off-the-shelf estimator with a diffusion prior and
-evaluates on SCARED \cite{xu2024stereodiffusion}. Its repository contains
-no implementation, so we could not run it. Of the remaining candidates,
-the black-box spatial refiner of \cite{aleotti2021ndr} and the
-model-agnostic video-consistency network of \cite{lai2018blind} publish
-code whose weights are no longer retrievable, and TC-Stereo's temporal
-path requires per-frame camera pose and warps by a rigid transform, an
-assumption deformable tissue violates and SCARED-C cannot supply. We
-therefore compare against the one method that is both runnable and
-published, BiDAStabilizer, and state plainly that it sees the future
-while we do not.
+knowledge, one published method, StereoDiffusion
+\cite{xu2024stereodiffusion}, whose repository contains no
+implementation. Of the rest, \cite{aleotti2021ndr} and
+\cite{lai2018blind} publish code whose weights are no longer retrievable,
+and TC-Stereo's temporal path warps by a rigid transform driven by
+per-frame pose, which SCARED-C cannot supply and deformable tissue
+violates. We therefore compare against the one runnable published
+method, BiDAStabilizer (Sec.~\ref{sec:bida}), noting that it sees the
+future and we do not.
 
 \paragraph{Evaluating temporal refinement.}
 Stereo benchmarks report frame-wise geometry and video methods add
@@ -702,13 +699,10 @@ D_t
 We retain mean, median, P95, P99, worst degradation, and the fraction
 of degraded frames.
 
-\paragraph{Selective risk.}
-When a risk score is available, the same framework supports
-risk--coverage analysis, $\AURC$, oracle/excess $\AURC$, AUROC, AUPRC,
-Brier, NLL, and ECE \cite{geifman2019selectivenet}.
-
-Primary aggregation is equal-sequence macro averaging.
-Pixel-weighted micro statistics are retained secondarily.
+Where a risk score exists the framework also supports risk--coverage
+analysis and its calibration statistics \cite{geifman2019selectivenet}.
+Primary aggregation is equal-sequence macro averaging; pixel-weighted
+micro statistics are retained secondarily.
 
 
 % ============================================================
@@ -785,39 +779,34 @@ expected rather than two independent confirmations.
 \subsection{Why $H=4$?}
 
 The lowest development EPE is at $H=6$ ($0.264656$ versus $0.265028$), a
-difference of $0.000372$\,px or $0.14\%$. Longer state lifetime buys that
-sliver at a measurable cost in intervention risk: from $H=4$ to $6$ to
-$8$ the harmful-update rate rises ($0.4048$, $0.4053$, $0.4068$) while
-the beneficial rate falls ($0.5074$, $0.5065$, $0.5047$) and $B^+/H^+$
-degrades from $2.53$ to $2.30$ to $2.04$; the frame tail follows, with
-$P95(D_t)$ at $0.01715$, $0.02037$, $0.02441$ and NewBad1 at $0.0467\%$,
-$0.0676\%$, $0.1282\%$. We therefore do not claim $H=4$ minimises
-development EPE. It is the frozen risk--gain operating point, chosen
-before the held-out split was opened.
+difference of $0.14\%$. Longer state lifetime buys that sliver at a
+measurable cost in intervention risk: from $H=4$ to $6$ to $8$ the
+harmful-update rate rises ($0.4048$, $0.4053$, $0.4068$), the beneficial
+rate falls ($0.5074$, $0.5065$, $0.5047$), $B^+/H^+$ degrades from $2.53$
+to $2.30$ to $2.04$, and NewBad1 nearly triples ($0.0467\%$, $0.0676\%$,
+$0.1282\%$). We do not claim $H=4$ minimises development EPE: it is the
+frozen risk--gain operating point, chosen before D7 was opened.
 
 
 \subsection{Why Recurrence Must Be Bounded}
 
-Continuous corrected-state recurrence moves mean EPE from
-$0.276202 \rightarrow 0.449349$, a $62.69\%$ increase: writing corrected
-disparity back into memory without interruption accumulates alignment
-and fusion error. Periodic raw re-anchoring is therefore structural
-rather than an implementation detail, though this does not imply that
-every continuous recurrent architecture must fail.
+Continuous corrected-state recurrence moves mean EPE from $0.276202$ to
+$0.449349$, a $62.69\%$ increase: writing corrected disparity back into
+memory without interruption accumulates alignment and fusion error.
+Periodic raw re-anchoring is structural, not an implementation detail,
+though this does not imply every continuous recurrent architecture fails.
 
 
 \subsection{Cross-Backbone Development Behaviour}
 
 Canonical $H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:scared_main}): $8.44\%$ on StereoAnywhere, $3.37\%$ on
-CREStereo, $2.87\%$ on RAFT-Stereo, $2.85\%$ on Fast-FoundationStereo,
-$2.17\%$ on S$^2$M$^2$-S; seen backbones $4.50\%$, unseen $3.11\%$, with
-all six unseen-backbone sequence groups improving. The pooled $4.05\%$ is
-the ratio of mean EPEs, not the mean of those percentages ($3.94\%$,
-median $2.87\%$). It is fair to ask whether StereoAnywhere alone carries
-the result: excluding it the D2 mean falls to $2.82\%$, but on held-out
-D7 it does not, the mean excluding StereoAnywhere being $4.14\%$ with
-RAFT-Stereo alone at $6.10\%$.
+(Table~\ref{tab:scared_main}), from $2.17\%$ on S$^2$M$^2$-S to $8.44\%$
+on StereoAnywhere; seen backbones gain $4.50\%$, unseen $3.11\%$, and all
+six unseen-backbone sequence groups improve. The pooled $4.05\%$ is the
+ratio of mean EPEs, not the mean of those percentages ($3.94\%$). It is
+fair to ask whether StereoAnywhere alone carries the result: excluding it
+the D2 mean falls to $2.82\%$, but on D7 it does not, the mean excluding
+StereoAnywhere being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
@@ -992,6 +981,44 @@ breaks.
 
 
 
+\subsection{Head-to-Head Against a Published Stabiliser}
+\label{sec:bida}
+
+BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
+stabiliser we could run; it is bidirectional and consumes future frames,
+which our setting forbids. That difference is reported, not removed;
+everything else is equalised. Both read identical frozen RAFT-Stereo
+\emph{robust} predictions from one stored boundary over the same $4249$
+frames, scored on one prediction-independent support (GT coverage $\cap$
+raw validity) neither influences.
+
+\begin{table}[!htb]
+\centering
+\scriptsize
+\caption{
+Common-support comparison on three D2 sequences, $18.0$M pixels, same
+frozen backbone and same frames. Lower is better.
+}
+\label{tab:bida}
+\begin{tabular}{lccccc}
+\toprule
+Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
+\midrule
+Raw RAFT-Stereo   & ---          & .3029 & 2.087 & .186 & .4484 \\
+BiDAStabilizer    & no           & .3021 & 1.987 & .171 & .4403 \\
+TETHER            & \textbf{yes} & \textbf{.2890} & \textbf{1.826} & \textbf{.157} & \textbf{.4256} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+TETHER is better on every metric while being the only causal entry:
+against raw it cuts EPE by $4.58\%$, Bad1 by $12.53\%$ and Bad3 by
+$15.52\%$, against $0.25\%$, $4.83\%$ and $8.32\%$ for the bidirectional
+baseline. The per-sequence picture is not uniform: BiDAStabilizer wins all
+three metrics on one of the three sequences, where our EPE is $0.27\%$
+worse than raw, while TETHER wins clearly on the other two ($-6.53\%$ EPE,
+$-17.17\%$ Bad1 on the $2114$-frame one).
+
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
 
@@ -1110,23 +1137,15 @@ because a module that declares a support must respect it.
 
 \subsection{No-Reference Temporal Behaviour on D4D}
 
-Because the D4D metric-geometry contract remains unresolved, we report
-only prediction-space temporal inconsistency, which falls by $51.9\%$ for
-RAFT-Stereo and $54.5\%$ for StereoAnywhere. That fact on its own is
-worth very little, and we quantify why with two degenerate controls that
-only reproduce history. Copy-previous, which emits the previous
-disparity verbatim without even aligning it, removes $97.3\%$ of the
-inconsistency; warped-previous, which emits the motion-compensated
-previous disparity, scores \emph{exactly} zero by construction, since a
-policy whose output is the warped previous frame is trivially consistent
-with the warped previous frame. TETHER removes $53.9\%$.
-
-The ordering is inverted with respect to geometric quality: the two
-policies that discard current stereo evidence outrank the one that uses
-it. We therefore treat D4D no-reference consistency as necessary but far
-from sufficient, make no D4D geometric claim, and report the controls
-beside the metric so no reduction figure can be read as accuracy. The
-full table is in the supplementary material.
+Because the D4D metric-geometry contract is unresolved we report only
+prediction-space temporal inconsistency, which TETHER reduces by
+$53.9\%$. That fact alone is worth little. Copy-previous, which emits the
+previous disparity verbatim without aligning it, removes $97.3\%$;
+warped-previous, which emits the motion-compensated previous disparity,
+scores \emph{exactly} zero by construction. The ordering is inverted with
+respect to geometric quality --- the policies discarding current stereo
+evidence outrank the one using it --- so we treat this metric as necessary
+but far from sufficient and make no D4D geometric claim.
 
 \section{Analysis}
 
@@ -1155,12 +1174,12 @@ architectures absent from its training.
 
 \subsection{The Oracle Gap Is the Next Problem}
 
-TETHER captures only $32.9\%$ of the raw-versus-memory oracle gain, and
-$30.1\%$ of the continuous oracle that its own convex action space could
-in principle reach; only $6.1\%$ of D2 pixels have the ground truth
-bracketed by the two candidates, so the two ceilings nearly coincide.
-Useful evidence therefore already exists, and the open problem is
-discriminating helpful from harmful intervention.
+TETHER captures $32.9\%$ of the raw-versus-memory oracle gain and
+$30.1\%$ of the continuous oracle its convex action space could reach;
+only $6.1\%$ of D2 pixels have the ground truth bracketed by the two
+candidates, so the ceilings nearly coincide. Useful evidence already
+exists; the open problem is discriminating helpful from harmful
+intervention.
 
 \subsection{The Fusion Weight Is Not an Uncertainty}
 
@@ -1180,19 +1199,15 @@ closing the oracle gap needs evidence the head does not receive.
 \subsection{Evaluation Matters}
 
 The framework exposes behaviour a mean would hide: on DRENDS mean and
-percentile geometry improve while RMSE worsens; the augmented model
-raises both beneficial and harmful intervention; longer horizons
-slightly improve mean D2 EPE while degrading $B^+/H^+$, NewBad1 and the
-frame tails. Temporal refinement is better read as an
-\emph{intervention} than as a final estimator.
+percentile geometry improve while RMSE worsens; longer horizons slightly
+improve mean D2 EPE while degrading $B^+/H^+$, NewBad1 and the frame
+tails. Temporal refinement is better read as an \emph{intervention} than
+as a final estimator.
 
-One reported quantity failed an audit and is withdrawn.
-FrameDegradation's CatastrophicFraction equalled PositiveFraction on
-every inspected row --- definitional, not a wiring fault: the two are
-$\Pr(D_t>\tau_{\mathrm{cat}})$ and $\Pr(D_t>0)$, and $\tau_{\mathrm{cat}}$
-defaults to $0$, which no evaluator overrides. We report the
-degraded-frame fraction $\Pr(D_t>0)$ and drop the duplicate column
-rather than keep a name implying a severity threshold it does not carry.
+One reported quantity failed an audit and is withdrawn: FrameDegradation's
+CatastrophicFraction is definitionally identical to PositiveFraction at
+the default threshold, so we report only the degraded-frame fraction
+$\Pr(D_t>0)$. The supplementary gives the derivation.
 
 
 % ============================================================
@@ -1223,12 +1238,11 @@ tails.
 
 \paragraph{Cost and scope.}
 The head is compact but the deployed system also runs frozen stereo and
-two SEA-RAFT passes, giving $33.60$\,ms of temporal overhead at
-$124.2$\,MB peak VRAM on an H100, hence $11.0$ down to $1.4$\,FPS
-end-to-end depending on the estimator: \emph{no real-time claim is
-made}. The experiments evaluate perception geometry and temporal
-behaviour, not downstream robotic control, and demonstrate neither
-clinical safety nor patient benefit.
+two SEA-RAFT passes: $33.60$\,ms of temporal overhead at $124.2$\,MB peak
+VRAM on an H100, hence $11.0$ down to $1.4$\,FPS end-to-end depending on
+the estimator --- \emph{no real-time claim is made}. The experiments
+evaluate perception geometry, not downstream control, and demonstrate
+neither clinical safety nor patient benefit.
 
 
 \section{Conclusion}
