@@ -955,15 +955,17 @@ the held-out numbers untouched.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\columnwidth]{temporal_trace.pdf}
+\includegraphics[width=\columnwidth]{frame_scatter.pdf}
 \caption{
-Per-frame behaviour on \texttt{dataset\_2\_keyframe\_4} with RAFT-Stereo
-($1846$ scored frames); thick lines are a $31$-frame rolling mean. The
-gain concentrates where the frozen estimator struggles: at the two Bad1
-peaks raw reaches $12\%$ and $7\%$ while TETHER holds $7\%$ and $5\%$.
-The per-frame change is asymmetric --- $31\%$ of frames improve against
-$16\%$ that worsen --- the frame-level form of the same asymmetry that
-produces $B^+/H^+$.
+Per-frame Bad1, raw against refined, for \emph{every} scored frame of
+each split --- five backbones and all sequences pooled, no selection.
+Points below the diagonal are improved frames. On held-out D7 half of all
+frames improve against $13\%$ worsened, and the worsened band hugs the
+diagonal while the improved mass extends far from it: the frame-level
+form of the count-versus-magnitude asymmetry behind $B^+/H^+$. Raw and
+refined disparity \emph{maps} are not shown because the intervention is
+sub-pixel on disparities of about $8$\,px, so at an honest colour scale
+they are indistinguishable.
 }
 \label{fig:trace}
 \end{figure}
@@ -1024,9 +1026,9 @@ $2114$-frame one).
 \label{sec:drends}
 
 We evaluate the frozen canonical checkpoint on five DRENDS recordings
-with three stereo estimators, two of which were excluded from
-temporal-head training, for a total of $20{,}929$ frames. No component
-is adapted, retrained, or tuned for this domain.
+with three estimators, two excluded from temporal-head training,
+$20{,}929$ frames. Nothing is adapted, retrained or tuned for this
+domain.
 
 \begin{table*}[!htb]
 \centering
@@ -1088,10 +1090,9 @@ OOD domain (DRENDS)       & $5.31$ & $\mathbf{4.84}$ \\
 \end{table}
 
 Every cell is positive, and the shift that costs most is the backbone,
-not the domain. This establishes zero-shot geometric transfer in
-disparity space under a ToF-derived metric reference; it does not
-establish universal cross-domain robustness, and DRENDS remains a
-non-independent reference.
+not the domain. This establishes zero-shot geometric transfer under a ToF-derived metric
+reference; it does not establish universal cross-domain robustness, and
+DRENDS remains a non-independent reference.
 
 
 \subsection{The Support Contract Is Load-Bearing}
