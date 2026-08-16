@@ -228,33 +228,25 @@ We study a different deployment setting:
 unchanged to heterogeneous frozen stereo estimators?}
 \end{quote}
 
-This formulation matters for robotic systems because the stereo
-backbone and temporal logic can evolve independently.
-A new stereo estimator can replace the previous one without requiring
-the temporal module to access its cost volume, hidden state, confidence
-head, or training pipeline.
+This matters for robotic systems because the backbone and the temporal
+logic can then evolve independently: a new estimator replaces the
+previous one without the temporal module needing its cost volume, hidden
+state, confidence head or training pipeline.
 
-Our starting point is the reset-and-fusion principle introduced by CODD
-\cite{li2023codd}.
-We do not claim reset/fusion itself as novel.
-Instead, we retain its useful inductive bias:
-the temporal system should decide whether motion-aligned historical
-geometry should influence the current stereo estimate and constrain the
-correction to a convex interpolation between the two.
+Our starting point is the reset-and-fusion principle of CODD
+\cite{li2023codd}, which we do not claim as novel. We retain its
+inductive bias --- decide whether motion-aligned history should influence
+the current estimate, and constrain the correction to a convex
+interpolation between the two --- and redesign it for an external
+black-box interface: the integrated motion pathway becomes frozen
+SEA-RAFT, backbone-specific representations become a shared external
+evidence space, and the same head is evaluated unchanged across
+architectures.
 
-We redesign this principle for an external black-box interface.
-The integrated motion pathway is replaced by frozen SEA-RAFT;
-stereo-backbone-specific representations are replaced by a shared
-external evidence space; and the same learned temporal head is evaluated
-unchanged across heterogeneous stereo architectures.
-
-The resulting system has a deliberately constrained structure.
-The current stereo estimate remains an anchor.
-Temporal memory is geometrically aligned before use.
-The learned head controls the amount of intervention, but cannot produce
-a value outside the interval spanned by the current and temporal
-candidates.
-Finally, corrected recurrence is periodically reset to raw stereo
+The structure is deliberately constrained. The current estimate stays an
+anchor, temporal memory is geometrically aligned before use, the head
+controls how much to intervene but cannot leave the interval spanned by
+the two candidates, and corrected recurrence is periodically reset to raw
 geometry.
 
 These restrictions raise an important question:
@@ -307,6 +299,95 @@ development and held-out data.
 % II. RELATED WORK
 % ============================================================
 
+\begin{figure*}[!t]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm,
+  every node/.style={font=\scriptsize},
+  frm/.style={draw=black!40, fill=black!5, rounded corners=0.8pt,
+              minimum width=5.4mm, minimum height=4mm, inner sep=0pt, font=\tiny},
+  dsp/.style={frm, fill=blue!6, draw=blue!35},
+  froz/.style={draw=black!45, fill=black!8, rounded corners=1.2pt,
+               inner xsep=2pt, inner ysep=2.2pt, font=\scriptsize},
+  trn/.style={draw=orange!75!black, fill=orange!22, rounded corners=1.2pt,
+              line width=0.6pt, inner xsep=2pt, inner ysep=2.2pt, font=\scriptsize},
+  ours/.style={trn, line width=0.9pt},
+  fwd/.style={->, >={Stealth[length=1.2mm]}, line width=0.4pt, draw=black!55},
+  past/.style={->, >={Stealth[length=1.3mm]}, line width=0.5pt, draw=teal!75!black},
+  futr/.style={->, >={Stealth[length=1.3mm]}, line width=0.5pt, draw=red!70!black},
+  pcap/.style={font=\scriptsize, align=center},
+  tag/.style={font=\tiny, inner sep=0.8pt}]
+
+% Frames on top, disparities at the bottom; every panel shares the same
+% vertical span so the four captions sit on one line.
+\def\frames#1{%
+  \node[frm] (#1f0) at (0,7)  {$t{-}1$};
+  \node[frm] (#1f1) at (7.5,7)  {$t$};
+  \node[frm] (#1f2) at (15,7) {$t{+}1$};}
+\def\disps#1#2{%
+  \node[dsp] (#1d0) at (0,#2)  {};
+  \node[dsp] (#1d1) at (7.5,#2)  {};
+  \node[dsp] (#1d2) at (15,#2) {};}
+
+% ---------- (a) frame-wise
+\begin{scope}[shift={(0,0)}]
+  \frames{a}
+  \node[froz] (am) at (7.5,-1) {stereo net};
+  \foreach \i in {0,1,2} { \draw[fwd] (af\i) -- (am); }
+  \disps{a}{-9}
+  \foreach \i in {0,1,2} { \draw[fwd] (am) -- (ad\i); }
+  \node[pcap] at (7.5,-15) {(a) frame-wise\\[-1pt] \tiny no temporal reasoning};
+\end{scope}
+
+% ---------- (b) integrated video stereo
+\begin{scope}[shift={(43,0)}]
+  \frames{b}
+  \node[trn] (bm) at (7.5,-1) {video stereo net};
+  \foreach \i in {0,1,2} { \draw[fwd] (bf\i) -- (bm); }
+  \disps{b}{-9}
+  \foreach \i in {0,1,2} { \draw[fwd] (bm) -- (bd\i); }
+  \draw[past] (bm.west) ++(-0.5,1.4) -- ++(-5,0) -- ++(0,-2.8) -- ++(5,0);
+  \node[pcap] at (7.5,-15) {(b) integrated video\\[-1pt] \tiny estimator replaced or retrained};
+\end{scope}
+
+% ---------- (c) bidirectional plug-in
+\begin{scope}[shift={(90,0)}]
+  \frames{c}
+  \node[froz] (cm) at (7.5,1.5) {frozen stereo};
+  \foreach \i in {0,1,2} { \draw[fwd] (cf\i) -- (cm); }
+  \node[trn] (cs) at (7.5,-4.5) {stabiliser};
+  \draw[fwd] (cm) -- (cs);
+  \disps{c}{-11}
+  \foreach \i in {0,1,2} { \draw[fwd] (cs) -- (cd\i); }
+  \draw[past] (cs.west) ++(-0.4,0.9) -- ++(-4.5,0) -- ++(0,-1.8) -- ++(4.5,0);
+  \draw[futr] (cs.east) ++(0.4,0.9) -- ++(4.5,0) -- ++(0,-1.8) -- ++(-4.5,0);
+  \node[tag, text=red!70!black] at (19.5,2.2) {future};
+  \node[pcap] at (7.5,-15) {(c) bidirectional plug-in\\[-1pt] \tiny frozen estimator, reads ahead};
+\end{scope}
+
+% ---------- (d) ours
+\begin{scope}[shift={(137,0)}]
+  \frames{d}
+  \node[froz] (dm) at (7.5,1.5) {frozen stereo};
+  \foreach \i in {0,1,2} { \draw[fwd] (df\i) -- (dm); }
+  \node[ours] (ds) at (7.5,-4.5) {TETHER, $177$k};
+  \draw[fwd] (dm) -- (ds);
+  \disps{d}{-11}
+  \foreach \i in {0,1,2} { \draw[fwd] (ds) -- (dd\i); }
+  \draw[past] (ds.west) ++(-0.4,0.9) -- ++(-4.5,0) -- ++(0,-1.8) -- ++(4.5,0);
+  \node[tag, text=teal!75!black] at (-5.5,2.2) {past only};
+  \node[pcap] at (7.5,-15) {(d) ours: causal plug-in\\[-1pt] \tiny frozen estimator, past only};
+\end{scope}
+\end{tikzpicture}
+\caption{
+Where TETHER sits. Grey is frozen, orange is trained, teal arrows read
+the past and the red arrow reads the future. Integrated video methods (b)
+buy consistency by replacing or retraining the estimator; plug-in
+stabilisers (c) keep it frozen but propagate bidirectionally, which a
+live system cannot do. TETHER (d) is the remaining cell.
+}
+\label{fig:taxonomy}
+\end{figure*}
+
 \section{Related Work}
 \label{sec:related}
 
@@ -319,24 +400,19 @@ is orthogonal: we neither modify the estimator nor assume an
 architecture.
 
 \paragraph{Temporal stereo and depth.}
-CODD couples stereo, motion and fusion online and introduced the
-reset/fusion mechanism we build on \cite{li2023codd}. DynamicStereo
-applies spatio-temporal attention to stereo video
-\cite{karaev2023dynamicstereo}, PPMStereo learns pick-and-play memory
-inside an integrated architecture \cite{wang2025ppm}, and TC-Stereo
-propagates a temporal state causally \cite{zeng2024tcstereo}. All four
-are co-designed with the estimator: they replace it, retrain it, or read
-its hidden state. Match Stereo Videos exposes BiDAStabilizer as a plug-in
-\cite{jing2024bida}, but propagates bidirectionally and therefore
-consumes future frames. A parallel line enforces consistency on monocular video depth, by
-test-time optimisation over a whole clip
-\cite{luo2020cvd} or by video diffusion and temporal
-heads \cite{hu2025depthcrafter}; NVDS stabilises monocular
-relative depth \cite{wang2023nvds}. All operate on a different output
-space and none is causal at clip level. A further line achieves temporal
-robustness by adapting the stereo network's weights online
-\cite{tonioni2019madnet,poggi2022continual}, which is
-the opposite of the constraint we adopt.
+Fig.~\ref{fig:taxonomy} places the families. CODD introduced the
+reset/fusion mechanism we build on \cite{li2023codd}; DynamicStereo
+\cite{karaev2023dynamicstereo}, PPMStereo \cite{wang2025ppm} and
+TC-Stereo \cite{zeng2024tcstereo} follow, all co-designed with the
+estimator, so a new backbone means a new temporal model. Match Stereo
+Videos exposes BiDAStabilizer as a plug-in on a frozen estimator
+\cite{jing2024bida}, but propagates bidirectionally. A parallel line
+enforces consistency on monocular video depth by clip-level optimisation
+\cite{luo2020cvd}, diffusion \cite{hu2025depthcrafter} or stabiliser
+networks \cite{wang2023nvds}: a different output space, none causal at
+clip level. A further line adapts the stereo weights online
+\cite{tonioni2019madnet,poggi2022continual}, the opposite of our
+constraint.
 
 \paragraph{What can actually be compared.}
 We are aware of no runnable published method in this exact setting ---
@@ -1128,40 +1204,22 @@ DRENDS remains a non-independent reference.
 The results above use the support-confined output of \eqref{eq:fusion}.
 The ablation is a single line, isolating the contract cleanly: checkpoint,
 head, evidence, policy and reset schedule identical, only the masking
-differs.
+differs. On DRENDS the difference is categorical. Unmasked, depth RMSE
+\emph{regresses} in $14/14$ cells by $+110.4\%$ and depth MAE in $10/14$
+by $+4.2\%$; confined, both improve in $15/15$, by $-3.2\%$ and $-3.7\%$.
+Disparity follows more quietly, EPE from $-4.30\%$ to $-5.00\%$ and Bad3
+from $-14.06\%$ to $-17.35\%$, and invalid refined pixels go from up to
+$1.3\times10^{-5}$ to exactly zero.
 
-\begin{table}[!ht]
-\centering
-\scriptsize
-\caption{
-Effect of applying the support mask of \eqref{eq:support} to the module
-output, over five DRENDS recordings and three backbones.
-``Regresses'' counts recording--backbone cells that get worse.
-}
-\label{tab:masking}
-\begin{tabular}{lrr}
-\toprule
-Quantity & Unmasked output & Support-confined \\
-\midrule
-Invalid refined pixels & up to $1.3\times10^{-5}$ & \textbf{0} \\
-Depth RMSE & regresses $14/14$, $+110.4\%$ & \textbf{improves $15/15$, $-3.2\%$} \\
-Depth MAE  & regresses $10/14$, $+4.2\%$   & \textbf{improves $15/15$, $-3.7\%$} \\
-Disparity EPE  & $-4.30\%$  & \textbf{$-5.00\%$} \\
-Disparity Bad3 & $-14.06\%$ & \textbf{$-17.35\%$} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Without the mask, zero-padded out-of-bounds memory enters the blend as
+The cause is that zero-padded out-of-bounds memory enters the blend as
 $\widetilde m_t=0$, the fused disparity collapses there, and bounded
 recurrence carries the collapse to the next re-anchor. The offenders are
-rare and bursty --- $300$ of $38.8$M on Vid10\_Liver\_Med, $265$ of
-$38.4$M on Vid11\_Liver\_High, in runs of at most $H$ frames --- and the
-aligned memory of every one is exactly $0.0$. Because an invalid prediction on valid support is penalised rather than
-discarded, those few hundred pixels are the entire source of the depth
-tail previously attributed to the external domain; confining the output
-removes it and improves disparity too, since the zero no longer enters
-memory.
+rare and bursty --- $300$ of $38.8$M pixels on one recording, $265$ of
+$38.4$M on another, in runs of at most $H$ frames --- and the aligned
+memory of every one is exactly $0.0$. Because an invalid prediction on
+valid support is penalised rather than discarded, those few hundred
+pixels are the entire source of the depth tail previously attributed to
+the external domain.
 
 On SCARED-C the same ablation is nearly inert: D2 unchanged at $4.05\%$,
 D7 from $4.64\%$ to $4.57\%$. The contract is therefore not free --- it
