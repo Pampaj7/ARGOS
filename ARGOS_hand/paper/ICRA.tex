@@ -497,8 +497,8 @@ which is why we treat refinement as an intervention on that geometry.
 
 % ---- bounded recurrence: the confined output returns to the cache
 \draw[fb] (mask.south) ++(0,-4) -- ++(0,-2) -| (62,-6) -- (mem.south);
-\node[tag, align=center, text=black!55] at (62,10)
-  {re-anchor to\\ $d_{t-1}^{\raw}$ every $H{=}4$};
+\node[tag, align=right, text=black!55, anchor=east] at (58,9)
+  {re-anchor to $d_{t-1}^{\raw}$\\ every $H{=}4$};
 \end{tikzpicture}
 \caption{
 TETHER reads only externally observable quantities. Grey boxes are frozen
