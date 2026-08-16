@@ -14643,5 +14643,31 @@ to the narrow and meaningless intervals that resampling pixels would have
 produced.
 
 
+
+\paragraph{Audit completed: all four main tables.} Continuing the staleness
+pass while the GPU jobs ran, Table~\ref{tab:intervention_quality}
+(intervention quality) also reproduces from
+\texttt{results/scared\_masked}: recomputing $B^+/H^+$ and
+RecoveredBad1/NewBad1 per split and backbone lands within $0.06$ of every
+printed cell, the residual being the difference between a ratio of
+sequence means and the framework's macro-sequence aggregation rather than
+an error. The prose claim underneath it --- identity preservation above
+$99.87\%$ in every case --- is correct and tight: the minimum over all ten
+split--backbone cells is $99.877\%$, on RAFT-Stereo D7.
+
+The closure table needed a note rather than a correction. Its source is
+\texttt{definitive\_evaluation/canonical\_h4\_baseline}, the
+\emph{unconfined} module, while every other table in the paper is the
+confined one. The tempting fix --- update the $H=4$ row to the confined
+number --- would have been wrong: the other ten rows ($H=6$, $H=1$, the
+fixed blends, the oracle) are all unconfined ablations, so changing one
+row would have compared two implementations inside a table whose entire
+purpose is that only the policy differs. Confinement moves D2 EPE by
+$1.2\times10^{-5}$\,px, so the honest fix was to say in the text that the
+whole table runs unconfined for exactly that reason. Raw D2 pooled EPE is
+$0.276202$ in both runs and the reduction is $4.05\%$ in both, so no other
+figure in the paper depends on the choice.
+
+
 \end{document}
 
