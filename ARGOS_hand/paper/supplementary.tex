@@ -661,6 +661,75 @@ is reported as the definition because it is the one that would matter on a
 boundary where the backbone declines pixels; here it is vacuous.
 
 % ============================================================
+\section{Analysis, in Full}
+% ============================================================
+
+The main paper compresses this section to a summary. Nothing here is
+new evidence; it is the interpretation of results already reported,
+kept intact because the page limit is on the submission and not on the
+supplementary.
+
+\paragraph{What Makes TETHER Work, and Why So Few Parameters Suffice}
+
+The closure isolates four requirements. Geometric alignment is necessary
+but not sufficient: the aligned memory carries a $12.30\%$ oracle
+ceiling, yet using it indiscriminately fails, since warped raw memory
+yields no meaningful gain and both direct FB-confidence weighting and
+full recurrent replacement worsen EPE. Under identical evidence and
+support the learned policy obtains almost seven times the gain of the
+best fixed blend, and the recurrent state must stay bounded because
+continuous propagation accumulates error and collapses. The mechanism is
+motion alignment plus learned graded intervention plus bounded recurrent
+state, not generic smoothing.
+
+This also explains the parameter count. The head never solves stereo
+matching: it receives two already meaningful candidates, $d_t^{\raw}$ and
+$\widetilde m_t$, plus evidence describing their disagreement, motion
+reliability, validity, matching consistency and appearance, so its
+problem is closer to judging whether temporal evidence is useful than to
+predicting disparity from RGB. Convex fusion further restricts the action
+space to a position between two candidate geometries. A decision problem
+that constrained is a plausible reason why one small head transfers to
+architectures absent from its training.
+
+\paragraph{The Oracle Gap Is the Next Problem}
+
+TETHER captures $32.9\%$ of the raw-versus-memory oracle gain and
+$30.1\%$ of the continuous oracle its convex action space could reach;
+only $6.1\%$ of D2 pixels have the ground truth bracketed by the two
+candidates, so the ceilings nearly coincide. Useful evidence already
+exists; the open problem is discriminating helpful from harmful
+intervention.
+
+\paragraph{The Fusion Weight Is Not an Uncertainty}
+
+Recovering the effective weight exactly from the convex form,
+$w_t=(d_t^{\fused}-d_t^{\raw})/(\widetilde m_t-d_t^{\raw})$, and scoring
+it as a predictor of harmful intervention gives AUROC $0.366$--$0.382$ on
+D2 but $0.496$--$0.506$ on held-out D7, i.e.\ chance; the raw--memory
+disagreement and the update magnitude behave the same way. The
+reliability curve inverts between splits --- for RAFT-Stereo the harm
+rate falls with $w_t$ on D2 ($0.550\rightarrow0.324$) and rises on D7
+($0.260\rightarrow0.450$) --- so $w_t$ is not a weak risk score but a
+sign-unstable one, capturing only $3.5\%$ and $6.1\%$ of the achievable
+selective gain. It is an intervention magnitude, not an uncertainty, and
+closing the oracle gap needs evidence the head does not receive.
+
+
+\paragraph{Evaluation Matters}
+
+The framework exposes behaviour a mean would hide: on DRENDS mean and
+percentile geometry improve while RMSE worsens; longer horizons slightly
+improve mean D2 EPE while degrading $B^+/H^+$, NewBad1 and the frame
+tails. Temporal refinement is better read as an \emph{intervention} than
+as a final estimator.
+
+One reported quantity failed an audit and is withdrawn: FrameDegradation's
+CatastrophicFraction is definitionally identical to PositiveFraction at
+the default threshold, so we report only the degraded-frame fraction
+$\Pr(D_t>0)$. The supplementary gives the derivation.
+
+% ============================================================
 \section{A Metric Field We Do Not Report}
 % ============================================================
 

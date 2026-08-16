@@ -295,13 +295,12 @@ development and held-out data.
 \label{sec:related}
 
 \paragraph{Deep stereo matching.}
-Stereo has moved from learned matching costs to iterative recurrent
-estimation and broad-domain zero-shot models: RAFT-Stereo
-\cite{lipson2021raftstereo}, CREStereo \cite{li2022crestereo}, Stereo
-Anywhere \cite{bartolomei2025stereoanywhere}, S$^2$M$^2$
-\cite{min2025s2m2} and foundation models
-\cite{wen2025foundationstereo,wen2026fastfoundationstereo}. Our work is
-orthogonal: we neither modify the estimator nor assume an architecture.
+Stereo has moved from cost-volume regression to iterative recurrent
+estimation \cite{lipson2021raftstereo,xu2023igev,li2022crestereo} and
+broad-domain zero-shot models \cite{bartolomei2025stereoanywhere,%
+min2025s2m2,wen2025foundationstereo,wen2026fastfoundationstereo}. Our work
+is orthogonal: we neither modify the estimator nor assume an
+architecture.
 
 \paragraph{Temporal stereo and depth.}
 CODD couples stereo, motion and fusion online and introduced the
@@ -313,11 +312,15 @@ propagates a temporal state causally \cite{zeng2024tcstereo}. All four
 are co-designed with the estimator: they replace it, retrain it, or read
 its hidden state. Match Stereo Videos exposes BiDAStabilizer as a plug-in
 \cite{jing2024bida}, but propagates bidirectionally and therefore
-consumes future frames. NVDS stabilises monocular relative depth
-\cite{wang2023nvds}, a different output space. A separate line achieves
-temporal robustness by adapting the stereo network's weights online
-\cite{tonioni2019madnet}, which is the opposite of the constraint we
-adopt.
+consumes future frames. A parallel line enforces consistency on monocular video depth, by
+test-time optimisation over a whole clip
+\cite{luo2020cvd} or by video diffusion and temporal
+heads \cite{hu2025depthcrafter,chen2025vda}; NVDS stabilises monocular
+relative depth \cite{wang2023nvds}. All operate on a different output
+space and none is causal at clip level. A further line achieves temporal
+robustness by adapting the stereo network's weights online
+\cite{tonioni2019madnet,tonioni2019adapt,poggi2022continual}, which is
+the opposite of the constraint we adopt.
 
 \paragraph{What can actually be compared.}
 Our setting --- causal, black-box, frozen weights --- admits, to our
@@ -335,9 +338,11 @@ future and we do not.
 Stereo benchmarks report frame-wise geometry and video methods add
 consistency measures, but neither characterises an intervention: a
 prediction can grow smoother without growing more correct, and a lower
-mean error can hide newly created failures. Refinement is comparative,
-so recovered and introduced error must both be measured, which connects
-to selective prediction \cite{geifman2019selectivenet}. Our contribution
+mean error can hide newly created failures. Recovered and introduced
+error must therefore both be measured, which connects to selective
+prediction \cite{geifman2019selectivenet} and to the uncertainty
+literature asking when a prediction should be trusted
+\cite{kendall2017uncertainties,poggi2020uncertainty}. Our contribution
 is not a new metric but a common protocol under fixed,
 prediction-independent support.
 
@@ -347,6 +352,9 @@ SCARED \cite{allan2021scared}, SERV-CT \cite{edwards2022servct}, D4D
 \cite{docea2026d4d} and DRENDS \cite{loza2025drends} supply the
 endoscopic stereo, CT-derived and structured-light geometry used here;
 Sec.~\ref{sec:experimental} states what each can and cannot support.
+Downstream reconstruction and tracking pipelines consume exactly the
+per-frame geometry we refine \cite{long2021edssr,recasens2021endodepth},
+which is why we treat refinement as an intervention on that geometry.
 
 
 \section{Method}
@@ -367,7 +375,7 @@ $d_t^{\fused}=T_\theta(d_t^{\raw},m_{t-1},I_t^L,I_t^R,I_{t-1}^L)$.
 
 \subsection{Causal Motion Alignment}
 
-Frozen SEA-RAFT \cite{wang2024searaft} estimates both directions between
+Frozen SEA-RAFT \cite{teed2020raft,wang2024searaft} estimates both directions between
 the two already observed left images,
 $F_{t\rightarrow t-1}=F(I_t^L,I_{t-1}^L)$ and
 $F_{t-1\rightarrow t}=F(I_{t-1}^L,I_t^L)$; the second is used only to
@@ -1139,75 +1147,37 @@ because a module that declares a support must respect it.
 
 Because the D4D metric-geometry contract is unresolved we report only
 prediction-space temporal inconsistency, which TETHER reduces by
-$53.9\%$. That fact alone is worth little. Copy-previous, which emits the
-previous disparity verbatim without aligning it, removes $97.3\%$;
-warped-previous, which emits the motion-compensated previous disparity,
-scores \emph{exactly} zero by construction. The ordering is inverted with
-respect to geometric quality --- the policies discarding current stereo
-evidence outrank the one using it --- so we treat this metric as necessary
-but far from sufficient and make no D4D geometric claim.
+$53.9\%$. That alone is worth little: copy-previous, which emits the
+previous disparity without aligning it, removes $97.3\%$, and
+warped-previous scores \emph{exactly} zero by construction. The ordering
+is inverted with respect to geometric quality, so we treat this metric as
+necessary but far from sufficient and make no D4D geometric claim.
 
 \section{Analysis}
 
-\subsection{What Makes TETHER Work, and Why So Few Parameters Suffice}
-
 The closure isolates four requirements. Geometric alignment is necessary
-but not sufficient: the aligned memory carries a $12.30\%$ oracle
-ceiling, yet using it indiscriminately fails, since warped raw memory
-yields no meaningful gain and both direct FB-confidence weighting and
-full recurrent replacement worsen EPE. Under identical evidence and
-support the learned policy obtains almost seven times the gain of the
-best fixed blend, and the recurrent state must stay bounded because
-continuous propagation accumulates error and collapses. The mechanism is
-motion alignment plus learned graded intervention plus bounded recurrent
-state, not generic smoothing.
+but not sufficient: the aligned memory carries a $12.30\%$ oracle ceiling,
+yet using it indiscriminately fails --- warped raw memory yields no
+meaningful gain, and both direct FB-confidence weighting and full
+recurrent replacement worsen EPE. Under identical evidence and support
+the learned policy obtains almost seven times the gain of the best fixed
+blend, and the recurrent state must stay bounded because continuous
+propagation collapses. The mechanism is motion alignment plus learned
+graded intervention plus bounded recurrent state, not generic smoothing.
 
-This also explains the parameter count. The head never solves stereo
-matching: it receives two already meaningful candidates, $d_t^{\raw}$ and
-$\widetilde m_t$, plus evidence describing their disagreement, motion
-reliability, validity, matching consistency and appearance, so its
-problem is closer to judging whether temporal evidence is useful than to
-predicting disparity from RGB. Convex fusion further restricts the action
-space to a position between two candidate geometries. A decision problem
-that constrained is a plausible reason why one small head transfers to
-architectures absent from its training.
-
-\subsection{The Oracle Gap Is the Next Problem}
-
-TETHER captures $32.9\%$ of the raw-versus-memory oracle gain and
-$30.1\%$ of the continuous oracle its convex action space could reach;
-only $6.1\%$ of D2 pixels have the ground truth bracketed by the two
-candidates, so the ceilings nearly coincide. Useful evidence already
-exists; the open problem is discriminating helpful from harmful
-intervention.
-
-\subsection{The Fusion Weight Is Not an Uncertainty}
-
-Recovering the effective weight exactly from the convex form,
-$w_t=(d_t^{\fused}-d_t^{\raw})/(\widetilde m_t-d_t^{\raw})$, and scoring
-it as a predictor of harmful intervention gives AUROC $0.366$--$0.382$ on
-D2 but $0.496$--$0.506$ on held-out D7, i.e.\ chance; the raw--memory
-disagreement and the update magnitude behave the same way. The
-reliability curve inverts between splits --- for RAFT-Stereo the harm
-rate falls with $w_t$ on D2 ($0.550\rightarrow0.324$) and rises on D7
-($0.260\rightarrow0.450$) --- so $w_t$ is not a weak risk score but a
-sign-unstable one, capturing only $3.5\%$ and $6.1\%$ of the achievable
-selective gain. It is an intervention magnitude, not an uncertainty, and
-closing the oracle gap needs evidence the head does not receive.
-
-
-\subsection{Evaluation Matters}
-
-The framework exposes behaviour a mean would hide: on DRENDS mean and
-percentile geometry improve while RMSE worsens; longer horizons slightly
-improve mean D2 EPE while degrading $B^+/H^+$, NewBad1 and the frame
-tails. Temporal refinement is better read as an \emph{intervention} than
-as a final estimator.
-
-One reported quantity failed an audit and is withdrawn: FrameDegradation's
-CatastrophicFraction is definitionally identical to PositiveFraction at
-the default threshold, so we report only the degraded-frame fraction
-$\Pr(D_t>0)$. The supplementary gives the derivation.
+The parameter count follows from this. The head never solves stereo
+matching: it receives two already meaningful candidates and evidence about
+their disagreement, and convex fusion restricts it to a position between
+two candidate geometries, which is a plausible reason why one small head
+transfers to unseen architectures. Two limits are worth stating. TETHER
+captures $32.9\%$ of the raw-versus-memory oracle gain and $30.1\%$ of the
+continuous oracle its action space could reach, so the open problem is
+deciding \emph{where} to intervene, not obtaining temporal evidence. And
+the effective fusion weight $w_t$, recovered exactly from the convex form,
+scores AUROC $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7
+as a predictor of harmful intervention, inverting its reliability curve
+between splits: it is an intervention magnitude, not an uncertainty. The
+supplementary gives both analyses in full.
 
 
 % ============================================================
@@ -1282,13 +1252,13 @@ domain and removes the entire external-domain metric-depth tail.
 Z.~Li \emph{et al.},
 ``Temporally consistent online depth estimation in dynamic scenes,''
 in \emph{Proc. IEEE/CVF Winter Conf. Applications of Computer Vision
-(WACV)}, 2023, pp.~3018--3027.
+(WACV)}, 2023.
 
 \bibitem{karaev2023dynamicstereo}
 N.~Karaev \emph{et al.},
 ``DynamicStereo: Consistent dynamic depth from stereo videos,''
 in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2023, pp.~13229--13239.
+(CVPR)}, 2023.
 
 \bibitem{jing2024bida}
 J.~Jing, Y.~Mao, A.~Qiu, and K.~Mikolajczyk,
@@ -1339,20 +1309,20 @@ in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
 K.~He, X.~Zhang, S.~Ren, and J.~Sun,
 ``Deep residual learning for image recognition,''
 in \emph{Proc. IEEE Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2016, pp.~770--778.
+(CVPR)}, 2016.
 
 \bibitem{lipson2021raftstereo}
 L.~Lipson, Z.~Teed, and J.~Deng,
 ``RAFT-Stereo: Multilevel recurrent field transforms for stereo
 matching,''
-in \emph{Proc. Int. Conf. 3D Vision (3DV)}, 2021, pp.~218--227.
+in \emph{Proc. Int. Conf. 3D Vision (3DV)}, 2021.
 
 \bibitem{li2022crestereo}
 J.~Li \emph{et al.},
 ``Practical stereo matching via cascaded recurrent network with
 adaptive correlation,''
 in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2022, pp.~16263--16272.
+(CVPR)}, 2022.
 
 \bibitem{bartolomei2025stereoanywhere}
 L.~Bartolomei, F.~Tosi, M.~Poggi, and S.~Mattoccia,
@@ -1423,6 +1393,67 @@ G.~Loza, M.~Magro, and B.~Calm\'e,
 scenarios,''
 Zenodo Dataset, 2025,
 doi: 10.5281/zenodo.17598453.
+
+\bibitem{xu2023igev}
+G.~Xu, X.~Wang, X.~Ding, and X.~Yang,
+``Iterative geometry encoding volume for stereo matching,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2023.
+
+\bibitem{teed2020raft}
+Z.~Teed and J.~Deng,
+``RAFT: Recurrent all-pairs field transforms for optical flow,''
+in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2020.
+
+\bibitem{luo2020cvd}
+X.~Luo, J.-B. Huang, R.~Szeliski, K.~Matzen, and J.~Kopf,
+``Consistent video depth estimation,''
+\emph{ACM Trans. Graphics}, vol.~39, no.~4, 2020.
+
+\bibitem{hu2025depthcrafter}
+W.~Hu \emph{et al.},
+``DepthCrafter: Generating consistent long depth sequences for
+open-world videos,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2025.
+
+\bibitem{chen2025vda}
+S.~Chen \emph{et al.},
+``Video Depth Anything: Consistent depth estimation for super-long
+videos,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2025.
+
+\bibitem{tonioni2019adapt}
+A.~Tonioni \emph{et al.},
+``Learning to adapt for stereo,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2019.
+
+\bibitem{poggi2022continual}
+M.~Poggi, A.~Tonioni, F.~Tosi, S.~Mattoccia, and L.~Di~Stefano,
+``Continual adaptation for deep stereo,''
+\emph{IEEE Trans. Pattern Analysis and Machine Intelligence},
+vol.~44, no.~9, 2022.
+
+\bibitem{kendall2017uncertainties}
+A.~Kendall and Y.~Gal,
+``What uncertainties do we need in Bayesian deep learning for computer
+vision?,''
+in \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem{poggi2020uncertainty}
+M.~Poggi, F.~Aleotti, F.~Tosi, and S.~Mattoccia,
+``On the uncertainty of self-supervised monocular depth estimation,''
+in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
+(CVPR)}, 2020.
+
+\bibitem{recasens2021endodepth}
+D.~Recasens, J.~Lamarca, J.~M. F\'acil, J.~M.~M. Montiel, and J.~Civera,
+``Endo-Depth-and-Motion: Reconstruction and tracking in endoscopic
+videos using depth networks and photometric constraints,''
+\emph{IEEE Robotics and Automation Letters},
+vol.~6, no.~4, 2021.
 
 \end{thebibliography}
 
