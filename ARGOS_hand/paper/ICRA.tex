@@ -723,8 +723,10 @@ Pixel-weighted micro statistics are retained secondarily.
 
 We first isolate the contribution of the learned decision policy on D2.
 All variants use the same frozen stereo predictions, temporal alignment,
-support contract, and evaluation implementation.
-Only the temporal policy is changed.
+support contract, and evaluation implementation; only the temporal policy
+changes. All rows use the unconfined output so the table shares one
+implementation; confinement (Sec.~\ref{sec:support}) moves D2 EPE by
+$1.2\times10^{-5}$\,px.
 
 \begin{table}[!htb]
 \centering
@@ -983,13 +985,10 @@ Fast-FoundationStereo & 2.11 & 4.0$\times$  & 2.10 & 4.8$\times$ \\
 \end{tabular}
 \end{table}
 
-Across both splits and all five backbones, TETHER recovers between
-$2.9\times$ and $10.4\times$ as many Bad1 pixels as it newly introduces.
-The corresponding identity-preservation score exceeds $99.87\%$ in
-every case.
-This directly supports the refinement-centric interpretation:
-the method changes only a small subset of threshold status while
-recovering substantially more errors than it creates.
+Across both splits and all five backbones TETHER recovers $2.9$--$10.4\times$
+as many Bad1 pixels as it introduces, with identity preservation above
+$99.87\%$ throughout: it changes little and repairs much more than it
+breaks.
 
 
 
@@ -1058,6 +1057,7 @@ cross-domain robustness, and DRENDS remains a non-independent reference.
 
 
 \subsection{The Support Contract Is Load-Bearing}
+\label{sec:support}
 \label{sec:masking}
 
 The results above use the support-confined output of
