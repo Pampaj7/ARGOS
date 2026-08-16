@@ -21,6 +21,15 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT.parent / "results"
 PREREGISTER = ROOT / "model_design/ablation_preregister.json"
+# The canonical model has three seeds. Comparing an ablation against seed 0 alone is
+# what we did first and it was misleading: seed 0 is the WEAKEST of the three on held-out
+# D7, so every variant looked better than it really is. The reference is the three-seed
+# mean, and the spread is what decides whether a difference means anything.
+CANONICAL_SEEDS = {
+    "seed 0": RESULTS / "scared_masked",
+    "seed 1": RESULTS / "seed_eval/seed_1",
+    "seed 2": RESULTS / "seed_eval/seed_2",
+}
 CANONICAL = RESULTS / "scared_masked"
 VARIANTS = {
     "a1": ("A1", "no appearance channels", "$142\\rightarrow78$ ch"),
@@ -59,8 +68,14 @@ def main() -> None:
     args = parser.parse_args()
 
     rows, missing = {}, []
-    rows["canonical"] = {(s, m): reduction(CANONICAL, s, m)
-                         for s in ("scared-d2", "scared-d7") for m in METRICS}
+    seeds = {name: {(s, m): reduction(root, s, m)
+                    for s in ("scared-d2", "scared-d7") for m in METRICS}
+             for name, root in CANONICAL_SEEDS.items() if (root / "runs").is_dir()}
+    rows["canonical (3 seeds)"] = {
+        key: float(np.mean([v[key] for v in seeds.values() if v[key] is not None]))
+        for key in seeds["seed 0"]}
+    spread = {key: float(np.std([v[key] for v in seeds.values() if v[key] is not None], ddof=1))
+              for key in seeds["seed 0"]}
     for key in VARIANTS:
         root = args.eval_root / key
         value = {(s, m): reduction(root, s, m) for s in ("scared-d2", "scared-d7") for m in METRICS}
@@ -71,7 +86,7 @@ def main() -> None:
 
     print(f"{'variant':<26}" + "".join(f"{s.split('-')[1].upper()} {m:<6}" for s in ("scared-d2", "scared-d7") for m in METRICS))
     for key, value in rows.items():
-        label = "canonical" if key == "canonical" else f"{VARIANTS[key][0]} {VARIANTS[key][1]}"
+        label = key if key.startswith("canonical") else f"{VARIANTS[key][0]} {VARIANTS[key][1]}"
         print(f"{label:<26}" + "".join(
             f"{value[(s, m)]:>9.2f}" if value[(s, m)] is not None else f"{'--':>9}"
             for s in ("scared-d2", "scared-d7") for m in METRICS))
@@ -80,15 +95,22 @@ def main() -> None:
         if args.require_all:
             raise SystemExit(1)
 
-    base = rows["canonical"][("scared-d7", "Bad1")]
-    print(f"\nheld-out Bad1 verdicts (three-seed spread {SEED_SPREAD_PP} pp):")
+    base = rows["canonical (3 seeds)"][("scared-d7", "Bad1")]
+    sigma = spread[("scared-d7", "Bad1")]
+    values = [v[("scared-d7", "Bad1")] for v in seeds.values()]
+    print(f"\nheld-out Bad1: canonical seeds {', '.join(f'{v:.2f}' for v in sorted(values))} "
+          f"-> mean {base:.2f}, std {sigma:.2f}")
+    print("each ablation is ONE seed, so a margin inside the seed range is not a result:")
     for key in VARIANTS:
         if key not in rows:
             continue
-        delta = rows[key][("scared-d7", "Bad1")] - base
+        value = rows[key][("scared-d7", "Bad1")]
+        delta = value - base
+        inside = min(values) <= value <= max(values)
         verdict = ("indistinguishable" if abs(delta) < SEED_SPREAD_PP
-                   else "better" if delta > 0 else "worse")
-        print(f"  {VARIANTS[key][0]}  {delta:+.2f} pp  -> {verdict}")
+                   else "inside the canonical seed range" if inside
+                   else f"outside it, {delta / sigma:+.1f} sigma, one seed")
+        print(f"  {VARIANTS[key][0]}  {value:.2f}  ({delta:+.2f} pp)  -> {verdict}")
 
     print("\n% ---- LaTeX ----")
     print("\\begin{tabular}{llcccc}")
@@ -97,7 +119,7 @@ def main() -> None:
     print("\\cmidrule(lr){3-4}\\cmidrule(lr){5-6}")
     print("Variant & Change & EPE & Bad1 & EPE & Bad1 \\\\")
     print("\\midrule")
-    c = rows["canonical"]
+    c = rows["canonical (3 seeds)"]
     print(f"Canonical & --- & ${c[('scared-d2','EPE')]:.2f}$ & ${c[('scared-d2','Bad1')]:.2f}$ "
           f"& $\\mathbf{{{c[('scared-d7','EPE')]:.2f}}}$ & ${c[('scared-d7','Bad1')]:.2f}$ \\\\")
     for key in VARIANTS:

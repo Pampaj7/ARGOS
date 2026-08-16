@@ -14897,5 +14897,62 @@ selecting the best variant post hoc is how the selection effect we spent
 today measuring gets back in through the side door.
 
 
+
+\section*{Correction: We Compared Against the Wrong Baseline}
+
+Everything written above about A1, A2 and A4 used
+\texttt{results/scared\_masked} as the reference. That is canonical
+\emph{seed 0}. And the seed study, run this same morning, established that
+seed 0 is the \emph{weakest} of the three canonical seeds on held-out D7.
+So every ablation was being measured against the luckiest possible
+comparison, and every one of them looked better than it is.
+
+Against the three-seed mean, which is the reference the pre-registration
+actually named:
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& D2 EPE & D2 Bad1 & D7 EPE & D7 Bad1 \\
+\midrule
+Canonical, 3 seeds & 3.55 & 8.40 & 5.06 & 5.15 \\
+A1 & 4.18 & 8.81 & 4.93 & 4.88 \\
+A2 & 3.69 & 12.84 & 5.49 & 5.69 \\
+A4 & 5.53 & 12.44 & 0.05 & 6.02 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two statements from earlier in this diary are wrong and are withdrawn.
+``A2's D2 EPE is worse than canonical'' compared $3.69$ against seed 0's
+$4.05$; against the three-seed mean of $3.55$ it is better. And the
+margins quoted for A2 and A4 on held-out Bad1 ($+0.91$ and $+1.23$) are
+really $+0.55$ and $+0.87$.
+
+The script now enforces the right baseline, prints the individual seed
+values, and refuses to call a one-seed margin a result when it falls
+inside the canonical seed range.
+
+\paragraph{And a decision that was rejected too quickly.} Asked whether
+the better variant should simply replace the canonical model, the answer
+given was a flat no, on the grounds that choosing it would burn the
+held-out split. That reasoning is correct and it is not the whole
+question. A2 is outside the canonical seed range on \emph{both} splits:
+$+1.8$ standard deviations on D2 Bad1 and $+1.6$ on D7. D2 is the
+development split --- deciding on it is what it exists for, and the
+pre-registration prohibits using D7 for decisions, not D2.
+
+So there is a clean path, and refusing it would have been caution
+mistaken for rigour. A2 is being trained at seeds 1 and 2, giving it the
+same three-seed treatment the canonical model has. The comparison that
+may promote it is the three-seed \emph{D2} mean. D7 is not consulted for
+that choice and stays held out; if A2 is promoted, its held-out numbers
+are reported afterwards and are not part of the decision. Declared in
+advance: if A2's three-seed D2 mean does not clearly exceed $8.40$ with a
+comparable spread, A2 stays an ablation and the canonical model is
+submitted unchanged.
+
+
 \end{document}
 

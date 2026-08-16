@@ -95,5 +95,13 @@
     "changing the checkpoint-selection rule for a variant",
     "reporting an ablation only on the split where it looks better",
     "interpreting differences smaller than the three-seed spread"
-  ]
+  ],
+  "A2_seed_study": {
+    "timestamp": "2026-08-16T21:20:00+02:00",
+    "why": "A2 sits outside the canonical three-seed range on BOTH splits (+1.8 sigma on D2 Bad1, +1.6 on D7) but is a single training run, so it is not yet a result.",
+    "what": "train A2 with seeds 1 and 2 under the same locked recipe, giving it the same three-seed treatment the canonical model has",
+    "decision_split": "D2 ONLY. The comparison that may promote A2 is the three-seed D2 mean. D7 is not used for this decision and stays held out; if A2 is promoted, its D7 numbers are reported afterwards and are not part of the choice.",
+    "declared_before_seeing_results": "If A2's three-seed D2 Bad1 mean does not clearly exceed the canonical three-seed mean of 8.40 with a comparable spread, A2 stays an ablation and the canonical model is submitted unchanged.",
+    "correction_recorded": "Our first comparison used canonical seed 0 alone as the baseline. Seed 0 is the weakest of the three on D7, so every variant looked better than it was. The reference is the three-seed mean; scripts/ablation_table.py now enforces this."
+  }
 }
