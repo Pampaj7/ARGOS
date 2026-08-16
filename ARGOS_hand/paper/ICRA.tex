@@ -210,7 +210,7 @@ It is also hard. Endoscopic scenes carry weak or repetitive texture,
 non-Lambertian tissue, specular highlights, blood, smoke, deformable
 anatomy, rapid viewpoint change and frequent tool occlusion
 \cite{allan2021scared,edwards2022servct}. Modern estimators
-\cite{lipson2021raftstereo,li2022crestereo,bartolomei2025stereoanywhere,min2025s2m2,wen2025foundationstereo,wen2026fastfoundationstereo}
+\cite{lipson2021raftstereo,li2022crestereo,bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}
 give increasingly strong frame-wise disparity, but nothing in a
 frame-wise model requires its predictions to cohere over time. Video
 stereo methods address this by building temporal reasoning into the
@@ -303,8 +303,7 @@ development and held-out data.
 \paragraph{Deep stereo matching.}
 Stereo has moved from cost-volume regression to iterative recurrent
 estimation \cite{lipson2021raftstereo,li2022crestereo} and
-broad-domain zero-shot models \cite{bartolomei2025stereoanywhere,%
-min2025s2m2,wen2025foundationstereo,wen2026fastfoundationstereo}. Our work
+broad-domain zero-shot models \cite{bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}. Our work
 is orthogonal: we neither modify the estimator nor assume an
 architecture.
 
@@ -315,12 +314,11 @@ CODD introduced the reset/fusion mechanism we build on
 TC-Stereo \cite{zeng2024tcstereo} follow, all co-designed with the
 estimator, so a new backbone means a new temporal model. Match Stereo
 Videos exposes BiDAStabilizer as a plug-in on a frozen estimator
-\cite{jing2024bida}, but propagates bidirectionally. A parallel line
-enforces consistency on monocular video depth by clip-level optimisation
-\cite{luo2020cvd}, diffusion \cite{hu2025depthcrafter} or stabiliser
-networks \cite{wang2023nvds}: a different output space, none causal at
-clip level. A further line adapts the stereo weights online
-\cite{tonioni2019madnet,poggi2022continual}, the opposite of our
+\cite{jing2024bida}, but propagates bidirectionally. A parallel line enforces
+consistency on monocular video depth by diffusion
+\cite{hu2025depthcrafter} or stabiliser networks \cite{wang2023nvds}: a
+different output space, none causal at clip level. A further line adapts
+the stereo weights online \cite{poggi2022continual}, the opposite of our
 constraint.
 
 \paragraph{What can actually be compared.}
@@ -473,10 +471,12 @@ a $3\times3$ convolution, GroupNorm, SiLU, and a residual block.
 A coarse pathway expands to 48 channels at one-quarter resolution,
 followed by three 48-channel residual blocks.
 
-A full-resolution reset branch predicts
-$r_t=\sigma(z_t^r)$,
-while the coarse fusion branch predicts
-$f_t= \uparrow_4[\sigma(z_t^f)]$.
+A full-resolution reset branch predicts $r_t=\sigma(z_t^r)$, while the
+coarse fusion branch predicts $f_t=\uparrow_4[\sigma(z_t^f)]$. Running the
+context branch coarsely is a compute choice, not a requirement: at
+identical parameter count it costs about $16\times$ less than the
+full-resolution alternative, which Sec.~\ref{sec:ablations} shows does not
+perform worse.
 
 The effective temporal weight is
 $w_t=r_tf_t$.
@@ -854,12 +854,10 @@ re-anchoring is structural, not an implementation detail.
 \subsection{Cross-Backbone Development Behaviour}
 
 Canonical $H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:scared_main}), from $2.17\%$ on S$^2$M$^2$-S to $8.44\%$
-on StereoAnywhere; seen backbones gain $4.50\%$, unseen $3.11\%$, and all
-six unseen-backbone sequence groups improve. It is fair to ask whether
-StereoAnywhere alone carries the result: excluding it the D2 mean falls
-to $2.82\%$, but on D7 it does not, the mean excluding StereoAnywhere
-being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
+(Table~\ref{tab:scared_main}), from $2.17\%$ to $8.44\%$, and all six
+unseen-backbone sequence groups improve. StereoAnywhere alone does not
+carry it: excluding it the D2 mean falls to $2.82\%$, but on D7 the mean
+excluding it is $4.14\%$, with RAFT-Stereo alone at $6.10\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
@@ -910,12 +908,10 @@ with paired sequence-level bootstrap intervals $[4.11,8.02]$ and
 $[3.42,5.80]$ and no resample in which refinement failed to help.
 
 The development split is not, and our protocol explains it. Checkpoints
-are selected on best D2 fused EPE, so seed $0$ is by construction the run
-that looked best on D2 --- where the seeds fall monotonically,
-$10.78\rightarrow8.67\rightarrow5.75$, a $5.03$ point spread. On D7 the
-ordering \emph{inverts}, seed $0$ is the weakest, and the spread collapses
-to $0.69$. Selection optimism sits in the split used to select and leaves
-the held-out numbers untouched.
+are selected on best D2 fused EPE, so on D2 the seeds fall monotonically,
+$10.78\rightarrow8.67\rightarrow5.75$, a $5.03$ point spread; on D7 the
+ordering \emph{inverts}, seed $0$ becomes the weakest, and the spread
+collapses to $0.69$. Selection optimism sits in the split used to select.
 
 \begin{figure}[!t]
 \centering
@@ -936,12 +932,11 @@ $8$\,px, so at an honest colour scale they are indistinguishable.
 \subsection{Refinement as an Intervention}
 
 Across both splits and all five backbones TETHER recovers
-$2.9$--$10.4\times$ as many Bad1 pixels as it introduces, with
-beneficial-to-harmful error-magnitude ratio $B^+/H^+$ between $1.76$ and
-$4.59$ and identity preservation above $99.87\%$ throughout: it changes
-little and repairs far more than it breaks (per-backbone table in the
-supplementary). Fig.~\ref{fig:trace} shows the same behaviour frame by
-frame.
+$2.9$--$10.4\times$ as many Bad1 pixels as it introduces, with $B^+/H^+$
+between $1.76$ and $4.59$ and identity preservation above $99.87\%$: it
+changes little and repairs far more than it breaks. Fig.~\ref{fig:trace}
+shows the same frame by frame; the per-backbone table is in the
+supplementary.
 
 
 \subsection{Head-to-Head Against a Published Stabiliser}
@@ -988,51 +983,19 @@ $2114$-frame one).
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
 
-We evaluate the frozen canonical checkpoint on five DRENDS recordings
-with three estimators, two excluded from temporal-head training,
-$20{,}929$ frames. Nothing is adapted, retrained or tuned for this
-domain.
-
-\begin{table}[!ht]
-\centering
-\scriptsize
-\caption{
-Zero-shot DRENDS transfer, relative change after refinement (negative is
-better); recordings Vid10--Vid14 are Liver\_Med, Liver\_High,
-Pancreas\_Ext, Pancreas\_Med and Pancreas\_High. The reference disparity
-comes from temporally filtered ToF geometry and is metric evidence, not
-independent stereo ground truth. The two rightmost estimators were
-excluded from temporal-head training, so their columns are the joint
-unseen-backbone / unseen-domain setting.
-}
-\label{tab:drends}
-\setlength{\tabcolsep}{3.2pt}
-\begin{tabular}{lcccccc}
-\toprule
-& \multicolumn{2}{c}{RAFT-St.\ (seen)}
-& \multicolumn{2}{c}{CREStereo}
-& \multicolumn{2}{c}{Fast-FoundSt.} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
-Rec. & EPE & Bad3 & EPE & Bad3 & EPE & Bad3 \\
-\midrule
-Vid10 & $-5.7$ & $-11.3$ & $-5.2$ & $-8.7$  & $-5.0$ & $-7.3$ \\
-Vid11 & $-3.4$ & $-21.9$ & $-3.7$ & $-22.8$ & $-3.2$ & $-20.4$ \\
-Vid12 & $-8.4$ & $-22.7$ & $-6.3$ & $-18.5$ & $-5.3$ & $-10.3$ \\
-Vid13 & $-4.3$ & $-14.2$ & $-5.2$ & $-10.4$ & $-4.3$ & $-10.9$ \\
-Vid14 & $-4.7$ & $-27.1$ & $-5.6$ & $-26.5$ & $-4.7$ & $-27.4$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+We evaluate the frozen checkpoint on five DRENDS recordings with three
+estimators, two excluded from temporal-head training, $20{,}929$ frames.
+Nothing is adapted, retrained or tuned for this domain.
 
 Across the 15 recording--backbone combinations, disparity EPE, Bad3,
 metric depth MAE and metric depth RMSE improve in \emph{every} cell
 ($60/60$), with mean changes of $-5.00\%$, $-17.35\%$, $-3.68\%$ and
-$-3.21\%$.
+$-3.21\%$; per-recording figures are in the supplementary.
 
-The per-recording pattern is set by the \emph{recording} and not the
-estimator: on Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$
-across the seen and the two unseen backbones, and the alignment holds
-elsewhere, so the residual variance is a property of the data.
+The pattern is set by the \emph{recording} and not the estimator: on
+Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ across the seen
+and the two unseen backbones, and the alignment holds elsewhere, so the
+residual variance is a property of the data.
 
 \begin{table}[!ht]
 \centering
@@ -1059,29 +1022,67 @@ reference; it does not establish universal cross-domain robustness, and
 DRENDS remains a non-independent reference.
 
 
+\subsection{Ablating Our Own Design Decisions}
+\label{sec:ablations}
+
+Four design choices were ablated under a pre-registration written before
+any variant was trained, naming held-out Bad1 as the endpoint and the
+three-seed spread as the threshold below which a difference is not read.
+
+\begin{table}[!ht]
+\centering
+\scriptsize
+\caption{
+Held-out relative reduction (\%) against the same raw predictions.
+Canonical is the mean of three seeds; each variant is a single seed. D2
+figures are in the supplementary.
+}
+\label{tab:ablations}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\toprule
+Variant & Change & D7 EPE & D7 Bad1 \\
+\midrule
+Canonical (3 seeds) & --- & $5.06$ & $5.15\pm0.34$ \\
+A1 & $142\rightarrow78$ ch & $4.93$ & $4.88$ \\
+A2 & $142\rightarrow38$ ch & $5.49$ & $5.69$ \\
+A3 & full-resolution context & $5.61$ & $5.85$ \\
+A4 & unconstrained output & $0.05$ & $6.02$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The result is not the one we expected. A1 is indistinguishable, while A2,
+A3 and A4 sit $1.6$ to $2.5$ standard deviations above the canonical
+mean, and A2 and A3 are better on EPE too: none of the four decisions is
+load-bearing. Two caveats --- each variant is one run against a
+three-seed baseline, so two standard deviations from a single sample is
+suggestive rather than settled, and A4 disqualifies itself with an EPE
+gain collapsing to $0.05\%$. What the table does establish is that the
+architecture is not delicate, that the richness of the evidence space is
+not what makes it work, and that three margins in the same direction
+point to a design that is over-specified rather than well-tuned.
+
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
 \label{sec:masking}
 
-The results above use the support-confined output of \eqref{eq:fusion}.
-The ablation is a single line, isolating the contract cleanly: checkpoint,
-head, evidence, policy and reset schedule identical, only the masking
-differs. On DRENDS the difference is categorical. Unmasked, depth RMSE
-\emph{regresses} in $14/14$ cells by $+110.4\%$ and depth MAE in $10/14$
-by $+4.2\%$; confined, both improve in $15/15$, by $-3.2\%$ and $-3.7\%$.
-Disparity follows more quietly, EPE from $-4.30\%$ to $-5.00\%$ and Bad3
-from $-14.06\%$ to $-17.35\%$, and invalid refined pixels go from up to
-$1.3\times10^{-5}$ to exactly zero.
+The results above use the support-confined output of \eqref{eq:fusion};
+the ablation is a single line, with checkpoint, head, evidence, policy and
+reset schedule identical. On DRENDS the difference is categorical.
+Unmasked, depth RMSE \emph{regresses} in $14/14$ cells by $+110.4\%$;
+confined, it improves in $15/15$ by $-3.2\%$. Disparity follows more
+quietly, EPE from $-4.30\%$ to $-5.00\%$, and invalid refined pixels go
+from up to $1.3\times10^{-5}$ to exactly zero.
 
 The cause is that zero-padded out-of-bounds memory enters the blend as
 $\widetilde m_t=0$, the fused disparity collapses there, and bounded
-recurrence carries the collapse to the next re-anchor. The offenders are
-rare and bursty --- $300$ of $38.8$M pixels on one recording, $265$ of
-$38.4$M on another, in runs of at most $H$ frames --- and the aligned
-memory of every one is exactly $0.0$. Because an invalid prediction on
-valid support is penalised rather than discarded, those few hundred
-pixels are the entire source of the depth tail previously attributed to
-the external domain.
+recurrence carries it to the next re-anchor. The offenders are rare and
+bursty --- $300$ of $38.8$M pixels on one recording, in runs of at most
+$H$ frames --- and the aligned memory of every one is exactly $0.0$. Since
+an invalid prediction on valid support is penalised rather than discarded,
+those few hundred pixels are the entire source of the depth tail
+previously attributed to the external domain.
 
 On SCARED-C the same ablation is nearly inert: D2 unchanged at $4.05\%$,
 D7 from $4.64\%$ to $4.57\%$. The contract is therefore not free --- it
@@ -1093,11 +1094,10 @@ only, which is what makes it worth stating.
 \subsection{No-Reference Temporal Behaviour on D4D}
 
 We report only prediction-space temporal inconsistency, which TETHER
-reduces by $53.9\%$. That alone is worth little: copy-previous removes
-$97.3\%$ without even aligning, and warped-previous scores \emph{exactly}
+reduces by $53.9\%$ --- worth little, since copy-previous removes
+$97.3\%$ without even aligning and warped-previous scores \emph{exactly}
 zero by construction. The ordering inverts with respect to geometric
-quality, so the metric is necessary but far from sufficient and we make
-no D4D geometric claim.
+quality, so we make no D4D geometric claim.
 
 
 \section{Analysis}
@@ -1113,14 +1113,11 @@ alignment plus learned graded intervention plus bounded recurrence, not
 smoothing. The parameter count follows: the head never solves stereo matching, it
 receives two already meaningful candidates and chooses between them.
 
-A pre-registered ablation of that constraint --- $49$ parameters letting
-the output leave the interval --- beats canonical on held-out Bad1
-($6.02\%$ against $4.78\%$), Bad3, RMSE and worst case, while mean EPE
-gain collapses from $4.57\%$ to $0.05\%$ and turns negative on three of
-five backbones. Improving RMSE rules out occasional large failure: it is
-broad degradation of pixels already close. The constraint buys mean
-accuracy, not safety from large corrections, and we withdraw the
-attribution of transfer to it.
+Ablating that constraint (A4, Table~\ref{tab:ablations}) collapses mean
+EPE gain to $0.05\%$ while improving RMSE and worst case: the failure is
+broad degradation of pixels already close, not occasional large error. The
+constraint buys mean accuracy, not safety from large corrections, and we
+withdraw the attribution of transfer to it.
 
 Two limits are worth stating.
 TETHER captures $32.9\%$ of the raw-versus-memory oracle gain and
@@ -1257,12 +1254,6 @@ W.-S. Lai \emph{et al.},
 ``Learning blind video temporal consistency,''
 in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2018.
 
-\bibitem{tonioni2019madnet}
-A.~Tonioni \emph{et al.},
-``Real-time self-adaptive deep stereo,''
-in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2019.
-
 \bibitem{he2016resnet}
 K.~He, X.~Zhang, S.~Ren, and J.~Sun,
 ``Deep residual learning for image recognition,''
@@ -1294,12 +1285,6 @@ J.~Min, Y.~Jeon, J.~Kim, and M.~Choi,
 ``S$^2$M$^2$: Scalable stereo matching model for reliable depth
 estimation,''
 in \emph{Proc. IEEE/CVF Int. Conf. Computer Vision (ICCV)}, 2025.
-
-\bibitem{wen2025foundationstereo}
-B.~Wen \emph{et al.},
-``FoundationStereo: Zero-shot stereo matching,''
-in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2025.
 
 \bibitem{wen2026fastfoundationstereo}
 B.~Wen, S.~Dewan, and S.~Birchfield,
@@ -1356,11 +1341,6 @@ doi: 10.5281/zenodo.17598453.
 Z.~Teed and J.~Deng,
 ``RAFT: Recurrent all-pairs field transforms for optical flow,''
 in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2020.
-
-\bibitem{luo2020cvd}
-X.~Luo, J.-B. Huang, R.~Szeliski, K.~Matzen, and J.~Kopf,
-``Consistent video depth estimation,''
-\emph{ACM Trans. Graphics}, vol.~39, no.~4, 2020.
 
 \bibitem{hu2025depthcrafter}
 W.~Hu \emph{et al.},
