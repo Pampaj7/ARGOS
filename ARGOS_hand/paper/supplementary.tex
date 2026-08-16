@@ -715,6 +715,43 @@ sign-unstable one, capturing only $3.5\%$ and $6.1\%$ of the achievable
 selective gain. It is an intervention magnitude, not an uncertainty, and
 closing the oracle gap needs evidence the head does not receive.
 
+\paragraph{Reconciling this with the intervention table}
+
+Taken alone, the previous paragraph appears to contradict the
+intervention-quality table of the main paper: if $w_t$ carries no information
+about harm on D7, how does the same policy reach $B^+/H^+$ between
+$2.10$ and $3.30$ there? The two statements are about different things,
+and the aggregate gain factorises exactly into them. Writing
+$\delta e = e^{\fused}-e^{\raw}$ per intervened pixel,
+%
+\begin{equation}
+\frac{B^+}{H^+}
+=\underbrace{\frac{\#\{\delta e<0\}}{\#\{\delta e>0\}}}_{\text{count}}
+\times
+\underbrace{\frac{\mathbb{E}[|\delta e| \mid \delta e<0]}
+                 {\mathbb{E}[|\delta e| \mid \delta e>0]}}_{\text{magnitude}} .
+\label{eq:factorisation}
+\end{equation}
+%
+Pooled over the five backbones this evaluates to $2.839=1.642\times1.728$
+on held-out D7 and $2.662=1.355\times1.965$ on D2. On D7, $62.2\%$ of
+interventions improve the pixel and the improvements are $1.73\times$
+larger than the regressions ($0.0594$ against $0.0344$\,px).
+
+Neither factor requires $w_t$ to rank anything. The policy shifts the
+\emph{distribution} of $\delta e$ favourably, which is what
+that table measures; the AUROC asks the
+strictly harder question of whether the scalar the head emits identifies
+\emph{which} pixels fall in the harmful $37.8\%$, and on held-out data it
+does not. A policy can be reliably good on average and completely
+uninformative per pixel: those are independent properties, and TETHER has
+the first without the second.
+
+This sharpens rather than weakens the oracle-gap claim. The remaining
+$67\%$ of the oracle is not reachable by thresholding anything the head
+already computes, because the quantity it computes is a magnitude and the
+gap is a ranking problem.
+
 
 \paragraph{Evaluation Matters}
 

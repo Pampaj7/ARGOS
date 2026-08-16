@@ -265,21 +265,21 @@ benefit, harm, and tail behavior.
 
 Our contributions are three.
 
-We formulate surgical temporal stereo refinement as a \emph{causal
+\emph{(i)} We formulate surgical temporal stereo refinement as a \emph{causal
 plug-and-play adaptation problem} over frozen, heterogeneous estimators,
 needing neither future frames nor backbone internals, and instantiate it
 as \steer: a 177,338-parameter reset-and-fusion head over causal
 SEA-RAFT alignment, a shared 142-channel external evidence space,
 support-confined convex fusion and bounded corrected-state recurrence.
 
-We show through a matched-baseline closure that the gain is not temporal
+\emph{(ii)} We show through a matched-baseline closure that the gain is not temporal
 smoothing --- $4.05\%$ against $0.59\%$ for the best fixed blend under an
 identical state machine --- and that one frozen checkpoint transfers
 along both available axes: to two estimators excluded from training on
 held-out D7, and to five recordings of an unseen domain, giving the first
 measurement of the two shifts combined.
 
-We introduce a refinement-centric evaluation protocol under fixed,
+\emph{(iii)} We introduce a refinement-centric evaluation protocol under fixed,
 prediction-independent support that measures introduced as well as
 recovered error, and we use it to bound our own claims: degenerate
 history-replay controls win the no-reference consistency metric outright,
@@ -323,10 +323,9 @@ robustness by adapting the stereo network's weights online
 the opposite of the constraint we adopt.
 
 \paragraph{What can actually be compared.}
-Our setting --- causal, black-box, frozen weights --- admits, to our
-knowledge, one published method, StereoDiffusion
-\cite{xu2024stereodiffusion}, whose repository contains no
-implementation. Of the rest, \cite{aleotti2021ndr} and
+We are aware of no runnable published method in this exact setting ---
+causal, black-box, frozen weights. The closest, StereoDiffusion
+\cite{xu2024stereodiffusion}, ships no implementation. Of the rest, \cite{aleotti2021ndr} and
 \cite{lai2018blind} publish code whose weights are no longer retrievable,
 and TC-Stereo's temporal path warps by a rigid transform driven by
 per-frame pose, which SCARED-C cannot supply and deformable tissue
@@ -770,18 +769,15 @@ Therefore,
 %
 $\Delta_{\mathrm{TETHER}}/\Delta_{\mathrm{fixed}} \approx 6.8$: the learned
 decision recovers almost seven times the gain of the best fixed blend
-under an identical state machine.
-
-Forward--backward confidence is the informative failure. It is one of
-TETHER's own input cues, yet using it directly as the fusion weight
-worsens EPE by $2.17\%$: motion reliability is useful evidence and a poor
-decision rule. Propagating aligned memory directly, or letting corrected
-recurrence run unbounded, degrades accuracy as well. The improvement is
-therefore not explained by alignment, averaging or smoothing.
-
-One entry deserves a caveat: under the implemented one-step update, EMA2
-is algebraically identical to fixed $w=0.5$, so their equal outputs are
-expected rather than two independent confirmations.
+under an identical state machine. Forward--backward confidence is the
+informative failure --- one of TETHER's own input cues, yet using it
+directly as the fusion weight worsens EPE by $2.17\%$, so motion
+reliability is useful evidence and a poor decision rule. Propagating
+aligned memory directly, or letting corrected recurrence run unbounded,
+also degrades accuracy. The improvement is therefore not explained by
+alignment, averaging or smoothing. One caveat: under the implemented
+one-step update EMA2 is algebraically identical to fixed $w=0.5$, so their
+equal outputs are expected, not two independent confirmations.
 
 
 \subsection{Why $H=4$?}
@@ -810,11 +806,10 @@ though this does not imply every continuous recurrent architecture fails.
 Canonical $H=4$ improves all five estimators in mean D2 EPE
 (Table~\ref{tab:scared_main}), from $2.17\%$ on S$^2$M$^2$-S to $8.44\%$
 on StereoAnywhere; seen backbones gain $4.50\%$, unseen $3.11\%$, and all
-six unseen-backbone sequence groups improve. The pooled $4.05\%$ is the
-ratio of mean EPEs, not the mean of those percentages ($3.94\%$). It is
-fair to ask whether StereoAnywhere alone carries the result: excluding it
-the D2 mean falls to $2.82\%$, but on D7 it does not, the mean excluding
-StereoAnywhere being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
+six unseen-backbone sequence groups improve. It is fair to ask whether
+StereoAnywhere alone carries the result: excluding it the D2 mean falls
+to $2.82\%$, but on D7 it does not, the mean excluding StereoAnywhere
+being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
@@ -824,10 +819,10 @@ We next evaluate the already frozen $H=4$ policy on held-out D7.
 \begin{table*}[!htb]
 \centering
 \caption{
-Cross-backbone evaluation on SCARED-C.
-The same frozen TETHER checkpoint is used in every row.
-EPE, Bad1, and RMSE use the primary macro-sequence aggregation.
-Lower is better.
+Cross-backbone evaluation on SCARED-C. One frozen TETHER checkpoint,
+canonical seed $0$, in every row, for comparability with the ablations;
+Sec.~\ref{sec:seeds} gives the three-seed spread. Primary macro-sequence
+aggregation; lower is better.
 }
 \label{tab:scared_main}
 \scriptsize
@@ -927,11 +922,11 @@ Section~\ref{sec:drends}.
 
 
 \subsection{Seed Variance, and What It Reveals About Selection}
+\label{sec:seeds}
 
-We pre-registered a seed study before any seed result existed: the seed
-is the only field that varies, sequences are the resampling unit, seeds
-are averaged inside each resample, and selecting the best seed is
-prohibited.
+We pre-registered a seed study before any result existed: the seed is the
+only field that varies, sequences are the resampling unit, and selecting
+the best seed is prohibited.
 
 Pooled over five backbones, the relative Bad1 reduction is
 $8.40\pm2.53\%$ on development D2 and $5.15\pm0.35\%$ on held-out D7;
@@ -946,10 +941,9 @@ Checkpoints are selected on best D2 fused EPE, so seed $0$ is by
 construction the run that looked best on D2 --- and on D2 the seeds fall
 monotonically, $10.78\rightarrow8.67\rightarrow5.75$, a $5.03$ point
 spread. On D7 that ordering \emph{inverts}: seed $0$ is the weakest of the
-three on both metrics and the spread collapses to $0.69$ points.
-Selection optimism sits where it should, in the split used to select, and
-leaves the held-out numbers untouched. Table~\ref{tab:scared_main} keeps
-seed $0$ for comparability with the ablations, which use that checkpoint.
+three and the spread collapses to $0.69$ points. Selection optimism sits
+where it should, in the split used to select, and leaves the held-out
+numbers untouched.
 
 \subsection{Refinement as an Intervention}
 
@@ -996,9 +990,9 @@ BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
 stabiliser we could run; it is bidirectional and consumes future frames,
 which our setting forbids. That difference is reported, not removed;
 everything else is equalised. Both read identical frozen RAFT-Stereo
-\emph{robust} predictions from one stored boundary over the same $4249$
-frames, scored on one prediction-independent support (GT coverage $\cap$
-raw validity) neither influences.
+\emph{robust} predictions from one stored boundary over all three D2
+sequences ($4249$ frames), on one prediction-independent support neither
+influences.
 
 \begin{table}[!htb]
 \centering
@@ -1022,10 +1016,14 @@ TETHER            & \textbf{yes} & \textbf{.2890} & \textbf{1.826} & \textbf{.15
 TETHER is better on every metric while being the only causal entry:
 against raw it cuts EPE by $4.58\%$, Bad1 by $12.53\%$ and Bad3 by
 $15.52\%$, against $0.25\%$, $4.83\%$ and $8.32\%$ for the bidirectional
-baseline. The per-sequence picture is not uniform: BiDAStabilizer wins all
-three metrics on one of the three sequences, where our EPE is $0.27\%$
-worse than raw, while TETHER wins clearly on the other two ($-6.53\%$ EPE,
-$-17.17\%$ Bad1 on the $2114$-frame one).
+baseline. This $4.58\%$ is not comparable with the $2.87\%$ of
+Table~\ref{tab:scared_main}, which uses \emph{middlebury} RAFT-Stereo
+weights under the strict protocol support; here the weights are
+\emph{robust} and the support is the stored boundary's, because that
+boundary is what BiDAStabilizer consumed. The picture is not uniform: BiDAStabilizer wins all three metrics on one
+sequence, where our EPE is $0.27\%$ worse than raw, while TETHER wins
+clearly on the other two ($-6.53\%$ EPE, $-17.17\%$ Bad1 on the
+$2114$-frame one).
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
@@ -1147,11 +1145,11 @@ because a module that declares a support must respect it.
 
 Because the D4D metric-geometry contract is unresolved we report only
 prediction-space temporal inconsistency, which TETHER reduces by
-$53.9\%$. That alone is worth little: copy-previous, which emits the
-previous disparity without aligning it, removes $97.3\%$, and
-warped-previous scores \emph{exactly} zero by construction. The ordering
-is inverted with respect to geometric quality, so we treat this metric as
-necessary but far from sufficient and make no D4D geometric claim.
+$53.9\%$. That alone is worth little: copy-previous removes $97.3\%$
+without even aligning, and warped-previous scores \emph{exactly} zero by
+construction. The ordering inverts with respect to geometric quality, so
+we treat the metric as necessary but far from sufficient and make no D4D
+geometric claim.
 
 \section{Analysis}
 
@@ -1175,9 +1173,13 @@ continuous oracle its action space could reach, so the open problem is
 deciding \emph{where} to intervene, not obtaining temporal evidence. And
 the effective fusion weight $w_t$, recovered exactly from the convex form,
 scores AUROC $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7
-as a predictor of harmful intervention, inverting its reliability curve
-between splits: it is an intervention magnitude, not an uncertainty. The
-supplementary gives both analyses in full.
+as a predictor of harmful intervention: it is an intervention magnitude,
+not an uncertainty. This does not contradict
+Table~\ref{tab:intervention_quality}, since the aggregate gain factorises
+exactly into a count and a magnitude term ($B^+/H^+=2.839=1.642\times1.728$
+on D7), neither of which requires $w_t$ to rank anything: the policy is
+reliably good on average and uninformative per pixel, which makes the
+oracle gap a ranking problem rather than a thresholding one.
 
 
 % ============================================================
@@ -1209,10 +1211,12 @@ tails.
 \paragraph{Cost and scope.}
 The head is compact but the deployed system also runs frozen stereo and
 two SEA-RAFT passes: $33.60$\,ms of temporal overhead at $124.2$\,MB peak
-VRAM on an H100, hence $11.0$ down to $1.4$\,FPS end-to-end depending on
-the estimator --- \emph{no real-time claim is made}. The experiments
-evaluate perception geometry, not downstream control, and demonstrate
-neither clinical safety nor patient benefit.
+VRAM on an H100. The frozen estimator dominates that budget by up to an
+order of magnitude, so end-to-end rate is set by the backbone, from
+$11.0$\,FPS on Fast-FoundationStereo (overhead $36.9\%$ of the total) to
+$1.4$\,FPS on StereoAnywhere (overhead $4.6\%$). \emph{No real-time claim
+is made.} The experiments evaluate perception geometry, not downstream
+control, and demonstrate neither clinical safety nor patient benefit.
 
 
 \section{Conclusion}
