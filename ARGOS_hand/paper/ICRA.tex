@@ -28,6 +28,8 @@
 \usepackage{bm}
 
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{array}
@@ -118,6 +120,57 @@ for Frozen Surgical Stereo}
 % ============================================================
 % ABSTRACT
 % ============================================================
+
+
+\begin{figure}[!t]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm,
+  box/.style={draw, rounded corners=1pt, align=center, inner xsep=1.6pt, inner ysep=1.8pt, font=\scriptsize},
+  frozen/.style={box, fill=black!8},
+  learn/.style={box, very thick},
+  sig/.style={->, >={Stealth[length=1.4mm]}},
+  lbl/.style={font=\tiny, inner sep=0.8pt}]
+
+\node[frozen] (stereo) at (0,32)  {frozen stereo $S$};
+\node[frozen] (flow)   at (44,32) {frozen SEA-RAFT};
+\node[lbl] at (0,37)  {$I_t^L,\,I_t^R$};
+\node[lbl] at (44,37) {$I_t^L,\,I_{t-1}^L$};
+
+\node[frozen] (mem)  at (72,24) {$m_{t-1}$};
+\node[box]    (warp) at (44,24) {pull-warp};
+\node[box]    (ev)   at (18,15) {external evidence, $142$ ch};
+\node[learn]  (head) at (18,7)  {fusion head, $177$k};
+\node[box]    (mix)  at (18,-1) {convex blend};
+\node[box]    (mask) at (18,-9) {confine to support};
+
+\draw[sig] (stereo.south) -- node[lbl,left,pos=.55]{$d_t^{\raw}$} (ev.north west);
+\draw[sig] (flow) -- (warp);
+\draw[sig] (mem) -- (warp);
+\draw[sig] (warp.south west) -- node[lbl,above left,pos=.55]{$\widetilde m_t$} (ev.north east);
+\draw[sig] (ev) -- (head);
+\draw[sig] (head) -- node[lbl,right]{$w_t$} (mix);
+\draw[sig] (mix) -- (mask);
+
+% the two candidate geometries enter the blend directly
+\draw[sig] (stereo.west) -- ++(-4,0) |- (mix.west);
+\draw[sig] (warp.east) -- ++(4,0) -- ++(0,-19) -| (mix.east);
+
+% bounded recurrence
+\draw[sig] (mask.south) -- ++(0,-4) node[lbl,below right,xshift=-2mm]{$d_t^{\fused}$}
+      -| (72,18) -- (mem.south);
+\node[lbl, align=center] at (68,10) {re-anchor to\\ $d_{t-1}^{\raw}$ every $H{=}4$};
+\end{tikzpicture}
+\caption{
+TETHER reads only externally observable quantities: RGB, disparity and
+validity. The frozen estimator and the frozen flow network are never
+modified and no future frame is used. The only learned component is the
+$177$k-parameter head, which emits the fusion weight $w_t$ placing the
+output between the two candidate geometries; that output is then confined
+to the support the module declares, and the recurrent state is
+re-anchored to independently predicted raw geometry every $H$ frames.
+}
+\label{fig:system}
+\end{figure}
 
 \begin{abstract}
 
@@ -722,12 +775,11 @@ micro statistics are retained secondarily.
 
 \subsection{Does the Learned Temporal Policy Matter?}
 
-We first isolate the contribution of the learned decision policy on D2.
-All variants use the same frozen stereo predictions, temporal alignment,
-support contract, and evaluation implementation; only the temporal policy
-changes. All rows use the unconfined output so the table shares one
-implementation; confinement (Sec.~\ref{sec:support}) moves D2 EPE by
-$1.2\times10^{-5}$\,px.
+We isolate the learned decision policy on D2. All variants share the
+frozen stereo predictions, the temporal alignment, the support contract
+and the evaluation code; only the policy changes. All rows use the
+unconfined output so the table shares one implementation --- confinement
+(Sec.~\ref{sec:support}) moves D2 EPE by $1.2\times10^{-5}$\,px.
 
 \begin{table}[!htb]
 \centering
@@ -780,25 +832,19 @@ one-step update EMA2 is algebraically identical to fixed $w=0.5$, so their
 equal outputs are expected, not two independent confirmations.
 
 
-\subsection{Why $H=4$?}
+\subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
 
-The lowest development EPE is at $H=6$ ($0.264656$ versus $0.265028$), a
-difference of $0.14\%$. Longer state lifetime buys that sliver at a
-measurable cost in intervention risk: from $H=4$ to $6$ to $8$ the
-harmful-update rate rises ($0.4048$, $0.4053$, $0.4068$), the beneficial
-rate falls ($0.5074$, $0.5065$, $0.5047$), $B^+/H^+$ degrades from $2.53$
-to $2.30$ to $2.04$, and NewBad1 nearly triples ($0.0467\%$, $0.0676\%$,
-$0.1282\%$). We do not claim $H=4$ minimises development EPE: it is the
-frozen risk--gain operating point, chosen before D7 was opened.
-
-
-\subsection{Why Recurrence Must Be Bounded}
-
-Continuous corrected-state recurrence moves mean EPE from $0.276202$ to
-$0.449349$, a $62.69\%$ increase: writing corrected disparity back into
-memory without interruption accumulates alignment and fusion error.
-Periodic raw re-anchoring is structural, not an implementation detail,
-though this does not imply every continuous recurrent architecture fails.
+The lowest development EPE is at $H=6$, by $0.14\%$. We do not claim
+$H=4$ minimises it: longer state lifetime buys that sliver at a
+measurable cost in intervention risk --- from $H=4$ to $6$ to $8$,
+$B^+/H^+$ degrades from $2.53$ to $2.30$ to $2.04$ and NewBad1 nearly
+triples --- so $H=4$ is the frozen risk--gain operating point, chosen
+before D7 was opened. The supplementary gives the sweep. Recurrence must
+also be bounded: continuous corrected-state propagation moves mean EPE
+from $0.276202$ to $0.449349$, a $62.69\%$ increase, because writing
+corrected disparity back into memory without interruption accumulates
+alignment and fusion error. Periodic raw re-anchoring is structural, not
+an implementation detail.
 
 
 \subsection{Cross-Backbone Development Behaviour}
@@ -947,40 +993,12 @@ numbers untouched.
 
 \subsection{Refinement as an Intervention}
 
-Beneficial updates consistently outweigh the threshold crossings the
-module introduces. Table~\ref{tab:intervention_quality} reports the
-beneficial-to-harmful error-magnitude ratio $B^+/H^+$ and the ratio of
-recovered to newly introduced Bad1 pixels.
-
-\begin{table}[!htb]
-\centering
-\scriptsize
-\caption{
-Canonical TETHER intervention quality.
-All ratios exceed one; higher is better.
-``Rec./New'' is RecoveredBad1/NewBad1.
-}
-\label{tab:intervention_quality}
-\begin{tabular}{lrrrr}
-\toprule
-& \multicolumn{2}{c}{D2} & \multicolumn{2}{c}{D7} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
-Backbone & $B^+/H^+$ & Rec./New & $B^+/H^+$ & Rec./New \\
-\midrule
-S$^2$M$^2$-S          & 1.76 & 3.1$\times$  & 2.10 & 6.0$\times$ \\
-RAFT-Stereo           & 2.05 & 2.9$\times$  & 2.85 & 3.2$\times$ \\
-Stereo Anywhere       & 4.59 & 10.4$\times$ & 3.30 & 5.9$\times$ \\
-CREStereo             & 2.23 & 4.3$\times$  & 2.40 & 4.6$\times$ \\
-Fast-FoundationStereo & 2.11 & 4.0$\times$  & 2.10 & 4.8$\times$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Across both splits and all five backbones TETHER recovers $2.9$--$10.4\times$
-as many Bad1 pixels as it introduces, with identity preservation above
-$99.87\%$ throughout: it changes little and repairs much more than it
-breaks.
-
+Across both splits and all five backbones TETHER recovers
+$2.9$--$10.4\times$ as many Bad1 pixels as it introduces, with
+beneficial-to-harmful error-magnitude ratio $B^+/H^+$ between $1.76$ and
+$4.59$ and identity preservation above $99.87\%$ throughout: it changes
+little and repairs far more than it breaks. Per-backbone table in the
+supplementary.
 
 
 \subsection{Head-to-Head Against a Published Stabiliser}
@@ -1064,28 +1082,21 @@ Vid14\_Pancreas\_High    & -4.7\% & -27.1\% & -5.6\% & -26.5\% & -4.7\% & -27.4\
 \end{table*}
 
 Across the 15 recording--backbone combinations, disparity EPE, Bad3,
-metric depth MAE and metric depth RMSE all improve in \emph{every} cell
+metric depth MAE and metric depth RMSE improve in \emph{every} cell
 ($60/60$), with mean changes of $-5.00\%$, $-17.35\%$, $-3.68\%$ and
-$-3.21\%$ respectively.
+$-3.21\%$.
 
-Two observations matter more than the aggregate.
-First, the per-recording pattern is set by the \emph{recording} and not
-by the estimator: on Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and
-$-5.0\%$ for the seen and the two unseen backbones respectively, and the
-same alignment holds on every other recording. The residual variance is
-therefore a property of the data, which is stronger evidence for
-backbone independence than any pooled mean.
-Second, both unseen estimators improve on all five recordings, so the
-joint unseen-backbone / unseen-domain cell is positive rather than
-merely unevaluated.
-
-The transfer matrix is consequently complete:
-seen-backbone / seen-domain and unseen-backbone / seen-domain on
-SCARED-C (Table~\ref{tab:scared_main}), and seen-backbone / OOD-domain
-and unseen-backbone / OOD-domain on DRENDS
-(Table~\ref{tab:drends}).
-This establishes zero-shot geometric transfer in disparity space under
-a ToF-derived metric reference; it does not establish universal
+Two observations matter more than the aggregate. The per-recording
+pattern is set by the \emph{recording} and not the estimator: on Vid10
+the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ for the seen and the
+two unseen backbones, and the same alignment holds elsewhere, so the
+residual variance is a property of the data --- stronger evidence for
+backbone independence than any pooled mean. And both unseen estimators
+improve on all five recordings, so the joint unseen-backbone /
+unseen-domain cell is positive rather than merely unevaluated. The
+transfer matrix is therefore complete in both axes and their combination.
+This establishes zero-shot geometric transfer in disparity space under a
+ToF-derived metric reference; it does not establish universal
 cross-domain robustness, and DRENDS remains a non-independent reference.
 
 
@@ -1157,25 +1168,23 @@ The closure isolates four requirements. Geometric alignment is necessary
 but not sufficient: the aligned memory carries a $12.30\%$ oracle ceiling,
 yet using it indiscriminately fails --- warped raw memory yields no
 meaningful gain, and both direct FB-confidence weighting and full
-recurrent replacement worsen EPE. Under identical evidence and support
-the learned policy obtains almost seven times the gain of the best fixed
-blend, and the recurrent state must stay bounded because continuous
-propagation collapses. The mechanism is motion alignment plus learned
-graded intervention plus bounded recurrent state, not generic smoothing.
-
-The parameter count follows from this. The head never solves stereo
-matching: it receives two already meaningful candidates and evidence about
-their disagreement, and convex fusion restricts it to a position between
-two candidate geometries, which is a plausible reason why one small head
-transfers to unseen architectures. Two limits are worth stating. TETHER
+recurrent replacement worsen EPE. Under identical evidence and support the
+learned policy obtains almost seven times the gain of the best fixed
+blend, and the state must stay bounded because continuous propagation
+collapses. The mechanism is alignment plus learned graded intervention
+plus bounded recurrence, not smoothing. The parameter count follows: the
+head never solves stereo matching, receiving two already meaningful
+candidates and evidence about their disagreement, with convex fusion
+restricting it to a position between them. Two limits are worth stating.
+TETHER
 captures $32.9\%$ of the raw-versus-memory oracle gain and $30.1\%$ of the
 continuous oracle its action space could reach, so the open problem is
 deciding \emph{where} to intervene, not obtaining temporal evidence. And
 the effective fusion weight $w_t$, recovered exactly from the convex form,
 scores AUROC $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7
 as a predictor of harmful intervention: it is an intervention magnitude,
-not an uncertainty. This does not contradict
-Table~\ref{tab:intervention_quality}, since the aggregate gain factorises
+not an uncertainty. This does not contradict the
+intervention ratios above, since the aggregate gain factorises
 exactly into a count and a magnitude term ($B^+/H^+=2.839=1.642\times1.728$
 on D7), neither of which requires $w_t$ to rank anything: the policy is
 reliably good on average and uninformative per pixel, which makes the

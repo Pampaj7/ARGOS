@@ -767,6 +767,36 @@ the default threshold, so we report only the degraded-frame fraction
 $\Pr(D_t>0)$. The supplementary gives the derivation.
 
 % ============================================================
+\section{Intervention Quality per Backbone}
+% ============================================================
+
+The main paper quotes the ranges; this is the table behind them. $B^+/H^+$ is the beneficial-to-harmful error-magnitude ratio and ``Rec./New'' the ratio of recovered to newly introduced Bad1 pixels, both on the prediction-independent protocol support.
+
+\begin{table}[!htb]
+\centering
+\scriptsize
+\caption{
+Canonical TETHER intervention quality.
+All ratios exceed one; higher is better.
+``Rec./New'' is RecoveredBad1/NewBad1.
+}
+\label{tab:intervention_quality}
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{D2} & \multicolumn{2}{c}{D7} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Backbone & $B^+/H^+$ & Rec./New & $B^+/H^+$ & Rec./New \\
+\midrule
+S$^2$M$^2$-S          & 1.76 & 3.1$\times$  & 2.10 & 6.0$\times$ \\
+RAFT-Stereo           & 2.05 & 2.9$\times$  & 2.85 & 3.2$\times$ \\
+Stereo Anywhere       & 4.59 & 10.4$\times$ & 3.30 & 5.9$\times$ \\
+CREStereo             & 2.23 & 4.3$\times$  & 2.40 & 4.6$\times$ \\
+Fast-FoundationStereo & 2.11 & 4.0$\times$  & 2.10 & 4.8$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
 \section{A Metric Field We Do Not Report}
 % ============================================================
 
