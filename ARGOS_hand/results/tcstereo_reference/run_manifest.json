@@ -1,0 +1,33 @@
+{
+  "project": "ARGOS v2",
+  "generated_at": "2026-08-16T04:27:46.804368+00:00",
+  "purpose": "TC-Stereo as the integrated-architecture reference on identical frames and GT",
+  "input_boundary": "/dtu/p1/leopam/ARGOS/ARGOS_hand/external_comparison/results/bidastabilizer_raftstereo_robust/d2_full",
+  "tcstereo_checkpoint": "/dtu/p1/leopam/ARGOS/external/comparison_methods/Temporally-Consistent-Stereo-Matching/checkpoints/sceneflow.pth",
+  "tcstereo_args": {
+    "hidden_dims": [
+      128,
+      128,
+      128
+    ],
+    "corr_implementation": "reg",
+    "corr_levels": 4,
+    "corr_radius": 4,
+    "n_downsample": 2,
+    "slow_fast_gru": false,
+    "n_gru_layers": 3,
+    "mixed_precision": false,
+    "init_thres": 0.5,
+    "context_norm": "instance",
+    "shared_backbone": true
+  },
+  "iters": 32,
+  "temporal_path_disabled": {
+    "params": null,
+    "reason": "its propagation warps the previous disparity by a rigid 6-DoF reprojection from per-frame pose, intrinsics and baseline; SCARED-C provides no per-frame pose and deformable tissue is not rigid",
+    "consequence": "this is TC-Stereo's single-frame stereo path, reported as an integrated-architecture reference and not as a temporal rival"
+  },
+  "invalid_penalty_px": 1000.0,
+  "training_performed": false,
+  "threshold_tuning_performed": false
+}

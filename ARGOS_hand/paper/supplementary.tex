@@ -456,6 +456,7 @@ not that it does so everywhere.
 
 % ============================================================
 \section{Acquisition Audit of the Comparison Set}
+\label{sec:acq}
 % ============================================================
 
 The main paper states that no published method in our category can be run
@@ -597,6 +598,67 @@ comparisons follow the same direction. Our checkpoint-selection rule
 picks best D2 fused EPE, so seed $0$ is by construction the run that
 looked best on D2; the D2 margin therefore carries selection optimism and
 the held-out margin does not.
+
+% ============================================================
+\section{TC-Stereo as an Integrated Reference, and Why It Is Weak Evidence}
+% ============================================================
+
+TC-Stereo \cite{zeng2024tcstereo} is the one temporally-aware competitor
+whose weights we obtained. Section~\ref{sec:acq} explains why its temporal
+branch cannot run on SCARED-C: it warps the previous disparity by a rigid
+$6$-DoF reprojection built from per-frame camera pose, which the dataset
+does not provide and which deformable tissue would invalidate anyway. We
+ran it with the temporal branch disabled --- its single-frame stereo path
+--- over the same stored boundary as the BiDAStabilizer comparison, so the
+frames and the ground truth are bit-identical across methods.
+
+\begin{table}[!htb]
+\centering
+\caption{Same $4249$ frames, same ground truth, same support, $18.0$M
+pixels. TC-Stereo is SceneFlow-pretrained and evaluated zero-shot with its
+temporal branch disabled. Read the caveat below before using this row.}
+\label{tab:tcstereo}
+\setlength{\tabcolsep}{4pt}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Method & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
+\midrule
+Raw RAFT-Stereo robust & 0.3029 & 2.087 & 0.186 & 0.4484 \\
+BiDAStabilizer         & 0.3021 & 1.987 & 0.171 & 0.4403 \\
+TETHER                 & \textbf{0.2890} & \textbf{1.826} & \textbf{0.157} & \textbf{0.4256} \\
+\midrule
+TC-Stereo (SceneFlow)  & 0.5242 & 9.051 & 1.680 & 1.4059 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The caveat, which is large.} This row understates TC-Stereo and
+we do not claim otherwise. The stored boundary is $144\times180$ with a
+median ground-truth disparity of $8.04$\,px (range $5.57$--$15.53$),
+whereas TC-Stereo was trained at full resolution on disparity ranges an
+order of magnitude larger. Asking a from-scratch cost-volume matcher to
+operate two octaves below its training regime is not a fair test of the
+architecture. A refiner is far less exposed to this: BiDAStabilizer and
+TETHER both consume the raw disparity and correct it, so the resolution
+of the boundary constrains them much less than it constrains a matcher
+built around a correlation pyramid.
+
+We report the row anyway, with this caveat attached, because the
+alternative --- running TC-Stereo at full resolution on frames the other
+methods never saw --- would buy fairness to one method by destroying the
+property that makes the whole table meaningful. The number is evidence
+that swapping in a different integrated architecture zero-shot is not a
+drop-in substitute for refining a strong in-domain frozen model. It is
+\emph{not} evidence that TETHER outperforms TC-Stereo, and we make no such
+claim.
+
+\paragraph{One detail of the support.} We planned two supports, ground
+truth alone and ground truth intersected with raw validity. On this
+boundary they coincide exactly: \texttt{raw\_valid} is true everywhere, so
+both conditions select the same $17{,}999{,}475$ pixels. The intersection
+is reported as the definition because it is the one that would matter on a
+boundary where the backbone declines pixels; here it is vacuous.
 
 % ============================================================
 \section{A Metric Field We Do Not Report}

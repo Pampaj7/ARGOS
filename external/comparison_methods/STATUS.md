@@ -80,5 +80,27 @@ rival, and the manifest records the disabled temporal path and the reason. It an
 the reviewer question our own ablations cannot: whether one should simply use a newer
 integrated network instead of refining a frozen one.
 
+RESULT (2026-08-16). Pooled over the same 4249 frames and 18.0M pixels as the BiDA
+table: TC-Stereo EPE 0.5242 / Bad1 9.05% / Bad3 1.68% / RMSE 1.4059, against raw
+RAFT-Stereo robust 0.3029 / 2.087% / 0.186% / 0.4484. It is a functioning stereo
+network here, not a broken one (91% of pixels within 1px), just a much less accurate
+one than the in-domain frozen backbone.
+
+CAVEAT, and it is large: the stored boundary is 144x180 with median GT disparity
+8.04px (range 5.57-15.53), while TC-Stereo was trained at full resolution on ranges an
+order of magnitude larger. A from-scratch cost-volume matcher two octaves below its
+training regime is not being tested fairly. A refiner is far less exposed, since it
+corrects an existing disparity rather than building a correlation pyramid. We kept the
+boundary anyway because running TC-Stereo at full resolution on frames the other
+methods never saw would buy fairness to one method by destroying the property that
+makes the table meaningful. The row supports "swapping in a different integrated
+architecture zero-shot is not a drop-in substitute for refining a strong in-domain
+frozen model"; it does NOT support "TETHER outperforms TC-Stereo", and we do not
+claim that.
+
+Note on support: the planned two supports (GT alone; GT AND raw validity) coincide
+exactly on this boundary because raw_valid is true everywhere. Both select the same
+17,999,475 pixels.
+
 ## 5. Deep Video Prior (NeurIPS 2020) — weights on Google Drive, expect blocked
 Non-causal anyway: per-video test-time training over the whole clip.

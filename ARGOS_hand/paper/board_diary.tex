@@ -14721,5 +14721,49 @@ prose. Nothing was dropped that is not still stated somewhere. Eight
 pages, comparison table included.
 
 
+
+\section*{TC-Stereo Runs, and We Argue Against Our Own Number}
+
+The last job finished. TC-Stereo, single-frame path, SceneFlow weights,
+over the same boundary as everything else: EPE $0.5242$, Bad1 $9.05\%$,
+against raw RAFT-Stereo robust at $0.3029$ and $2.087\%$. Seventy-three
+percent worse on EPE, four times worse on Bad1.
+
+The tempting move is to put that in the main paper as a win. It is not
+one, and the reason is worth recording.
+
+The stored boundary is $144\times180$ with a median ground-truth disparity
+of $8.04$\,px, range $5.57$--$15.53$. TC-Stereo was trained at full
+resolution on disparity ranges an order of magnitude larger. We are asking
+a from-scratch cost-volume matcher to work two octaves below its training
+regime. It still functions --- $91\%$ of pixels land within $1$\,px, so
+this is a working network producing worse geometry, not a broken
+configuration or a scale bug --- but the comparison is not fair to the
+architecture. A refiner is far less exposed to the same problem: both
+BiDAStabilizer and TETHER consume the raw disparity and correct it, so
+boundary resolution constrains them much less than it constrains a
+correlation pyramid.
+
+We kept the boundary rather than re-running TC-Stereo at full resolution,
+because doing that would buy fairness to one method by destroying the
+property the entire table rests on: that every method sees identical
+frames and identical ground truth. So the row goes in the supplementary,
+with the caveat attached, supporting the claim it can support --- swapping
+in a different integrated architecture zero-shot is not a drop-in
+substitute for refining a strong in-domain frozen model --- and explicitly
+not the claim it cannot: that TETHER outperforms TC-Stereo.
+
+\paragraph{A design that turned out vacuous.} The runner scored two
+supports, ground truth alone and ground truth intersected with raw
+validity, on the theory that a method not consuming the backbone should
+not be charged for the backbone's refusals. On this boundary
+\texttt{raw\_valid} is true everywhere, so both conditions select the same
+$17{,}999{,}475$ pixels and the two tables are identical. The distinction
+was worth building --- it would matter on a boundary where the backbone
+declines pixels --- but here it bought nothing, and the supplementary says
+so rather than presenting two columns that look like independent
+confirmation.
+
+
 \end{document}
 
