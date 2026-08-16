@@ -23,6 +23,7 @@ RUNS = ROOT / "model_design/training_runs"
 VARIANTS = {
     "A1_no_appearance": "A1_no_appearance_channels",
     "A2_no_learned_evidence": "A2_no_learned_stereo_evidence",
+    "A3_single_resolution": "A3_single_resolution",
     "A4_relaxed_convexity": "A4_relaxed_convexity",
 }
 
@@ -81,10 +82,12 @@ class AblationH4(MaskedCanonicalH4):
             CODDStyleFusionHead, FrozenResNet18Layer1, build_codd_cues,
         )
         from model_design.comparison.ablation_variants import (
-            RelaxedConvexityHead, build_cues_without_appearance,
+            RelaxedConvexityHead, SingleResolutionHead, build_cues_without_appearance,
         )
 
-        head_class = RelaxedConvexityHead if self.variant == "A4_relaxed_convexity" else CODDStyleFusionHead
+        head_class = {"A4_relaxed_convexity": RelaxedConvexityHead,
+                      "A3_single_resolution": SingleResolutionHead}.get(
+                          self.variant, CODDStyleFusionHead)
         state = torch.load(self.checkpoint, map_location="cpu", weights_only=False)
         self._model = head_class(state["cue_channels"]).to(self.device).eval().requires_grad_(False)
         self._model.load_state_dict(state["model"], strict=True)
@@ -110,6 +113,10 @@ def factory_a1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
 
 def factory_a2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A2_no_learned_evidence", device=device)
+
+
+def factory_a3(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A3_single_resolution", device=device)
 
 
 def factory_a4(*, device: str = "cuda:0", **_: Any) -> AblationH4:

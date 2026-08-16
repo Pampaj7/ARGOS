@@ -1,0 +1,50 @@
+{
+  "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "declared": {
+    "change": "drop the 64 tanh-compressed frozen ResNet-18 layer1 channels from the 142-channel cue stack, leaving 78",
+    "everything_else": "unchanged",
+    "field": "cue construction",
+    "honest_note": "This does NOT remove the frozen extractor from the runtime: the appearance correlations still require it. Only the input width of the first convolution shrinks. Any latency claim belongs to A2, not here.",
+    "rationale": "Appearance self-correlation and cross-appearance correlation are already derived from those same features. This asks whether raw appearance adds anything BEYOND the correlations computed from it."
+  },
+  "locked_training": {
+    "alpha_reg": 0.2,
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
+    "batch_size": 4,
+    "clip_length": 4,
+    "coverage_threshold": 0.5,
+    "epochs": 12,
+    "gradient_clip_norm": 1.0,
+    "learned_stereo_evidence": true,
+    "learning_rate": 0.0002,
+    "memory_state": "recurrent",
+    "mixed_precision_cuda": true,
+    "optimizer": "AdamW",
+    "scheduler": null,
+    "seed": 0,
+    "tau_fusion_native_px": 1.0,
+    "tau_reset_native_px": 5.0,
+    "train_dataset_ids": [
+      1,
+      3,
+      6
+    ],
+    "validation_dataset_ids": [
+      2
+    ],
+    "weight_decay": 0.0001
+  },
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A1_no_appearance",
+  "patch": {
+    "cue_channels": 78,
+    "from": "build_codd_cues",
+    "patched": "build_codd_cues",
+    "to": "build_cues_without_appearance"
+  },
+  "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+  "variant": "A1_no_appearance"
+}

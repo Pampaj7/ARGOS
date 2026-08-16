@@ -14765,5 +14765,74 @@ so rather than presenting two columns that look like independent
 confirmation.
 
 
+
+\section*{16 August, Afternoon: The Ablations Answer, and One Answer Is No}
+
+Four architecture ablations were pre-registered this morning and launched
+on the two H100s. Two have finished training and evaluation, one is
+training, one is being evaluated. Two results are already worth writing
+down, and the first one costs us a sentence in the paper.
+
+\paragraph{A4: the convexity claim is withdrawn.} The Analysis said that
+confining the output to the interval between the two candidate geometries
+was ``a plausible reason why one small head transfers to architectures
+absent from its training''. That was an assertion with no experiment
+behind it, so we built one: $49$ parameters, a zero-initialised additive
+term that lets the output leave the interval. Zero-initialised so training
+starts exactly at the canonical model and any departure has to be learned.
+
+The pre-registration named Bad1 on held-out D7 as the primary endpoint and
+committed, in advance, to \emph{withdrawing} rather than softening the
+claim if the relaxed variant matched or beat canonical there.
+
+It beat it. On D7: Bad1 $6.02\%$ against $4.78\%$, and also better on
+Bad3, RMSE and worst-case error. The claim is withdrawn.
+
+What the experiment actually shows is not what we expected, and is more
+specific. Mean EPE gain collapses from $4.57\%$ to $0.05\%$, turning
+\emph{negative} on three of five backbones --- the module makes disparity
+worse than doing nothing. Our first reading was the obvious one,
+occasional large failures, and it is wrong: RMSE and the worst case both
+\emph{improve}, and a quadratic metric would be the first to register
+outliers. The only consistent reading is the opposite. The relaxed variant
+fixes the few large errors and degrades a great many pixels that were
+already close. A linear mean registers that; thresholds and squared errors
+do not.
+
+So the convex constraint does not buy safety from catastrophic
+corrections. It buys mean accuracy, by stopping the module from disturbing
+the majority of pixels the frozen estimator already had right. Narrower
+than what we claimed, and now supported.
+
+\paragraph{A1: forty-five percent of the input is redundant.} The evidence
+space carries $64$ frozen ResNet-18 channels out of $142$. But appearance
+self-correlation and cross-appearance correlation are computed from those
+same features --- so the real question was never ``do appearance features
+help'' but ``does raw appearance add anything \emph{beyond} the
+correlations already derived from it''.
+
+On held-out D7, dropping them changes nothing: Bad1 $4.88\%$ against
+$4.78\%$, a difference of $0.10$ points against a three-seed spread of
+$0.37$. EPE, Bad3 and RMSE are all marginally better. By the
+pre-registered rule this is \emph{indistinguishable}, and the
+pre-registration also said what to do about it: describe the channels as
+redundant.
+
+One asymmetry is worth noting because it is the same one the seed study
+found. On D2, A1 is clearly worse on Bad1 ($8.81\%$ against $10.78\%$),
+and D2 is the split the checkpoint is selected on. Development says the
+channels matter; held-out says they do not.
+
+\paragraph{What this does not buy.} A1 shrinks the first convolution from
+$30{,}672$ to $16{,}848$ parameters, about $8\%$ of the head, and does
+\emph{not} remove the frozen extractor from the runtime --- the appearance
+correlations still need it. Any latency argument belongs to A2, which
+removes the learned evidence entirely and is in evaluation now. A3, the
+single-resolution variant, is training: it keeps the parameter count
+exactly identical and moves only the receptive field, because deleting the
+context branch outright would have confounded ``context needs low
+resolution'' with ``the head needs capacity''.
+
+
 \end{document}
 

@@ -87,6 +87,39 @@ class RelaxedConvexityHead(CODDStyleFusionHead):
         return CODDFusionOutput(reset, fusion, temporal, convex + escape)
 
 
+class SingleResolutionHead(CODDStyleFusionHead):
+    """A3: the canonical head with the context branch moved to full resolution.
+
+    The canonical head gathers context in a 48-channel branch running at a quarter of
+    the cache grid, and predicts the fusion weight there. This variant runs exactly the
+    same branch at full resolution instead: the average pooling is dropped and the
+    strided convolution becomes stride one.
+
+    Nothing else changes, and crucially the parameter count is *identical* --- convolution
+    weights do not depend on spatial size. Removing the branch outright would have cut the
+    head from 177k to about 41k parameters and confounded 'context needs low resolution'
+    with 'the head needs capacity'. Here the only thing that moves is the receptive field,
+    which shrinks by a factor of four in pixels.
+    """
+
+    def __init__(self, cue_channels: int, width: int = 48) -> None:
+        super().__init__(cue_channels, width)
+        strided = self.coarse[0]
+        same = torch.nn.Conv2d(strided.in_channels, strided.out_channels, 3,
+                               stride=1, padding=1, bias=False)
+        same.weight = strided.weight            # the same parameter tensor, not a copy
+        self.coarse[0] = same
+
+    def forward(self, cues: CODDCues, raw: torch.Tensor, aligned_memory: torch.Tensor) -> CODDFusionOutput:
+        fine = self.full(cues.values)
+        context = self.coarse(fine)                     # full resolution: no pool, no stride
+        reset = torch.sigmoid(self.reset(torch.cat((fine, context), dim=1)))
+        fusion = torch.sigmoid(self.fusion(context))    # already full resolution
+        temporal = reset * fusion
+        return CODDFusionOutput(reset, fusion, temporal,
+                                (1.0 - temporal) * raw + temporal * aligned_memory)
+
+
 def demo() -> None:
     """Self-check: A1 removes exactly the appearance block, A4 starts as the canonical head."""
     channels, height, width = TOTAL_CHANNELS, 32, 40
@@ -110,6 +143,13 @@ def demo() -> None:
     assert torch.allclose(a, b, atol=1e-6), "A4 must start identical to the canonical head"
     extra = sum(p.numel() for p in relaxed.parameters()) - sum(p.numel() for p in canonical.parameters())
     assert extra == 49, extra
+
+    single = SingleResolutionHead(channels).eval()
+    assert sum(p.numel() for p in single.parameters()) == sum(p.numel() for p in canonical.parameters()), \
+        "A3 must keep the canonical parameter count; only the receptive field may change"
+    with torch.inference_mode():
+        out = single(cues, raw, memory)
+    assert out.fusion_weight.shape[-2:] == raw.shape[-2:], "A3 predicts fusion at full resolution"
     print(f"OK: A1 keeps 78 channels and drops [{APPEARANCE_SLICE.start}:{APPEARANCE_SLICE.stop}]; "
           f"A4 adds {extra} parameters and is initially identical to the canonical head")
 

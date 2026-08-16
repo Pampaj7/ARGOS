@@ -1,0 +1,54 @@
+{
+  "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "declared": {
+    "change": "drop the average pooling and make the strided convolution stride one, so the 48-channel context branch and the fusion gate run at full resolution instead of a quarter",
+    "declared_after": "A4 was already evaluated; A3 tests an independent design decision and its endpoint is unchanged",
+    "everything_else": "unchanged, including the loss and the channel counts",
+    "field": "resolution of the context branch",
+    "honest_note": "Full-resolution 48-channel residual blocks cost roughly 16x the compute of the canonical branch, so this variant is slower to train and would be slower at inference. If it wins, that trade has to be reported, not hidden.",
+    "parameter_cost": 0,
+    "rationale": "The head predicts the reset gate at full resolution and the fusion weight at a quarter, on the reasoning that deciding HOW MUCH to intervene needs more context than deciding WHETHER. That reasoning has never been tested.",
+    "timestamp": "2026-08-16T18:10:00+02:00",
+    "why_not_delete_the_branch": "Removing it outright would cut the head from 177,338 to about 41,000 parameters and confound 'context needs low resolution' with 'the head needs capacity'. Keeping the same weights at stride one holds the parameter count exactly and moves only the receptive field, which shrinks by a factor of four in pixels."
+  },
+  "locked_training": {
+    "alpha_reg": 0.2,
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
+    "batch_size": 4,
+    "clip_length": 4,
+    "coverage_threshold": 0.5,
+    "epochs": 12,
+    "gradient_clip_norm": 1.0,
+    "learned_stereo_evidence": true,
+    "learning_rate": 0.0002,
+    "memory_state": "recurrent",
+    "mixed_precision_cuda": true,
+    "optimizer": "AdamW",
+    "scheduler": null,
+    "seed": 0,
+    "tau_fusion_native_px": 1.0,
+    "tau_reset_native_px": 5.0,
+    "train_dataset_ids": [
+      1,
+      3,
+      6
+    ],
+    "validation_dataset_ids": [
+      2
+    ],
+    "weight_decay": 0.0001
+  },
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A3_single_resolution",
+  "patch": {
+    "extra_parameters": 0,
+    "from": "CODDStyleFusionHead",
+    "patched": "CODDStyleFusionHead",
+    "to": "SingleResolutionHead"
+  },
+  "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+  "variant": "A3_single_resolution"
+}

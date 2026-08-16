@@ -1,7 +1,6 @@
 {
   "timestamp": "2026-08-16T09:40:00+02:00",
   "objective": "The paper shows that a learned temporal policy is necessary but says nothing about why THIS head. Three design decisions have never been ablated: the 64 frozen ResNet-18 appearance channels, the learned stereo evidence block as a whole, and the convex-fusion constraint on the output. The last is the sharpest gap, because the Analysis section already asserts that convexity is a plausible reason the head transfers to unseen backbones, and that assertion currently has no experiment behind it.",
-
   "deviations_from_locked_recipe": {
     "A1_no_appearance_channels": {
       "field": "cue construction",
@@ -27,13 +26,33 @@
       "rationale": "Minimal relaxation of the convexity constraint. Removing the sigmoid from fusion_weight instead would have been unfair: the loss supervises that weight as a probability and an unbounded weight makes those terms degenerate, so we would be ablating the loss and not the architecture.",
       "initialisation": "zero, so training starts exactly at the canonical model and any departure from convexity is learned rather than imposed",
       "honest_note": "This relaxes the constraint, it does not remove it. A head that never uses the extrapolation term is evidence FOR convexity; one that does is evidence against."
+    },
+    "A3_single_resolution": {
+      "timestamp": "2026-08-16T18:10:00+02:00",
+      "declared_after": "A4 was already evaluated; A3 tests an independent design decision and its endpoint is unchanged",
+      "field": "resolution of the context branch",
+      "change": "drop the average pooling and make the strided convolution stride one, so the 48-channel context branch and the fusion gate run at full resolution instead of a quarter",
+      "parameter_cost": 0,
+      "everything_else": "unchanged, including the loss and the channel counts",
+      "rationale": "The head predicts the reset gate at full resolution and the fusion weight at a quarter, on the reasoning that deciding HOW MUCH to intervene needs more context than deciding WHETHER. That reasoning has never been tested.",
+      "why_not_delete_the_branch": "Removing it outright would cut the head from 177,338 to about 41,000 parameters and confound 'context needs low resolution' with 'the head needs capacity'. Keeping the same weights at stride one holds the parameter count exactly and moves only the receptive field, which shrinks by a factor of four in pixels.",
+      "honest_note": "Full-resolution 48-channel residual blocks cost roughly 16x the compute of the canonical branch, so this variant is slower to train and would be slower at inference. If it wins, that trade has to be reported, not hidden."
     }
   },
-
   "unchanged_and_verified_at_launch": {
-    "train_dataset_ids": [1, 3, 6],
-    "validation_dataset_ids": [2],
-    "backbones": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+    "train_dataset_ids": [
+      1,
+      3,
+      6
+    ],
+    "validation_dataset_ids": [
+      2
+    ],
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
     "seed": 0,
     "clip_length": 4,
     "memory_state": "recurrent",
@@ -50,7 +69,6 @@
     "checkpoint_selection_rule": "best development (D2) fused EPE, identical to the canonical run",
     "loss": "unchanged in all three variants"
   },
-
   "protocol": {
     "implementation": "model_design/train_ablation.py, a sibling of train.py that reuses its metadata(), verify_sources(), validate_output() and config() unchanged and patches only the runner's cue builder or head class",
     "train_py_modified": false,
@@ -58,19 +76,19 @@
     "output_directories": [
       "model_design/training_runs/ablation_A1_no_appearance",
       "model_design/training_runs/ablation_A2_no_learned_evidence",
-      "model_design/training_runs/ablation_A4_relaxed_convexity"
+      "model_design/training_runs/ablation_A4_relaxed_convexity",
+      "model_design/training_runs/ablation_A3_single_resolution"
     ],
     "evaluation": "each checkpoint is evaluated with the frozen support-masked module on SCARED-C D2 and D7 under the unmodified definitive protocol; no threshold, policy or selection rule is re-tuned",
     "comparison_baseline": "canonical seed 0, results/scared_masked",
     "reporting_rule": "report the relative Bad1 and EPE reduction of each variant against the same raw predictions, on both splits, and state the held-out D7 number as primary; a variant that matches the canonical model within the three-seed spread (0.37 percentage points pooled Bad1) is reported as indistinguishable, not as better or worse"
   },
-
   "declared_before_seeing_results": {
     "what_would_falsify_the_convexity_claim": "If A4 matches or beats the canonical model on held-out D7, the Analysis sentence attributing transfer to the convex action space must be withdrawn rather than softened.",
     "what_would_make_A1_a_positive_result": "If A1 matches the canonical model within the seed spread, the 64 appearance channels are redundant given their own correlations and should be dropped from the architecture description.",
-    "seed_spread_is_the_yardstick": "The canonical three-seed pooled Bad1 spread is 0.37 percentage points; differences smaller than that are not interpreted."
+    "seed_spread_is_the_yardstick": "The canonical three-seed pooled Bad1 spread is 0.37 percentage points; differences smaller than that are not interpreted.",
+    "what_would_make_A3_informative": "If A3 matches the canonical model within the three-seed spread, the dual-resolution design is unjustified and should be described as a compute choice rather than a necessity. If it loses, the claim that the fusion weight needs a wider receptive field than the reset gate is supported."
   },
-
   "prohibited": [
     "selecting the best ablation and presenting it as the canonical model",
     "re-tuning any threshold after seeing ablation results",

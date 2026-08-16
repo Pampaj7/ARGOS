@@ -20,6 +20,7 @@ PREREGISTER = ROOT / "model_design/ablation_preregister.json"
 VARIANTS = {
     "A1_no_appearance": "A1_no_appearance_channels",
     "A2_no_learned_evidence": "A2_no_learned_stereo_evidence",
+    "A3_single_resolution": "A3_single_resolution",
     "A4_relaxed_convexity": "A4_relaxed_convexity",
 }
 
@@ -37,7 +38,7 @@ def _train_module():
 def install(runner, variant: str) -> dict:
     """Rebind exactly one name in the runner's namespace and report what changed."""
     from model_design.comparison.ablation_variants import (
-        RelaxedConvexityHead, build_cues_without_appearance,
+        RelaxedConvexityHead, SingleResolutionHead, build_cues_without_appearance,
     )
     if variant == "A1_no_appearance":
         canonical = runner.build_codd_cues
@@ -49,6 +50,11 @@ def install(runner, variant: str) -> dict:
         runner.CODDStyleFusionHead = RelaxedConvexityHead
         return {"patched": "CODDStyleFusionHead", "from": canonical.__name__,
                 "to": "RelaxedConvexityHead", "extra_parameters": 49}
+    if variant == "A3_single_resolution":
+        canonical = runner.CODDStyleFusionHead
+        runner.CODDStyleFusionHead = SingleResolutionHead
+        return {"patched": "CODDStyleFusionHead", "from": canonical.__name__,
+                "to": "SingleResolutionHead", "extra_parameters": 0}
     if variant == "A2_no_learned_evidence":
         # Nothing is patched: the runner already honours the config flag.
         return {"patched": None, "config_field": "disable_learned_stereo_evidence",
@@ -100,7 +106,8 @@ def main() -> None:
     if args.dry_run:
         runner_names = {"note": "runner not loaded in dry-run; patch target verified by name only",
                         "target": "build_codd_cues" if args.variant == "A1_no_appearance"
-                                  else "CODDStyleFusionHead" if args.variant == "A4_relaxed_convexity"
+                                  else "CODDStyleFusionHead" if args.variant in
+                                  ("A4_relaxed_convexity", "A3_single_resolution")
                                   else None}
         print(json.dumps(record | {"dry_run": True, "writes": False, "patch": runner_names},
                          indent=2, sort_keys=True))

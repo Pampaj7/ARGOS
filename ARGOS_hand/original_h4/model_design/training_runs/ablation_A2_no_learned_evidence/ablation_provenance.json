@@ -1,0 +1,52 @@
+{
+  "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+  "declared": {
+    "change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+    "everything_else": "unchanged",
+    "field": "disable_learned_stereo_evidence",
+    "implementation": "an existing flag in train.py; no code change",
+    "locked_value": false,
+    "new_value": true,
+    "rationale": "Tests whether the head needs learned features at all. This is the variant that removes the frozen extractor from the deployed system, so it is the one with a runtime consequence."
+  },
+  "locked_training": {
+    "alpha_reg": 0.2,
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
+    "batch_size": 4,
+    "clip_length": 4,
+    "coverage_threshold": 0.5,
+    "epochs": 12,
+    "gradient_clip_norm": 1.0,
+    "learned_stereo_evidence": true,
+    "learning_rate": 0.0002,
+    "memory_state": "recurrent",
+    "mixed_precision_cuda": true,
+    "optimizer": "AdamW",
+    "scheduler": null,
+    "seed": 0,
+    "tau_fusion_native_px": 1.0,
+    "tau_reset_native_px": 5.0,
+    "train_dataset_ids": [
+      1,
+      3,
+      6
+    ],
+    "validation_dataset_ids": [
+      2
+    ],
+    "weight_decay": 0.0001
+  },
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A2_no_learned_evidence",
+  "patch": {
+    "config_field": "disable_learned_stereo_evidence",
+    "cue_channels": 38,
+    "patched": null,
+    "value": true
+  },
+  "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+  "variant": "A2_no_learned_evidence"
+}

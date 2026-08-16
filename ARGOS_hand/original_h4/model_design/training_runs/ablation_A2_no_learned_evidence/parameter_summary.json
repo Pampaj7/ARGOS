@@ -1,0 +1,6 @@
+{
+  "codd_appendix_a3": "reset full resolution; fusion at lower resolution then bilinear upsample",
+  "cue_channels": 38,
+  "frozen_resnet18_parameters": 0,
+  "fusion_trainable_parameters": 154874
+}
