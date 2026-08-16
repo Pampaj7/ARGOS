@@ -122,56 +122,6 @@ for Frozen Surgical Stereo}
 % ============================================================
 
 
-\begin{figure}[!t]
-\centering
-\begin{tikzpicture}[x=1mm, y=1mm,
-  box/.style={draw, rounded corners=1pt, align=center, inner xsep=1.6pt, inner ysep=1.8pt, font=\scriptsize},
-  frozen/.style={box, fill=black!8},
-  learn/.style={box, very thick},
-  sig/.style={->, >={Stealth[length=1.4mm]}},
-  lbl/.style={font=\tiny, inner sep=0.8pt}]
-
-\node[frozen] (stereo) at (0,32)  {frozen stereo $S$};
-\node[frozen] (flow)   at (44,32) {frozen SEA-RAFT};
-\node[lbl] at (0,37)  {$I_t^L,\,I_t^R$};
-\node[lbl] at (44,37) {$I_t^L,\,I_{t-1}^L$};
-
-\node[frozen] (mem)  at (72,24) {$m_{t-1}$};
-\node[box]    (warp) at (44,24) {pull-warp};
-\node[box]    (ev)   at (18,15) {external evidence, $142$ ch};
-\node[learn]  (head) at (18,7)  {fusion head, $177$k};
-\node[box]    (mix)  at (18,-1) {convex blend};
-\node[box]    (mask) at (18,-9) {confine to support};
-
-\draw[sig] (stereo.south) -- node[lbl,left,pos=.55]{$d_t^{\raw}$} (ev.north west);
-\draw[sig] (flow) -- (warp);
-\draw[sig] (mem) -- (warp);
-\draw[sig] (warp.south west) -- node[lbl,above left,pos=.55]{$\widetilde m_t$} (ev.north east);
-\draw[sig] (ev) -- (head);
-\draw[sig] (head) -- node[lbl,right]{$w_t$} (mix);
-\draw[sig] (mix) -- (mask);
-
-% the two candidate geometries enter the blend directly
-\draw[sig] (stereo.west) -- ++(-4,0) |- (mix.west);
-\draw[sig] (warp.east) -- ++(4,0) -- ++(0,-19) -| (mix.east);
-
-% bounded recurrence
-\draw[sig] (mask.south) -- ++(0,-4) node[lbl,below right,xshift=-2mm]{$d_t^{\fused}$}
-      -| (72,18) -- (mem.south);
-\node[lbl, align=center] at (68,10) {re-anchor to\\ $d_{t-1}^{\raw}$ every $H{=}4$};
-\end{tikzpicture}
-\caption{
-TETHER reads only externally observable quantities: RGB, disparity and
-validity. The frozen estimator and the frozen flow network are never
-modified and no future frame is used. The only learned component is the
-$177$k-parameter head, which emits the fusion weight $w_t$ placing the
-output between the two candidate geometries; that output is then confined
-to the support the module declares, and the recurrent state is
-re-anchored to independently predicted raw geometry every $H$ frames.
-}
-\label{fig:system}
-\end{figure}
-
 \begin{abstract}
 
 Dense stereo is attractive for robotic surgery because it provides
@@ -410,6 +360,57 @@ which is why we treat refinement as an intervention on that geometry.
 
 
 \section{Method}
+
+\begin{figure}[!t]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm,
+  box/.style={draw, rounded corners=1pt, align=center, inner xsep=1.6pt, inner ysep=1.8pt, font=\scriptsize},
+  frozen/.style={box, fill=black!8},
+  learn/.style={box, very thick},
+  sig/.style={->, >={Stealth[length=1.4mm]}},
+  lbl/.style={font=\tiny, inner sep=0.8pt}]
+
+\node[frozen] (stereo) at (0,32)  {frozen stereo $S$};
+\node[frozen] (flow)   at (44,32) {frozen SEA-RAFT};
+\node[lbl] at (0,37)  {$I_t^L,\,I_t^R$};
+\node[lbl] at (44,37) {$I_t^L,\,I_{t-1}^L$};
+
+\node[frozen] (mem)  at (72,24) {$m_{t-1}$};
+\node[box]    (warp) at (44,24) {pull-warp};
+\node[box]    (ev)   at (18,15) {external evidence, $142$ ch};
+\node[learn]  (head) at (18,7)  {fusion head, $177$k};
+\node[box]    (mix)  at (18,-1) {convex blend};
+\node[box]    (mask) at (18,-9) {confine to support};
+
+\draw[sig] (stereo.south) -- node[lbl,left,pos=.55]{$d_t^{\raw}$} (ev.north west);
+\draw[sig] (flow) -- (warp);
+\draw[sig] (mem) -- (warp);
+\draw[sig] (warp.south west) -- node[lbl,above left,pos=.55]{$\widetilde m_t$} (ev.north east);
+\draw[sig] (ev) -- (head);
+\draw[sig] (head) -- node[lbl,right]{$w_t$} (mix);
+\draw[sig] (mix) -- (mask);
+
+% the two candidate geometries enter the blend directly
+\draw[sig] (stereo.west) -- ++(-4,0) |- (mix.west);
+\draw[sig] (warp.east) -- ++(4,0) -- ++(0,-19) -| (mix.east);
+
+% bounded recurrence
+\draw[sig] (mask.south) -- ++(0,-4) node[lbl,below right,xshift=-2mm]{$d_t^{\fused}$}
+      -| (72,18) -- (mem.south);
+\node[lbl, align=center] at (68,10) {re-anchor to\\ $d_{t-1}^{\raw}$ every $H{=}4$};
+\end{tikzpicture}
+\caption{
+TETHER reads only externally observable quantities: RGB, disparity and
+validity. The frozen estimator and the frozen flow network are never
+modified and no future frame is used. The only learned component is the
+$177$k-parameter head, which emits the fusion weight $w_t$ placing the
+output between the two candidate geometries; that output is then confined
+to the support the module declares, and the recurrent state is
+re-anchored to independently predicted raw geometry every $H$ frames.
+}
+\label{fig:system}
+\end{figure}
+
 \label{sec:method}
 
 \subsection{External Causal Interface}
@@ -835,16 +836,13 @@ equal outputs are expected, not two independent confirmations.
 \subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
 
 The lowest development EPE is at $H=6$, by $0.14\%$. We do not claim
-$H=4$ minimises it: longer state lifetime buys that sliver at a
-measurable cost in intervention risk --- from $H=4$ to $6$ to $8$,
-$B^+/H^+$ degrades from $2.53$ to $2.30$ to $2.04$ and NewBad1 nearly
-triples --- so $H=4$ is the frozen risk--gain operating point, chosen
-before D7 was opened. The supplementary gives the sweep. Recurrence must
-also be bounded: continuous corrected-state propagation moves mean EPE
-from $0.276202$ to $0.449349$, a $62.69\%$ increase, because writing
-corrected disparity back into memory without interruption accumulates
-alignment and fusion error. Periodic raw re-anchoring is structural, not
-an implementation detail.
+$H=4$ minimises it: longer lifetime buys that sliver at a cost in
+intervention risk --- from $H=4$ to $6$ to $8$, $B^+/H^+$ degrades from
+$2.53$ to $2.30$ to $2.04$ and NewBad1 nearly triples --- so $H=4$ is the
+frozen risk--gain operating point, chosen before D7 was opened (sweep in
+the supplementary). Recurrence must also be bounded: continuous
+corrected-state propagation raises mean EPE by $62.69\%$, so periodic raw
+re-anchoring is structural, not an implementation detail.
 
 
 \subsection{Cross-Backbone Development Behaviour}
@@ -954,17 +952,12 @@ that on external domains an unmasked output does introduce invalid
 predictions, which is precisely what the support contract of
 \eqref{eq:fusion} prevents.
 
-Thus the EPE gain is not obtained by trading mean accuracy for a worse
-aggregate bad-pixel rate or a broader SCARED-C error tail.
-This does not imply that no individual new bad pixels are introduced;
-those events are measured explicitly through NewBad and recovered-error
-statistics below.
-
-This supports transfer of one common learned intervention policy across
-heterogeneous stereo estimators within the SCARED-C domain.
-
-The joint unseen-backbone / unseen-domain cell is reported separately in
-Section~\ref{sec:drends}.
+The EPE gain is therefore not obtained by trading mean accuracy for a
+worse bad-pixel rate or a broader tail, which supports transfer of one
+learned policy across heterogeneous estimators within SCARED-C. It does
+not imply that no new bad pixels appear; those are measured explicitly
+below. The joint unseen-backbone / unseen-domain cell is reported in
+Section~\ref{sec:drends} and summarised in Table~\ref{tab:transfer}.
 
 
 \subsection{Seed Variance, and What It Reveals About Selection}
@@ -1086,18 +1079,36 @@ metric depth MAE and metric depth RMSE improve in \emph{every} cell
 ($60/60$), with mean changes of $-5.00\%$, $-17.35\%$, $-3.68\%$ and
 $-3.21\%$.
 
-Two observations matter more than the aggregate. The per-recording
-pattern is set by the \emph{recording} and not the estimator: on Vid10
-the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ for the seen and the
-two unseen backbones, and the same alignment holds elsewhere, so the
-residual variance is a property of the data --- stronger evidence for
-backbone independence than any pooled mean. And both unseen estimators
-improve on all five recordings, so the joint unseen-backbone /
-unseen-domain cell is positive rather than merely unevaluated. The
-transfer matrix is therefore complete in both axes and their combination.
-This establishes zero-shot geometric transfer in disparity space under a
-ToF-derived metric reference; it does not establish universal
-cross-domain robustness, and DRENDS remains a non-independent reference.
+The per-recording pattern is set by the \emph{recording} and not the
+estimator: on Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ for
+the seen and the two unseen backbones, and the same alignment holds
+elsewhere, so the residual variance is a property of the data --- stronger
+evidence for backbone independence than any pooled mean.
+
+\begin{table}[!htb]
+\centering
+\scriptsize
+\caption{
+Transfer matrix, mean EPE reduction (\%). One frozen checkpoint
+throughout. The bottom-right cell is the one usually left unevaluated:
+an estimator the temporal head never saw, in a domain it never saw.
+}
+\label{tab:transfer}
+\begin{tabular}{lcc}
+\toprule
+& Seen backbone & Unseen backbone \\
+\midrule
+Seen domain (SCARED-C D7) & $4.53$ & $3.70$ \\
+OOD domain (DRENDS)       & $5.31$ & $\mathbf{4.84}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every cell is positive, and the shift that costs most is the backbone,
+not the domain. This establishes zero-shot geometric transfer in
+disparity space under a ToF-derived metric reference; it does not
+establish universal cross-domain robustness, and DRENDS remains a
+non-independent reference.
 
 
 \subsection{The Support Contract Is Load-Bearing}
