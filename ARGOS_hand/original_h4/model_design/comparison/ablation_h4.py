@@ -35,15 +35,19 @@ def _sha256(path: Path) -> str:
 class AblationH4(MaskedCanonicalH4):
     """Canonical masked inference, with one architectural change from the preregistration."""
 
-    def __init__(self, *, variant: str, device: str = "cuda:0") -> None:
+    def __init__(self, *, variant: str, seed: int | None = None, device: str = "cuda:0") -> None:
         if variant not in VARIANTS:
             raise ValueError(f"unknown variant {variant}; expected one of {sorted(VARIANTS)}")
         declared = json.loads(PREREGISTER.read_text())["deviations_from_locked_recipe"]
         if VARIANTS[variant] not in declared:
             raise ValueError(f"{variant} is not pre-registered")
         self.variant = variant
+        self.seed = seed
         self.declared = declared[VARIANTS[variant]]
-        self.checkpoint = RUNS / f"ablation_{variant}/checkpoints/best_validation.pt"
+        # Seed runs live beside the seed-0 run rather than inside it, so the directory
+        # carries the seed and the provenance is checked for it below.
+        run = f"ablation_{variant}" + (f"_seed_{seed}" if seed is not None else "")
+        self.checkpoint = RUNS / f"{run}/checkpoints/best_validation.pt"
         if not self.checkpoint.is_file():
             raise FileNotFoundError(f"{variant} checkpoint missing: {self.checkpoint}")
         provenance = self.checkpoint.parents[1] / "ablation_provenance.json"
@@ -52,6 +56,11 @@ class AblationH4(MaskedCanonicalH4):
         record = json.loads(provenance.read_text())
         if record["variant"] != variant:
             raise RuntimeError(f"provenance disagrees with requested variant {variant}")
+        used = record.get("deviation", {}).get("seed", {}).get("used")
+        if seed is not None and used != seed:
+            raise RuntimeError(f"provenance says seed {used}, requested {seed}")
+        if seed is None and used is not None:
+            raise RuntimeError(f"{variant} without a seed resolved to a seed-{used} run")
         self.device = device
         self._model = self._extractor = self._build_cues = None
         self._policy = None
@@ -62,6 +71,7 @@ class AblationH4(MaskedCanonicalH4):
             "module": "ablation_h4",
             "variant_of": "canonical_h4_masked",
             "variant": self.variant,
+            "seed": self.seed,
             "declared_change": self.declared["change"],
             "checkpoint": str(self.checkpoint),
             "checkpoint_sha256": _sha256(self.checkpoint),
@@ -115,6 +125,14 @@ def factory_a1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
 
 def factory_a2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A2_no_learned_evidence", device=device)
+
+
+def factory_a2_seed1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A2_no_learned_evidence", seed=1, device=device)
+
+
+def factory_a2_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A2_no_learned_evidence", seed=2, device=device)
 
 
 def factory_a3(*, device: str = "cuda:0", **_: Any) -> AblationH4:
