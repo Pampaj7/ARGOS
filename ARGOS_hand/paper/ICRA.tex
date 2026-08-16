@@ -30,6 +30,19 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+
+% Float placement: the defaults defer nearly every float to the end when a
+% short paper carries five tables and two figures.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.60}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\dblfloatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\setcounter{dbltopnumber}{2}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{array}
@@ -770,67 +783,7 @@ micro statistics are retained secondarily.
 % V. RESULTS
 % ============================================================
 
-\section{Results}
-\label{sec:results}
-
-
-\subsection{Does the Learned Temporal Policy Matter?}
-
-We isolate the learned decision policy on D2. All variants share the
-frozen stereo predictions, the alignment, the support contract and the
-evaluation code; only the policy changes, and all run unconfined so the
-comparison shares one implementation (confinement, Sec.~\ref{sec:support},
-moves D2 EPE by $1.2\times10^{-5}$\,px).
-
-The canonical learned policy obtains
-$\Delta_{\mathrm{TETHER}} = 0.276202-0.265028 = 0.011174\;\mathrm{px}$.
-
-The best matched fixed fusion obtains only
-$\Delta_{\mathrm{fixed}} = 0.276202-0.274562 = 0.001640\;\mathrm{px}$.
-
-Therefore,
-%
-Raw D2 EPE is $0.276202$. Canonical $H=4$ reaches $0.265028$ ($4.05\%$),
-the best matched fixed blend ($w=0.5$, algebraically identical to EMA2
-here) only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle
-$0.242223$ ($12.30\%$). The learned decision recovers almost seven times
-the gain of the best fixed blend under an identical state machine. All
-fifteen policies are tabulated in the supplementary. Forward--backward confidence is the informative failure: one of TETHER's
-own input cues, yet using it directly as the fusion weight worsens EPE by
-$2.17\%$ --- motion reliability is useful evidence and a poor decision
-rule. Propagating aligned memory directly, or letting corrected
-recurrence run unbounded ($+62.69\%$), also degrades accuracy, so the
-improvement is not explained by alignment, averaging or smoothing.
-
-
-\subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
-
-The lowest development EPE is at $H=6$, by $0.14\%$. We do not claim
-$H=4$ minimises it: longer lifetime buys that sliver at a cost in
-intervention risk --- from $H=4$ to $6$ to $8$, $B^+/H^+$ degrades from
-$2.53$ to $2.30$ to $2.04$ and NewBad1 nearly triples --- so $H=4$ is the
-frozen risk--gain operating point, chosen before D7 was opened (sweep in
-the supplementary). Recurrence must also be bounded: continuous
-corrected-state propagation raises mean EPE by $62.69\%$, so periodic raw
-re-anchoring is structural, not an implementation detail.
-
-
-\subsection{Cross-Backbone Development Behaviour}
-
-Canonical $H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:scared_main}), from $2.17\%$ on S$^2$M$^2$-S to $8.44\%$
-on StereoAnywhere; seen backbones gain $4.50\%$, unseen $3.11\%$, and all
-six unseen-backbone sequence groups improve. It is fair to ask whether
-StereoAnywhere alone carries the result: excluding it the D2 mean falls
-to $2.82\%$, but on D7 it does not, the mean excluding StereoAnywhere
-being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
-
-
-\subsection{Held-Out Cross-Backbone Confirmation}
-
-We next evaluate the already frozen $H=4$ policy on held-out D7.
-
-\begin{table*}[!htb]
+\begin{table*}[!t]
 \centering
 \caption{
 Cross-backbone evaluation on SCARED-C. One frozen TETHER checkpoint,
@@ -901,6 +854,66 @@ Fast-FoundationStereo
 \bottomrule
 \end{tabular}
 \end{table*}
+
+\section{Results}
+\label{sec:results}
+
+
+\subsection{Does the Learned Temporal Policy Matter?}
+
+We isolate the learned decision policy on D2. All variants share the
+frozen stereo predictions, the alignment, the support contract and the
+evaluation code; only the policy changes, and all run unconfined so the
+comparison shares one implementation (confinement, Sec.~\ref{sec:support},
+moves D2 EPE by $1.2\times10^{-5}$\,px).
+
+The canonical learned policy obtains
+$\Delta_{\mathrm{TETHER}} = 0.276202-0.265028 = 0.011174\;\mathrm{px}$.
+
+The best matched fixed fusion obtains only
+$\Delta_{\mathrm{fixed}} = 0.276202-0.274562 = 0.001640\;\mathrm{px}$.
+
+Therefore,
+%
+Raw D2 EPE is $0.276202$. Canonical $H=4$ reaches $0.265028$ ($4.05\%$),
+the best matched fixed blend ($w=0.5$, algebraically identical to EMA2
+here) only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle
+$0.242223$ ($12.30\%$). The learned decision recovers almost seven times
+the gain of the best fixed blend under an identical state machine. All
+fifteen policies are tabulated in the supplementary. Forward--backward confidence is the informative failure: one of TETHER's
+own input cues, yet using it directly as the fusion weight worsens EPE by
+$2.17\%$ --- motion reliability is useful evidence and a poor decision
+rule. Propagating aligned memory directly, or letting corrected
+recurrence run unbounded ($+62.69\%$), also degrades accuracy, so the
+improvement is not explained by alignment, averaging or smoothing.
+
+
+\subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
+
+The lowest development EPE is at $H=6$, by $0.14\%$. We do not claim
+$H=4$ minimises it: longer lifetime buys that sliver at a cost in
+intervention risk --- from $H=4$ to $6$ to $8$, $B^+/H^+$ degrades from
+$2.53$ to $2.30$ to $2.04$ and NewBad1 nearly triples --- so $H=4$ is the
+frozen risk--gain operating point, chosen before D7 was opened (sweep in
+the supplementary). Recurrence must also be bounded: continuous
+corrected-state propagation raises mean EPE by $62.69\%$, so periodic raw
+re-anchoring is structural, not an implementation detail.
+
+
+\subsection{Cross-Backbone Development Behaviour}
+
+Canonical $H=4$ improves all five estimators in mean D2 EPE
+(Table~\ref{tab:scared_main}), from $2.17\%$ on S$^2$M$^2$-S to $8.44\%$
+on StereoAnywhere; seen backbones gain $4.50\%$, unseen $3.11\%$, and all
+six unseen-backbone sequence groups improve. It is fair to ask whether
+StereoAnywhere alone carries the result: excluding it the D2 mean falls
+to $2.82\%$, but on D7 it does not, the mean excluding StereoAnywhere
+being $4.14\%$ with RAFT-Stereo alone at $6.10\%$.
+
+
+\subsection{Held-Out Cross-Backbone Confirmation}
+
+We next evaluate the already frozen $H=4$ policy on held-out D7.
 
 All five backbones improve on D7, including both architectures unseen
 during temporal-head training.
@@ -990,7 +1003,7 @@ everything else is equalised --- identical frozen RAFT-Stereo
 \emph{robust} predictions from one stored boundary over all three D2
 sequences ($4249$ frames), one prediction-independent support.
 
-\begin{table}[!htb]
+\begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
@@ -1029,35 +1042,36 @@ with three estimators, two excluded from temporal-head training,
 $20{,}929$ frames. Nothing is adapted, retrained or tuned for this
 domain.
 
-\begin{table*}[!htb]
+\begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
-Zero-shot DRENDS transfer, relative change after refinement
-(negative is better).
-The reference disparity is derived from temporally filtered ToF
-geometry and is metric evidence, not independent stereo ground truth.
-The two rightmost estimators were excluded from temporal-head training,
-so their columns are the joint unseen-backbone / unseen-domain setting.
+Zero-shot DRENDS transfer, relative change after refinement (negative is
+better); recordings Vid10--Vid14 are Liver\_Med, Liver\_High,
+Pancreas\_Ext, Pancreas\_Med and Pancreas\_High. The reference disparity
+comes from temporally filtered ToF geometry and is metric evidence, not
+independent stereo ground truth. The two rightmost estimators were
+excluded from temporal-head training, so their columns are the joint
+unseen-backbone / unseen-domain setting.
 }
 \label{tab:drends}
-\setlength{\tabcolsep}{5pt}
+\setlength{\tabcolsep}{3.2pt}
 \begin{tabular}{lcccccc}
 \toprule
-& \multicolumn{2}{c}{RAFT-Stereo (seen)}
-& \multicolumn{2}{c}{CREStereo (unseen)}
-& \multicolumn{2}{c}{Fast-FoundationStereo (unseen)} \\
+& \multicolumn{2}{c}{RAFT-St.\ (seen)}
+& \multicolumn{2}{c}{CREStereo}
+& \multicolumn{2}{c}{Fast-FoundSt.} \\
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
-Recording & EPE & Bad3 & EPE & Bad3 & EPE & Bad3 \\
+Rec. & EPE & Bad3 & EPE & Bad3 & EPE & Bad3 \\
 \midrule
-Vid10\_Liver\_Med        & -5.7\% & -11.3\% & -5.2\% & -8.7\%  & -5.0\% & -7.3\% \\
-Vid11\_Liver\_High       & -3.4\% & -21.9\% & -3.7\% & -22.8\% & -3.2\% & -20.4\% \\
-Vid12\_Pancreas\_Ext     & -8.4\% & -22.7\% & -6.3\% & -18.5\% & -5.3\% & -10.3\% \\
-Vid13\_Pancreas\_Med     & -4.3\% & -14.2\% & -5.2\% & -10.4\% & -4.3\% & -10.9\% \\
-Vid14\_Pancreas\_High    & -4.7\% & -27.1\% & -5.6\% & -26.5\% & -4.7\% & -27.4\% \\
+Vid10 & $-5.7$ & $-11.3$ & $-5.2$ & $-8.7$  & $-5.0$ & $-7.3$ \\
+Vid11 & $-3.4$ & $-21.9$ & $-3.7$ & $-22.8$ & $-3.2$ & $-20.4$ \\
+Vid12 & $-8.4$ & $-22.7$ & $-6.3$ & $-18.5$ & $-5.3$ & $-10.3$ \\
+Vid13 & $-4.3$ & $-14.2$ & $-5.2$ & $-10.4$ & $-4.3$ & $-10.9$ \\
+Vid14 & $-4.7$ & $-27.1$ & $-5.6$ & $-26.5$ & $-4.7$ & $-27.4$ \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 Across the 15 recording--backbone combinations, disparity EPE, Bad3,
 metric depth MAE and metric depth RMSE improve in \emph{every} cell
@@ -1069,7 +1083,7 @@ estimator: on Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$
 across the seen and the two unseen backbones, and the alignment holds
 elsewhere, so the residual variance is a property of the data.
 
-\begin{table}[!htb]
+\begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
@@ -1103,7 +1117,7 @@ The ablation is a single line, isolating the contract cleanly: checkpoint,
 head, evidence, policy and reset schedule identical, only the masking
 differs.
 
-\begin{table}[!htb]
+\begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
