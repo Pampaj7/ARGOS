@@ -377,49 +377,62 @@ which is why we treat refinement as an intervention on that geometry.
 \begin{figure}[!t]
 \centering
 \begin{tikzpicture}[x=1mm, y=1mm,
-  box/.style={draw, rounded corners=1pt, align=center, inner xsep=1.6pt, inner ysep=1.8pt, font=\scriptsize},
-  frozen/.style={box, fill=black!8},
-  learn/.style={box, very thick},
-  sig/.style={->, >={Stealth[length=1.4mm]}},
-  lbl/.style={font=\tiny, inner sep=0.8pt}]
+  every node/.style={font=\scriptsize},
+  box/.style={draw=black!55, rounded corners=1.2pt, align=center,
+              inner xsep=2.2pt, inner ysep=2.4pt, line width=0.35pt},
+  frozen/.style={box, fill=black!7, draw=black!45},
+  learn/.style={box, fill=orange!22, draw=orange!75!black, line width=0.7pt},
+  act/.style={box, fill=blue!7, draw=blue!45},
+  rawflow/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=teal!75!black},
+  memflow/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=violet!70},
+  ctrl/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=black!65},
+  fb/.style={->, >={Stealth[length=1.5mm]}, line width=0.5pt, draw=black!45, dashed},
+  tag/.style={font=\tiny, inner sep=1pt}]
 
-\node[frozen] (stereo) at (0,32)  {frozen stereo $S$};
-\node[frozen] (flow)   at (44,32) {frozen SEA-RAFT};
-\node[lbl] at (0,37)  {$I_t^L,\,I_t^R$};
-\node[lbl] at (44,37) {$I_t^L,\,I_{t-1}^L$};
+% ---- frozen networks and the cache
+\node[frozen] (stereo) at (4,32)  {frozen stereo $S$};
+\node[frozen] (flow)   at (38,32) {frozen SEA-RAFT};
+\node[frozen] (mem)    at (62,23) {$m_{t-1}$};
+\node[act]    (warp)   at (38,23) {pull-warp};
+\node[tag] at (4,37)  {$I_t^L,\,I_t^R$};
+\node[tag] at (38,37) {$I_t^L,\,I_{t-1}^L$};
 
-\node[frozen] (mem)  at (72,24) {$m_{t-1}$};
-\node[box]    (warp) at (44,24) {pull-warp};
-\node[box]    (ev)   at (18,15) {external evidence, $142$ ch};
-\node[learn]  (head) at (18,7)  {fusion head, $177$k};
-\node[box]    (mix)  at (18,-1) {convex blend};
-\node[box]    (mask) at (18,-9) {confine to support};
+% ---- the learned path
+\node[act]   (ev)   at (15,14)   {external evidence, $142$\,ch};
+\node[learn] (head) at (15,6.5)  {fusion head, $177$k};
+\node[act]   (mix)  at (15,-1.5) {convex blend};
+\node[act]   (mask) at (15,-9.5) {confine to support};
 
-\draw[sig] (stereo.south) -- node[lbl,left,pos=.55]{$d_t^{\raw}$} (ev.north west);
-\draw[sig] (flow) -- (warp);
-\draw[sig] (mem) -- (warp);
-\draw[sig] (warp.south west) -- node[lbl,above left,pos=.55]{$\widetilde m_t$} (ev.north east);
-\draw[sig] (ev) -- (head);
-\draw[sig] (head) -- node[lbl,right]{$w_t$} (mix);
-\draw[sig] (mix) -- (mask);
+% ---- current stereo estimate (teal): into the evidence, and into the blend
+\draw[rawflow] (stereo.south) -- node[tag,left,pos=.6]{$d_t^{\raw}$} (ev.north west);
+\draw[rawflow] (stereo.west) -- ++(-3.5,0) |- (mix.west);
 
-% the two candidate geometries enter the blend directly
-\draw[sig] (stereo.west) -- ++(-4,0) |- (mix.west);
-\draw[sig] (warp.east) -- ++(4,0) -- ++(0,-19) -| (mix.east);
+% ---- aligned memory (violet): into the evidence, and into the blend
+\draw[memflow] (mem) -- (warp);
+\draw[memflow] (warp.south west) -- node[tag,above left,pos=.65]{$\widetilde m_t$} (ev.north east);
+\draw[memflow] (warp.south) -- ++(0,-21.5) -- (mix.east);
 
-% bounded recurrence
-\draw[sig] (mask.south) -- ++(0,-4) node[lbl,below right,xshift=-2mm]{$d_t^{\fused}$}
-      -| (72,18) -- (mem.south);
-\node[lbl, align=center] at (68,10) {re-anchor to\\ $d_{t-1}^{\raw}$ every $H{=}4$};
+% ---- control path
+\draw[ctrl] (flow) -- (warp);
+\draw[ctrl] (ev) -- (head);
+\draw[ctrl] (head) -- node[tag,right]{$w_t$} (mix);
+\draw[ctrl] (mix) -- (mask);
+\draw[ctrl] (mask.south) -- ++(0,-4) node[tag,right,xshift=0.4mm]{$d_t^{\fused}$};
+
+% ---- bounded recurrence: the confined output returns to the cache
+\draw[fb] (mask.south) ++(0,-4) -- ++(0,-2) -| (62,-6) -- (mem.south);
+\node[tag, align=center, text=black!55] at (62,10)
+  {re-anchor to\\ $d_{t-1}^{\raw}$ every $H{=}4$};
 \end{tikzpicture}
 \caption{
-TETHER reads only externally observable quantities: RGB, disparity and
-validity. The frozen estimator and the frozen flow network are never
-modified and no future frame is used. The only learned component is the
-$177$k-parameter head, which emits the fusion weight $w_t$ placing the
-output between the two candidate geometries; that output is then confined
-to the support the module declares, and the recurrent state is
-re-anchored to independently predicted raw geometry every $H$ frames.
+TETHER reads only externally observable quantities. Grey boxes are frozen
+and never modified; the orange box is the only trained component. The two
+candidate geometries reach the blend by separate paths --- the current
+stereo estimate in teal, the motion-aligned memory in violet --- and the
+head contributes only the scalar $w_t$ that places the output between
+them. That output is confined to the support the module declares, and the
+recurrent state is re-anchored to independently predicted raw geometry
+every $H$ frames. No future frame is used.
 }
 \label{fig:system}
 \end{figure}
