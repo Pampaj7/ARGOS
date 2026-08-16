@@ -50,6 +50,22 @@ def build_cues_without_appearance(extractor, **kwargs: Any) -> CODDCues:
     return CODDCues(values=values, support=cues.support, channels=values.shape[1])
 
 
+def build_cues_without_learned_evidence(extractor, **kwargs: Any) -> CODDCues:
+    """A2: disparity, motion and RGB geometry only (142 -> 38).
+
+    The inherited `step()` always asks for learned stereo evidence, so A2 cannot simply
+    pass a null extractor: the pinned builder raises. This forces the flag instead, and
+    passes `None` for the extractor so the frozen ResNet is genuinely not evaluated --
+    which is the point of A2, and the only variant with a runtime consequence.
+    """
+    kwargs["include_learned_stereo_evidence"] = False
+    cues = _canonical_build_codd_cues(None, **kwargs)
+    expected = 38
+    if cues.channels != expected:
+        raise RuntimeError(f"A2 produced {cues.channels} channels, expected {expected}")
+    return cues
+
+
 class RelaxedConvexityHead(CODDStyleFusionHead):
     """A4: the canonical head plus a zero-initialised additive escape from the interval.
 

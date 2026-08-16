@@ -82,7 +82,8 @@ class AblationH4(MaskedCanonicalH4):
             CODDStyleFusionHead, FrozenResNet18Layer1, build_codd_cues,
         )
         from model_design.comparison.ablation_variants import (
-            RelaxedConvexityHead, SingleResolutionHead, build_cues_without_appearance,
+            RelaxedConvexityHead, SingleResolutionHead,
+            build_cues_without_appearance, build_cues_without_learned_evidence,
         )
 
         head_class = {"A4_relaxed_convexity": RelaxedConvexityHead,
@@ -98,8 +99,9 @@ class AblationH4(MaskedCanonicalH4):
         needs_extractor = self.variant != "A2_no_learned_evidence"
         self._extractor = (FrozenResNet18Layer1().to(self.device).eval().requires_grad_(False)
                            if needs_extractor else None)
-        self._build_cues = (build_cues_without_appearance
-                            if self.variant == "A1_no_appearance" else build_codd_cues)
+        self._build_cues = {"A1_no_appearance": build_cues_without_appearance,
+                            "A2_no_learned_evidence": build_cues_without_learned_evidence,
+                            }.get(self.variant, build_codd_cues)
         expected = self.declared.get("cue_channels")
         if expected is not None and state["cue_channels"] != expected:
             raise RuntimeError(f"{self.variant}: checkpoint has {state['cue_channels']} cue "

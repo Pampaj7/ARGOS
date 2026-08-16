@@ -13,7 +13,7 @@ if [ "${1:-}" = "--node" ]; then
     "$PY" model_design/comparison/run_definitive_evaluation.py --datasets scared-d2 scared-d7 \
         --module model_design.comparison.ablation_h4:factory_a2 --device cuda:0 \
         --output /dtu/p1/leopam/ARGOS/ARGOS_hand/results/ablation_eval/a2 || echo "EVAL FAILED"
-    echo "A3 DONE"
+    echo "A2 EVAL DONE"
     exit 0
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
