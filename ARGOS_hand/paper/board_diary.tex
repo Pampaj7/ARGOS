@@ -14555,5 +14555,34 @@ figure will be the three-seed mean with this same bootstrap, and this
 two-seed table stands as the record of what was known first.
 
 
+
+\section*{Staleness Audit: Do the Tables Still Match the Files?}
+
+The support-mask fix changed enough numbers that a table could plausibly
+have been left behind. While the GPU jobs ran we re-derived the two largest
+tables straight from the report JSONs instead of trusting the manuscript.
+
+Table~\ref{tab:scared_main} (cross-backbone SCARED-C) reproduces exactly
+from \texttt{results/scared\_masked}: S$^2$M$^2$-S Bad1
+$.01394\!\rightarrow\!.01291$ on D2 and $.06440\!\rightarrow\!.06076$ on D7,
+RAFT-Stereo $.01603\!\rightarrow\!.01492$ and
+$.06085\!\rightarrow\!.05845$. No drift.
+
+Table~\ref{tab:drends} (zero-shot DRENDS) reproduces exactly from
+\texttt{results/drends\_masked}, all fifteen recording--backbone cells, and
+so do the four pooled means quoted underneath it: $-5.00\%$ EPE,
+$-17.35\%$ Bad3, $-3.68\%$ depth MAE, $-3.21\%$ depth RMSE, with $60/60$
+cells improving.
+
+One trap worth writing down, because it nearly caught us.
+\texttt{results/drends\_multisequence} still exists and still contains four
+RAFT-Stereo reports whose numbers ($-3.9\%$ EPE on Vid10 against the
+paper's $-5.7\%$) look like a contradiction. It is not: that directory is
+the pre-mask, single-backbone, four-recording run, superseded by
+\texttt{drends\_masked}. Two result directories that differ by a bug fix are
+indistinguishable by filename, and the older one sorts first. The manifests
+disambiguate them; directory names do not.
+
+
 \end{document}
 
