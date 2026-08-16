@@ -14503,5 +14503,57 @@ refinement failed to help. The real three-seed number replaces it when seeds
 $1$ and $2$ finish.
 
 
+
+\section*{Seed 1 Lands, and Says Something About Checkpoint Selection}
+
+Seed 1 finished its D2 and D7 evaluation through the frozen support-masked
+path. Pairing it with seed 0 under the pre-registered rule --- sequences as
+the resampling unit, seeds averaged inside each resample --- gives the
+following relative Bad1 reductions.
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Split & Backbone & mean\% & std\% & seed 0 & seed 1 \\
+\midrule
+D2 & CREStereo             &  7.44 & 1.17 &  8.26 &  6.62 \\
+D2 & Fast-FoundationStereo &  6.83 & 1.53 &  7.91 &  5.74 \\
+D2 & RAFT-Stereo           &  6.17 & 1.10 &  6.95 &  5.40 \\
+D2 & S2M2-S                &  7.05 & 0.50 &  7.40 &  6.70 \\
+D2 & StereoAnywhere        & 17.80 & 2.62 & 19.65 & 15.95 \\
+\midrule
+D7 & CREStereo             &  4.18 & 0.46 &  3.86 &  4.51 \\
+D7 & Fast-FoundationStereo &  4.02 & 0.08 &  3.97 &  4.08 \\
+D7 & RAFT-Stereo           &  4.65 & 0.99 &  3.95 &  5.35 \\
+D7 & S2M2-S                &  5.96 & 0.42 &  5.66 &  6.25 \\
+D7 & StereoAnywhere        &  6.73 & 0.47 &  6.40 &  7.07 \\
+\midrule
+\multicolumn{2}{@{}l}{Pooled, 35 sequences} & 5.90 & 0.15 & 5.79 & 6.00 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every cell is a reduction on both seeds. The pooled standard deviation is
+$0.15$ percentage points on a $5.90$ point effect, and the paired
+sequence-level bootstrap gives $[4.26, 8.38]$ with no resample in which
+refinement failed to help.
+
+The interesting part is the sign pattern, which is not noise. Seed 1 is
+worse than seed 0 on \emph{all five} D2 backbones and better than seed 0 on
+\emph{all five} D7 backbones. Ten out of ten is not a coin flip. The
+explanation is in our own protocol: the checkpoint-selection rule picks the
+best development (D2) fused EPE, so seed 0 is by construction the run that
+looked best on D2. Its D2 margin is partly a selection artefact, and the
+held-out split --- the one that carries the claim --- is where the other seed
+does slightly better.
+
+This is a point in favour of the result rather than against it. The number
+we report on held-out data is not the one selection inflated, and it is
+stable across an independent training run. Seed 2 is in flight; the reported
+figure will be the three-seed mean with this same bootstrap, and this
+two-seed table stands as the record of what was known first.
+
+
 \end{document}
 
