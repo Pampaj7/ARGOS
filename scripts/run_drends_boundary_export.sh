@@ -23,5 +23,5 @@ if [ "${1:-}" = "--node" ]; then
     exec "$ROOT/.miniconda/envs/argos/bin/python" export_drends_boundary.py --device cuda:0 "$@"
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
-exec bsub -I -q p1i -app h100app -n 16 -R "span[hosts=1] rusage[mem=10GB]" \
+exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=40GB]" \
      -gpu "num=1:mode=shared" -J argos_drendsexport "$SELF --node $*"

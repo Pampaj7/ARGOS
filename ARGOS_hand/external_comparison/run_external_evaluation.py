@@ -33,7 +33,7 @@ def main() -> None:
     parser.add_argument("--method", choices=sorted(METHODS), required=True)
     parser.add_argument("--input", type=Path, required=True); parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--raw-output", type=Path, help="BiDA only: RAFT-robust bridge input paired with the refined output")
-    parser.add_argument("--purpose", choices=("SMOKE_DIAGNOSTIC", "D2_FULL_DIAGNOSTIC"), default="SMOKE_DIAGNOSTIC")
+    parser.add_argument("--purpose", choices=("SMOKE_DIAGNOSTIC", "D2_FULL_DIAGNOSTIC", "DRENDS_FULL_DIAGNOSTIC"), default="SMOKE_DIAGNOSTIC")
     parser.add_argument("--python", type=Path, default=Path(sys.executable), help="isolated upstream environment interpreter")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
