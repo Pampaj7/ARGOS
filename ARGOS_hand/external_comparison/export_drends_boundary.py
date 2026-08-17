@@ -6,16 +6,21 @@ selected on while BiDAStabilizer had never seen the domain. That comparison is r
 in the paper as an upper bound on our advantage rather than an estimate of it. This
 builds the neutral arena: on DRENDS neither method has seen the domain.
 
-Exactly one thing must be true for the comparison to mean anything, and it is the thing
-the D2 comparison was originally written to fix: both methods must consume the SAME
-frozen disparity. The D2 boundary carried RAFT-Stereo *robust* because that is what the
-published BiDA reproduction ran; our DRENDS cache carries RAFT-Stereo *middlebury*.
-Rather than re-run either side with the other's weights, this exports the middlebury
-predictions we already evaluate TETHER on and hands BiDA that identical array, so the
-stored boundary -- not a coincidence of configuration -- is what both read.
+This is a SEED boundary and carries RGB only. The disparity field is a documented dummy,
+for the same reason the D2 seed export writes one: `workers/bidastabilizer.py` reads only
+`rgb_left` and `rgb_right`, then replaces `raw_disparity` with its own RAFT-Stereo
+*robust* prediction (32 iterations) and writes that back out via `--raw-output`. Anything
+we put in this field would be silently discarded, and putting our cached *middlebury*
+disparity here would merely look as though the two sides shared an input when they never
+did.
 
-No ground truth crosses the boundary: BiDA sees RGB and raw disparity only, and scoring
-happens afterwards against a support neither method influences.
+The shared input therefore comes from BiDA, not from us, and the order matters: BiDA runs
+first and produces the RAFT-robust raw, and TETHER is then run on that stored array. That
+is exactly what the D2 comparison does, and it is why its numbers are not comparable with
+the middlebury figures in the cross-backbone table.
+
+No ground truth crosses the boundary: BiDA sees RGB only, and scoring happens afterwards
+against a support neither method influences.
 """
 from __future__ import annotations
 
@@ -37,40 +42,41 @@ from bridge import write_input  # noqa: E402
 
 
 def export(recording: str, device: str, max_frames: int | None) -> dict:
-    """One recording, on the same canonical grid the evaluation uses."""
+    """One recording's RGB, on the same canonical grid the evaluation uses."""
     sys.path[:0] = [str(H4), str(H4 / "scripts"), str(ARGOS / "ARGOS_FREEZED/src")]
     import torch
     from model_design.comparison import drends_backbone_transfer as transfer
 
     base = transfer.base
+    # The backbone still runs, because _canonical_frames is the only path that produces
+    # frames on the grid the evaluation agrees on, and its disparity is what makes the
+    # RGB reproducible from a named checkpoint. The disparity itself is not exported.
     _checkpoint, predict = transfer._load_backbone("RAFT-Stereo", torch.device(device))
     records, _info = base.load_drends_records(recording, max_frames)
     frames, (height, width) = base._canonical_frames(records, predict, device=device)
 
-    # [T,3,H,W] float32 RGB and [T,1,H,W] disparity, exactly the grid the frozen module
-    # and the metrics already agree on. Anything resampled here would silently make the
-    # two sides incomparable again.
+    # [T,3,H,W] float32 RGB on exactly the grid the frozen module and the metrics already
+    # agree on. Anything resampled here would silently make the two sides incomparable.
     left = np.stack([frame["rgb"][0].cpu().numpy().astype(np.float32) for frame in frames])
     right = np.stack([frame["right_rgb"][0].cpu().numpy().astype(np.float32) for frame in frames])
-    disparity = np.stack([frame["raw"][0].cpu().numpy().astype(np.float32) for frame in frames])
-    # The evaluator's own validity, not a re-derived one: a mask computed here could
-    # disagree with the mask TETHER was scored under and quietly change the support.
-    valid = np.stack([frame["raw_valid"][0].cpu().numpy() for frame in frames]).astype(bool)
-    # The bridge refuses non-positive disparity on valid pixels; the evaluator's mask
-    # already encodes exactly that, so a mismatch here means the contract changed.
-    if np.any(disparity[valid] <= 0):
-        raise RuntimeError("evaluator marked non-positive disparity valid; contract mismatch")
+    # Dummy disparity, as in the D2 seed export. The stabiliser overwrites this field with
+    # its own RAFT-robust prediction, so a real array here would be discarded while
+    # implying a shared input that does not exist until BiDA has run.
+    dummy = np.ones((len(frames), 1, int(height), int(width)), np.float32)
     ids = np.array([f"{recording}_{index:06d}" for index in range(len(frames))], dtype="<U64")
 
-    destination = OUT / recording / "input.npz"
+    destination = OUT / recording / "seed.npz"
     info = write_input(destination, {"rgb_left": left, "rgb_right": right,
-                                     "raw_disparity": disparity, "raw_valid": valid,
+                                     "raw_disparity": dummy,
+                                     "raw_valid": np.ones_like(dummy, bool),
                                      "frame_ids": ids},
                        {"dataset": "drends", "recording": recording,
-                        "backbone": "RAFT-Stereo", "backbone_checkpoint": _checkpoint,
+                        "publication": "TEST_ONLY", "purpose": "DRENDS_SEED",
+                        "rgb_source_backbone_checkpoint": _checkpoint,
                         "grid": [int(height), int(width)],
-                        "note": "middlebury weights, matching the cache TETHER is evaluated on; "
-                                "BiDA must consume this array and not its own prediction"})
+                        "note": "RGB-only seed; raw_disparity is a dummy the stabilizer replaces "
+                                "with its own RAFT-robust prediction, which then becomes the "
+                                "shared input TETHER is run on"})
     return {"recording": recording, "frames": int(len(frames)), "grid": [int(height), int(width)],
             "path": str(destination), "input_sha256": info["input_sha256"]}
 
