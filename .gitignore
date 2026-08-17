@@ -110,5 +110,8 @@ results/temporal evaluation/scared_multisequence_validation/
 # dumps. Only the small hand-written summaries under results/ are tracked, which
 # is how scared_masked and seed_eval have always been handled.
 ARGOS_hand/results/ablation_eval/
+ARGOS_hand/results/drends_a2/
+ARGOS_hand/results/drends_canonical_seeds/
 ARGOS_hand/results/*/scared_per_frame_metrics.csv
 ARGOS_hand/results/*/scared_aggregate_metrics.csv
+.claude/settings.local.json

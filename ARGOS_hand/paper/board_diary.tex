@@ -15122,5 +15122,68 @@ it is the paper rather than a private note about what we would have done
 with another week.
 
 
+\section*{17 August: A2 Loses In Domain and Wins Out of It}
+
+The reason we did not promote A2 was that it had been measured on
+SCARED-C only. So we measured it on DRENDS, the out-of-domain split,
+three seeds against three backbones. The result reverses cleanly along an
+axis we had not separated.
+
+On SCARED, A2 is worse. Held-out D7 Bad1 reduction $5.84\%$ against the
+canonical $5.15\%$ --- and broken out by backbone, A2 gives up
+$0.75$ percentage points on the three the head was trained beside and
+$0.61$ on the two it had never seen. Unseen \emph{backbone} does not
+rescue it.
+
+On DRENDS it is not close, and it is the same direction for every metric
+and every backbone:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Reduction on DRENDS & Canonical & A2 \\
+\midrule
+EPE  & $4.5$--$5.4\%$  & $17.4$--$18.5\%$ \\
+Bad1 & $4.7$--$5.6\%$  & $13.1$--$15.3\%$ \\
+Bad3 & $12$--$16\%$    & $59$--$67\%$ \\
+RMSE & $6.5$--$7.0\%$  & $23$--$28\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Three to four times the reduction, out of domain, from the variant that
+loses in domain. The axis is not \emph{unseen sequence} and not
+\emph{unseen backbone} --- A2 loses on both. It is \emph{unseen domain}.
+The 64 frozen ResNet channels and the confidence machinery built on them
+let the head fit the appearance of ex-vivo porcine tissue; on synthetic
+colonoscopy that fit is a liability, and the variant that never had access
+to appearance has nothing to mislead it. Geometry and motion transfer.
+Appearance, even frozen appearance, does not.
+
+\paragraph{One thing we caught before believing it.} A2's seed spread on
+DRENDS is $0.001$ percentage points, against $0.34$ for the canonical
+model on SCARED. A spread that small usually means the same checkpoint
+was loaded three times. It was not: the three files hash differently and
+their provenance records carry seeds $0$, $1$ and $2$. The spread is real
+and is itself informative --- out of domain, three independently trained
+A2 heads converge to almost identical behaviour, which suggests what
+happens there is governed by the support and confinement machinery rather
+than by the learned weights.
+
+\paragraph{And the comparison is still not matched.} The seed study was
+run on SCARED only, so the canonical model has exactly one DRENDS number
+and A2 has three. Setting a three-seed mean against a one-seed baseline is
+precisely the error recorded two entries above, where canonical seed $0$
+turned out to be the weakest of the three and flattered every variant.
+The table above is therefore the seed-$0$ against seed-$0$ pairing, which
+is matched, and canonical seeds $1$ and $2$ are running on DRENDS now.
+The margin is large enough that the conclusion is unlikely to move, which
+is not a reason to skip the measurement.
+
+Nothing in the paper has been changed on the strength of this. Promotion
+still means re-running every table, and the decision waits for the matched
+baseline.
+
+
 \end{document}
 
