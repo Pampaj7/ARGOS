@@ -39,9 +39,14 @@ from compare_bidastabilizer import metrics  # noqa: E402  same invalid-penalty d
 
 
 def ground_truth(recording: str, frames: int) -> tuple[np.ndarray, np.ndarray]:
-    """DRENDS ground-truth disparity and validity on the canonical grid."""
+    """DRENDS ground-truth disparity and validity on the canonical grid.
+
+    `frames` is passed down as the record cap rather than used only to slice: loading all
+    ~1500 depth maps to keep the first 24 makes a smoke test as slow as a real run, which
+    defeats the point of having one.
+    """
     from model_design.comparison import drends_evaluation as base
-    records, info = base.load_drends_records(recording, None)
+    records, info = base.load_drends_records(recording, frames)
     scale = base.CANONICAL_SIZE[0] / 1280.0
     depth, valid, _coverage = zip(*(base._depth(item["_depth_left"], item["_mask_left"], scale)
                                     for item in records))
