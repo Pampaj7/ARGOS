@@ -322,7 +322,7 @@ def main() -> None:
     parser.add_argument("--raw-output", type=Path, help="write the RAFT-robust bridge input used by the stabilizer")
     parser.add_argument("--protocol", type=Path); parser.add_argument("--checkpoints", type=Path)
     parser.add_argument("--device", default="cuda:0")
-    parser.add_argument("--purpose", default="SMOKE_DIAGNOSTIC", choices=("SMOKE_DIAGNOSTIC", "D2_FULL_DIAGNOSTIC"))
+    parser.add_argument("--purpose", default="SMOKE_DIAGNOSTIC", choices=("SMOKE_DIAGNOSTIC", "D2_FULL_DIAGNOSTIC", "DRENDS_FULL_DIAGNOSTIC"))
     parser.add_argument("--convert", action="store_true", help="offline conversion of verified original checkpoint bytes")
     parser.add_argument("--equivalence", type=Path, help="write official-wrapper equivalence JSON; does not write predictions")
     args = parser.parse_args()
