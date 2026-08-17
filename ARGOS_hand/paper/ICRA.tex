@@ -687,12 +687,12 @@ At horizons $k\in\{1,2,4,8\}$ the framework defines grid-based temporal
 change error and, when correspondence is supplied, motion-compensated
 $\TEPE_{\mathrm{corr}}$, warped depth DTCE and pure prediction
 consistency (OPW). Estimated-flow correspondences are marked as
-flow-conditioned proxies. We report the motion-compensated family in the
-supplementary material: it is informative --- on held-out D7 both
-$\TEPE_{\mathrm{corr}}$ and OPW improve in all $20/20$
-backbone--horizon cases --- but on development D2 the two disagree,
-which needs more space to treat honestly than a submission of this
-length allows.
+flow-conditioned proxies. We do not build on the motion-compensated
+family here, and say why rather than omit it: it is informative --- on
+held-out D7 both $\TEPE_{\mathrm{corr}}$ and OPW improve in all $20/20$
+backbone--horizon cases --- but on development D2 the two disagree, which
+needs more space to treat honestly than a submission of this length
+allows.
 
 
 \paragraph{Intervention harm and benefit.}
@@ -830,8 +830,9 @@ Raw D2 EPE is $0.276202$. Canonical $H=4$ reaches $0.265028$ ($4.05\%$),
 the best matched fixed blend ($w=0.5$, algebraically identical to EMA2
 here) only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle
 $0.242223$ ($12.30\%$). The learned decision recovers almost seven times
-the gain of the best fixed blend under an identical state machine. All
-fifteen policies are tabulated in the supplementary. Forward--backward confidence is the informative failure: one of TETHER's
+the gain of the best fixed blend under an identical state machine, across
+fifteen policies evaluated under that machine.
+Forward--backward confidence is the informative failure: one of TETHER's
 own input cues, yet using it directly as the fusion weight worsens EPE by
 $2.17\%$ --- motion reliability is useful evidence and a poor decision
 rule. Propagating aligned memory directly, or letting corrected
@@ -845,8 +846,8 @@ The lowest development EPE is at $H=6$, by $0.14\%$. We do not claim
 $H=4$ minimises it: longer lifetime buys that sliver at a cost in
 intervention risk --- from $H=4$ to $6$ to $8$, $B^+/H^+$ degrades from
 $2.53$ to $2.30$ to $2.04$ and NewBad1 nearly triples --- so $H=4$ is the
-frozen risk--gain operating point, chosen before D7 was opened (sweep in
-the supplementary). Recurrence must also be bounded: continuous
+frozen risk--gain operating point, chosen before D7 was opened.
+Recurrence must also be bounded: continuous
 corrected-state propagation raises mean EPE by $62.69\%$, so periodic raw
 re-anchoring is structural, not an implementation detail.
 
@@ -935,35 +936,38 @@ Across both splits and all five backbones TETHER recovers
 $2.9$--$10.4\times$ as many Bad1 pixels as it introduces, with $B^+/H^+$
 between $1.76$ and $4.59$ and identity preservation above $99.87\%$: it
 changes little and repairs far more than it breaks. Fig.~\ref{fig:trace}
-shows the same frame by frame; the per-backbone table is in the
-supplementary.
+shows the same frame by frame.
 
 
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
 
 BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
-stabiliser we could run; it is bidirectional and consumes future frames,
-which our setting forbids. That difference is reported, not removed;
-everything else is equalised --- identical frozen RAFT-Stereo
-\emph{robust} predictions from one stored boundary over all three D2
-sequences ($4249$ frames), one prediction-independent support.
+stabiliser we could run. Everything that can be equalised is --- identical
+frozen RAFT-Stereo \emph{robust} predictions from one stored boundary over
+all three D2 sequences ($4249$ frames), one prediction-independent
+support. Two asymmetries cannot be, and both favour us, so both are
+declared: it is bidirectional and consumes future frames, which our
+setting forbids, and it is zero-shot here while D2 is the split our
+checkpoint was selected on. The margin below is an upper bound on our
+advantage, not an estimate of it.
 
 \begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
-Common-support comparison on three D2 sequences, $18.0$M pixels, same
-frozen backbone and same frames. Lower is better.
+Common-support comparison on three D2 sequences, $18.0$M pixels. Every row
+refines the \emph{same} frozen RAFT-Stereo \emph{robust} predictions on the
+same frames under one prediction-independent support. Lower is better.
 }
 \label{tab:bida}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
-Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
+Method (RAFT-Stereo robust) & Causal & Zero-shot & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
 \midrule
-Raw RAFT-Stereo   & ---          & .3029 & 2.087 & .186 & .4484 \\
-BiDAStabilizer    & no           & .3021 & 1.987 & .171 & .4403 \\
-TETHER            & \textbf{yes} & \textbf{.2890} & \textbf{1.826} & \textbf{.157} & \textbf{.4256} \\
+Raw               & ---          & ---          & .3029 & 2.087 & .186 & .4484 \\
+BiDAStabilizer    & no           & \textbf{yes} & .3021 & 1.987 & .171 & .4403 \\
+TETHER            & \textbf{yes} & no           & \textbf{.2890} & \textbf{1.826} & \textbf{.157} & \textbf{.4256} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -990,7 +994,7 @@ Nothing is adapted, retrained or tuned for this domain.
 Across the 15 recording--backbone combinations, disparity EPE, Bad3,
 metric depth MAE and metric depth RMSE improve in \emph{every} cell
 ($60/60$), with mean changes of $-5.00\%$, $-17.35\%$, $-3.68\%$ and
-$-3.21\%$; per-recording figures are in the supplementary.
+$-3.21\%$.
 
 The pattern is set by the \emph{recording} and not the estimator: on
 Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ across the seen
@@ -1034,8 +1038,7 @@ three-seed spread as the threshold below which a difference is not read.
 \scriptsize
 \caption{
 Held-out relative reduction (\%) against the same raw predictions.
-Canonical is the mean of three seeds; each variant is a single seed. D2
-figures are in the supplementary.
+Canonical is the mean of three seeds; each variant is a single seed.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{4pt}
