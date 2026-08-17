@@ -15306,6 +15306,43 @@ excluded from the spread, and the header carries $n$ per seed.
 Seeds $1$ and $2$ are still running and add A2's own spread, not a second
 baseline. Nothing in the paper has changed.
 
+\paragraph{Eleven of twelve is not evidence, so we bootstrapped it.}
+Counting how often A2 wins settles nothing: the twelve backbone-metric
+comparisons share five sequences and are not independent draws. So the
+difference was resampled at the level that actually varies. Sequences are
+the resampled unit, the paired difference is formed per sequence before
+resampling --- which cancels sequence difficulty exactly, the variance
+that manufactured this morning's phantom --- and all three backbones of a
+resampled sequence move together, preserving their correlation rather than
+averaging it away.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Metric & Mean difference & $95\%$ interval & $P(\text{A2 better})$ \\
+\midrule
+EPE  & $-0.0042$ & $[-0.0072, -0.0016]$ & $1.000$ \\
+Bad1 & $-0.0026$ & $[-0.0041, -0.0013]$ & $1.000$ \\
+Bad3 & $-0.0004$ & $[-0.0007, -0.0001]$ & $0.992$ \\
+RMSE & $-0.0017$ & $[-0.0062, +0.0026]$ & $0.767$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Three of four intervals exclude zero. The advantage is therefore real and
+detectable --- and it is $0.004$ pixels of EPE. Both halves of that
+sentence are load-bearing: this is what a genuine effect of no consequence
+looks like, and it is worth having a name for, because an interval that
+excludes zero is otherwise very easy to report as though it mattered.
+
+One limit stated plainly: the interval covers variation across
+\emph{sequences} only. The canonical side is a single training run and the
+A2 side currently pools one seed, so seed variance is not in it --- and
+A2's seed-to-seed spread on DRENDS is of the same order as the differences
+above. The reading stays \emph{detectable and negligible}, not
+\emph{better}. The script prints that caveat with its own output so the
+number cannot travel without it.
+
 
 \end{document}
 
