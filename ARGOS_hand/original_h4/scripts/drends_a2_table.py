@@ -40,8 +40,19 @@ def sequences(root: Path, backbone: str) -> dict[str, dict]:
     return out
 
 
-def macro(reports: dict[str, dict], family: str, metric: str) -> float | None:
-    values = [r[family][metric]["macro_sequence"] for r in reports.values() if metric in r[family]]
+def macro(reports: dict[str, dict], family: str, metric: str,
+          only: list[str] | None = None) -> float | None:
+    """Macro-sequence mean, restricted to `only` when given.
+
+    `only` is not optional in practice. Averaging each side over whatever sequences it
+    happens to contain is what produced a threefold phantom improvement here: the variant
+    had been evaluated on one DRENDS recording and the baseline on five, and Vid14 is the
+    easier one. Both sides must be reduced over the same sequences or the delta is noise
+    about sequence difficulty rather than about the model.
+    """
+    names = only if only is not None else list(reports)
+    values = [reports[n][family][metric]["macro_sequence"] for n in names
+              if n in reports and metric in reports[n][family]]
     return float(np.mean(values)) if values else None
 
 
@@ -58,22 +69,35 @@ def main() -> None:
         base = sequences(CANONICAL, backbone)
         if not base:
             continue
-        entry = {"canonical": macro(base, "refined", args.metric), "raw": macro(base, "raw", args.metric)}
-        for seed in seeds:
-            variant = sequences(A2 / seed, backbone)
-            if not variant:
-                continue
+        loaded = {seed: sequences(A2 / seed, backbone) for seed in seeds}
+        loaded = {seed: v for seed, v in loaded.items() if v}
+        # Every side is reduced over the sequences ALL of them share, never over whatever
+        # each happens to hold. A run still in progress, or one launched with a different
+        # recording list, otherwise contributes a mean over an easier subset.
+        shared = sorted(set(base).intersection(*(set(v) for v in loaded.values()))) if loaded \
+            else sorted(base)
+        if not shared:
+            continue
+        entry = {"canonical": macro(base, "refined", args.metric, shared),
+                 "raw": macro(base, "raw", args.metric, shared),
+                 "n": len(shared), "coverage": {"canonical": len(base)}}
+        for seed, variant in loaded.items():
             # The raw predictions come from the same frozen backbone on the same frames, so
             # they must agree exactly. A mismatch means the two runs are not comparable.
-            shared = sorted(set(base) & set(variant))
             a = np.array([base[s]["raw"][args.metric]["macro_sequence"] for s in shared])
             b = np.array([variant[s]["raw"][args.metric]["macro_sequence"] for s in shared])
             if not np.allclose(a, b, atol=1e-6):
                 raise RuntimeError(f"{backbone}/{seed}: raw predictions differ from canonical; "
                                    "the comparison would be meaningless")
-            entry[seed] = macro(variant, "refined", args.metric)
-            entry[f"{seed}_n"] = len(shared)
+            entry[seed] = macro(variant, "refined", args.metric, shared)
+            entry["coverage"][seed] = len(variant)
         rows[backbone] = entry
+
+    for backbone, entry in rows.items():
+        counts = set(entry["coverage"].values())
+        if len(counts) > 1:
+            print(f"WARNING {backbone}: sequence coverage differs across runs "
+                  f"({entry['coverage']}); comparing on the {entry['n']} shared only.\n")
 
     header = f"{'backbone':<24}{'raw':>9}{'canon(s0)':>11}" + "".join(f"{s:>9}" for s in seeds)
     print(header)

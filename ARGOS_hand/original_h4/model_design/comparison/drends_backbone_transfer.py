@@ -27,6 +27,12 @@ CANONICAL_SIZE = base.CANONICAL_SIZE
 SEEN_BACKBONES = ("S2M2-S", "RAFT-Stereo", "StereoAnywhere")
 UNSEEN_BACKBONES = ("CREStereo", "Fast-FoundationStereo")
 ALL_BACKBONES = SEEN_BACKBONES + UNSEEN_BACKBONES
+# Every DRENDS recording. This used to default to Vid14 alone, which is a quiet way to
+# produce a one-sequence run that still labels itself "complete_recordings" and then gets
+# averaged against a five-sequence baseline as if the two were comparable. That happened,
+# and it invented a threefold improvement out of nothing. The default is now the full set.
+ALL_RECORDINGS = ("Vid10_Liver_Med", "Vid11_Liver_High", "Vid12_Pancreas_Ext",
+                  "Vid13_Pancreas_Med", "Vid14_Pancreas_High")
 
 
 def _load_backbone(name: str, device: Any) -> tuple[str, Any]:
@@ -50,7 +56,7 @@ def evaluate_drends_backbone(*, output: Path, module_spec: str, device_name: str
 
     if backbone not in ALL_BACKBONES:
         raise ValueError(f"unknown backbone: {backbone}")
-    selected = recordings or ["Vid14_Pancreas_High"]
+    selected = recordings or list(ALL_RECORDINGS)
     if len(selected) != len(set(selected)):
         raise ValueError("duplicate DRENDS recording")
     status = "training_seen" if backbone in SEEN_BACKBONES else "training_unseen"

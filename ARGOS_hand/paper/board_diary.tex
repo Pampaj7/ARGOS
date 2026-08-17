@@ -15122,7 +15122,12 @@ it is the paper rather than a private note about what we would have done
 with another week.
 
 
-\section*{17 August: A2 Loses In Domain and Wins Out of It}
+\section*{17 August, Retracted Within the Hour: The Threefold DRENDS Win
+Was One Sequence Against Five}
+
+\emph{Everything in the first four paragraphs below is wrong. It is left
+standing because the way it was wrong is the useful part, and because the
+commit that carried it has been pushed. The retraction follows.}
 
 The reason we did not promote A2 was that it had been measured on
 SCARED-C only. So we measured it on DRENDS, the out-of-domain split,
@@ -15183,6 +15188,67 @@ is not a reason to skip the measurement.
 Nothing in the paper has been changed on the strength of this. Promotion
 still means re-running every table, and the decision waits for the matched
 baseline.
+
+\paragraph{Retraction.} None of that survives. The reader who saw the
+table above and said it was impossible was right, and the reason is
+embarrassingly simple: \textbf{A2 had been evaluated on one DRENDS
+recording and the canonical model on five}. The comparison averaged
+Vid14\_Pancreas\_High alone against the mean of Vid10 through Vid14, and
+Vid14 is the easier of them. The threefold improvement was a statement
+about which sequences were in each average, and none of it was about the
+model.
+
+Restricted to the one recording both sides actually cover, the two models
+are the same to three decimal places:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Bad1 on Vid14 & Raw & Canonical & A2 \\
+\midrule
+CREStereo             & $0.499$ & $0.473$ & $0.473$ \\
+Fast-FoundationStereo & $0.487$ & $0.465$ & $0.465$ \\
+RAFT-Stereo           & $0.538$ & $0.512$ & $0.511$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Deltas of $0.001$ percentage points, in both directions. Indistinguishable.
+
+\paragraph{Two defects, and the second is the worse one.} The first is in
+\texttt{drends\_backbone\_transfer.py}, which read
+
+\begin{center}
+\texttt{selected = recordings or ["Vid14\_Pancreas\_High"]}
+\end{center}
+
+so a runner that omits \texttt{-{}-recordings} silently evaluates a single
+sequence --- and the report it writes still labels itself
+\texttt{complete\_recordings}, because that field only distinguishes a
+frame cap from no frame cap. The canonical DRENDS run passed the flag; the
+A2 runner we wrote did not. The default is now the full five, and the
+constant carries the story.
+
+The second defect is in the comparison script, and it is the one that
+allowed the first to matter. It \emph{did} check that both sides shared
+identical raw predictions before believing any delta --- and that check
+passed, because it ran on the intersection of the two sequence sets, which
+was one sequence, and on that sequence the raw predictions agreed
+perfectly. The check then handed off to a mean computed over each side's
+\emph{own} sequences. A guard that verifies the overlap and then reports
+the union is not a guard. Both sides are now reduced over the shared set
+only, and any coverage mismatch prints a warning before the table.
+
+The earlier interpretation --- ``frozen appearance features fit ex-vivo
+tissue and mislead out of domain'' --- was a tidy story invented to
+explain an artefact. It explained the artefact well. That is exactly what
+made it dangerous, and it is worth noting that the story arrived within
+seconds of the number and never once prompted a check of what the number
+was averaged over.
+
+The A2 DRENDS evaluation is running again on all five recordings. The
+canonical seed study on DRENDS is cancelled: with a delta of $0.001$
+percentage points there is nothing for a seed baseline to resolve.
 
 
 \end{document}
