@@ -15282,16 +15282,15 @@ magnitude nobody should care about.
 $157{,}504$ parameters of frozen ResNet-18 from the deployed system,
 three forward passes per frame with it, and $104$ of the $142$ evidence
 channels. Out of domain it costs nothing: eleven of twelve margins favour
-it, none exceeds $0.005$. In domain it costs $0.69$ percentage points of
-Bad1 reduction on held-out D7 --- more than a hundred times the largest
-DRENDS margin.
+it, none exceeds $0.005$.
 
-So the learned stereo evidence buys in-domain accuracy and buys nothing
-out of domain. That is worth reporting, and it is a smaller claim than the
-one we retracted this morning, which had A2 winning out of domain by
-threefold. The honest version is \emph{no worse}, not \emph{better}, and
-the difference between those two sentences is the whole reason the
-morning went the way it did.
+\emph{The sentence that stood here was backwards and is corrected in the
+evening entry below.} It read that A2 ``costs $0.69$ percentage points of
+Bad1 reduction on held-out D7''. These figures are relative
+\emph{reductions}, so a larger number is a better result: canonical is
+$5.15\%$ and A2 is $5.84\%$ across three seeds. A2 does not pay $0.69$
+points in domain, it \emph{gains} them, and it gains $4.44$ on D2. Every
+conclusion drawn from the wrong sign is withdrawn with it.
 
 \paragraph{A third defect, caught before it mattered.} The comparison
 script was fixed at midday to reduce both sides over their shared
@@ -15393,12 +15392,67 @@ canonical seed variance widens the intervals, and every interval already
 includes zero. Had the three seeds gone the other way, the missing
 baseline would have been load-bearing.
 
+\section*{17 August, Late: A Sign Error, and the Conclusion It Was
+Hiding}
+
+Every in-domain statement written today had the sign backwards. The
+ablation table reports \emph{relative reduction}, computed as
+$100\,(\text{raw}-\text{refined})/\text{raw}$, so a larger number is a
+better result. Read correctly:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Bad1 reduction (\%) & Canonical & A2 \\
+\midrule
+D2 development & $8.40$ & $\mathbf{12.84}$ \\
+D7 held out    & $5.15 \pm 0.34$ & $\mathbf{5.84 \pm 0.22}$ \\
+DRENDS         & \multicolumn{2}{c}{indistinguishable} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A2 does not lose in domain. It \emph{wins} in domain, by $0.69$ points on
+held-out D7 and by $4.44$ on D2, and it is neutral out of domain. Three
+commits and two diary paragraphs today asserted the opposite, including
+the phrases ``A2 loses in domain'' and ``more than a hundred times the
+largest DRENDS margin''. All of it is withdrawn.
+
+\paragraph{What was actually being measured.} With the sign fixed, the
+result stops being about domains and becomes a statement about the
+architecture. The $64$ frozen ResNet-18 channels, the confidence curves
+built from them and both appearance correlations --- $104$ of $142$
+channels, $157{,}504$ frozen parameters, three forward passes per frame
+--- buy accuracy \emph{nowhere}. In domain the model is better without
+them. Out of domain it is unchanged.
+
+The pre-registration allowed for exactly this and named the consequence
+before any of it ran: if the appearance channels match within the seed
+spread they ``are redundant given their own correlations and should be
+dropped from the architecture description''.
+
+\paragraph{The uncomfortable version.} A2 is not alone. On held-out D7,
+A3 (single resolution) reaches $5.85$ and A4 (relaxed convexity) $6.02$,
+both above canonical's $5.15$; only A1 is below, at $4.88$. Every
+simplification we pre-registered does at least as well as the model we
+designed. The narrow reading is that the frozen extractor is unnecessary.
+The wider one is that the canonical head is over-specified and its parts
+are not earning their places --- and that is a finding about our design
+process, not about temporal refinement.
+
+Two limits keep this from being stronger than it is. Each ablation is a
+\emph{single} seed against a three-seed canonical, and A2's $+0.55$ on one
+seed sits only modestly above the $0.34$ canonical spread. And the D2
+margin, being the selection split, is exactly where a variant is most
+flattered.
+
 \paragraph{The whole day in one line.} A2 removes the frozen ResNet-18
-from the runtime, costs $0.69$ percentage points of Bad1 reduction in
-domain, and is indistinguishable out of it. That is the third and final
-version of this result today: first threefold better, then detectably
-better, now neither. Each revision came from measuring something that had
-been assumed, and each made the claim smaller.
+from the runtime, is better in domain and indistinguishable out of it.
+The out-of-domain claim went threefold better, then detectably better,
+then neither; the in-domain claim went the other way, from a loss to a
+gain, because of a sign. Each revision came from checking something that
+had been assumed --- and the sign was assumed longest, because it was the
+half nobody was arguing about.
 
 
 \end{document}
