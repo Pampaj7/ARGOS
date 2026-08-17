@@ -19,9 +19,15 @@ PY=$ROOT/.miniconda/envs/argos/bin/python
 SELF=$(readlink -f "$0")
 if [ "${1:-}" = "--node" ]; then
     shift
-    CUDA_VISIBLE_DEVICES=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | sort -t, -k2 -nr | head -1 | cut -d, -f1)
-    export CUDA_VISIBLE_DEVICES PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-    export ARGOS_EXTERNAL_CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES" PYTHONDONTWRITEBYTECODE=1
+    # run_external_evaluation.py refuses physical GPU 0 -- it is reserved, and the D2
+    # runner hardcodes device 1 for the same reason. Picking the freest device, as the
+    # other launchers here do, selected GPU 0 and every recording failed at once. The
+    # job therefore requests two GPUs so that device 1 exists at all.
+    if ! nvidia-smi --query-gpu=index --format=csv,noheader | grep -qx 1; then
+        echo "device 1 not visible; external comparisons may not run on GPU 0" >&2; exit 1
+    fi
+    export ARGOS_EXTERNAL_CUDA_VISIBLE_DEVICES=1 PYTHONDONTWRITEBYTECODE=1
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     cd "$EXT" || exit 1
     for REC in Vid10_Liver_Med Vid11_Liver_High Vid12_Pancreas_Ext Vid13_Pancreas_Med Vid14_Pancreas_High; do
         DEST="$OUT/$REC"
@@ -40,4 +46,4 @@ if [ "${1:-}" = "--node" ]; then
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
 exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=40GB]" \
-     -gpu "num=1:mode=shared" -J argos_bidadrends "$SELF --node $*"
+     -gpu "num=2:mode=shared" -J argos_bidadrends "$SELF --node $*"
