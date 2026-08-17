@@ -165,7 +165,7 @@ with only $0.59\%$ for the best matched fixed/EMA blend, while direct
 flow-confidence weighting and ungated memory propagation degrade
 accuracy.
 The raw-versus-memory oracle exposes a $12.30\%$ improvement ceiling,
-of which TETHER recovers $32.9\%$.
+of which TETHER recovers $37.2\%$.
 Continuous corrected-state recurrence increases EPE by $62.69\%$,
 supporting bounded memory.
 
@@ -1120,9 +1120,10 @@ constraint buys mean accuracy, not safety from large corrections, and we
 withdraw the attribution of transfer to it.
 
 Two limits are worth stating.
-TETHER captures $32.9\%$ of the raw-versus-memory oracle gain and
-$30.1\%$ of the continuous oracle its action space could reach, so the
-open problem is deciding \emph{where} to intervene. And the effective
+TETHER captures $37.2\%$ of the raw-versus-memory oracle gain and
+$34.5\%$ of the continuous oracle its action space could reach, pooled
+over all five backbones, so the open problem is deciding \emph{where} to
+intervene. And the effective
 weight $w_t$, recovered from the convex form, scores AUROC
 $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7 as a predictor
 of harmful intervention: an intervention magnitude, not an uncertainty.
