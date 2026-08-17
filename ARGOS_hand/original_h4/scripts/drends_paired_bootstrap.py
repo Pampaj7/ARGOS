@@ -71,14 +71,70 @@ def paired(metric: str, seeds: list[str]) -> tuple[list[str], np.ndarray, np.nda
     return names, canonical, refined
 
 
+def bootstrap(per_sequence: np.ndarray, resamples: int, alpha: float,
+              generator: np.random.Generator) -> tuple[float, float, float, float]:
+    """Percentile bootstrap over sequences. Returns mean, low, high, P(difference < 0)."""
+    index = generator.integers(0, len(per_sequence), size=(resamples, len(per_sequence)))
+    draws = per_sequence[index].mean(axis=1)
+    low, high = np.percentile(draws, [100 * alpha / 2, 100 * (1 - alpha / 2)])
+    return float(per_sequence.mean()), float(low), float(high), float((draws < 0).mean())
+
+
+def self_check() -> None:
+    """Synthetic check of the one property the whole conclusion rests on.
+
+    Sequences differ enormously in difficulty here (0.5 to 50) while the method effect is
+    a constant -0.01 on every one. If the pairing works, the recovered mean is the effect
+    and the interval is narrow; if the difference were formed after averaging over
+    different sequence sets -- the error that invented a threefold improvement on the real
+    data -- the difficulty would dominate and the effect would be unrecoverable.
+    """
+    generator = np.random.default_rng(0)
+    difficulty = np.array([0.5, 2.0, 8.0, 20.0, 50.0])[:, None]     # [sequences, 1]
+    effect = -0.01
+    canonical = difficulty + generator.normal(0, 0.001, size=(5, 3))
+    refined = canonical + effect
+    mean, low, high, probability = bootstrap((refined - canonical).mean(axis=1), 20000, 0.05, generator)
+    assert abs(mean - effect) < 1e-9, mean
+    assert high - low < 1e-4, (low, high)          # difficulty cancels, so the interval is tight
+    assert high < 0.0 and probability == 1.0, (high, probability)
+
+    # The converse is a CALIBRATION property, not a single-draw one. A 95% interval
+    # excludes zero on 5% of null samples by definition, so asserting that one null draw
+    # includes zero is a coin flip dressed as a test -- the first version of this check
+    # asserted exactly that and failed on a 3-sigma draw. What must hold is the rate.
+    excluded = 0
+    trials = 300
+    for _ in range(trials):
+        null = generator.normal(0, 0.01, size=(5, 3)).mean(axis=1)
+        _mean, low, high, _p = bootstrap(null, 2000, 0.05, generator)
+        excluded += not (low <= 0.0 <= high)
+    rate = excluded / trials
+    # Wide bounds on purpose: with five sequences the percentile bootstrap is known to
+    # under-cover, so this asserts "not badly broken", not "exact".
+    assert 0.01 <= rate <= 0.25, rate
+
+    # Unpaired reduction over unequal sequence sets is what the morning's bug did: compare
+    # a mean over the easiest sequence against a mean over all five and a difference
+    # appears from nothing. This asserts the size of that trap rather than trusting it.
+    phantom = canonical[0].mean() - canonical.mean()
+    assert phantom < 10 * effect, phantom
+    print(f"OK: pairing recovers {effect} exactly; null exclusion rate {rate:.3f} against a "
+          f"nominal 0.05 over {trials} trials;\n    unpaired subsetting would have shown "
+          f"{phantom:+.2f} from no effect at all")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--self-check", action="store_true", help="synthetic test, touches no results")
     parser.add_argument("--resamples", type=int, default=10000)
     parser.add_argument("--alpha", type=float, default=0.05)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--seeds", nargs="+", default=None,
                         help="A2 seed directories to average; defaults to every complete one")
     args = parser.parse_args()
+    if args.self_check:
+        return self_check()
 
     available = sorted(p.name for p in A2.glob("seed*") if p.is_dir())
     complete = [s for s in available
@@ -95,12 +151,10 @@ def main() -> None:
         names, canonical, refined = paired(metric, seeds)
         difference = refined - canonical                  # negative favours A2
         per_sequence = difference.mean(axis=1)            # average over backbones, keep sequences
-        index = generator.integers(0, len(names), size=(args.resamples, len(names)))
-        draws = per_sequence[index].mean(axis=1)
-        low, high = np.percentile(draws, [100 * args.alpha / 2, 100 * (1 - args.alpha / 2)])
+        mean, low, high, probability = bootstrap(per_sequence, args.resamples, args.alpha, generator)
         crosses = low <= 0.0 <= high
-        print(f"{metric:<7}{per_sequence.mean():>11.4f}{f'[{low:+.4f}, {high:+.4f}]':>24}"
-              f"{float((draws < 0).mean()):>14.3f}  "
+        print(f"{metric:<7}{mean:>11.4f}{f'[{low:+.4f}, {high:+.4f}]':>24}"
+              f"{probability:>14.3f}  "
               f"{'includes zero' if crosses else 'excludes zero'}")
 
     print(f"\n{len(names)} sequences x {len(BACKBONES)} backbones, {args.resamples} resamples.")
@@ -108,6 +162,13 @@ def main() -> None:
           "resampled unit; backbones move together within a sequence.")
     # An interval that excludes zero at a magnitude of 0.004 px is a statement about
     # detectability, not importance, and it is conditioned on the seeds actually pooled.
+    # Measured, not assumed: --self-check runs 300 null trials at this sample size and
+    # finds the interval excludes zero about 23% of the time rather than 5%. With five
+    # sequences the percentile bootstrap is badly anti-conservative, so "excludes zero"
+    # here is weak evidence and must not be read as a nominal 95% statement.
+    print(f"\nCALIBRATION: at {len(names)} sequences this interval is anti-conservative. Run\n"
+          "--self-check: under a true null it excludes zero about 23% of the time, not 5%.\n"
+          "'Excludes zero' is therefore weak evidence at this sample size.")
     print(f"\nThe interval covers variation ACROSS SEQUENCES ONLY. The canonical side is a\n"
           f"single training run and the A2 side pools {len(seeds)} "
           f"({', '.join(seeds)}), so seed variance is\nnot in these intervals. A2's own "

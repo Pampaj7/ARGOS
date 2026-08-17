@@ -15482,6 +15482,31 @@ Two limits survive the audit. A3 and A4 remain single seeds, so ``every
 simplification'' is demonstrated only for A2. And the D2 margin sits on
 the selection split, where any variant is most flattered.
 
+\paragraph{The interval was weaker than its label.} The bootstrap script
+had produced the day's final conclusion and had no test, so it got one:
+synthetic sequences whose difficulty spans $0.5$ to $50$ with a constant
+$-0.01$ effect on every one. The pairing recovers $-0.01$ exactly, and the
+same data reduced the unpaired way over unequal subsets shows $-15.60$
+from no effect at all --- the morning's bug, reproduced on demand.
+
+The second half of that check measures something we should have known and
+did not. Under a \emph{true null} at this sample size, the percentile
+interval excludes zero on $22.7\%$ of $300$ trials rather than $5\%$. With
+five sequences the bootstrap is anti-conservative by more than four times.
+
+So ``three of four intervals exclude zero'', reported this afternoon as
+evidence the effect was real, was much weaker evidence than its label
+implied. It does not change the final answer --- with three seeds nothing
+excludes zero anyway --- but it does mean the intermediate claim was
+flimsier than the caveat attached to it admitted. The script now prints
+the measured under-coverage next to every result.
+
+The first version of this test asserted that a single null draw must
+include zero, and failed on a three-sigma sample. That assertion was
+wrong, not the code: a $95\%$ interval excludes zero on $5\%$ of nulls by
+construction. Testing a rate rather than a draw is what turned a flaky
+assertion into the finding above.
+
 \paragraph{The whole day in one line.} A2 removes the frozen ResNet-18
 from the runtime, is better in domain and indistinguishable out of it.
 The out-of-domain claim went threefold better, then detectably better,
