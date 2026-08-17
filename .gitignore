@@ -6,6 +6,9 @@ argos_data/
 dataset/*
 !dataset/README.md
 !dataset/manifest.json
+!dataset/DRENDS/
+dataset/DRENDS/*
+!dataset/DRENDS/DATASET_CARD.md
 weights/
 checkpoints/
 *.pth
@@ -102,3 +105,10 @@ results/temporal evaluation/causal_ema_benchmark/
 results/temporal evaluation/fair_interpretability_checks/
 results/temporal evaluation/scared_multisequence_compact/
 results/temporal evaluation/scared_multisequence_validation/
+
+# Definitive-evaluation output directories: multi-GB per-frame and aggregate CSV
+# dumps. Only the small hand-written summaries under results/ are tracked, which
+# is how scared_masked and seed_eval have always been handled.
+ARGOS_hand/results/ablation_eval/
+ARGOS_hand/results/*/scared_per_frame_metrics.csv
+ARGOS_hand/results/*/scared_aggregate_metrics.csv
