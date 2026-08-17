@@ -69,19 +69,17 @@ def main() -> None:
         base = sequences(CANONICAL, backbone)
         if not base:
             continue
-        loaded = {seed: sequences(A2 / seed, backbone) for seed in seeds}
-        loaded = {seed: v for seed, v in loaded.items() if v}
-        # Every side is reduced over the sequences ALL of them share, never over whatever
-        # each happens to hold. A run still in progress, or one launched with a different
-        # recording list, otherwise contributes a mean over an easier subset.
-        shared = sorted(set(base).intersection(*(set(v) for v in loaded.values()))) if loaded \
-            else sorted(base)
-        if not shared:
-            continue
-        entry = {"canonical": macro(base, "refined", args.metric, shared),
-                 "raw": macro(base, "raw", args.metric, shared),
-                 "n": len(shared), "coverage": {"canonical": len(base)}}
+        loaded = {seed: v for seed, v in
+                  ((s, sequences(A2 / seed, backbone)) for s in seeds for seed in [s]) if v}
+        # Each seed is compared with canonical on THEIR OWN shared sequences. Intersecting
+        # across every seed instead would let one run still in progress drag a finished
+        # seed's comparison down to its partial coverage, which is the same class of error
+        # as averaging different sequence sets -- just quieter.
+        entry = {"coverage": {"canonical": len(base)}, "n": {}}
         for seed, variant in loaded.items():
+            shared = sorted(set(base) & set(variant))
+            if not shared:
+                continue
             # The raw predictions come from the same frozen backbone on the same frames, so
             # they must agree exactly. A mismatch means the two runs are not comparable.
             a = np.array([base[s]["raw"][args.metric]["macro_sequence"] for s in shared])
@@ -90,14 +88,21 @@ def main() -> None:
                 raise RuntimeError(f"{backbone}/{seed}: raw predictions differ from canonical; "
                                    "the comparison would be meaningless")
             entry[seed] = macro(variant, "refined", args.metric, shared)
+            entry[f"canonical@{seed}"] = macro(base, "refined", args.metric, shared)
+            entry[f"raw@{seed}"] = macro(base, "raw", args.metric, shared)
             entry["coverage"][seed] = len(variant)
+            entry["n"][seed] = len(shared)
+        # The headline row uses the full canonical coverage; per-seed rows above carry
+        # their own baseline whenever a seed covers less.
+        entry["canonical"] = macro(base, "refined", args.metric)
+        entry["raw"] = macro(base, "raw", args.metric)
         rows[backbone] = entry
 
     for backbone, entry in rows.items():
-        counts = set(entry["coverage"].values())
-        if len(counts) > 1:
-            print(f"WARNING {backbone}: sequence coverage differs across runs "
-                  f"({entry['coverage']}); comparing on the {entry['n']} shared only.\n")
+        partial = {s: n for s, n in entry["n"].items() if n != entry["coverage"]["canonical"]}
+        if partial:
+            print(f"WARNING {backbone}: incomplete seeds {partial} against canonical "
+                  f"{entry['coverage']['canonical']}; each is compared on its own shared set.\n")
 
     header = f"{'backbone':<24}{'raw':>9}{'canon(s0)':>11}" + "".join(f"{s:>9}" for s in seeds)
     print(header)
@@ -110,11 +115,17 @@ def main() -> None:
     for backbone, entry in rows.items():
         if entry.get("seed0") is None:
             continue
-        delta = entry["seed0"] - entry["canonical"]
-        print(f"  {backbone:<24} canonical {entry['canonical']:.3f}  A2 {entry['seed0']:.3f}  "
-              f"({delta:+.3f} {'A2 better' if delta < 0 else 'canonical better'})")
+        base_value = entry["canonical@seed0"]
+        delta = entry["seed0"] - base_value
+        raw_value = entry["raw@seed0"]
+        print(f"  {backbone:<24} n={entry['n']['seed0']}  canonical {base_value:.3f} "
+              f"({100 * (raw_value - base_value) / raw_value:.2f}%)  "
+              f"A2 {entry['seed0']:.3f} ({100 * (raw_value - entry['seed0']) / raw_value:.2f}%)  "
+              f"{delta:+.3f} {'A2' if delta < 0 else 'canonical'}")
 
-    landed = [s for s in seeds if all(rows[b].get(s) is not None for b in rows)]
+    landed = [s for s in seeds
+              if all(rows[b].get(s) is not None
+                     and rows[b]["n"].get(s) == rows[b]["coverage"]["canonical"] for b in rows)]
     if len(landed) > 1:
         print(f"\nA2 seed spread over {len(landed)} complete seeds (context, not a comparison):")
         for backbone, entry in rows.items():

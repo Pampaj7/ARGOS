@@ -15251,5 +15251,61 @@ canonical seed study on DRENDS is cancelled: with a delta of $0.001$
 percentage points there is nothing for a seed baseline to resolve.
 
 
+\section*{17 August, Afternoon: What A2 Actually Does Out of Domain}
+
+Seed $0$ finished on all five DRENDS recordings against all three
+backbones, $7{,}476$ frames per backbone, matched sequence for sequence
+against the canonical run. This is the comparison the morning's retracted
+table was pretending to be.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Canonical} & \multicolumn{2}{c}{A2} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Reduction on DRENDS & Min & Max & Min & Max \\
+\midrule
+EPE  & $4.52$ & $5.42$ & $4.75$ & $5.74$ \\
+Bad1 & $4.78$ & $5.69$ & $5.14$ & $6.17$ \\
+Bad3 & $11.14$ & $16.17$ & $11.61$ & $17.04$ \\
+RMSE & $6.43$ & $6.96$ & $6.37$ & $7.18$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Across the twelve comparisons --- three backbones by four metrics --- A2
+is ahead in eleven and behind in one, and every margin lies between
+$0.000$ and $0.005$ in absolute terms. That is a consistent direction at a
+magnitude nobody should care about.
+
+\paragraph{The finding, stated the way it survives.} A2 removes
+$157{,}504$ parameters of frozen ResNet-18 from the deployed system,
+three forward passes per frame with it, and $104$ of the $142$ evidence
+channels. Out of domain it costs nothing: eleven of twelve margins favour
+it, none exceeds $0.005$. In domain it costs $0.69$ percentage points of
+Bad1 reduction on held-out D7 --- more than a hundred times the largest
+DRENDS margin.
+
+So the learned stereo evidence buys in-domain accuracy and buys nothing
+out of domain. That is worth reporting, and it is a smaller claim than the
+one we retracted this morning, which had A2 winning out of domain by
+threefold. The honest version is \emph{no worse}, not \emph{better}, and
+the difference between those two sentences is the whole reason the
+morning went the way it did.
+
+\paragraph{A third defect, caught before it mattered.} The comparison
+script was fixed at midday to reduce both sides over their shared
+sequences. That fix intersected across \emph{every} seed present --- so
+the moment seed $1$ started writing its first recording, seed $0$'s
+finished five-sequence comparison silently collapsed to the one sequence
+seed $1$ had reached. A guard that over-corrects into a new way of
+comparing unequal things is not fixed. Each seed is now intersected with
+canonical on its own, incomplete seeds are named in a warning and
+excluded from the spread, and the header carries $n$ per seed.
+
+Seeds $1$ and $2$ are still running and add A2's own spread, not a second
+baseline. Nothing in the paper has changed.
+
+
 \end{document}
 
