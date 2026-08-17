@@ -2,10 +2,17 @@
 """Stage-by-stage runtime and peak VRAM of the frozen temporal refiner.
 
 Measures only what the temporal module adds on top of a frozen stereo estimator:
-SEA-RAFT forward, SEA-RAFT reverse, BiDA alignment, 142-channel evidence construction
-(including the frozen ResNet-18 features), and the fusion head.  Frozen stereo latency
-is not re-measured here: it is already recorded per backbone in the cache metadata, and
-is combined with these numbers to report end-to-end FPS.
+SEA-RAFT forward, SEA-RAFT reverse, BiDA alignment, evidence construction (including the
+frozen ResNet-18 features when the measured module uses them), and the fusion head.
+Frozen stereo latency is not re-measured here: it is already recorded per backbone in the
+cache metadata, and is combined with these numbers to report end-to-end FPS.
+
+`--module` selects what is measured, in the same `module:factory` form the evaluation
+runners take.  This matters for exactly one pre-registered variant: A2 drops the learned
+stereo evidence and with it the frozen ResNet-18, so it is the only variant whose latency
+can differ from the canonical model rather than only its parameter count.  The evidence
+stage is named after the channel width actually built, and the output file is named after
+the module, so a variant cannot silently overwrite the canonical row.
 
 No claim of real-time operation is made by this script; it only produces the numbers.
 """
@@ -71,6 +78,15 @@ def main() -> None:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--iterations", type=int, default=200)
     parser.add_argument("--warmup", type=int, default=30)
+    # A2 is the only pre-registered variant that removes the frozen ResNet-18 from the
+    # deployed system rather than only narrowing the first convolution, so it is the only
+    # one whose latency can differ from canonical. That was unmeasurable while this script
+    # named its module in an import statement.
+    parser.add_argument("--module", default="model_design.comparison.canonical_h4:factory",
+                        help="module:factory to measure, as accepted by the evaluation runners")
+    parser.add_argument("--output", type=Path, default=None,
+                        help="defaults to results/runtime/runtime.json for the canonical module "
+                             "and a module-derived name otherwise, so variants cannot overwrite it")
     args = parser.parse_args()
     device = torch.device(args.device)
     if device.type != "cuda":
@@ -80,13 +96,16 @@ def main() -> None:
                  str(ARGOS / "ARGOS_FREEZED/experiments/02_massive_training/scripts")):
         if path not in sys.path:
             sys.path.insert(0, path)
-    import canonical_h4
+    import importlib
     from argos_freezed.alignment.bida_pull_warp import temporal_disparity_evidence
     from argos_freezed.alignment.sea_raft_adapter import SEARAFTFlowAdapter
 
+    module_name, _, factory_name = args.module.partition(":")
+    factory = getattr(importlib.import_module(module_name), factory_name or "factory")
+
     torch.cuda.set_device(device)          # peak-memory stats need an initialised context
     torch.cuda.reset_peak_memory_stats(device)
-    adapter = canonical_h4.factory(device=str(device))
+    adapter = factory(device=str(device))
     model, extractor, build_codd_cues = adapter._load()
     flow = SEARAFTFlowAdapter(device=device)
 
@@ -116,9 +135,14 @@ def main() -> None:
             flow_magnitude=evidence.flow_magnitude,
             forward_backward_confidence=evidence.forward_backward_confidence,
             warp_support=evidence.warp_support, aligned_valid=evidence.aligned_validity,
-            include_learned_stereo_evidence=True)
-        stages["evidence_142ch"] = timed(build, args.iterations, args.warmup, device)
+            # A variant that drops the learned evidence also drops the extractor, and its
+            # cue builder would refuse the flag being true. Deriving it here keeps the
+            # measured configuration identical to the evaluated one.
+            include_learned_stereo_evidence=extractor is not None)
         cues = build()
+        # Named after what was actually built, not after the canonical width: a variant
+        # measured under a "142ch" label is how a latency table acquires a wrong row.
+        stages[f"evidence_{cues.channels}ch"] = timed(build, args.iterations, args.warmup, device)
         stages["fusion_head"] = timed(lambda: model(cues, raw, evidence.aligned_past_disparity),
                                       args.iterations, args.warmup, device)
 
@@ -137,12 +161,18 @@ def main() -> None:
     }
 
     OUT.mkdir(parents=True, exist_ok=True)
+    default = "runtime.json" if module_name.endswith("canonical_h4") and factory_name in ("", "factory") \
+        else f"runtime_{module_name.rsplit('.', 1)[-1]}_{factory_name or 'factory'}.json"
+    destination = args.output or (OUT / default)
     record = {
         "project": "ARGOS v2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "device_name": torch.cuda.get_device_name(device),
         "torch": torch.__version__,
         "cache_grid": [HEIGHT, WIDTH],
+        "module": args.module,
+        "cue_channels": cues.channels,
+        "frozen_extractor_in_runtime": extractor is not None,
         "module_provenance": adapter.describe(),
         "stages_ms": stages,
         "temporal_overhead_median_ms": overhead,
@@ -154,9 +184,13 @@ def main() -> None:
                    "stages are measured here at the 144x180 cache grid"),
         "realtime_claim": None,
     }
-    (OUT / "runtime.json").write_text(json.dumps(record, indent=2) + "\n")
-    print(json.dumps({k: record[k] for k in ("device_name", "stages_ms", "temporal_overhead_median_ms",
-                                             "peak_vram_mb", "end_to_end")}, indent=2))
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(record, indent=2) + "\n")
+    print(f"wrote {destination}")
+    print(json.dumps({k: record[k] for k in ("device_name", "module", "cue_channels",
+                                             "frozen_extractor_in_runtime", "stages_ms",
+                                             "temporal_overhead_median_ms", "peak_vram_mb",
+                                             "end_to_end")}, indent=2))
 
 
 if __name__ == "__main__":
