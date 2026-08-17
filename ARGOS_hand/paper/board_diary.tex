@@ -15446,6 +15446,42 @@ seed sits only modestly above the $0.34$ canonical spread. And the D2
 margin, being the selection split, is exactly where a variant is most
 flattered.
 
+\paragraph{Audited, because it read as too neat.} ``Every simplification
+beats the model we designed'' is the kind of sentence that is usually a
+measurement error, so it was checked before being believed. It is not one.
+The raw baseline is identical to eight decimals across all seven runs
+($0.06205083$ on D7), the backbone--sequence sets hash identically, every
+run trained twelve epochs, and every checkpoint was selected on validation
+fused EPE. Nothing about the comparison is uneven.
+
+What the audit did find is that the interesting number is a spread, not a
+mean:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Bad1 reduction (\%), three seeds each & Canonical & A2 \\
+\midrule
+D2 development & $8.40 \pm 2.53$ & $12.73 \pm 0.32$ \\
+D7 held out    & $5.15 \pm 0.34$ & $5.84 \pm 0.22$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+On D7 the two ranges are disjoint --- A2's worst seed, $5.69$, beats
+canonical's best, $5.47$ --- so for A2 this is not seed noise. But the
+figure that matters is $\pm 2.53$: the canonical model's development
+result runs from $5.75$ to $10.78$ depending only on the seed, close to a
+factor of two, while A2 runs from $12.38$ to $12.98$. The learned evidence
+is not merely failing to buy accuracy. It is making training unstable, and
+that instability is the honest explanation for why every variant looks
+better than the canonical model: the canonical distribution is wide and
+the number in our tables is one draw from it.
+
+Two limits survive the audit. A3 and A4 remain single seeds, so ``every
+simplification'' is demonstrated only for A2. And the D2 margin sits on
+the selection split, where any variant is most flattered.
+
 \paragraph{The whole day in one line.} A2 removes the frozen ResNet-18
 from the runtime, is better in domain and indistinguishable out of it.
 The out-of-domain claim went threefold better, then detectably better,
