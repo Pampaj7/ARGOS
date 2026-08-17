@@ -15021,5 +15021,47 @@ whether the $38$-channel variant is genuinely better or one lucky run,
 and by pre-registration that question is settled on D2 alone.
 
 
+
+\section*{Night Audit: One Number Was Computed on a Subset}
+
+With the ablations queued and nothing to collect, the night went into
+checking every figure the paper quotes against the files it came from.
+Four checks, one real defect.
+
+\paragraph{The defect.} The paper claimed TETHER captures $32.9\%$ of the
+raw-versus-memory oracle gain and $30.1\%$ of the continuous one. Neither
+reproduces from \texttt{results/oracle\_risk\_analysis}. Recomputing
+pixel-weighted, macro over sequences, and as a ratio of summed gains all
+give the same pair: $37.2\%$ and $34.5\%$.
+
+The published numbers turn out to match exactly one computation ---
+dropping StereoAnywhere, which is the outlier at $50.9\%$ against
+$31$--$33\%$ for the other four. That may well have been a deliberate
+robustness check at the time. It was quoted without the exclusion, which
+makes it wrong as written.
+
+Corrected in both documents, along with the bracketed fraction from
+$6.1\%$ to $6.2\%$. Worth recording that the correct figure is the
+\emph{better} one: we were under-reporting our own result by four points.
+Errors of this kind are usually assumed to run the other way, which is
+probably why nobody re-derived it.
+
+\paragraph{The three that held.} D4D reproduces exactly --- TETHER
+$53.93\%$, copy-previous $97.35\%$, warped-previous $100.00\%$ against
+the $53.9$, $97.3$ and $100.0$ printed. Runtime reproduces exactly:
+$33.60$\,ms overhead, $124.2$\,MB peak VRAM, and end-to-end rates of
+$10.98$ and $1.38$\,FPS with overhead fractions of $36.9\%$ and $4.6\%$
+at the two extremes. And every cross-document promise now has a section
+behind it: the fifteen closure policies, the DRENDS per-recording
+figures, the per-backbone intervention table, the ablation D2 figures,
+and --- added tonight --- the horizon sweep's risk columns, which the
+main paper pointed at and the supplementary did not carry.
+
+\paragraph{Method.} The audit is worth doing in this direction:
+recompute from the stored reports and compare to the manuscript, rather
+than reading the manuscript and asking whether it looks right. Every
+number here looked right. The one that was wrong looked right too.
+
+
 \end{document}
 
