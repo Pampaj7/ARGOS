@@ -15344,5 +15344,62 @@ above. The reading stays \emph{detectable and negligible}, not
 number cannot travel without it.
 
 
+\section*{17 August, Evening: The Third Seed Removes the Effect}
+
+The caveat above was the right caveat and it was still too generous. Seeds
+$1$ and $2$ finished, all nine runs at five recordings, and pooling them
+moves every interval across zero:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Metric & Mean difference & $95\%$ interval & $P(\text{A2 better})$ \\
+\midrule
+EPE  & $-0.0028$ & $[-0.0056, +0.0002]$ & $0.962$ \\
+Bad1 & $-0.0015$ & $[-0.0032, +0.0001]$ & $0.971$ \\
+Bad3 & $-0.0002$ & $[-0.0005, +0.0000]$ & $0.930$ \\
+RMSE & $-0.0031$ & $[-0.0059, +0.0009]$ & $0.942$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Three of four intervals excluded zero on seed $0$, three of four still
+excluded it with two seeds pooled, and \emph{none} of four excludes it
+with three. The per-seed numbers say why, and they are monotone:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Bad1, RAFT-Stereo & Canonical & A2 seed 0 & seed 1 & seed 2 \\
+\midrule
+DRENDS & $0.555$ & $0.552$ & $0.553$ & $0.555$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A2 seed $2$ lands exactly on the canonical value, on EPE as well
+($1.241$ against $1.241$). The advantage was a property of seed $0$, and
+the earlier sentence --- ``the advantage is therefore real and detectable''
+--- does not survive. The finding is now the flat one: out of domain, A2
+and the canonical model are \textbf{indistinguishable}.
+
+\paragraph{What this does not need.} The canonical DRENDS seed study was
+cancelled earlier today on the reasoning that a $0.001$ point difference
+left a seed baseline nothing to resolve. That reasoning was based on the
+one-sequence numbers and was wrong at the time: A2's real seed spread here
+is $0.003$, the same size as the gap it was being compared against. The
+conclusion survives the error only because it runs the safe way --- adding
+canonical seed variance widens the intervals, and every interval already
+includes zero. Had the three seeds gone the other way, the missing
+baseline would have been load-bearing.
+
+\paragraph{The whole day in one line.} A2 removes the frozen ResNet-18
+from the runtime, costs $0.69$ percentage points of Bad1 reduction in
+domain, and is indistinguishable out of it. That is the third and final
+version of this result today: first threefold better, then detectably
+better, now neither. Each revision came from measuring something that had
+been assumed, and each made the claim smaller.
+
+
 \end{document}
 
