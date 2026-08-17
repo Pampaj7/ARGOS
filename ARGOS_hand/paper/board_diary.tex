@@ -15063,5 +15063,64 @@ than reading the manuscript and asking whether it looks right. Every
 number here looked right. The one that was wrong looked right too.
 
 
+
+\section*{A2 Wins the Pre-Registered Comparison, and We Submit the Other Model}
+
+Three seeds of A2 finished overnight. On D2 --- the split the
+pre-registration named as the decision split, precisely so that a
+promotion could be made without touching held-out data:
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+D2 Bad1 reduction & seeds & mean & std \\
+\midrule
+Canonical, $142$ ch & 10.78, 8.67, 5.75 & 8.40 & 2.53 \\
+A2, $38$ ch & 12.84, 12.38, 12.98 & \textbf{12.73} & \textbf{0.32} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The ranges do not overlap: A2's worst seed beats the canonical model's
+best. The declared criterion --- clearly exceeding $8.40$ with a
+comparable spread --- is met, and the spread is not comparable but eight
+times tighter.
+
+That variance is the more interesting half of the result. The canonical
+model swings five points across seeds on D2, from $5.75$ to $10.78$; the
+$38$-channel variant swings half a point. A head whose evidence is mostly
+appearance-derived is apparently fitting the training domain in a way
+that depends heavily on initialisation, and stripping that evidence
+removes the dependence along with it.
+
+Held out, reported after the decision and not part of it: A2 gives
+$5.84\pm0.22\%$ against the canonical $5.15\pm0.34\%$.
+
+\paragraph{And we are submitting the canonical model anyway.} Not out of
+caution. Two reasons, and neither is that the result is doubtful.
+
+First, promotion is not an edit. Every table in the paper --- DRENDS
+zero-shot, the BiDAStabilizer common-support comparison, the transfer
+matrix, the intervention ratios, the runtime budget --- was measured on
+the canonical checkpoint. A2 has been evaluated on SCARED-C only.
+Promoting it means re-running all of it, and a paper whose headline model
+is supported by one split while its tables come from another is worse
+than either option taken cleanly.
+
+Second, and this is the part worth remembering: the comparison that
+favours A2 was deliberately built on the development split so that the
+held-out numbers would stay untouched by any choice of ours. Promoting on
+the strength of it and then reporting D7 for the promoted model would
+spend exactly the thing the design was protecting.
+
+So the paper reports the ablation as it stands: a pre-registered variant
+that beats the submitted model on the split where such comparisons are
+allowed, with the numbers, the variance and the reason we did not act on
+it. That is a finding, not an embarrassment --- and the honest place for
+it is the paper rather than a private note about what we would have done
+with another week.
+
+
 \end{document}
 
