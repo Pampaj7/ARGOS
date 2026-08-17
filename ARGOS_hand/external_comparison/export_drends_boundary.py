@@ -53,12 +53,18 @@ def export(recording: str, device: str, max_frames: int | None) -> dict:
     # RGB reproducible from a named checkpoint. The disparity itself is not exported.
     _checkpoint, predict = transfer._load_backbone("RAFT-Stereo", torch.device(device))
     records, _info = base.load_drends_records(recording, max_frames)
-    frames, (height, width) = base._canonical_frames(records, predict, device=device)
+    # The second return value is the NATIVE shape (720, 1280) that _canonical_frames
+    # validates its input against, not the grid the frames come out on -- they are
+    # resized to CANONICAL_SIZE, 144x180. Using the returned shape here built a dummy
+    # disparity at native size against 144x180 RGB, which the bridge rejected. Take the
+    # grid from the array that will actually be written.
+    frames, _native = base._canonical_frames(records, predict, device=device)
 
     # [T,3,H,W] float32 RGB on exactly the grid the frozen module and the metrics already
     # agree on. Anything resampled here would silently make the two sides incomparable.
     left = np.stack([frame["rgb"][0].cpu().numpy().astype(np.float32) for frame in frames])
     right = np.stack([frame["right_rgb"][0].cpu().numpy().astype(np.float32) for frame in frames])
+    height, width = left.shape[2], left.shape[3]
     # Dummy disparity, as in the D2 seed export. The stabiliser overwrites this field with
     # its own RAFT-robust prediction, so a real array here would be discarded while
     # implying a shared input that does not exist until BiDA has run.
