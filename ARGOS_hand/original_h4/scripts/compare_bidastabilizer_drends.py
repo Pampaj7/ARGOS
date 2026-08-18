@@ -116,9 +116,17 @@ def main() -> None:
                      "bidastabilizer": metrics(bida, gt, support),
                      "tether": metrics(tether, gt, support)})
         current = rows[-1]
+        # Flushed, and the partial result is written after every recording. A five-hour
+        # run whose only output arrives at the end is unobservable while it matters and
+        # unrecoverable if it dies: block buffering behind a pipe hid all progress on the
+        # first full run, so there was no way to tell slow from stuck.
         print(f"{recording:<24} n={count:>5} px={current['pixels']:>10,}  "
               f"EPE raw {current['raw']['EPE']:.4f}  BiDA {current['bidastabilizer']['EPE']:.4f}  "
-              f"TETHER {current['tether']['EPE']:.4f}")
+              f"TETHER {current['tether']['EPE']:.4f}", flush=True)
+        OUT.mkdir(parents=True, exist_ok=True)
+        (OUT / "partial.json").write_text(json.dumps(
+            {"complete": False, "recordings_done": [r["recording"] for r in rows],
+             "capped": args.max_frames is not None, "per_recording": rows}, indent=2) + "\n")
 
     def pooled(method: str, metric: str) -> float:
         """Pixel-weighted over recordings, so a long recording is not worth a short one."""
@@ -137,7 +145,8 @@ def main() -> None:
                          for method in ("raw", "bidastabilizer", "tether")}}
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "comparison.json").write_text(json.dumps(record, indent=2) + "\n")
-    print("\npooled (pixel-weighted):")
+    (OUT / "partial.json").unlink(missing_ok=True)   # a leftover partial would outrank nothing
+    print("\npooled (pixel-weighted):", flush=True)
     for method in ("raw", "bidastabilizer", "tether"):
         values = record["pooled"][method]
         print(f"  {method:<16} EPE {values['EPE']:.4f}  Bad1 {100 * values['Bad1']:.3f}%  "
