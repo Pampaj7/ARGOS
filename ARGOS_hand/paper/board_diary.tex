@@ -15861,5 +15861,48 @@ running script is not being edited --- bash reads a script by byte offset while
 executing it, so editing one mid-run corrupts it --- so the job will be stopped
 after seed $0$ lands instead.
 
+
+\section*{18 August, Night: A Trend That Was the Order of the Cells}
+
+Sharding the A2 closure produced numbers fast enough to look at, and they told a
+clean story. Reduction on D2 EPE, A2 minus canonical: $-0.11$ points at $H{=}1$,
+$-0.54$ at $H{=}2$, $-1.18$ at $H{=}4$, $-2.69$ at $H{=}8$. A monotone widening
+with the horizon, and a mechanism to go with it --- the $142$-channel evidence
+would matter more the longer a corrected state has to survive, and buy nothing at
+$H{=}1$ where memory comes from raw every frame. It would have reversed the
+promotion for the operating point the paper actually ships.
+
+It is an artefact. The cells complete in a fixed backbone and sequence order, so
+the ones finished first are always the same ones, and they are not a random
+sample. Canonical's own reduction on exactly the cells A2 has finished, against
+its reduction on all fifteen:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Method & on finished cells & on all cells & subset bias \\
+\midrule
+$H{=}1$ & $2.52\%$ ($n{=}15$) & $2.52\%$ & $+0.00$ \\
+$H{=}2$ & $2.98\%$ ($n{=}6$)  & $3.09\%$ & $-0.11$ \\
+$H{=}4$ & $4.80\%$ ($n{=}4$)  & $3.81\%$ & $+0.98$ \\
+$H{=}8$ & $5.53\%$ ($n{=}4$)  & $3.84\%$ & $+1.69$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The first four cells of $H{=}8$ are worth $1.69$ points more to canonical than its
+own average, and the gap I was about to report there is $2.69$. Most of the trend
+is the ordering of the work queue.
+
+What survives: $H{=}1$ is complete on all fifteen cells and unbiased, and there
+A2 is level at $-0.11$ points. Nothing can be said about $H{=}4$ until its
+remaining eleven cells land.
+
+This is the same error as the threefold DRENDS win of yesterday --- averaging two
+quantities over sets that are not the same set --- arriving in a new costume. The
+check that caught it took two minutes and should be standing procedure for any
+partial run: before comparing, score the \emph{reference} on exactly the subset
+the new run has finished.
+
 \end{document}
 
