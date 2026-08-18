@@ -201,9 +201,9 @@ analysis in robot-assisted surgery, and stereo endoscopy is attractive
 because depth is recovered passively from images the platform already
 provides.
 
-It is also hard. Endoscopic scenes carry weak or repetitive texture,
-non-Lambertian tissue, specular highlights, blood, smoke, deformable
-anatomy, rapid viewpoint change and frequent tool occlusion
+It is also hard. Endoscopic scenes carry weak texture, non-Lambertian
+tissue, specular highlights, blood, smoke, deformable anatomy, rapid
+viewpoint change and frequent tool occlusion
 \cite{allan2021scared,edwards2022servct}. Modern estimators
 \cite{lipson2021raftstereo,li2022crestereo,bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}
 give increasingly strong frame-wise disparity, but nothing in a
@@ -216,20 +216,19 @@ representations, future observations, or co-design with the estimator.
 
 We study a different deployment setting: \emph{can one causal temporal
 module be trained once and attached unchanged to heterogeneous frozen
-stereo estimators?} This matters for robotic systems because the backbone and the temporal
-logic can then evolve independently: a new estimator replaces the
-previous one without the temporal module needing its cost volume, hidden
-state, confidence head or training pipeline.
+stereo estimators?} This matters because backbone and temporal logic can then evolve
+independently: a new estimator replaces the previous one without the
+temporal module needing its cost volume, hidden state, confidence head or
+training pipeline.
 
 Our starting point is the reset-and-fusion principle of CODD
-\cite{li2023codd}, which we do not claim as novel. We retain its
-inductive bias --- decide whether motion-aligned history should influence
-the current estimate, and constrain the correction to a convex
-interpolation between the two --- and redesign it for an external
-black-box interface: the integrated motion pathway becomes frozen
-SEA-RAFT, backbone-specific representations become a shared external
-evidence space, and the same head is evaluated unchanged across
-architectures.
+\cite{li2023codd}, which we do not claim as novel. We keep its inductive
+bias --- decide whether motion-aligned history should influence the
+current estimate, and constrain the correction to a convex interpolation
+between the two --- and redesign it for a black-box interface: the
+integrated motion pathway becomes frozen SEA-RAFT, backbone-specific
+representations become a shared external evidence space, and the same head
+is evaluated unchanged across architectures.
 
 The structure is deliberately constrained. The current estimate stays an
 anchor, temporal memory is geometrically aligned before use, the head
@@ -265,12 +264,12 @@ as \steer: a 177,338-parameter reset-and-fusion head over causal
 SEA-RAFT alignment, a shared 142-channel external evidence space,
 support-confined convex fusion and bounded corrected-state recurrence.
 
-\emph{(ii)} We show through a matched-baseline closure that the gain is not temporal
-smoothing --- $4.05\%$ against $0.59\%$ for the best fixed blend under an
-identical state machine --- and that one frozen checkpoint transfers
-along both available axes: to two estimators excluded from training on
-held-out D7, and to five recordings of an unseen domain, giving the first
-measurement of the two shifts combined.
+\emph{(ii)} We show through a matched-baseline closure that the gain is not
+temporal smoothing --- $4.05\%$ against $0.59\%$ for the best fixed blend
+under an identical state machine --- and that one frozen checkpoint
+transfers along both axes: to estimators excluded from training on
+held-out D7, and to an unseen domain, the first measurement of the two
+shifts combined.
 
 \emph{(iii)} We introduce a refinement-centric evaluation protocol under fixed,
 prediction-independent support that measures introduced as well as
@@ -786,27 +785,46 @@ backbone or per arena average per-cell relative reductions instead.
 Raw D2 EPE is $0.276202$. Canonical $H=4$ reaches $0.265028$ ($4.05\%$),
 the best matched fixed blend ($w=0.5$, algebraically identical to EMA2
 here) only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle
-$0.242223$ ($12.30\%$). The learned decision recovers almost seven times
-the gain of the best fixed blend under an identical state machine, across
-fifteen policies evaluated under that machine.
-Forward--backward confidence is the informative failure: one of TETHER's
-own input cues, yet using it directly as the fusion weight worsens EPE by
-$2.17\%$ --- motion reliability is useful evidence and a poor decision
-rule. Propagating aligned memory directly, or letting corrected
-recurrence run unbounded ($+62.69\%$), also degrades accuracy, so the
-improvement is not explained by alignment, averaging or smoothing.
+$0.242223$ ($12.30\%$): almost seven times the gain of the best fixed
+blend under an identical state machine. Forward--backward confidence is
+the informative failure --- one of TETHER's own input cues, yet used
+directly as the fusion weight it worsens EPE by $2.17\%$. Propagating
+aligned memory directly also degrades accuracy, so the improvement is not
+alignment, averaging or smoothing.
 
 
 \subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
 
-The lowest development EPE is at $H=6$, by $0.14\%$. We do not claim
-$H=4$ minimises it: longer lifetime buys that sliver at a cost in
-intervention risk --- from $H=4$ to $6$ to $8$, $B^+/H^+$ degrades from
-$2.53$ to $2.30$ to $2.04$ and NewBad1 nearly triples --- so $H=4$ is the
-frozen risk--gain operating point, chosen before D7 was opened.
-Recurrence must also be bounded: continuous
-corrected-state propagation raises mean EPE by $62.69\%$, so periodic raw
-re-anchoring is structural, not an implementation detail.
+\begin{table}[!ht]
+\centering
+\scriptsize
+\caption{
+Horizon sweep on D2, EPE reduction (\%), pooled as elsewhere in this
+section; higher is better. A2 is the $38$-channel variant of
+Sec.~\ref{sec:ablations}.
+}
+\label{tab:horizon}
+\begin{tabular}{lcc}
+\toprule
+$H$ & Canonical & A2 \\
+\midrule
+$1$ & $2.61$ & $2.49$ \\
+$2$ & $3.24$ & $3.02$ \\
+$4$ & $\mathbf{4.05}$ & $3.69$ \\
+$8$ & $4.09$ & $3.52$ \\
+continuous & $-62.69$ & $\mathbf{-19.17}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Recurrence must be bounded: with no re-anchor the canonical head loses
+$62.69\%$ of EPE, and gains stop growing with the horizon, $H=8$ buying
+$0.04$ points over $H=4$. $H=6$ is lower by $0.14\%$, bought at a cost in intervention risk
+($B^+/H^+$ degrades $2.53\rightarrow2.30\rightarrow2.04$ while NewBad1
+nearly triples), so $H=4$ is the frozen risk--gain operating point, chosen
+before D7 was opened. The table also says what the evidence space is for:
+A2 is behind at every bounded horizon and further behind as it lengthens,
+yet degrades three times less once the bound is removed.
 
 
 \subsection{Cross-Backbone Development Behaviour}
@@ -1061,12 +1079,10 @@ The closure isolates four requirements. Alignment is necessary but not
 sufficient: the aligned memory carries a $12.30\%$ oracle ceiling, yet
 using it indiscriminately fails --- warped raw memory yields no gain, and
 both FB-confidence weighting and full recurrent replacement worsen EPE.
-Under identical evidence and support the learned policy obtains almost
-seven times the gain of the best fixed blend, and the state must stay
-bounded because continuous propagation collapses. The mechanism is
-alignment plus learned graded intervention plus bounded recurrence, not
-smoothing. The parameter count follows: the head never solves stereo matching, it
-receives two already meaningful candidates and chooses between them.
+The mechanism is alignment plus learned graded intervention plus bounded
+recurrence, not smoothing. The parameter count follows: the head never
+solves stereo matching, it receives two meaningful candidates and chooses
+between them.
 
 Ablating that constraint (A4, Table~\ref{tab:ablations}) collapses mean
 EPE gain to $0.05\%$ while improving RMSE and worst case: the failure is
@@ -1074,12 +1090,11 @@ broad degradation of pixels already close, not occasional large error. The
 constraint buys mean accuracy, not safety from large corrections, and we
 withdraw the attribution of transfer to it.
 
-Two limits are worth stating.
-TETHER captures $37.2\%$ of the raw-versus-memory oracle gain and
-$34.5\%$ of the continuous oracle its action space could reach, pooled
-over all five backbones, so the open problem is deciding \emph{where} to
-intervene. And the effective
-weight $w_t$, recovered from the convex form, scores AUROC
+Two limits are worth stating. TETHER captures $37.2\%$ of the
+raw-versus-memory oracle gain and $34.5\%$ of the continuous oracle its
+action space could reach, so the open problem is deciding \emph{where} to
+intervene. And the effective weight $w_t$, recovered from the convex form,
+scores AUROC
 $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7 as a predictor
 of harmful intervention: an intervention magnitude, not an uncertainty.
 That does not contradict the intervention ratios above, because the gain
@@ -1136,7 +1151,7 @@ frozen $H=4$ checkpoint improves all five estimators on held-out D7 in
 EPE, Bad1 and RMSE at once, including two excluded from training, recovers
 $2.9$--$10.4\times$ more Bad1 pixels than it introduces, and holds at
 $5.15\pm0.35\%$ Bad1 across three seeds.
-Zero-shot transfer to five DRENDS recordings improves every one of 60
+Zero-shot transfer to DRENDS improves every one of 60
 recording--backbone--metric cells.
 
 Four results bound what may be claimed. The no-reference consistency
@@ -1145,11 +1160,10 @@ smoothness cannot stand in for correctness. The fusion weight inverts its
 relation to harm between development and held-out data, so it is an
 intervention magnitude, not an uncertainty. Development gains carry
 selection optimism that held-out gains do not: across seeds the D2 effect
-spans $5.03$ points, the D7 effect $0.69$. And a module that declares a
-support must apply it to what it emits --- a contract whose violation is
-almost invisible in domain and costs the whole metric-depth tail out of
-it, a general hazard for flow-aligned plug-in modules rather than a
-property of ours.
+spans $5.03$ points, the D7 effect $0.69$. And a module that declares a support must apply it to what it emits: a
+contract whose violation is almost invisible in domain and costs the whole
+metric-depth tail out of it, a hazard for flow-aligned plug-in modules
+generally, not a property of ours.
 
 What remains open is where to intervene: the oracle over the module's own
 action space is far from reached, and the weight the head computes is a
