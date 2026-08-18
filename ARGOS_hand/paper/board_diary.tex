@@ -15710,5 +15710,46 @@ accumulated reconstruction drift instead --- which is exactly the downstream
 robotics evidence the review's first objection demands. The error that weakened
 the competitor comparison was also the one blocking the venue argument.
 
+
+\section*{18 August, Late Afternoon: The Freeze Refused Twice, Correctly}
+
+Re-canonicalising to A2 means re-running the development closure under the
+promoted head. Two attempts to do that failed before the third worked, and both
+failures were the protocol behaving exactly as designed.
+
+Adding a \texttt{-{}-head} argument to \texttt{experimental\_closure.py} produced
+\texttt{freeze hash mismatch: experimental\_closure}. Moving the new adapter class
+into \texttt{canonical\_horizons.py} produced \texttt{freeze hash mismatch:
+canonical\_horizons}. Both files are pinned by the closure's freeze manifest. A
+frozen experiment whose script can be edited in place is not frozen, and the
+manifest said so twice before any GPU time was spent. The canonical closure keeps
+its bytes; the promoted head runs from its own module beside it.
+
+\paragraph{The re-run is a night, not a week.} Six method-configurations per
+seed, not twenty-one. Nine of the fifteen closure policies blend raw against
+flow-aligned raw with a fixed, EMA or forward--backward-confidence weight and
+load no checkpoint at all, so they are identical whichever head the paper ships;
+the raw-versus-memory oracle is computed from ground truth and never runs the
+adapter. Both are carried forward by reference, and the runner refuses to start
+if the canonical closure they come from is missing.
+
+\paragraph{Two things landed in the paper that survive the promotion.} The
+fifteen policies are now enumerated --- the review asked for the list and the
+paper had named five --- and the two aggregations are declared. That second one
+was a real finding from the review's forensics: raw D2 EPE $0.276202$ matches no
+row of the backbone table because the closure pools every backbone and sequence
+before taking a ratio, while everything reported per backbone or per arena
+averages per-cell relative reductions. They differ by up to half a point and
+neither was named. Space came from two displayed deltas that restated in symbols
+the four numbers the following sentence already gave in prose.
+
+\paragraph{The wrong sentence was load-bearing in two places.}
+\texttt{evaluate\_3d\_consistency.py} justified limiting itself to
+frame-to-frame surface stability by the same false claim about missing poses.
+Corrected: the restriction is a scope decision, and the accumulated-drift
+measurement the poses enable is named as the next step. That measurement is also
+the downstream evidence the review demands for a robotics venue, so one wrong
+sentence was blocking the competitor comparison and the venue argument at once.
+
 \end{document}
 
