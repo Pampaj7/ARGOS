@@ -724,71 +724,36 @@ micro statistics are retained secondarily.
 \begin{table*}[!t]
 \centering
 \caption{
-Cross-backbone evaluation on SCARED-C. One frozen TETHER checkpoint,
-canonical seed $0$, in every row for comparability with the ablations;
-Sec.~\ref{sec:seeds} gives the three-seed spread. Macro-sequence
-aggregation, lower is better.
+One frozen TETHER checkpoint, canonical seed $0$, across five frozen
+estimators and three arenas: the development split, the held-out split,
+and a domain the head never saw. Every cell is raw$\rightarrow$TETHER and
+lower is better. Two estimators were excluded from temporal-head training,
+so the lower-right block is the joint backbone--domain shift usually left
+unmeasured. Macro-sequence aggregation; Sec.~\ref{sec:seeds} gives the
+three-seed spread.
 }
-\label{tab:scared_main}
+\label{tab:grid}
 \scriptsize
-\setlength{\tabcolsep}{3.7pt}
-\begin{tabular}{llccc|ccc}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ll|cc|cc|cc}
 \toprule
 & &
-\multicolumn{3}{c|}{D2 development}
+\multicolumn{2}{c|}{D2 development}
 &
-\multicolumn{3}{c}{D7 held out}
+\multicolumn{2}{c|}{D7 held out}
+&
+\multicolumn{2}{c}{DRENDS, out of domain}
 \\
-\cmidrule(lr){3-5}
-\cmidrule(lr){6-8}
-Backbone & Status &
-EPE raw$\rightarrow$TETHER &
-Bad1 raw$\rightarrow$TETHER &
-RMSE raw$\rightarrow$TETHER &
-EPE raw$\rightarrow$TETHER &
-Bad1 raw$\rightarrow$TETHER &
-RMSE raw$\rightarrow$TETHER \\
+\cmidrule(lr){3-4}
+\cmidrule(lr){5-6}
+\cmidrule(lr){7-8}
+Backbone & Status & EPE & Bad1 (\%) & EPE & Bad1 (\%) & EPE & Bad1 (\%) \\
 \midrule
-S$^2$M$^2$-S
-& seen
-& .2704$\rightarrow$\textbf{.2645}
-& .01394$\rightarrow$\textbf{.01291}
-& .3892$\rightarrow$\textbf{.3806}
-& .5176$\rightarrow$\textbf{.5010}
-& .06440$\rightarrow$\textbf{.06076}
-& 1.4515$\rightarrow$\textbf{1.3991} \\
-RAFT-Stereo
-& seen
-& .2691$\rightarrow$\textbf{.2614}
-& .01603$\rightarrow$\textbf{.01492}
-& .4009$\rightarrow$\textbf{.3896}
-& .4671$\rightarrow$\textbf{.4397}
-& .06085$\rightarrow$\textbf{.05845}
-& 1.3324$\rightarrow$\textbf{1.2290} \\
-Stereo Anywhere
-& seen
-& .3022$\rightarrow$\textbf{.2767}
-& .02183$\rightarrow$\textbf{.01754}
-& .7208$\rightarrow$\textbf{.4785}
-& .4774$\rightarrow$\textbf{.4449}
-& .06227$\rightarrow$\textbf{.05828}
-& 1.2869$\rightarrow$\textbf{1.1895} \\
-CREStereo
-& unseen
-& .2668$\rightarrow$\textbf{.2578}
-& .01568$\rightarrow$\textbf{.01439}
-& .4601$\rightarrow$\textbf{.4299}
-& .5165$\rightarrow$\textbf{.4957}
-& .06354$\rightarrow$\textbf{.06108}
-& 1.3757$\rightarrow$\textbf{1.3120} \\
-Fast-FoundationStereo
-& unseen
-& .2725$\rightarrow$\textbf{.2647}
-& .01604$\rightarrow$\textbf{.01477}
-& .4022$\rightarrow$\textbf{.3905}
-& .4819$\rightarrow$\textbf{.4668}
-& .05919$\rightarrow$\textbf{.05684}
-& 1.3535$\rightarrow$\textbf{1.3076} \\
+S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2645}$ & $1.39\rightarrow\mathbf{1.29}$ & $.5176\rightarrow\mathbf{.5010}$ & $6.44\rightarrow\mathbf{6.08}$ & --- & --- \\
+RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2614}$ & $1.60\rightarrow\mathbf{1.49}$ & $.4671\rightarrow\mathbf{.4397}$ & $6.09\rightarrow\mathbf{5.84}$ & $1.3125\rightarrow\mathbf{1.2414}$ & $58.83\rightarrow\mathbf{55.48}$ \\
+Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2767}$ & $2.18\rightarrow\mathbf{1.75}$ & $.4774\rightarrow\mathbf{.4449}$ & $6.23\rightarrow\mathbf{5.83}$ & --- & --- \\
+CREStereo & unseen & $.2668\rightarrow\mathbf{.2578}$ & $1.57\rightarrow\mathbf{1.44}$ & $.5165\rightarrow\mathbf{.4957}$ & $6.35\rightarrow\mathbf{6.11}$ & $1.3027\rightarrow\mathbf{1.2350}$ & $55.17\rightarrow\mathbf{52.51}$ \\
+Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2647}$ & $1.60\rightarrow\mathbf{1.48}$ & $.4819\rightarrow\mathbf{.4668}$ & $5.92\rightarrow\mathbf{5.68}$ & $1.2838\rightarrow\mathbf{1.2257}$ & $54.88\rightarrow\mathbf{52.25}$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -842,7 +807,7 @@ re-anchoring is structural, not an implementation detail.
 \subsection{Cross-Backbone Development Behaviour}
 
 Canonical $H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:scared_main}), from $2.17\%$ to $8.44\%$, and all six
+(Table~\ref{tab:grid}), from $2.17\%$ to $8.44\%$, and all six
 unseen-backbone sequence groups improve. StereoAnywhere alone does not
 carry it: excluding it the D2 mean falls to $2.82\%$, but on D7 the mean
 excluding it is $4.14\%$, with RAFT-Stereo alone at $6.10\%$.
@@ -876,8 +841,8 @@ The EPE gain is therefore not bought by a worse bad-pixel rate or a
 broader tail, which supports transfer of one learned policy across
 heterogeneous estimators within SCARED-C. New bad pixels do appear and
 are measured explicitly below. The joint unseen-backbone /
-unseen-domain cell is in Section~\ref{sec:drends} and
-Table~\ref{tab:transfer}.
+unseen-domain cell is the lower-right block of
+Table~\ref{tab:grid}, read in Section~\ref{sec:drends}.
 
 
 \subsection{Seed Variance, and What It Reveals About Selection}
@@ -996,27 +961,14 @@ Vid10 the EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ across the seen
 and the two unseen backbones, and the alignment holds elsewhere, so the
 residual variance is a property of the data.
 
-\begin{table}[!ht]
-\centering
-\scriptsize
-\caption{
-Transfer matrix, mean EPE reduction (\%). One frozen checkpoint
-throughout. The bottom-right cell is the one usually left unevaluated:
-an estimator the temporal head never saw, in a domain it never saw.
-}
-\label{tab:transfer}
-\begin{tabular}{lcc}
-\toprule
-& Seen backbone & Unseen backbone \\
-\midrule
-Seen domain (SCARED-C D7) & $4.53$ & $3.70$ \\
-OOD domain (DRENDS)       & $5.31$ & $\mathbf{4.84}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Every cell is positive, and the shift that costs most is the backbone,
-not the domain. This establishes zero-shot geometric transfer under a ToF-derived metric
+Averaged over backbones, the mean EPE reduction is $4.39\%$ for seen and
+$2.96\%$ for unseen estimators on D2, $4.52\%$ and $3.70\%$ on held-out
+D7, and $5.31\%$ and $4.84\%$ on DRENDS: every combination is positive,
+and the shift that costs more is the backbone, not the domain.
+\NOTE{pending the S2M2-S and StereoAnywhere DRENDS runs: this seen-backbone
+mean is n=1, and the paragraph above still says 15 combinations, 60/60 cells,
+20,929 frames and three estimators --- all five numbers change together}
+This establishes zero-shot geometric transfer under a ToF-derived metric
 reference; it does not establish universal cross-domain robustness, and
 DRENDS remains a non-independent reference.
 
