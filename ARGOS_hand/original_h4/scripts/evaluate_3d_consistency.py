@@ -23,12 +23,20 @@ in the predictions, so the claimable quantity is the *excess* of raw/refined ove
 
 What this can and cannot claim
 ------------------------------
-SCARED-C ships no per-frame camera pose in this repo, and none is invented here. Both
-clouds of a pair live in their *own* camera frames, so p2p_mm mixes true surface change
-with rigid camera motion; the GT floor absorbs that shared component. This is
-FRAME-TO-FRAME SURFACE STABILITY, NOT global reconstruction drift: no windowed rigid
-alignment, no accumulated trajectory, no loop metric. The sliding window (default 8
-frames) only pools consecutive-pair statistics; it does not chain transforms.
+This measures FRAME-TO-FRAME SURFACE STABILITY, NOT global reconstruction drift: no
+windowed rigid alignment, no accumulated trajectory, no loop metric. The sliding window
+(default 8 frames) only pools consecutive-pair statistics; it does not chain transforms.
+No camera pose is used here, so both clouds of a pair live in their *own* camera frames
+and p2p_mm mixes true surface change with rigid camera motion; the GT floor absorbs that
+shared component.
+
+This file used to justify that choice by asserting SCARED-C ships no per-frame pose.
+That was false, and the same false claim reached the paper. SCARED-C is *Corrected Camera
+Poses for Endoscopic Depth Estimation*: `raw/dataset_N/keyframe_M/data/frame_data.tar.gz`
+holds one 4x4 camera-pose per co-registered frame, 1033 of them for the 1033 frames of
+dataset_2_keyframe_2. Not using them is now a scope decision rather than a claim about
+the dataset, and the accumulated-drift measurement those poses make possible is the
+obvious next thing to build here.
 
 Assumptions a reviewer could challenge: principal point at image center and fy = fx
 (rectified, near-isotropic grid rescale -- asserted at runtime); disparity clamped at
@@ -321,7 +329,7 @@ def main() -> None:
         "alignment": "pair_flow[t-1] = SEA-RAFT infer(frame_t, frame_{t-1}) pulls t-1 onto t",
         "assumptions": ["principal point at image center", "fy == fx (isotropic rescale asserted)",
                         "disparity clamped at 0.1 px before back-projection",
-                        "no camera pose used or invented; GT rows are the motion floor"],
+                        "no camera pose used here (SCARED-C does ship them); GT rows are the motion floor"],
         "training_performed": False, "threshold_tuning_performed": False,
         "rows": len(rows),
     }, indent=2) + "\n")
