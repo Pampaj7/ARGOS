@@ -15822,5 +15822,44 @@ The columns were also unlabelled as relative reductions, which the review report
 misreading on first pass, and the warp support and the total support were both
 $S_t$. Both fixed.
 
+
+\section*{18 August, Night: The First Thirteen Cells of the A2 Closure}
+
+The A2 closure is thirteen cells into \texttt{canonical\_h1}, and every one has a
+canonical counterpart to compare against. The raw column is identical to $10^{-9}$
+in all thirteen, which is the check that matters first: the two runs are on the
+same boundary and any difference is the head.
+
+Mean difference: $+0.00017$\,px, with five of thirteen cells better for A2. At
+$H{=}1$ the $142$-channel evidence space buys nothing measurable over $38$
+channels. That is consistent with the promotion but it is also the least
+demanding setting --- $H{=}1$ takes memory from raw every frame and never
+propagates a corrected state --- so it is not yet the interesting comparison.
+$H{=}4$ is.
+
+One pattern worth recording before it is explained away: A2 is behind on
+\texttt{keyframe\_2} and \texttt{keyframe\_4} and ahead on \texttt{keyframe\_3},
+consistently across all five backbones. The difference is sequence-driven, not
+backbone-driven, which is the same shape as the DRENDS finding that the recording
+sets the pattern and the estimator does not.
+
+\paragraph{Out of domain, A2 is now level.} The second recording landed:
+Vid11 raw $1.3208$, BiDA $1.2760$, canonical $1.2274$, A2 $1.2178$. A2 is ahead
+by $0.0096$\,px here, having been behind by $0.0105$ on Vid10. Two recordings,
+one each way, roughly cancelling. The note written earlier this evening --- that
+Vid10 was the first place A2 had not been at least level --- stands as recorded
+but no longer points anywhere.
+
+\paragraph{A scoping error worth twenty-three GPU-hours.} The launcher runs the
+A2 closure for seeds $0$, $1$ and $2$. The canonical closure it is being compared
+against was run on seed $0$ alone --- checkpoint sha \texttt{99c5745c}, the
+canonical seed-0 weights. A matched comparison therefore needs A2 seed $0$ and
+nothing more; the other two seeds are roughly ten hours each of a GPU that the
+downstream reconstruction-drift experiment and the runtime measurement both need,
+and the review ranks the first of those above anything else in the paper. The
+running script is not being edited --- bash reads a script by byte offset while
+executing it, so editing one mid-run corrupts it --- so the job will be stopped
+after seed $0$ lands instead.
+
 \end{document}
 
