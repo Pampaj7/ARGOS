@@ -14,6 +14,7 @@ cells are complete.
 from __future__ import annotations
 
 import argparse
+import collections
 import glob
 import json
 import os
@@ -59,9 +60,21 @@ def main() -> None:
             continue
         bias = np.mean(sub) - np.mean(full)
         complete = len(sub) == len(full)
+        # Which sequences are missing matters more than how many cells are. The queue
+        # finishes one sequence at a time across all backbones, and at H=1 -- the only
+        # complete horizon -- the per-sequence gap alternates in sign: -0.41, +0.47, -0.40.
+        # A partial mean is therefore not a noisy estimate of the whole, it is the whole
+        # minus specific sequences whose direction is known.
+        absent = [f"{Path(f).parent.name}/{Path(f).name}"
+                  for f in glob.glob(str(CANONICAL / f"reports/{method}/*/*.json"))
+                  if f"{Path(f).parent.name}/{Path(f).name}" not in done]
+        per_sequence = collections.Counter(key.split("/")[1][:-5].replace("dataset_2_keyframe_", "kf")
+                                           for key in absent)
+        short = ", ".join(f"{n}x{seq}" for seq, n in sorted(per_sequence.items()))
+        status = f"PARTIAL {len(sub)}/{len(full)}, missing {short} -- not comparable"
         print(f"{method:16s}{len(sub):4d}{np.mean(sub):12.2f}{np.mean(full):12.2f}{bias:+8.2f}"
               f"{np.mean(list(head.values())):9.2f}{np.mean(list(head.values())) - np.mean(sub):+9.2f}"
-              f"  {'complete' if complete else f'PARTIAL {len(sub)}/{len(full)} -- not comparable'}")
+              f"  {'complete' if complete else status}")
 
 
 if __name__ == "__main__":

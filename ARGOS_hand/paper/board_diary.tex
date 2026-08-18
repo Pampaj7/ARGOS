@@ -15988,5 +15988,46 @@ project by default, not only this one.
 The honest position at $H{=}4$, the operating point that matters, is a deficit of
 $0.36$ points that is still moving toward zero. Five cells remain.
 
+
+\section*{18 August, Night: The Gap Is Not Converging, It Is Alternating}
+
+Three entries above I reported the A2 deficit shrinking threefold as cells landed
+and wrote that at $H{=}4$ it was ``still moving toward zero''. That reading was
+mine, not the data's, and it is wrong.
+
+$H{=}1$ is complete, so its fifteen cells can be decomposed by sequence:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Sequence & A2 $-$ canonical \\
+\midrule
+\texttt{dataset\_2\_keyframe\_2} & $-0.41$ \\
+\texttt{dataset\_2\_keyframe\_3} & $+0.47$ \\
+\texttt{dataset\_2\_keyframe\_4} & $-0.40$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A2 loses on two sequences and wins on one. The gap therefore has nothing to
+converge to --- what it does is move according to which sequence the queue has
+reached. The apparent shrinkage was \texttt{keyframe\_3} cells arriving, and
+$H{=}4$ currently holds \texttt{keyframe\_2} and \texttt{keyframe\_3} only: every
+one of its five \texttt{keyframe\_4} cells is still missing, and
+\texttt{keyframe\_4} is the sequence where A2 loses by $0.40$ at the horizon we
+can actually measure.
+
+So the honest expectation is the opposite of what I wrote: when the last block
+lands the $H{=}4$ gap should hold near $-0.4$ or widen, not close. The queue does
+not deliver a random sample and it never did --- it delivers one sequence at a
+time, which is the worst possible ordering for anyone extrapolating from a
+partial mean.
+
+I have now made three versions of this same mistake in two days: averaging over
+mismatched sets, reading a trend that was the work queue, and extrapolating a
+partial mean as if the remainder resembled the part. The rule that would have
+caught all three: a partial result is not a small version of the whole result,
+it is a \emph{biased} version, and the bias has a direction you can look up.
+
 \end{document}
 
