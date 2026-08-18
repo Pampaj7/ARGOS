@@ -37,5 +37,8 @@ if [ "${1:-}" = "--node" ]; then
     exit 0
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
-exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=40GB]" \
+# 40GB was not schedulable while three of our own jobs held the node: "Job requirements
+# for reserving resource (mem) not satisfied", pending for an hour. The other launchers ask
+# for 10GB and dispatch immediately; this run is no heavier than they are.
+exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=10GB]" \
      -gpu "num=1:mode=shared" -J argos_closurea2 "$SELF --node $*"

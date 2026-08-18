@@ -25,6 +25,11 @@ if [ "${1:-}" = "--node" ]; then
     for B in S2M2-S StereoAnywhere; do
         # A finished run is one that wrote its summary, not one that made a directory.
         if [ -f "$OUT/$B/summary.json" ]; then echo "=== $B already complete"; continue; fi
+        # Half of resumability was missing: skipping finished work is not enough, because
+        # the evaluator refuses to write into an existing directory. A killed run leaves a
+        # manifest with no summary, and every later attempt then died on FileExistsError.
+        # The remains are moved aside rather than deleted -- they are evidence of the kill.
+        if [ -d "$OUT/$B" ]; then mv "$OUT/$B" "$OUT/$B.incomplete-$(date +%s)"; fi
         echo "=== $B"
         "$PY" -m model_design.comparison.drends_backbone_transfer --device cuda:0 \
             --backbone "$B" --module "model_design.comparison.canonical_h4_masked:factory" \
