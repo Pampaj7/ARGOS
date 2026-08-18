@@ -1133,11 +1133,12 @@ magnitude, so the end-to-end rate is set by the backbone, from $11.0$\,FPS
 on Fast-FoundationStereo (overhead $36.9\%$) to $1.4$\,FPS on
 StereoAnywhere ($4.6\%$); \emph{no real-time claim is made}.
 
-Stage timing locates it: the two SEA-RAFT passes are $76\%$ of the
-overhead and the reverse one exists only to compute $C^{FB}_t$. A2 cuts the
-evidence stage from $6.44$ to $0.71$\,ms and the total by $14\%$; dropping
-the reverse flow would free three times as much, at an accuracy cost we
-have not measured. We
+Stage timing locates it, on an otherwise idle H100: the two SEA-RAFT
+passes are $26.3$ of the $33.5$\,ms, against $5.13$ for the evidence tensor
+and $1.01$ for the head. The reverse pass exists only to compute
+$C^{FB}_t$. A2 cuts the evidence stage to $0.67$\,ms and the total to
+$28.9$\,ms, a saving of $13.8\%$; dropping the reverse flow would free
+nearly three times as much, at an accuracy cost we have not measured. We
 evaluate perception geometry, not downstream control, and demonstrate
 neither clinical safety nor patient benefit.
 
