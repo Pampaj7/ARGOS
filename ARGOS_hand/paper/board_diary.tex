@@ -16169,5 +16169,55 @@ invoking the script by absolute path puts \texttt{scripts/} on \texttt{sys.path}
 rather than the working directory, which every other launcher sidesteps by using
 \texttt{python -m}.
 
+
+\section*{19 August, After Midnight: A2 Out of Domain, and the Case Assembled}
+
+Both remaining jobs finished. The out-of-domain scorer reached all five DRENDS
+recordings with the A2 head, and the two canonical DRENDS seeds landed, so the
+comparison is finally three against three on both sides.
+
+\paragraph{Pooled, same boundary, same support.}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
+\midrule
+Raw               & $1.1988$ & $44.92$ & $4.54$ & $1.8762$ \\
+BiDAStabilizer    & $1.1746$ & $44.81$ & $4.32$ & $1.7764$ \\
+TETHER canonical  & $1.1325$ & $43.52$ & $3.98$ & $\mathbf{1.6990}$ \\
+TETHER A2         & $\mathbf{1.1311}$ & $\mathbf{43.39}$ & $\mathbf{3.94}$ & $1.7098$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A2 leads on three metrics of four and gives up the tail. Per recording it is
+ahead on three of five, and every difference is hundredths of a pixel.
+
+\paragraph{The seed study is the cleaner evidence.} Canonical $5.00$, $4.74$,
+$4.74$ --- mean $4.83\pm0.15$. A2 $5.32$, $5.21$, $5.06$ --- mean
+$5.20\pm0.13$. The ranges do not overlap: A2's worst seed beats canonical's
+best. Three trained checkpoints each, same protocol, same recordings, out of
+domain for both.
+
+\paragraph{The ledger, now that every piece is measured.} A2 costs $0.35$ points
+of unconfined D2 EPE at $H{=}4$. It buys $4.33$ points of the pre-registered
+confined Bad1 endpoint, a seed spread eight times tighter ($0.32$ against
+$2.53$), three times less degradation when the recurrence bound is removed
+($-19.17\%$ against $-62.69\%$), $13.8\%$ of the runtime and $157{,}504$
+parameters, and now a non-overlapping out-of-domain margin. One consistent
+negative against six positives.
+
+That is enough to ship A2, and the sentence for the paper is not ``A2 is
+better'' --- it is that the $142$-channel evidence space buys mean accuracy under
+a bound and costs stability everywhere else.
+
+\paragraph{Two smaller things.} The runtime re-ran on a genuinely idle GPU and
+returned $33.549$\,ms for the canonical head, against the $33.60$ the paper has
+quoted since before tonight: a number recomputed from scratch that confirmed
+itself. And a stale ``60 cells'' survived in the conclusion after the grid went
+to $100$; the DRENDS numbers had been regenerated everywhere the
+\texttt{NOTE} pointed, and the conclusion was not one of the places it pointed.
+
 \end{document}
 
