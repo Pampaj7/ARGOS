@@ -22,6 +22,11 @@ if [ "${1:-}" = "--node" ]; then
     export CUDA_VISIBLE_DEVICES
     echo "host=$(hostname) gpu=$CUDA_VISIBLE_DEVICES free_mib=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits -i "$CUDA_VISIBLE_DEVICES")"
     cd "$ROOT/ARGOS_hand/original_h4" || exit 1
+    # Running the script by absolute path puts scripts/ on sys.path, not the working
+    # directory, so `import model_design` fails. The other launchers avoid this by using
+    # `python -m` from here; this one needs the package root stated.
+    export PYTHONPATH="$ROOT/ARGOS_hand/original_h4${PYTHONPATH:+:$PYTHONPATH}"
+    nvidia-smi --query-compute-apps=pid,used_memory --format=csv,noheader | wc -l | xargs echo "other processes on this GPU:"
     echo "=== canonical (142 channels, frozen ResNet-18 in the loop)"
     "$PY" "$EVAL" --device cuda:0 --module model_design.comparison.canonical_h4:factory \
         --output "$OUT/canonical_h4_quiet.json" || echo "FAILED canonical"
@@ -36,5 +41,10 @@ export ESUB_BYPASS=1 ESUB_QUIET=1
 # queue"), and gpuv100i is at its own job limit, so the quiet-GPU plan reduces to asking
 # for an exclusive GPU here and reporting which host we landed on. A contended measurement
 # is reported as contended rather than quietly published as latency.
+# An exclusive GPU never became available: p1i is one node, both its H100s carry
+# other users' work, and the request pended for three hours. Shared it is -- which makes
+# the ABSOLUTE numbers unusable as latency, and the RELATIVE one still sound: the two heads
+# run back to back in the same job on the same device, so whatever contention exists applies
+# to both. What this measures is the cost A2 removes, not what either costs.
 exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=8GB]" \
-     -gpu "num=1:mode=exclusive_process" -J argos_runtimepair "$SELF --node $*"
+     -gpu "num=1:mode=shared" -J argos_runtimepair "$SELF --node $*"

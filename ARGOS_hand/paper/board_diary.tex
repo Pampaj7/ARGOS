@@ -16121,5 +16121,53 @@ the recording rather than the estimator sets the pattern --- which is now a
 five-backbone spread of $0.77$ points instead of three numbers quoted from a
 partial run. The draft \texttt{NOTE} listing them is gone because it is done.
 
+
+\section*{18 August, Late: Where the Overhead Actually Is}
+
+The stage-by-stage runtime finally ran, for both heads back to back in one job on
+one device. Medians, milliseconds per frame:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Stage & Canonical & A2 \\
+\midrule
+SEA-RAFT forward   & $13.400$ & $13.644$ \\
+SEA-RAFT reverse   & $13.346$ & $13.668$ \\
+BiDA alignment     & $1.064$  & $1.115$ \\
+Evidence           & $6.443$  & $\mathbf{0.710}$ \\
+Fusion head        & $1.036$  & $1.103$ \\
+\midrule
+Total overhead     & $35.288$ & $\mathbf{30.240}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Two things this settles.} A2 removes $5.05$\,ms, $14\%$ of the
+overhead, and almost all of it comes from the evidence stage collapsing from
+$6.44$ to $0.71$\,ms --- the frozen ResNet-18's three forward passes per frame.
+That is the runtime consequence the ablation promised and it is now measured.
+
+The second is larger and is not ours. \emph{Two SEA-RAFT passes are $27$ of the
+$35$ milliseconds}, $76\%$ of everything the module costs. The reverse pass exists
+solely to compute the forward--backward confidence cue. The review guessed this
+and asked what removing the FB branch would cost; the answer is that it would
+free $13.7$\,ms, nearly three times what re-canonicalising to A2 frees. A2 plus
+the FB branch would be $18.7$\,ms of $35.3$, more than half the overhead, against
+an accuracy cost of $0.35$ points at $H{=}4$.
+
+\paragraph{What this measurement is not.} An exclusive GPU never became available
+--- p1i is a single node, both its H100s carry other users' work, and the request
+pended for three hours before being withdrawn. This ran shared, with one other
+process on the device. The absolute figures are therefore not latency and are not
+quotable as such; the two heads ran back to back on the same device in the same
+job, so the \emph{difference} is sound. What is measured here is the cost A2
+removes, not what either configuration costs.
+
+The first attempt failed twice on \texttt{ModuleNotFoundError: model\_design}:
+invoking the script by absolute path puts \texttt{scripts/} on \texttt{sys.path}
+rather than the working directory, which every other launcher sidesteps by using
+\texttt{python -m}.
+
 \end{document}
 
