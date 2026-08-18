@@ -696,8 +696,12 @@ we measure
 \BUR &= P(\delta e<0).
 \end{align}
 
-For each bad-pixel threshold $\tau$ we additionally report
-NewBad, RecoveredBad, bad-rate delta, and identity preservation.
+For each bad-pixel threshold $\tau$ we additionally report NewBad,
+RecoveredBad, bad-rate delta, and identity preservation --- the fraction
+of pixels already within $\tau$ in the raw prediction that are still
+within it after refinement. It is a retention rate, not a count of
+untouched pixels: the convex blend moves almost every pixel on the
+support, and the question is whether it moves the good ones out.
 
 \paragraph{Frame-level tails.}
 For each frame,
@@ -816,10 +820,9 @@ excluding it is $4.14\%$, with RAFT-Stereo alone at $6.10\%$.
 
 \subsection{Held-Out Cross-Backbone Confirmation}
 
-We next evaluate the already frozen $H=4$ policy on held-out D7.
-
-All five backbones improve on D7, including both architectures unseen
-during temporal-head training: mean backbone EPE decreases
+We next evaluate the already frozen $H=4$ policy on held-out D7. All five
+backbones improve, including both architectures unseen during
+temporal-head training: mean backbone EPE decreases
 $0.4921 \rightarrow 0.4696$, or $4.57\%$.
 
 The improvement is not restricted to the mean: Bad1 and RMSE decrease for
@@ -879,8 +882,8 @@ $8$\,px, so at an honest colour scale they are indistinguishable.
 Across both splits and all five backbones TETHER recovers
 $2.9$--$10.4\times$ as many Bad1 pixels as it introduces, with $B^+/H^+$
 between $1.76$ and $4.59$ and identity preservation above $99.87\%$: it
-changes little and repairs far more than it breaks. Fig.~\ref{fig:trace}
-shows the same frame by frame.
+repairs far more than it breaks. Fig.~\ref{fig:trace} shows this frame by
+frame.
 
 
 \subsection{Head-to-Head Against a Published Stabiliser}
@@ -979,9 +982,9 @@ DRENDS remains a non-independent reference.
 \subsection{Ablating Our Own Design Decisions}
 \label{sec:ablations}
 
-Four design choices were ablated under a pre-registration written before
-any variant was trained, naming held-out Bad1 as the endpoint and the
-three-seed spread as the threshold below which a difference is not read.
+Four design choices were ablated under a pre-registration naming held-out
+Bad1 as the endpoint and the three-seed spread as the threshold below
+which a difference is not read.
 
 \begin{table}[!ht]
 \centering
