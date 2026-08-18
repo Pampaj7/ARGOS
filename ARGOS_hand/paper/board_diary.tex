@@ -16029,5 +16029,49 @@ partial mean as if the remainder resembled the part. The rule that would have
 caught all three: a partial result is not a small version of the whole result,
 it is a \emph{biased} version, and the bias has a direction you can look up.
 
+
+\section*{18 August, Night: Three Complete Horizons, and A2 Does Not Collapse}
+
+$H{=}1$, $H{=}2$ and $H{=}8$ are now complete on all fifteen cells, so they can
+be read without a subset argument. Reduction in D2 EPE, unconfined:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+$H$ & canonical & A2 & A2 $-$ canonical \\
+\midrule
+$1$ & $2.52$ & $2.40$ & $-0.11$ \\
+$2$ & $3.09$ & $2.87$ & $-0.21$ \\
+$8$ & $3.84$ & $3.18$ & $-0.66$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Two corrections to what I wrote earlier tonight.}
+First, I said A2 collapses at a long horizon and lands below its own $H{=}1$.
+That was the biased subset talking. On complete cells A2 improves monotonically,
+$2.40 \rightarrow 2.87 \rightarrow 3.18$; it simply improves \emph{less} than
+canonical, which goes $2.52 \rightarrow 3.09 \rightarrow 3.84$. Nothing collapses.
+
+Second, the magnitudes I quoted were inflated between three and four times. The
+$H{=}8$ deficit is $0.66$ points, not the $2.72$ of the first look. The shape
+--- a gap widening monotonically with the horizon --- is the only thing that
+survived every refresh, and it is now measured rather than guessed.
+
+\paragraph{Out of domain, three recordings in, A2 is level.} Vid10 $+0.0105$\,px
+against canonical, Vid11 $-0.0096$, Vid12 $-0.0084$. Two better, one worse, all
+of them hundredths of a pixel on a raw error above one pixel.
+
+\paragraph{What the promotion actually buys, stated plainly.} A2 is behind on
+unconfined D2 EPE at every horizon, by between $0.11$ and $0.66$ points. It is
+ahead on the pre-registered endpoint, confined D2 Bad1, by $4.33$ points. It is
+eight times tighter across seeds, $0.32$ against $2.53$. And it is level out of
+domain. The trade is a little mean accuracy for a large gain in bad-pixel rate
+and in run-to-run stability, and that is a defensible thing to ship --- but it
+has to be said in those words rather than as ``A2 is better''.
+
+$H{=}4$, the operating point, is at thirteen of fifteen cells and sitting at
+$-0.37$. Two \texttt{keyframe\_4} cells remain.
+
 \end{document}
 
