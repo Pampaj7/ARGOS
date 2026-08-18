@@ -15516,5 +15516,88 @@ had been assumed --- and the sign was assumed longest, because it was the
 half nobody was arguing about.
 
 
+\section*{18 August, Overnight: The Comparison Moved to Neutral Ground}
+
+The published head-to-head against BiDAStabilizer ran on SCARED-C D2. That
+is the split our checkpoint was selected on under the pre-registered rule,
+while BiDAStabilizer had never seen the domain --- so the arena was ours and
+the margin measured partly that. Yesterday the paper began declaring it. Last
+night it was replaced.
+
+DRENDS is out of domain for \emph{both}: we train on ex-vivo porcine tissue
+and BiDAStabilizer has never seen synthetic colonoscopy either. Five
+recordings, $7{,}476$ frames, $117.4$M pixels, one prediction-independent
+support, both methods refining the same array.
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+Reduction vs.\ raw & Causal & EPE & Bad1 & Bad3 & RMSE \\
+\midrule
+BiDAStabilizer & no  & $2.0\%$ & $0.2\%$ & $4.7\%$ & $5.3\%$ \\
+TETHER         & yes & $\mathbf{5.5\%}$ & $\mathbf{3.1\%}$ & $\mathbf{12.3\%}$ & $\mathbf{9.5\%}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two to thirteen times the error removed on every metric, from the only causal
+entry, whose trained module is $54\times$ smaller --- $177{,}338$ parameters
+against $9{,}636{,}375$, both counted from the checkpoints rather than from
+the papers. Not uniform, and reported that way: TETHER leads on four
+recordings of five and is $0.020$\,px worse than the baseline on Vid13.
+
+\paragraph{The ordering was forced, not chosen.} \texttt{workers/bidastabilizer.py}
+reads \texttt{rgb\_left} and \texttt{rgb\_right} only and then replaces the
+disparity with its own RAFT-Stereo \emph{robust} prediction. The first
+exporter was written on the opposite assumption --- that handing it our
+cached middlebury array would give both sides one input --- and that array
+would have been discarded on read while the file implied a sharing that never
+happened. So BiDA runs first and \emph{produces} the shared raw; TETHER is
+driven on it afterwards. Caught by reading the worker before running it.
+
+\paragraph{Five things broke, and the shape of them is the lesson.}
+\begin{itemize}
+\item \texttt{\_canonical\_frames} returns the \emph{native} $720\times1280$
+      shape it validates against, not the $144\times180$ grid its frames come
+      out on. Unpacking that as the output grid built a dummy disparity at the
+      wrong size, which the bridge rejected on write --- doing its job, but
+      only after a 25-minute run.
+\item The \texttt{h100app} profile has \texttt{TASKLIMIT 4}, so a 16-core
+      request is rejected outright, and the edit that introduced it had
+      quietly broken three working launchers.
+\item The external-comparison wrapper refuses physical GPU 0. Our own runners
+      pick the freest device; the D2 external runner pins device 1. Copying
+      the wrong one of two coexisting conventions failed all five recordings
+      at once.
+\item A 160GB reservation left the job PEND with ``requirements for reserving
+      resource (mem) not satisfied''. The request was not merely generous, it
+      stopped the work from starting. At 40GB it dispatched immediately.
+\item \texttt{--purpose} accepted only \texttt{SMOKE\_DIAGNOSTIC} or
+      \texttt{D2\_FULL\_DIAGNOSTIC}, so a full DRENDS run could only be
+      labelled as a smoke test or as D2 data. Added a third rather than write
+      a false label.
+\end{itemize}
+
+None of these were subtle once seen. All five came from assuming a convention
+instead of reading the one already in the repo.
+
+\paragraph{Eight hours blind.} The scoring run took over eight hours and
+printed nothing: its only output lands at the end of each recording and
+stdout is block-buffered behind the \texttt{bsub} pipe. There was no way to
+tell slow from stuck, the completion estimate was wrong three times, and a
+crash on the fifth recording would have discarded all of it. The script now
+flushes and writes a \texttt{partial.json} after each recording, with the
+final write removing it so a leftover partial always means an unfinished run.
+The run in flight was left alone rather than restarted for better logging.
+
+\paragraph{What this does not yet say.} The comparison used the
+\emph{canonical} module. A2 --- which is better in domain, indistinguishable
+out of it, and drops the frozen ResNet-18 from the runtime entirely --- has
+not been put through it. If it holds the same margin the claim becomes a
+$154$k-parameter module with no frozen extractor beating a $9.64$M
+bidirectional stabiliser out of domain, and the $157{,}504$ parameters we
+currently have to add to our own side of the ledger disappear.
+
+
 \end{document}
 
