@@ -16073,5 +16073,53 @@ has to be said in those words rather than as ``A2 is better''.
 $H{=}4$, the operating point, is at thirteen of fifteen cells and sitting at
 $-0.37$. Two \texttt{keyframe\_4} cells remain.
 
+
+\section*{18 August, Late: Every Horizon Complete, and the Mechanism Was Backwards}
+
+All six horizons are done on all fifteen cells, and the grid has no empty cells
+left. Pooled EPE reduction on D2:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+$H$ & canonical & A2 & A2 $-$ canonical \\
+\midrule
+$1$ & $2.61$ & $2.49$ & $-0.12$ \\
+$2$ & $3.24$ & $3.02$ & $-0.21$ \\
+$4$ & $4.05$ & $3.69$ & $-0.35$ \\
+$6$ & $4.18$ & $3.73$ & $-0.45$ \\
+$8$ & $4.09$ & $3.52$ & $-0.57$ \\
+continuous & $-62.69$ & $-19.17$ & $+43.52$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{The mechanism I proposed was backwards.} The story earlier tonight was
+that the $142$ channels let the head notice when aged memory has gone stale, so
+A2 should suffer most where recurrence runs longest. The first half holds --- A2
+falls further behind at every longer horizon. The second half is the opposite of
+what happens: remove the bound entirely and A2 degrades \emph{three times less},
+$-19.17\%$ against $-62.69\%$. A head that supposedly cannot detect stale memory
+survives unbounded staleness far better than the one that supposedly can.
+
+The reading that fits all of it: the learned evidence buys mean accuracy while a
+re-anchor keeps memory young, and costs robustness once nothing does. That is the
+same trade as the seed spread ($0.32$ against $2.53$) and the Bad1 margin
+($+4.33$). A2 is not more accurate, it is harder to break --- three separate
+measurements now say so, and none of them says it is better.
+
+\paragraph{The grid closed too.} S2M2-S and StereoAnywhere finished on DRENDS,
+which was the last gap and, awkwardly, both missing cells were on the seen side:
+the out-of-domain column had been one seen backbone against two unseen. With all
+five, every one of $100$ recording--backbone--metric cells improves, against
+$60/60$ before, and the seen-backbone DRENDS mean moves from $5.31$ on one
+backbone to $5.27$ on three.
+
+Five numbers in the prose moved with it and all five were regenerated rather than
+nudged: combinations, cells, frames, estimator count, and the Vid10 argument that
+the recording rather than the estimator sets the pattern --- which is now a
+five-backbone spread of $0.77$ points instead of three numbers quoted from a
+partial run. The draft \texttt{NOTE} listing them is gone because it is done.
+
 \end{document}
 
