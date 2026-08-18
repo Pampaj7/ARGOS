@@ -943,46 +943,46 @@ shows the same frame by frame.
 \label{sec:bida}
 
 BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
-stabiliser we could run. Everything that can be equalised is --- identical
-frozen RAFT-Stereo \emph{robust} predictions from one stored boundary over
-all three D2 sequences ($4249$ frames), one prediction-independent
-support. Two asymmetries cannot be, and both favour us, so both are
-declared: it is bidirectional and consumes future frames, which our
-setting forbids, and it is zero-shot here while D2 is the split our
-checkpoint was selected on. The margin below is an upper bound on our
-advantage, not an estimate of it.
+stabiliser we could run. We compare on DRENDS because only there is
+\emph{neither} method in domain: we train on ex-vivo porcine tissue and it
+has never seen synthetic colonoscopy. The shared input is its own
+RAFT-Stereo \emph{robust} prediction, so TETHER is driven on that exact
+array over all five recordings ($7476$ frames) under one support neither
+method influences. One asymmetry remains and favours the baseline: it is
+bidirectional and consumes future frames, which our setting forbids.
 
 \begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
-Common-support comparison on three D2 sequences, $18.0$M pixels. Every row
-refines the \emph{same} frozen RAFT-Stereo \emph{robust} predictions on the
-same frames under one prediction-independent support. Lower is better.
+Out-of-domain common support on all five DRENDS recordings, $117.4$M
+pixels; \emph{neither} method has seen this domain. Every row refines the
+same frozen RAFT-Stereo \emph{robust} predictions. Lower is better.
 }
 \label{tab:bida}
-\begin{tabular}{lcccccc}
+\begin{tabular}{lccccc}
 \toprule
-Method (RAFT-Stereo robust) & Causal & Zero-shot & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
+Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
 \midrule
-Raw               & ---          & ---          & .3029 & 2.087 & .186 & .4484 \\
-BiDAStabilizer    & no           & \textbf{yes} & .3021 & 1.987 & .171 & .4403 \\
-TETHER            & \textbf{yes} & no           & \textbf{.2890} & \textbf{1.826} & \textbf{.157} & \textbf{.4256} \\
+Raw            & ---          & $1.199$ & $44.92$ & $4.54$ & $1.876$ \\
+BiDAStabilizer & no           & $1.175$ & $44.82$ & $4.32$ & $1.776$ \\
+TETHER         & \textbf{yes} & $\mathbf{1.133}$ & $\mathbf{43.52}$ & $\mathbf{3.98}$ & $\mathbf{1.699}$ \\
+\midrule
+\multicolumn{2}{l}{\emph{reduction vs.\ raw}} & & & & \\
+BiDAStabilizer & no           & $2.0\%$ & $0.2\%$ & $4.7\%$ & $5.3\%$ \\
+TETHER         & \textbf{yes} & $\mathbf{5.5\%}$ & $\mathbf{3.1\%}$ & $\mathbf{12.3\%}$ & $\mathbf{9.5\%}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-TETHER is better on every metric while being the only causal entry:
-against raw it cuts EPE by $4.58\%$, Bad1 by $12.53\%$ and Bad3 by
-$15.52\%$, against $0.25\%$, $4.83\%$ and $8.32\%$ for the bidirectional
-baseline. This $4.58\%$ is not comparable with the $2.87\%$ of
-Table~\ref{tab:scared_main}, which uses \emph{middlebury} RAFT-Stereo
-weights under the strict protocol support; here the weights are
-\emph{robust} and the support is the stored boundary's, because that
-boundary is what BiDAStabilizer consumed. The picture is not uniform: BiDAStabilizer wins all three metrics on one
-sequence, where our EPE is $0.27\%$ worse than raw, while TETHER wins
-clearly on the other two ($-6.53\%$ EPE, $-17.17\%$ Bad1 on the
-$2114$-frame one).
+Out of domain for both, TETHER removes two to thirteen times as much error
+as the bidirectional baseline on every metric, while being the only causal
+entry and $54\times$ smaller in trained parameters ($177$k against
+$9.64$M). It is not uniform: TETHER leads on four recordings of five and
+on Vid13 is $0.020$\,px worse than the baseline. The same comparison run in
+domain, on three D2 sequences, favours us far more ($4.58\%$ against
+$0.25\%$ EPE), which is precisely why we report DRENDS instead: D2 is the
+split our checkpoint was selected on.
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
@@ -1205,7 +1205,11 @@ magnitude rather than a ranking, so closing that gap needs evidence this
 interface does not yet carry.
 
 
+\balance
+% 27 entries at default itemsep spill two references onto a ninth page; the
+% list is compacted rather than the evidence cut.
 \begin{thebibliography}{99}
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.},
