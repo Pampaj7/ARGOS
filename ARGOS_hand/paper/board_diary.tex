@@ -15793,5 +15793,34 @@ $160$GB, and three of our own jobs had left $7$GB free of $529$GB reserved on th
 node. Resubmitted at $10$GB, and it now waits behind our own work rather than
 behind a bad request.
 
+
+\section*{18 August, Night: A Guard That Only Worked in One Direction}
+
+\texttt{seed1 / CREStereo} died on \texttt{FileExistsError: refusing existing
+output}. The resume guard added this afternoon tests whether a run wrote its
+summary, which is the right definition of finished --- but the evaluator also
+refuses to write into a directory that already exists, and a killed run leaves a
+manifest with no summary behind. So the guard correctly decided the work was
+unfinished, and the evaluator then refused to do it. Every attempt would have
+failed the same way.
+
+Incomplete remains are now moved aside with a timestamp rather than deleted.
+Four kilobytes is not worth automatically destroying the record that a run was
+killed.
+
+\paragraph{Two corrections to the paper that the review earned.} The ablation
+table still described every variant as a single run and still carried A2's
+seed-0 numbers, five days after A2 got its three seeds. Its held-out figures are
+$5.61\pm0.42$ EPE and $5.84\pm0.22$ Bad1 against canonical $5.06$ and
+$5.15\pm0.34$. The discussion used to lean on ``two standard deviations from a
+single sample is suggestive rather than settled'' --- a defence that has expired
+--- and now says what the seeds actually show: the $142$-channel evidence space
+is not what makes the module work, it is what makes its training unstable,
+$2.53$ points of D2 Bad1 spread against A2's $0.32$.
+
+The columns were also unlabelled as relative reductions, which the review reports
+misreading on first pass, and the warp support and the total support were both
+$S_t$. Both fixed.
+
 \end{document}
 
