@@ -952,8 +952,11 @@ either recovers a good one.
 Out of domain for both, TETHER removes two to thirteen times as much error
 as the bidirectional baseline on every metric, while being the only causal
 entry and $54\times$ smaller in trained parameters ($177$k against
-$9.64$M). It is not uniform: TETHER leads on four recordings of five and on Vid13 is
-$0.020$\,px worse. In domain, on three D2 sequences, the same comparison
+$9.64$M). It is not uniform, and the exception is worth naming: on Vid13 TETHER is
+$0.020$\,px behind the baseline and, more importantly, $0.012$\,px
+\emph{worse than the raw prediction it refines} --- the one recording of
+five where the intervention is a net harm and the bidirectional method is
+not. In domain, on three D2 sequences, the same comparison
 favours us far more ($4.58\%$ against $0.25\%$ EPE), which is why we report
 DRENDS instead.
 
