@@ -31,6 +31,11 @@ CANONICAL_SEEDS = {
     "seed 2": RESULTS / "seed_eval/seed_2",
 }
 CANONICAL = RESULTS / "scared_masked"
+# A2 was given the same three-seed treatment as the canonical model, under a rule written
+# before the extra seeds were trained. Reading it as a single run -- which this script did
+# until the seeds were noticed sitting unused on disk -- reproduces exactly the mistake the
+# comment above records, with the roles reversed.
+VARIANT_SEEDS = {"a2": ("a2", "a2_seed1", "a2_seed2")}
 VARIANTS = {
     "a1": ("A1", "no appearance channels", "$142\\rightarrow78$ ch"),
     "a2": ("A2", "no learned evidence", "$142\\rightarrow38$ ch"),
@@ -76,13 +81,19 @@ def main() -> None:
         for key in seeds["seed 0"]}
     spread = {key: float(np.std([v[key] for v in seeds.values() if v[key] is not None], ddof=1))
               for key in seeds["seed 0"]}
+    variant_spread = {}
     for key in VARIANTS:
-        root = args.eval_root / key
-        value = {(s, m): reduction(root, s, m) for s in ("scared-d2", "scared-d7") for m in METRICS}
-        if value[("scared-d7", "Bad1")] is None:
+        runs = [args.eval_root / name for name in VARIANT_SEEDS.get(key, (key,))]
+        per_seed = [{(s, m): reduction(root, s, m) for s in ("scared-d2", "scared-d7") for m in METRICS}
+                    for root in runs if root.is_dir()]
+        per_seed = [v for v in per_seed if v[("scared-d7", "Bad1")] is not None]
+        if not per_seed:
             missing.append(key)
-        else:
-            rows[key] = value
+            continue
+        rows[key] = {k: float(np.mean([v[k] for v in per_seed])) for k in per_seed[0]}
+        if len(per_seed) > 1:
+            variant_spread[key] = ({k: float(np.std([v[k] for v in per_seed], ddof=1)) for k in per_seed[0]},
+                                   len(per_seed), per_seed)
 
     print(f"{'variant':<26}" + "".join(f"{s.split('-')[1].upper()} {m:<6}" for s in ("scared-d2", "scared-d7") for m in METRICS))
     for key, value in rows.items():
@@ -100,17 +111,35 @@ def main() -> None:
     values = [v[("scared-d7", "Bad1")] for v in seeds.values()]
     print(f"\nheld-out Bad1: canonical seeds {', '.join(f'{v:.2f}' for v in sorted(values))} "
           f"-> mean {base:.2f}, std {sigma:.2f}")
-    print("each ablation is ONE seed, so a margin inside the seed range is not a result:")
+    print("a margin inside the seed range is not a result:")
     for key in VARIANTS:
         if key not in rows:
             continue
         value = rows[key][("scared-d7", "Bad1")]
         delta = value - base
         inside = min(values) <= value <= max(values)
+        count = variant_spread[key][1] if key in variant_spread else 1
         verdict = ("indistinguishable" if abs(delta) < SEED_SPREAD_PP
                    else "inside the canonical seed range" if inside
-                   else f"outside it, {delta / sigma:+.1f} sigma, one seed")
+                   else f"outside it, {delta / sigma:+.1f} sigma, "
+                        f"{f'{count} seeds' if count > 1 else 'one seed'}")
         print(f"  {VARIANTS[key][0]}  {value:.2f}  ({delta:+.2f} pp)  -> {verdict}")
+
+    # The promotion rule, quoted from ablation_preregister.json and evaluated here so that
+    # it cannot be re-read favourably after the fact. The decision split is D2 alone; D7 is
+    # reported afterwards and takes no part in the choice.
+    for key, (sd, count, per_seed) in variant_spread.items():
+        canonical_d2 = rows["canonical (3 seeds)"][("scared-d2", "Bad1")]
+        value = rows[key][("scared-d2", "Bad1")]
+        each = sorted(v[("scared-d2", "Bad1")] for v in per_seed)
+        print(f"\npre-registered promotion rule for {VARIANTS[key][0]} -- decision split: D2 ONLY")
+        print(f"  D2 Bad1 seeds {', '.join(f'{v:.2f}' for v in each)} -> mean {value:.2f}, "
+              f"std {sd[('scared-d2', 'Bad1')]:.2f} over {count} seeds")
+        print(f"  canonical three-seed mean {canonical_d2:.2f}, spread {spread[('scared-d2', 'Bad1')]:.2f}")
+        exceeds = value - canonical_d2
+        comparable = sd[("scared-d2", "Bad1")] <= 2 * spread[("scared-d2", "Bad1")]
+        print(f"  exceeds by {exceeds:+.2f} pp; spread {'comparable' if comparable else 'NOT comparable'}")
+        print(f"  -> {'PROMOTE' if exceeds > 0 and comparable else 'stays an ablation'}")
 
     print("\n% ---- LaTeX ----")
     print("\\begin{tabular}{llcccc}")

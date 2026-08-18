@@ -15652,5 +15652,63 @@ one-seed canonical baseline, which is the asymmetry we already know how to
 be wrong about. The launcher now skips any run that wrote its summary, so a
 second kill costs only the run in flight.
 
+
+\section*{18 August, Evening: The Promotion Rule Fires, and It Is Not Ours to Argue With}
+
+A review arrived. Its second major objection is that the ablations contradict
+the canonical configuration and the paper states this without acting on it ---
+that honesty about a problem is not a resolution of it. That is correct, and the
+answer was already on disk.
+
+\paragraph{The seeds existed and the script ignored them.}
+\texttt{ablation\_table.py} printed ``each ablation is ONE seed'' while
+\texttt{results/ablation\_eval/} held \texttt{a2}, \texttt{a2\_seed1} and
+\texttt{a2\_seed2}. The defence the review calls self-defeating --- one run
+against a three-seed baseline --- had been retired days ago by our own runs, and
+nobody told the table. The script carried a comment at the top explaining that
+comparing against canonical seed 0 alone had already misled us once; it then
+made the same mistake with the roles reversed.
+
+\paragraph{The rule was written first, which is the only reason this is allowed.}
+\texttt{ablation\_preregister.json} prohibits ``selecting the best ablation and
+presenting it as the canonical model''. What makes promotion legitimate rather
+than cherry-picking is the \texttt{A2\_seed\_study} block of 16 August, which
+fixed the decision \emph{before} the extra seeds were trained: decision split D2
+only, D7 reported afterwards and taking no part in the choice.
+
+\paragraph{The verdict.} D2 Bad1 across A2's three seeds is $12.38$, $12.84$,
+$12.98$: mean $12.73$, spread $0.32$. The canonical three-seed mean is $8.40$
+with spread $2.53$. A2 exceeds it by $4.33$ points with a spread eight times
+tighter, so the rule returns PROMOTE. It is also ahead on held-out D7, which the
+rule deliberately does not consider.
+
+\paragraph{We looked for a reason to keep the larger model, and did not find one.}
+A2 is better on the decision split, better on the split it was not judged on,
+far more stable across seeds, and smaller: it sets
+\texttt{include\_learned\_stereo\_evidence=False} and passes a null extractor, so
+the frozen ResNet-18 is genuinely not evaluated --- $157{,}504$ parameters and
+three forward passes per frame that stop existing. Proposing the $142$-channel
+model while reporting that the $38$-channel one is better is the position the
+review describes, and it is indefensible. The choice is to re-canonicalise or to
+find a principled reason not to; there is no third option where we report both
+and keep the bigger one.
+
+\paragraph{What re-canonicalisation actually costs.} A2 has three trained
+checkpoints, D2 and D7 evaluations on all five backbones, and DRENDS on three;
+its out-of-domain BiDA comparison is running now. What is missing is the
+development closure, which is the expensive half: \texttt{experimental\_closure.py}
+hardcodes \texttt{CanonicalHorizon} and \texttt{ExperimentalPolicy} with no module
+argument, so the fifteen policies, the horizon sweep and the oracle cannot be
+pointed at A2 without changing the code first. $225$ method reports on D2.
+
+\paragraph{An unrelated fact that turned out to be the same fact.}
+The pose claim retracted this afternoon appears twice, not once:
+\texttt{evaluate\_3d\_consistency.py} also states that ``SCARED-C ships no
+per-frame camera pose in this repo'', and limits itself to frame-to-frame surface
+stability for that reason. With the poses recovered, that script can measure
+accumulated reconstruction drift instead --- which is exactly the downstream
+robotics evidence the review's first objection demands. The error that weakened
+the competitor comparison was also the one blocking the venue argument.
+
 \end{document}
 
