@@ -817,29 +817,20 @@ excluding it is $4.14\%$, with RAFT-Stereo alone at $6.10\%$.
 We next evaluate the already frozen $H=4$ policy on held-out D7.
 
 All five backbones improve on D7, including both architectures unseen
-during temporal-head training.
+during temporal-head training: mean backbone EPE decreases
+$0.4921 \rightarrow 0.4696$, or $4.57\%$.
 
-The mean backbone EPE decreases from
-$0.4921 \rightarrow 0.4696$,
-or $4.57\%$.
-
-The improvement is not restricted to the mean.
-Bad1 and disparity RMSE decrease for every backbone on both D2 and D7.
-P99 disparity error likewise decreases in all ten backbone--split cases,
-while maximum error decreases in nine of ten.
-The strongest tail reduction occurs for Stereo Anywhere on D2, where
-maximum disparity error decreases from $33.27$ to $14.88$ px.
-InvalidRate remains zero for both raw and refined outputs in all ten
-SCARED-C backbone--split evaluations. This is a property of SCARED-C
-rather than of the module in general: Section~\ref{sec:masking} shows
-that on external domains an unmasked output does introduce invalid
-predictions, which is precisely what the support contract of
-\eqref{eq:fusion} prevents.
+The improvement is not restricted to the mean: Bad1 and RMSE decrease for
+every backbone on both splits, P99 decreases in all ten backbone--split
+cases and maximum error in nine of ten, most strongly for Stereo Anywhere
+on D2 ($33.27$ to $14.88$ px).
+InvalidRate stays zero in all ten SCARED-C backbone--split evaluations ---
+a property of SCARED-C, not of the module: Sec.~\ref{sec:masking} shows an
+unmasked output does introduce invalid predictions on external domains,
+which the support contract of \eqref{eq:fusion} prevents.
 
 The EPE gain is therefore not bought by a worse bad-pixel rate or a
-broader tail, which supports transfer of one learned policy across
-heterogeneous estimators within SCARED-C. New bad pixels do appear and
-are measured explicitly below. The joint unseen-backbone /
+broader tail. New bad pixels do appear and are measured below. The joint unseen-backbone /
 unseen-domain cell is the lower-right block of
 Table~\ref{tab:grid}, read in Section~\ref{sec:drends}.
 
@@ -926,14 +917,22 @@ TETHER         & \textbf{yes} & $\mathbf{5.5\%}$ & $\mathbf{3.1\%}$ & $\mathbf{1
 \end{tabular}
 \end{table}
 
+The regime is a hard one and the Bad1 column says so: DRENDS ground-truth
+disparity averages $9.89$\,px and spans $8.42$--$11.89$ between the $5$th
+and $95$th percentiles, so a raw EPE of $1.199$\,px is a third of the
+scene's entire disparity spread and a $1$\,px threshold rejects $44.9\%$ of
+pixels. This is not an artefact of synthetic data: SCARED-C D7
+keyframe~$3$ sits at raw EPE $1.18$\,px on comparable disparities. What
+follows compares two refiners of a weak prediction, not a claim that
+either recovers a good one.
+
 Out of domain for both, TETHER removes two to thirteen times as much error
 as the bidirectional baseline on every metric, while being the only causal
 entry and $54\times$ smaller in trained parameters ($177$k against
-$9.64$M). It is not uniform: TETHER leads on four recordings of five and
-on Vid13 is $0.020$\,px worse than the baseline. The same comparison run in
-domain, on three D2 sequences, favours us far more ($4.58\%$ against
-$0.25\%$ EPE), which is precisely why we report DRENDS instead: D2 is the
-split our checkpoint was selected on.
+$9.64$M). It is not uniform: TETHER leads on four recordings of five and on Vid13 is
+$0.020$\,px worse. In domain, on three D2 sequences, the same comparison
+favours us far more ($4.58\%$ against $0.25\%$ EPE), which is why we report
+DRENDS instead.
 
 TC-Stereo \cite{zeng2024tcstereo} needs privileged inputs our interface
 does not assume: it propagates temporal state by a rigid reprojection from
