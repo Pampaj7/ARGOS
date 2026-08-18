@@ -15751,5 +15751,47 @@ measurement the poses enable is named as the next step. That measurement is also
 the downstream evidence the review demands for a robotics venue, so one wrong
 sentence was blocking the competitor comparison and the venue argument at once.
 
+
+\section*{18 August, Evening: What Regime Are We Actually Measuring In}
+
+The review asks what causes Bad1 $=44.92\%$ on DRENDS raw, and reads it as a
+prediction at the edge of broken. It is, and the paper now says so.
+
+\paragraph{The first explanation was wrong.} The comfortable answer was a units
+artefact: DRENDS ground-truth disparity averages $9.89$\,px and spans
+$8.42$--$11.89$ between the $5$th and $95$th percentiles, so a $1$\,px threshold
+covers a third of the scene's entire depth range and Bad1 is simply a harsh bar
+at that scale. That would have made the number a measurement quirk rather than a
+weakness. It does not survive contact with SCARED-C, which sits at the same
+disparity scale --- $7.2$ to $11.0$\,px across D7, recovered from the reported
+depth and $f_x b$ --- while raw EPE there is $0.14$ against $1.20$ on DRENDS.
+Same units, eight times the error. The regime is genuinely hard.
+
+Nor is it a property of synthetic data, which was the second comfortable answer:
+SCARED-C D7 keyframe~$3$ has raw EPE $1.18$\,px on comparable disparities. Real
+porcine tissue, same difficulty.
+
+\paragraph{What this costs us.} The out-of-domain BiDA comparison is the paper's
+primary head-to-head, and it happens where the input is weak. That does not
+invalidate it --- both methods refine the same weak prediction under one support
+--- but it bounds what it can claim, and the section now says the comparison is
+between two refiners of a poor estimate rather than evidence that either
+recovers a good one.
+
+\paragraph{An early signal on A2, from one recording of five.} The out-of-domain
+scorer has finished Vid10: raw $2.1185$, BiDA $2.0411$, canonical TETHER
+$1.9133$, A2 $1.9238$. Identical raw and identical BiDA confirm the two runs sit
+on the same boundary. A2 is $0.0105$\,px \emph{behind} canonical here --- $9.19\%$
+reduction against $9.69\%$. One recording is not a result and the promotion rule
+was decided on D2 in any case, but it is the first place A2 has not been at least
+level, and it is worth watching rather than discovering later.
+
+\paragraph{The memory-per-core trap, again.} The A2 closure pended for an hour on
+``Job requirements for reserving resource (mem) not satisfied''. LSF reserves
+\texttt{rusage[mem]} \emph{per core}, so \texttt{-n 4 -R rusage[mem=40GB]} holds
+$160$GB, and three of our own jobs had left $7$GB free of $529$GB reserved on the
+node. Resubmitted at $10$GB, and it now waits behind our own work rather than
+behind a bad request.
+
 \end{document}
 
