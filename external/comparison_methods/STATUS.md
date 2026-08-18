@@ -123,3 +123,15 @@ exactly on this boundary because raw_valid is true everywhere. Both select the s
 
 ## 5. Deep Video Prior (NeurIPS 2020) — weights on Google Drive, expect blocked
 Non-causal anyway: per-video test-time training over the whole clip.
+
+## Re-check 2026-08-18
+
+Both blocked methods re-verified, same result, so the "unrunnable" verdicts stand
+with current evidence rather than two-day-old evidence:
+
+  http://vllab.ucmerced.edu/.../ECCV18_blind_consistency.pth   -> HTTP 404
+  api.github.com/repos/CVLAB-Unibo/neural-disparity-refinement/releases -> 200, []
+  huggingface.co/api/models?search=neural disparity refinement -> 200, []
+
+The two 200s matter as much as the 404: GitHub and Hugging Face answer us
+normally, so connectivity is not the obstacle and the artefacts are simply gone.
