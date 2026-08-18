@@ -391,8 +391,8 @@ observed frames is not bidirectional temporal inference.
 Previous geometry is pulled onto the current grid,
 $\widetilde m_t(x)=m_{t-1}(x+F_{t\rightarrow t-1}(x))$, by bilinear
 sampling with zero padding and \texttt{align\_corners=True}. Warp support
-$S_t$ records whether the source coordinate lies inside the preceding
-image, and historical validity is sampled on the same grid. Pulling the
+$\mathcal{S}_t$ records whether the source coordinate lies inside the
+preceding image, and historical validity is sampled on the same grid. Pulling the
 reverse flow the same way, $\widetilde F_{t-1\rightarrow t}=
 \warp(F_{t-1\rightarrow t},F_{t\rightarrow t-1})$, gives the
 forward--backward residual
@@ -484,7 +484,9 @@ M_t^{\raw}
 \label{eq:support}
 \end{equation}
 %
-and confine the intervention to it. Final disparity is
+--- the warp support $\mathcal{S}_t$ of the previous paragraph, the raw
+validity and the sampled historical validity --- and confine the
+intervention to it. Final disparity is
 %
 \begin{equation}
 \boxed{
@@ -985,18 +987,19 @@ three-seed spread as the threshold below which a difference is not read.
 \centering
 \scriptsize
 \caption{
-Held-out relative reduction (\%) against the same raw predictions.
-Canonical is the mean of three seeds; each variant is a single seed.
+Held-out \emph{relative reduction} (\%) against the same raw predictions,
+not error: higher is better. Canonical and A2 are three-seed means with
+their spread; A1, A3 and A4 are single runs.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lccc}
 \toprule
-Variant & Change & D7 EPE & D7 Bad1 \\
+Variant & Change & D7 EPE red. & D7 Bad1 red. \\
 \midrule
 Canonical (3 seeds) & --- & $5.06$ & $5.15\pm0.34$ \\
 A1 & $142\rightarrow78$ ch & $4.93$ & $4.88$ \\
-A2 & $142\rightarrow38$ ch & $5.49$ & $5.69$ \\
+A2 (3 seeds) & $142\rightarrow38$ ch & $\mathbf{5.61\pm0.42}$ & $\mathbf{5.84\pm0.22}$ \\
 A3 & full-resolution context & $5.61$ & $5.85$ \\
 A4 & unconstrained output & $0.05$ & $6.02$ \\
 \bottomrule
@@ -1004,15 +1007,14 @@ A4 & unconstrained output & $0.05$ & $6.02$ \\
 \end{table}
 
 The result is not the one we expected. A1 is indistinguishable, while A2,
-A3 and A4 sit $1.6$ to $2.5$ standard deviations above the canonical
-mean, and A2 and A3 are better on EPE too: none of the four decisions is
-load-bearing. Two caveats --- each variant is one run against a
-three-seed baseline, so two standard deviations from a single sample is
-suggestive rather than settled, and A4 disqualifies itself with an EPE
-gain collapsing to $0.05\%$. What the table does establish is that the
-architecture is not delicate, that the richness of the evidence space is
-not what makes it work, and that three margins in the same direction
-point to a design that is over-specified rather than well-tuned.
+A3 and A4 all sit above the canonical mean and A2 and A3 are better on
+EPE too: none of the four decisions is load-bearing. A2 was then given
+the canonical model's own three-seed treatment under a rule fixed
+beforehand, and it stays ahead on both endpoints with a spread eight
+times tighter ($0.32$ against $2.53$ points of D2 Bad1), so the
+$142$-channel evidence space is not what makes the module work --- it is
+what makes its training unstable. A3 and A4 remain single runs, and A4
+disqualifies itself with an EPE gain collapsing to $0.05\%$.
 
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
