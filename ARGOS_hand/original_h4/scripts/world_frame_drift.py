@@ -121,6 +121,48 @@ def backproject(disp: np.ndarray, fx: float, baseline_mm: float, cx: float, cy: 
     return np.stack(((xs - cx) * z / fx, (ys - cy) * z / fx, z))
 
 
+def accumulate_spread(clouds, masks, intrinsics, shape, min_views: int = 3):
+    """Disagreement between frames about the same world point, which is what a map fuses.
+
+    Every frame's prediction is projected into the shared keyframe pixel grid and its world
+    Z is accumulated there. A predictor that is wrong but *consistently* wrong leaves a tight
+    stack and a clean surface; one that jitters leaves a thick one, at the same mean error.
+    That difference is invisible to per-frame disparity metrics and is exactly what
+    accumulates in a TSDF or a pose graph.
+
+    Welford, because storing every observation of every pixel over a thousand frames is
+    gigabytes for a number that needs two accumulators.
+    """
+    count = np.zeros(shape, dtype=np.int32)
+    mean = np.zeros(shape, dtype=np.float64)
+    m2 = np.zeros(shape, dtype=np.float64)
+    for cloud, mask in zip(clouds, masks):
+        points = cloud[:, mask]
+        pixel = intrinsics @ points
+        u = np.rint(pixel[0] / pixel[2]).astype(int)
+        v = np.rint(pixel[1] / pixel[2]).astype(int)
+        inside = (u >= 0) & (u < shape[1]) & (v >= 0) & (v < shape[0]) & (points[2] > 0)
+        u, v, z = u[inside], v[inside], points[2][inside]
+        # Several rays of one frame can land on one keyframe pixel; keep the nearest, which
+        # is the surface a z-buffer would keep, rather than averaging through it.
+        order = np.argsort(-z)
+        flat = v[order] * shape[1] + u[order]
+        nearest = np.zeros(shape[0] * shape[1], dtype=np.float64)
+        touched = np.zeros(shape[0] * shape[1], dtype=bool)
+        nearest[flat] = z[order]
+        touched[flat] = True
+        idx = np.flatnonzero(touched)
+        value = nearest[idx]
+        count.flat[idx] += 1
+        delta = value - mean.flat[idx]
+        mean.flat[idx] += delta / count.flat[idx]
+        m2.flat[idx] += delta * (value - mean.flat[idx])
+    enough = count >= min_views
+    variance = np.zeros(shape, dtype=np.float64)
+    variance[enough] = m2[enough] / (count[enough] - 1)
+    return np.sqrt(variance[enough]), int(enough.sum())
+
+
 def self_check(sequence: str, frames: int) -> None:
     """Reproject transformed ground truth into the keyframe and compare against its own
     structured-light point map. Includes the discrimination test the first version lacked.
@@ -194,16 +236,72 @@ def self_check(sequence: str, frames: int) -> None:
     # builder rather than chosen.
 
 
+def score(sequence: str, backbone: str, frames: int, min_views: int) -> None:
+    """Ground truth and raw, in the shared world frame. Refined needs the module and a GPU."""
+    import cv2
+    import tifffile
+    _paths()
+    sys.path.insert(0, str(ARGOS))
+    from argos_v2.cache_io import load_sequence_cache
+    from argos_v2.scared_c_data import load_frame_gt, load_sequence_info
+    from scripts.scared_c.build_corrected_temporal_gt import load_calib
+
+    kf_dir, _ = sequence_paths(sequence)
+    intrinsics = load_calib(kf_dir / "endoscope_calibration.yaml")["M1"]
+    keyframe_shape = tifffile.imread(kf_dir / "left_depth_map.tiff").shape[:2]
+    info = load_sequence_info(sequence)
+    ids = info.frame_ids[:frames] if frames else info.frame_ids
+    poses = load_poses(sequence, ids)
+    native, _valid = load_frame_gt(info, ids[0])
+    r1 = rectification_rotation(sequence, native.shape)
+
+    disparity, valid_mask, cached_ids, _meta = load_sequence_cache(backbone, sequence)
+    index = {str(v): i for i, v in enumerate(np.asarray(cached_ids).astype(str))}
+
+    series = {"gt": ([], []), "raw": ([], [])}
+    for frame_id in ids:
+        depth, valid = load_frame_gt(info, frame_id)
+        height, width = depth.shape
+        fx = info.fx * width / native.shape[1]
+        cx, cy = (width - 1) / 2, (height - 1) / 2
+        series["gt"][0].append(to_world(backproject(depth, fx, info.baseline_mm, cx, cy),
+                                        poses[frame_id], r1))
+        series["gt"][1].append(valid & (depth > 0))
+
+        row = index.get(frame_id)
+        if row is None:
+            raise RuntimeError(f"{backbone} has no cached prediction for {sequence}/{frame_id}")
+        raw = np.asarray(disparity[row], dtype=np.float64)
+        raw_valid = np.asarray(valid_mask[row]).astype(bool)
+        if raw.shape != depth.shape:
+            scale = width / raw.shape[1]
+            raw = cv2.resize(raw, (width, height), interpolation=cv2.INTER_NEAREST) * scale
+            raw_valid = cv2.resize(raw_valid.astype(np.uint8), (width, height),
+                                   interpolation=cv2.INTER_NEAREST).astype(bool)
+        series["raw"][0].append(to_world(backproject(raw, fx, info.baseline_mm, cx, cy),
+                                         poses[frame_id], r1))
+        series["raw"][1].append(raw_valid & (raw > 0))
+
+    print(f"{sequence} / {backbone}: {len(ids)} frames, world-frame disagreement per keyframe "
+          f"pixel over >= {min_views} views")
+    for name, (clouds, masks) in series.items():
+        spread, pixels = accumulate_spread(clouds, masks, intrinsics, keyframe_shape, min_views)
+        print(f"  {name:6s} n={pixels:8,}  median {np.median(spread):8.3f} mm  "
+              f"mean {spread.mean():8.3f}  p95 {np.percentile(spread, 95):8.3f}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--sequence", default="dataset_2_keyframe_2")
-    parser.add_argument("--frames", type=int, default=12)
+    parser.add_argument("--backbone", default="RAFT-Stereo")
+    parser.add_argument("--frames", type=int, default=40)
+    parser.add_argument("--min-views", type=int, default=3)
     parser.add_argument("--self-check", action="store_true")
     args = parser.parse_args()
     if args.self_check:
-        self_check(args.sequence, args.frames)
+        self_check(args.sequence, min(args.frames, 8))
         return
-    raise SystemExit("scoring not wired yet; --self-check validates the pose convention first")
+    score(args.sequence, args.backbone, args.frames, args.min_views)
 
 
 if __name__ == "__main__":
