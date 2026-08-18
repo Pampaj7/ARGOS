@@ -145,16 +145,11 @@ predictions without modifying the stereo estimator, accessing its
 internal representation, or using future frames.
 
 We present \steer, a causal plug-and-play temporal refiner for frozen
-stereo. The name reflects the constraint that defines it: every output
-is tethered between the current stereo estimate and aligned temporal
-memory, and the recurrent state is periodically re-tethered to
-independently predicted raw geometry.
-At each frame, preceding disparity is motion-aligned to the current view
-using frozen SEA-RAFT.
-A shared 142-channel external evidence representation feeds a
-177,338-parameter CODD-inspired reset-and-fusion head that predicts a
-bounded interpolation between the current stereo estimate and aligned
-temporal memory.
+stereo. At each frame, preceding disparity is motion-aligned to the
+current view using frozen SEA-RAFT, and a shared 142-channel external
+evidence representation feeds a 177,338-parameter CODD-inspired
+reset-and-fusion head that predicts a bounded interpolation between the
+current stereo estimate and that aligned memory.
 Corrected recurrence is explicitly bounded and periodically re-anchored
 to independently predicted raw geometry.
 
@@ -185,10 +180,10 @@ it, zero-padded out-of-bounds memory turns rare pixels into invalid
 predictions and produces the metric-depth tail previously attributed to
 the external domain.
 
-We additionally introduce a unified refinement-centric evaluation
-framework that jointly measures spatial geometry, multi-horizon
-temporal fidelity, introduced and recovered error, frame-level tails,
-and selective risk under fixed prediction-independent support.
+We additionally introduce a refinement-centric evaluation framework
+measuring spatial geometry, multi-horizon temporal fidelity, introduced
+and recovered error, frame tails and selective risk under fixed,
+prediction-independent support.
 
 \end{abstract}
 
@@ -219,14 +214,9 @@ model
 the price of assuming a temporal architecture, model-specific
 representations, future observations, or co-design with the estimator.
 
-We study a different deployment setting:
-
-\begin{quote}
-\emph{Can one causal temporal module be trained once and attached
-unchanged to heterogeneous frozen stereo estimators?}
-\end{quote}
-
-This matters for robotic systems because the backbone and the temporal
+We study a different deployment setting: \emph{can one causal temporal
+module be trained once and attached unchanged to heterogeneous frozen
+stereo estimators?} This matters for robotic systems because the backbone and the temporal
 logic can then evolve independently: a new estimator replaces the
 previous one without the temporal module needing its cost volume, hidden
 state, confidence head or training pipeline.
@@ -247,11 +237,9 @@ controls how much to intervene but cannot leave the interval spanned by
 the two candidates, and corrected recurrence is periodically reset to raw
 geometry.
 
-These restrictions raise an important question:
-does the learned head actually provide value, or would simple temporal
-averaging give the same improvement?
-
-We answer this experimentally under a frozen development protocol.
+These restrictions raise a question: does the learned head add anything
+that simple temporal averaging would not?
+We answer it experimentally under a frozen development protocol.
 Matched fixed fusion, EMA, warped-memory propagation, and direct
 forward--backward confidence weighting recover only a small fraction of
 TETHER's gain.
@@ -261,10 +249,9 @@ This indicates that the core problem is not obtaining temporal evidence,
 but identifying \emph{where and how much} of it should be used.
 
 A second question is how such intervention should be evaluated.
-Temporal smoothness is not equivalent to temporal correctness:
-a stale prediction can be smooth while being geometrically wrong.
-Likewise, lower mean EPE does not reveal whether refinement introduces
-new bad pixels or rare catastrophic frames.
+Smoothness is not correctness --- a stale prediction can be smooth and
+geometrically wrong --- and lower mean EPE does not reveal whether
+refinement introduces new bad pixels or rare catastrophic frames.
 We therefore evaluate refinement relative to the frozen upstream
 prediction and explicitly separate geometry, temporal fidelity,
 benefit, harm, and tail behavior.
@@ -328,9 +315,10 @@ causal, black-box, frozen weights. The closest, StereoDiffusion
 \cite{lai2018blind} publish code whose weights are no longer retrievable,
 and TC-Stereo warps its temporal state by a rigid reprojection needing
 per-frame pose, intrinsics and baseline --- privileged inputs our
-interface does not assume. We therefore compare against the one runnable
-published method under our own constraints, BiDAStabilizer
-(Sec.~\ref{sec:bida}), noting that it sees the future and we do not.
+interface does not assume, so only its frame path can be moved. We
+therefore compare against the one runnable published method under our own
+constraints, BiDAStabilizer (Sec.~\ref{sec:bida}), which sees the future
+while we do not.
 
 \paragraph{Evaluating temporal refinement.}
 Stereo benchmarks report frame-wise geometry and video methods add
@@ -367,7 +355,6 @@ chain is cut and re-tied to raw geometry the frozen network produced
 independently (teal). The five frames are consecutive and the two
 disparity rows share one colour scale: they differ by $0.108$\,px on
 average, because the intervention is sub-pixel by design.
-Fig.~\ref{fig:trace} shows where that accumulates into a measurable gain.
 \textbf{(b)} One time step. Dashed grey is frozen; the single orange block
 is the only trained component, and it emits one scalar $w_t$ rather than
 geometry. \textbf{(c)} The evidence space: none of the $142$ channels
@@ -738,9 +725,9 @@ micro statistics are retained secondarily.
 \centering
 \caption{
 Cross-backbone evaluation on SCARED-C. One frozen TETHER checkpoint,
-canonical seed $0$, in every row, for comparability with the ablations;
-Sec.~\ref{sec:seeds} gives the three-seed spread. Primary macro-sequence
-aggregation; lower is better.
+canonical seed $0$, in every row for comparability with the ablations;
+Sec.~\ref{sec:seeds} gives the three-seed spread. Macro-sequence
+aggregation, lower is better.
 }
 \label{tab:scared_main}
 \scriptsize
@@ -924,7 +911,7 @@ the diagonal are improved frames. On held-out D7 half improve against
 $13\%$ worsened, and the worsened band hugs the diagonal while the
 improved mass extends far from it: the frame-level form of the
 count-versus-magnitude asymmetry behind $B^+/H^+$. Disparity \emph{maps}
-are not shown --- the intervention is sub-pixel on disparities of about
+are not shown: the intervention is sub-pixel on disparities of about
 $8$\,px, so at an honest colour scale they are indistinguishable.
 }
 \label{fig:trace}
@@ -983,6 +970,14 @@ on Vid13 is $0.020$\,px worse than the baseline. The same comparison run in
 domain, on three D2 sequences, favours us far more ($4.58\%$ against
 $0.25\%$ EPE), which is precisely why we report DRENDS instead: D2 is the
 split our checkpoint was selected on.
+
+TC-Stereo \cite{zeng2024tcstereo} cannot be a plug-in at all --- its
+temporal state is propagated by a rigid reprojection from per-frame pose,
+which SCARED-C lacks and deforming tissue violates --- but its frame path
+can be moved, and on that same D2 support it scores EPE $0.524$ and Bad1
+$9.05\%$ against $0.303$/$2.09\%$ raw and $0.289$/$1.83\%$ for us: a
+co-designed model transferred without retraining starts $73\%$ worse than
+the estimator it would replace.
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
@@ -1094,8 +1089,7 @@ domain --- and it is almost invisible to anyone validating in domain
 only, which is what makes it worth stating.
 
 
-\subsection{No-Reference Temporal Behaviour on D4D}
-
+\paragraph{No-reference temporal behaviour on D4D}
 We report only prediction-space temporal inconsistency, which TETHER
 reduces by $53.9\%$ --- worth little, since copy-previous removes
 $97.3\%$ without even aligning and warped-previous scores \emph{exactly}
@@ -1181,9 +1175,9 @@ reduces EPE by $4.05\%$ against $0.59\%$ for the best matched fixed blend
 under an identical state machine, while direct flow-confidence weighting
 and unbounded recurrence degrade accuracy, the latter by $62.69\%$. A
 frozen $H=4$ checkpoint improves all five estimators on held-out D7 in
-EPE, Bad1 and RMSE simultaneously, including two excluded from training,
-recovers $2.9$--$10.4\times$ more Bad1 pixels than it introduces, and
-holds at $5.15\pm0.35\%$ Bad1 across three independently trained seeds.
+EPE, Bad1 and RMSE at once, including two excluded from training, recovers
+$2.9$--$10.4\times$ more Bad1 pixels than it introduces, and holds at
+$5.15\pm0.35\%$ Bad1 across three seeds.
 Zero-shot transfer to five DRENDS recordings improves every one of 60
 recording--backbone--metric cells.
 
@@ -1201,8 +1195,7 @@ property of ours.
 
 What remains open is where to intervene: the oracle over the module's own
 action space is far from reached, and the weight the head computes is a
-magnitude rather than a ranking, so closing that gap needs evidence this
-interface does not yet carry.
+magnitude rather than a ranking.
 
 
 \balance
@@ -1370,11 +1363,10 @@ in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
 (CVPR)}, 2020.
 
 \bibitem{recasens2021endodepth}
-D.~Recasens, J.~Lamarca, J.~M. F\'acil, J.~M.~M. Montiel, and J.~Civera,
+D.~Recasens \emph{et al.},
 ``Endo-Depth-and-Motion: Reconstruction and tracking in endoscopic
 videos using depth networks and photometric constraints,''
-\emph{IEEE Robotics and Automation Letters},
-vol.~6, no.~4, 2021.
+\emph{IEEE Robotics and Automation Letters}, vol.~6, no.~4, 2021.
 
 \end{thebibliography}
 

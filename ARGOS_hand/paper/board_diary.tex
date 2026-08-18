@@ -15599,5 +15599,58 @@ bidirectional stabiliser out of domain, and the $157{,}504$ parameters we
 currently have to add to our own side of the ledger disappear.
 
 
+
+\section*{18 August, Afternoon: A Competitor That Was Already Measured}
+
+TC-Stereo has been scored since 16 August. The numbers sat in
+\texttt{results/tcstereo\_reference/pooled.json} for two days without ever
+reaching the paper, which cited the method in related work and then said
+nothing about having run it. That is the cheapest possible kind of waste:
+GPU hours spent, evidence produced, evidence not used.
+
+\paragraph{What it can and cannot be.} TC-Stereo propagates its temporal
+state by a rigid $6$-DoF reprojection built from per-frame pose,
+intrinsics and baseline. SCARED-C publishes no per-frame pose, and
+deforming tissue would break the rigidity assumption even if it did, so the
+temporal path was disabled in the run and the manifest records why. What
+was measured is therefore TC-Stereo's \emph{frame} path, and it must be
+reported as an integrated-architecture reference rather than as a temporal
+rival. Reporting it as a beaten competitor would be a straw man.
+
+\paragraph{The support is bit-identical, which is why the row can exist.}
+The run took the same D2 boundary as the in-domain BiDA head-to-head. Raw
+EPE, Bad1, Bad3 and RMSE agree with the BiDA table to full double
+precision, the three sequences are the same, and the per-sequence frame and
+pixel counts match exactly ($17{,}999{,}475$ pixels). That check ran before
+anything was written: the same class of error --- comparing over
+sets that only look the same --- produced the phantom threefold DRENDS win
+yesterday, and the lesson was to verify the support first.
+
+\paragraph{The result.} Transferred without retraining, TC-Stereo reaches
+EPE $0.524$ and Bad1 $9.05\%$, against $0.303$ and $2.09\%$ for the frozen
+RAFT-Stereo \emph{robust} prediction and $0.289$ and $1.83\%$ after our
+head. A co-designed model moved to surgical data starts $73\%$ worse than
+the estimator it would have to replace, and its temporal component cannot
+be reached from there at all. This is the argument for the plug-in
+interface stated in someone else's numbers rather than ours, which makes it
+worth more than another ablation of our own.
+
+\paragraph{The page limit was the real work.} The paragraph pushed the
+paper to nine pages, with exactly one reference spilling. Reclaiming it
+took six lines: the abstract repeated the name explanation the introduction
+already gives, the research question sat in a \texttt{quote} block costing
+more vertical space than the sentence, and three sentences said twice what
+they say once. No evidence was cut. A note for the next time this happens:
+\texttt{\textbackslash footnotesize} on the bibliography does nothing,
+\texttt{ieeeconf} already sets it.
+
+\paragraph{Still open.} Canonical seeds 1 and 2 on DRENDS were relaunched
+this afternoon after the first attempt was killed mid-run on 17 August ---
+the log ends in \texttt{KeyboardInterrupt} and a manifest with no summary.
+Until they finish, A2's three-seed spread is being compared against a
+one-seed canonical baseline, which is the asymmetry we already know how to
+be wrong about. The launcher now skips any run that wrote its summary, so a
+second kill costs only the run in flight.
+
 \end{document}
 
