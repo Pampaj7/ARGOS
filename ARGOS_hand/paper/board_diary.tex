@@ -15904,5 +15904,54 @@ check that caught it took two minutes and should be standing procedure for any
 partial run: before comparing, score the \emph{reference} on exactly the subset
 the new run has finished.
 
+
+\section*{18 August, Night: What the $142$ Channels Might Actually Buy}
+
+Having thrown away the contaminated version, the honest comparison is on the
+cells \emph{every} horizon has finished --- five of fifteen, the same five for
+both models, so the absolute levels are inflated for both but the shape across
+$H$ is measured on identical data.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+$H$ & canonical & A2 & A2 $-$ canonical \\
+\midrule
+$1$ & $2.92$ & $2.50$ & $-0.41$ \\
+$2$ & $3.60$ & $2.87$ & $-0.72$ \\
+$4$ & $4.44$ & $3.22$ & $-1.22$ \\
+$8$ & $5.12$ & $2.40$ & $-2.72$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Canonical keeps gaining as the horizon lengthens. A2 gains to $H{=}4$ and then
+collapses --- at $H{=}8$ it is worse than at $H{=}1$. If this survives the
+remaining ten cells it is the most interesting thing the ablation has produced,
+because it names what the removed channels were for: the appearance correlations
+and learned stereo evidence are what let the head notice that aged memory has
+gone stale. With $38$ channels of disparity, motion and RGB geometry the head
+cannot tell a good old memory from a rotten one, so a longer recurrence hurts it.
+
+\paragraph{The tension with the promotion, stated rather than smoothed.}
+The promotion rule was decided on confined D2 \emph{Bad1}, where A2 wins
+decisively, $12.73$ against $8.40$. This is unconfined \emph{EPE}, where it
+loses. Different metrics, not a contradiction --- but they point opposite ways
+and the paper cannot report one and bury the other.
+
+Worse for the simple story: at seed $0$ alone, the seed the closure actually
+runs, canonical beats A2 on D2 EPE in the complete confined evaluation too
+($3.95$ against $3.69$). A2 only passes canonical on EPE in the \emph{three-seed
+mean} ($4.13$ against $3.45$), and it passes there because canonical's spread is
+enormous, not because A2 is more accurate.
+
+So the reading forming tonight is that A2 is not better, it is \emph{steadier}:
+it wins on Bad1 and on seed variance, and loses on long-horizon EPE. If that
+holds, the conclusion may not be ``ship A2'' but ``ship A2 at a shorter
+horizon'', or ``what the $142$ channels buy is horizon''. The closure already
+evaluates A2 at $H\in\{1,2,4,6,8\}$, so that answer arrives without another run.
+
+Nothing goes in the paper until $H{=}4$ has all fifteen cells.
+
 \end{document}
 
