@@ -315,10 +315,10 @@ causal, black-box, frozen weights. The closest, StereoDiffusion
 \cite{lai2018blind} publish code whose weights are no longer retrievable,
 and TC-Stereo warps its temporal state by a rigid reprojection needing
 per-frame pose, intrinsics and baseline --- privileged inputs our
-interface does not assume, so only its frame path can be moved. We
-therefore compare against the one runnable published method under our own
-constraints, BiDAStabilizer (Sec.~\ref{sec:bida}), which sees the future
-while we do not.
+interface does not assume, though SCARED-C supplies them. We compare
+against the one runnable published method under our own constraints,
+BiDAStabilizer (Sec.~\ref{sec:bida}), which sees the future while we do
+not.
 
 \paragraph{Evaluating temporal refinement.}
 Stereo benchmarks report frame-wise geometry and video methods add
@@ -936,13 +936,16 @@ domain, on three D2 sequences, favours us far more ($4.58\%$ against
 $0.25\%$ EPE), which is precisely why we report DRENDS instead: D2 is the
 split our checkpoint was selected on.
 
-TC-Stereo \cite{zeng2024tcstereo} cannot be a plug-in at all --- its
-temporal state is propagated by a rigid reprojection from per-frame pose,
-which SCARED-C lacks and deforming tissue violates --- but its frame path
-can be moved, and on that same D2 support it scores EPE $0.524$ and Bad1
-$9.05\%$ against $0.303$/$2.09\%$ raw and $0.289$/$1.83\%$ for us: a
-co-designed model transferred without retraining starts $73\%$ worse than
-the estimator it would replace.
+TC-Stereo \cite{zeng2024tcstereo} needs privileged inputs our interface
+does not assume: it propagates temporal state by a rigid reprojection from
+per-frame pose, intrinsics and baseline. SCARED-C \emph{does} supply
+per-frame poses --- correcting them is what the dataset is for --- so its
+temporal path is runnable here.
+\TODO{run TC-Stereo's temporal path on the SCARED-C corrected poses; this
+paragraph claimed the poses did not exist, which was false}
+Its frame path alone, moved to the same
+D2 support, scores EPE $0.524$ and Bad1 $9.05\%$ against $0.303$/$2.09\%$
+raw and $0.289$/$1.83\%$ for us.
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
