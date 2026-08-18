@@ -61,7 +61,12 @@ def main() -> None:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--recordings", nargs="+", default=list(RECORDINGS))
     parser.add_argument("--max-frames", type=int, help="smoke cap; a capped run is not a result")
+    # A second module must not land on the first one's record: the default path holds the
+    # canonical comparison the paper cites, and overwriting it would leave two different
+    # models behind one file name.
+    parser.add_argument("--output", type=Path, default=OUT)
     args = parser.parse_args()
+    out = args.output
 
     import torch
     for path in (str(ROOT), str(ROOT / "scripts"), str(ARGOS / "ARGOS_FREEZED/src"),
@@ -123,8 +128,8 @@ def main() -> None:
         print(f"{recording:<24} n={count:>5} px={current['pixels']:>10,}  "
               f"EPE raw {current['raw']['EPE']:.4f}  BiDA {current['bidastabilizer']['EPE']:.4f}  "
               f"TETHER {current['tether']['EPE']:.4f}", flush=True)
-        OUT.mkdir(parents=True, exist_ok=True)
-        (OUT / "partial.json").write_text(json.dumps(
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "partial.json").write_text(json.dumps(
             {"complete": False, "recordings_done": [r["recording"] for r in rows],
              "capped": args.max_frames is not None, "per_recording": rows}, indent=2) + "\n")
 
@@ -143,9 +148,9 @@ def main() -> None:
               "per_recording": rows,
               "pooled": {method: {metric: pooled(method, metric) for metric in ("EPE", "Bad1", "Bad3", "RMSE")}
                          for method in ("raw", "bidastabilizer", "tether")}}
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "comparison.json").write_text(json.dumps(record, indent=2) + "\n")
-    (OUT / "partial.json").unlink(missing_ok=True)   # a leftover partial would outrank nothing
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "comparison.json").write_text(json.dumps(record, indent=2) + "\n")
+    (out / "partial.json").unlink(missing_ok=True)   # a leftover partial would outrank nothing
     print("\npooled (pixel-weighted):", flush=True)
     for method in ("raw", "bidastabilizer", "tether"):
         values = record["pooled"][method]
