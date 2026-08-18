@@ -46,6 +46,8 @@ def run(config: argparse.Namespace) -> None:
         raise RuntimeError("the canonical D2 closure must exist first; its baseline policy "
                            "rows and its oracle are the reference this run is compared against")
     suffix = config.head + (f"_seed{config.head_seed}" if config.head_seed is not None else "")
+    if getattr(config, "shard", None):
+        suffix += f"_shard-{config.shard}"
     output = config.output or RESULTS / f"d2_{suffix}"
     if output.resolve() == CANONICAL_D2.resolve():
         raise ValueError("a promoted head may not write the canonical closure root")
@@ -58,6 +60,8 @@ def run(config: argparse.Namespace) -> None:
                 "freeze": {"path": str(freeze.get("path", "")), "verified": True},
                 "canonical_closure": {"path": str(CANONICAL_D2),
                                       "summary_sha256": sha256(CANONICAL_D2 / "summary.csv")},
+                "shard": getattr(config, "shard", None),
+                "complete_method_set": tuple(config.methods) == tuple(CANONICAL_HORIZONS),
                 "not_rerun": {"baseline_policies": "model-free; identical under any head",
                               "raw_vs_aligned_memory_oracle": "GT-only; never runs the adapter"},
                 "scope": freeze["required_d2_scope"], "dense_predictions_written": False,
@@ -105,12 +109,21 @@ def main() -> None:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--dataset", default="scared-d2", choices=("scared-d2",))
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--shard", help="name for a partial-method run; required when --methods is a subset")
     config = parser.parse_args()
-    if not config.smoke and (tuple(config.methods) != tuple(CANONICAL_HORIZONS)
-                             or tuple(config.backbones) != tuple(ALL_BACKBONES)
+    # A shard is a legitimate way to run six independent methods across several GPUs, and a
+    # different thing from a smoke test. It must still cover every backbone and sequence --
+    # the scope guard is what makes the cells comparable -- so only the method set may be
+    # cut, and the output lands in its own directory so no shard can be mistaken for a
+    # complete run.
+    full = (tuple(config.methods) == tuple(CANONICAL_HORIZONS))
+    if not config.smoke and (tuple(config.backbones) != tuple(ALL_BACKBONES)
                              or config.sequences is not None or config.max_frames is not None):
-        raise SystemExit("a complete re-run forbids partial methods, custom scope and frame limits; "
+        raise SystemExit("a re-run forbids custom backbone scope and frame limits; "
                          "pass --smoke to explore")
+    if not config.smoke and not full and not config.shard:
+        raise SystemExit("a partial method set is a shard: pass --shard NAME so it writes "
+                         "somewhere of its own and is not mistaken for a complete run")
     run(config)
 
 
