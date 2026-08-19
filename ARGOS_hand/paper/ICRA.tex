@@ -779,17 +779,16 @@ ratio, so $0.276202$ is one raw mean over fifteen cells; reductions per
 backbone or per arena average per-cell relative reductions instead.
 
 Raw D2 EPE is $0.276202$. Canonical $H=4$ reaches $0.265028$ ($4.05\%$),
-the best matched fixed blend ($w=0.5$, algebraically identical to EMA2
-here) only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle
-$0.242223$ ($12.30\%$): almost seven times the gain of the best fixed
-blend under an identical state machine. Per backbone, against whichever fixed or EMA policy is best \emph{for that
+the best matched fixed blend ($w=0.5$, algebraically identical to EMA2)
+only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle $0.242223$
+($12.30\%$): almost seven times the best fixed blend under an identical
+state machine. Per backbone, against whichever fixed or EMA policy is best \emph{for that
 backbone}, the ratio ranges $4.4\times$ to $12.5\times$ and is $5.6\times$
 excluding Stereo Anywhere: the absolute gain depends on that estimator, the
-margin over smoothing does not. Forward--backward confidence is
-the informative failure --- one of TETHER's own input cues, yet used
-directly as the fusion weight it worsens EPE by $2.17\%$. Propagating
-aligned memory directly also degrades accuracy, so the improvement is not
-alignment, averaging or smoothing.
+margin over smoothing does not. Forward--backward confidence is the informative failure --- one of TETHER's
+own cues, yet used directly as the weight it worsens EPE by $2.17\%$.
+Propagating aligned memory directly also degrades accuracy, so the
+improvement is not alignment, averaging or smoothing.
 
 
 \subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
@@ -798,8 +797,8 @@ alignment, averaging or smoothing.
 \centering
 \scriptsize
 \caption{
-Horizon sweep on D2, EPE reduction (\%), pooled as elsewhere here; higher
-is better. A2 is the $38$-channel variant of Sec.~\ref{sec:ablations}.
+Horizon sweep on D2, EPE reduction (\%), pooled as elsewhere here. A2 is
+the $38$-channel variant of Sec.~\ref{sec:ablations}.
 }
 \label{tab:horizon}
 \begin{tabular}{lcc}
@@ -995,14 +994,14 @@ DRENDS remains a non-independent reference.
 
 Four design choices were ablated under a pre-registration naming held-out
 Bad1 as the endpoint and the three-seed spread as the threshold below which
-a difference is not read (A3 and A4 remain single runs).
+a difference is not read; A3 and A4 remain single runs.
 
 \begin{table}[!ht]
 \centering
 \scriptsize
 \caption{
 Held-out \emph{relative reduction} (\%), not error: higher is better.
-Canonical and A2 are three-seed means; A1, A3, A4 are single runs.
+Canonical and A2 are three-seed means.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{4pt}
@@ -1020,13 +1019,13 @@ A4 & unconstrained output & $0.05$ & $6.02$ \\
 \end{table}
 
 The result is not the one we expected. A1 is indistinguishable; A2, A3 and
-A4 all sit above the canonical mean and A2 and A3 are better on EPE too, so
-none of the four decisions is load-bearing. A2 was then given the canonical
-model's own three-seed treatment under a rule fixed beforehand and stays
-ahead on both endpoints with a spread eight times tighter ($0.32$ against
-$2.53$ points of D2 Bad1): the $142$-channel evidence space is not what
-makes the module work, it is what makes its training unstable. A4
-disqualifies itself with an EPE gain collapsing to $0.05\%$.
+A4 all sit above the canonical mean, so none of the four decisions is
+load-bearing. A2 was then given the canonical model's own three-seed
+treatment under a rule fixed beforehand and stays ahead on both endpoints
+with a spread eight times tighter ($0.32$ against $2.53$ points of D2
+Bad1): the $142$-channel evidence space is not what makes the module work,
+it is what makes its training unstable. A4 disqualifies itself with an EPE
+gain collapsing to $0.05\%$.
 
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
@@ -1064,11 +1063,17 @@ only, which is what makes it worth stating.
 The closure isolates four requirements. Alignment is necessary but not
 sufficient: the aligned memory carries a $12.30\%$ oracle ceiling, yet
 using it indiscriminately fails --- warped raw memory yields no gain, and
-both FB-confidence weighting and full recurrent replacement worsen EPE.
-The mechanism is alignment plus learned graded intervention plus bounded
-recurrence, not smoothing. The parameter count follows: the head never
-solves stereo matching, it receives two meaningful candidates and chooses
-between them.
+both FB-confidence weighting and full recurrent replacement worsen EPE. The
+mechanism is alignment plus learned graded intervention plus bounded
+recurrence, not smoothing. The head never solves stereo matching: it
+receives two meaningful candidates and chooses between them.
+
+\paragraph{What each branch of $w_t=r_tf_t$ does.}
+Suppressing one factor at inference, trained head unchanged: fusion alone
+recovers almost all the mean gain ($4.01\%$ against $4.05\%$) but more than
+doubles newly broken pixels ($0.096\%$ against $0.047\%$) and drops
+$B^+/H^+$ to $2.15$; reset alone is worse on both. On EPE the reset gate
+looks redundant, on harm it is what makes the intervention safe.
 
 Ablating that constraint (A4, Table~\ref{tab:ablations}) collapses mean
 EPE gain to $0.05\%$ while improving RMSE and worst case: the failure is

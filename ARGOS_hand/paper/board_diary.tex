@@ -16400,5 +16400,44 @@ fifteen cells and only the grid is partial. Those are different risks: the first
 biases a number, the second only leaves a better number possibly unfound, and the
 analytic limits above bound how much better it could be.
 
+
+\section*{19 August, Morning: Which Branch Does the Work}
+
+The review's second question --- which of $r_t$ and $f_t$ produces the gain --- is
+answered by suppressing one factor at inference with the trained head unchanged.
+Nothing is retrained, so the difference is the branch.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& EPE red. & $B^+/H^+$ & NewBad1 & RecovBad1 \\
+\midrule
+$w=r_tf_t$ & $4.05\%$ & $\mathbf{2.53}$ & $\mathbf{0.047\%}$ & $0.227\%$ \\
+$w=r_t$    & $3.42\%$ & $1.44$ & $0.191\%$ & $0.286\%$ \\
+$w=f_t$    & $4.01\%$ & $2.15$ & $0.096\%$ & $0.244\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Read on EPE alone the answer is that fusion does everything and the reset gate is
+redundant: $4.01$ against $4.05$, a difference of one part in a hundred. That
+reading is wrong, and it is wrong in exactly the way this paper spends a section
+warning about. Dropping the reset gate more than doubles the pixels the
+intervention breaks and takes $B^+/H^+$ from $2.53$ to $2.15$.
+
+So the two factors have different jobs: the fusion weight sets how much is gained
+and the reset gate sets how little is broken. A paper that reports $B^+/H^+$
+because counts and magnitudes can disagree has that disagreement inside its own
+architecture, and would have missed it by reporting the product and one metric.
+
+\paragraph{A mistake worth recording.} I killed the wrong jobs. Having just
+argued in a commit message that the $\tau{=}2.0$ sweep points could not produce a
+new maximum, I ran \texttt{bjobs | tail -2} and killed the two \emph{most recently
+submitted} residual jobs --- which were the fine-$\tau$ points launched a minute
+earlier to bracket the peak. The worthless work survived and the valuable work
+died. \texttt{tail} on a job list selects by submission order, which has no
+relation to what the jobs are doing; they have to be killed by identifier after
+looking at what each one is.
+
 \end{document}
 
