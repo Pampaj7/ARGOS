@@ -236,14 +236,23 @@ def self_check(sequence: str, frames: int) -> None:
     # builder rather than chosen.
 
 
-def score(sequence: str, backbone: str, frames: int, min_views: int) -> None:
-    """Ground truth and raw, in the shared world frame. Refined needs the module and a GPU."""
+def score(sequence: str, backbone: str, frames: int, min_views: int,
+          module: str, device_name: str, output: Path | None) -> None:
+    """Ground truth, raw and refined in the shared world frame, all on the module's grid.
+
+    Everything is computed at 144x180 because that is where the module operates and where
+    the cached raw predictions live. Scoring raw at native resolution and refined at the
+    module's would compare two different resamplings and call the difference a result.
+    """
     import cv2
     import tifffile
+    import torch
     _paths()
     sys.path.insert(0, str(ARGOS))
+    from argos_freezed.alignment.sea_raft_adapter import SEARAFTFlowAdapter
     from argos_v2.cache_io import load_sequence_cache
-    from argos_v2.scared_c_data import load_frame_gt, load_sequence_info
+    from argos_v2.scared_c_data import load_frame_gt, load_sequence_info, read_rgb
+    from model_design.comparison.run_comparison import drive, load_factory
     from scripts.scared_c.build_corrected_temporal_gt import load_calib
 
     kf_dir, _ = sequence_paths(sequence)
@@ -252,42 +261,79 @@ def score(sequence: str, backbone: str, frames: int, min_views: int) -> None:
     info = load_sequence_info(sequence)
     ids = info.frame_ids[:frames] if frames else info.frame_ids
     poses = load_poses(sequence, ids)
-    native, _valid = load_frame_gt(info, ids[0])
-    r1 = rectification_rotation(sequence, native.shape)
+    device = torch.device(device_name)
+    adapter = load_factory(module)(device=device_name)
+    flow_model = SEARAFTFlowAdapter(device=device)
 
-    disparity, valid_mask, cached_ids, _meta = load_sequence_cache(backbone, sequence)
-    index = {str(v): i for i, v in enumerate(np.asarray(cached_ids).astype(str))}
+    def rgb(path: Path):
+        value = cv2.resize(read_rgb(path), (GRID_W, GRID_H), interpolation=cv2.INTER_AREA)
+        return torch.from_numpy(np.ascontiguousarray(value)).permute(2, 0, 1).float().to(device)[None]
 
-    series = {"gt": ([], []), "raw": ([], [])}
+    images = [rgb(info.seq_dir / "left" / f"{v}.png") for v in ids]
+    right = [rgb(info.seq_dir / "right" / f"{v}.png") for v in ids]
+
+    gt_grid, coverage = [], []
+    native_shape = None
     for frame_id in ids:
-        depth, valid = load_frame_gt(info, frame_id)
-        height, width = depth.shape
-        fx = info.fx * width / native.shape[1]
-        cx, cy = (width - 1) / 2, (height - 1) / 2
-        series["gt"][0].append(to_world(backproject(depth, fx, info.baseline_mm, cx, cy),
-                                        poses[frame_id], r1))
-        series["gt"][1].append(valid & (depth > 0))
+        native, valid = load_frame_gt(info, frame_id)
+        native_shape = native.shape
+        cover = cv2.resize(valid.astype(np.float32), (GRID_W, GRID_H), interpolation=cv2.INTER_AREA)
+        numerator = cv2.resize(native * valid.astype(np.float32), (GRID_W, GRID_H), interpolation=cv2.INTER_AREA)
+        gt_grid.append(numerator / np.maximum(cover, 1e-6) * (GRID_W / native.shape[1]))
+        coverage.append(cover)
+    gt_grid, coverage = np.stack(gt_grid), np.stack(coverage)
+    fx_grid = info.fx * GRID_W / native_shape[1]
+    r1 = rectification_rotation(sequence, native_shape)
+    cx, cy = (GRID_W - 1) / 2, (GRID_H - 1) / 2
 
-        row = index.get(frame_id)
-        if row is None:
-            raise RuntimeError(f"{backbone} has no cached prediction for {sequence}/{frame_id}")
-        raw = np.asarray(disparity[row], dtype=np.float64)
-        raw_valid = np.asarray(valid_mask[row]).astype(bool)
-        if raw.shape != depth.shape:
-            scale = width / raw.shape[1]
-            raw = cv2.resize(raw, (width, height), interpolation=cv2.INTER_NEAREST) * scale
-            raw_valid = cv2.resize(raw_valid.astype(np.uint8), (width, height),
-                                   interpolation=cv2.INTER_NEAREST).astype(bool)
-        series["raw"][0].append(to_world(backproject(raw, fx, info.baseline_mm, cx, cy),
-                                         poses[frame_id], r1))
-        series["raw"][1].append(raw_valid & (raw > 0))
+    disparity, validity, cache_ids, _meta = load_sequence_cache(backbone, sequence)
+    if [str(v) for v in cache_ids[:len(ids)]] != ids:
+        raise RuntimeError(f"frame-ID mismatch: {backbone}/{sequence}")
+    count = len(ids)
+    frame_dicts = [{"index": i,
+                    "raw": torch.from_numpy(np.asarray(disparity[i:i + 1], np.float32))[:, None].to(device),
+                    "raw_valid": torch.from_numpy(np.asarray(validity[i:i + 1]) > 0)[:, None].to(device),
+                    "rgb": images[i], "right_rgb": right[i]} for i in range(count)]
 
-    print(f"{sequence} / {backbone}: {len(ids)} frames, world-frame disagreement per keyframe "
-          f"pixel over >= {min_views} views")
-    for name, (clouds, masks) in series.items():
-        spread, pixels = accumulate_spread(clouds, masks, intrinsics, keyframe_shape, min_views)
-        print(f"  {name:6s} n={pixels:8,}  median {np.median(spread):8.3f} mm  "
-              f"mean {spread.mean():8.3f}  p95 {np.percentile(spread, 95):8.3f}")
+    def flow_pair(current, past):
+        a, b = current["index"], past["index"]
+        return flow_model.infer(images[a], images[b]), flow_model.infer(images[b], images[a])
+
+    with torch.inference_mode():
+        outputs = dict(drive(adapter, frame_dicts, flow_pair))
+        refined = np.stack([outputs[i]["disparity"][0, 0].detach().float().cpu().numpy()
+                            for i in range(count)])
+    raw = np.asarray(disparity[:count], np.float64)
+    raw_valid = np.asarray(validity[:count]) > 0
+
+    # One prediction-independent support for all three, as everywhere else in the framework.
+    support = (coverage > 0.5) & raw_valid & (gt_grid > 0)
+    record = {"sequence": sequence, "backbone": backbone, "module": module,
+              "frames": count, "min_views": min_views, "grid": [GRID_H, GRID_W],
+              "metric": "per-keyframe-pixel standard deviation of world-frame Z, mm",
+              "results": {}}
+    print(f"{sequence} / {backbone} / {module}: {count} frames, >= {min_views} views")
+    for name, source in (("gt", gt_grid), ("raw", raw), ("refined", refined)):
+        clouds = [to_world(backproject(np.asarray(source[t], np.float64), fx_grid,
+                                       info.baseline_mm, cx, cy), poses[ids[t]], r1)
+                  for t in range(count)]
+        spread, pixels = accumulate_spread(clouds, list(support), intrinsics, keyframe_shape, min_views)
+        record["results"][name] = {"pixels": pixels, "median_mm": float(np.median(spread)),
+                                   "mean_mm": float(spread.mean()),
+                                   "p95_mm": float(np.percentile(spread, 95))}
+        print(f"  {name:8s} n={pixels:8,}  median {np.median(spread):8.4f} mm  "
+              f"mean {spread.mean():8.4f}  p95 {np.percentile(spread, 95):8.4f}")
+    gt_floor = record["results"]["gt"]["median_mm"]
+    for name in ("raw", "refined"):
+        record["results"][name]["excess_over_gt_mm"] = record["results"][name]["median_mm"] - gt_floor
+    excess_raw = record["results"]["raw"]["excess_over_gt_mm"]
+    excess_ref = record["results"]["refined"]["excess_over_gt_mm"]
+    record["excess_reduction_pct"] = 100.0 * (excess_raw - excess_ref) / excess_raw
+    print(f"  excess over the ground-truth floor: raw {excess_raw:.4f} -> refined "
+          f"{excess_ref:.4f} mm ({record['excess_reduction_pct']:+.1f}%)")
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(record, indent=2) + "\n")
 
 
 def main() -> None:
@@ -296,12 +342,16 @@ def main() -> None:
     parser.add_argument("--backbone", default="RAFT-Stereo")
     parser.add_argument("--frames", type=int, default=40)
     parser.add_argument("--min-views", type=int, default=3)
+    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--self-check", action="store_true")
     args = parser.parse_args()
     if args.self_check:
         self_check(args.sequence, min(args.frames, 8))
         return
-    score(args.sequence, args.backbone, args.frames, args.min_views)
+    score(args.sequence, args.backbone, args.frames, args.min_views, args.module,
+          args.device, args.output)
 
 
 if __name__ == "__main__":

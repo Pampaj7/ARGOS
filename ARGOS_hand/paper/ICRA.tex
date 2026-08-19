@@ -161,16 +161,14 @@ current stereo estimate and that aligned memory.
 Corrected recurrence is explicitly bounded and periodically re-anchored
 to independently predicted raw geometry.
 
-A controlled development-set closure shows that the learned policy is
-not explained by temporal smoothing:
-on SCARED-C D2, canonical $H=4$ reduces mean EPE by $4.05\%$, compared
-with only $0.59\%$ for the best matched fixed/EMA blend, while direct
-flow-confidence weighting and ungated memory propagation degrade
+A controlled development-set closure shows the learned policy is not
+explained by temporal smoothing: on SCARED-C D2, canonical $H=4$ reduces
+mean EPE by $4.05\%$ against $0.59\%$ for the best matched fixed/EMA blend,
+while flow-confidence weighting and ungated memory propagation degrade
 accuracy.
-The raw-versus-memory oracle exposes a $12.30\%$ improvement ceiling,
-of which TETHER recovers $37.2\%$.
-Continuous corrected-state recurrence increases EPE by $62.69\%$,
-supporting bounded memory.
+The raw-versus-memory oracle exposes a $12.30\%$ ceiling, of which TETHER
+recovers $37.2\%$; continuous corrected-state recurrence increases EPE by
+$62.69\%$, supporting bounded memory.
 
 One frozen $H=4$ checkpoint improves all five evaluated stereo estimators
 on held-out SCARED-C D7, including CREStereo and Fast-FoundationStereo,
@@ -182,13 +180,13 @@ depth in all $100$ recording--backbone--metric cells, completing the
 transfer matrix across both the backbone and the domain shift.
 We further show that confining the fused output to the support the module
 already declares is load-bearing: without it, zero-padded out-of-bounds
-memory turns rare pixels into invalid predictions and produces the
+memory turns rare pixels into invalid predictions and produces a
 metric-depth tail previously attributed to the external domain.
 
 We additionally introduce a refinement-centric evaluation framework
-measuring geometry, multi-horizon temporal fidelity, introduced and
-recovered error, frame tails and selective risk under fixed,
-prediction-independent support.
+measuring geometry, temporal fidelity, introduced and recovered error,
+frame tails and selective risk under fixed, prediction-independent
+support.
 
 \end{abstract}
 
@@ -221,10 +219,10 @@ representations, future observations, or co-design with the estimator.
 
 We study a different deployment setting: \emph{can one causal temporal
 module be trained once and attached unchanged to heterogeneous frozen
-stereo estimators?} This matters because backbone and temporal logic can then evolve
-independently: a new estimator replaces the previous one without the
-temporal module needing its cost volume, hidden state, confidence head or
-training pipeline.
+stereo estimators?} Backbone and temporal logic can then evolve
+independently, a new estimator replacing the previous one without the module
+needing its cost volume, hidden state, confidence head or training
+pipeline.
 
 Our starting point is the reset-and-fusion principle of CODD
 \cite{li2023codd}, which we do not claim as novel. We keep its inductive
@@ -949,12 +947,11 @@ a weak prediction, not a claim that either recovers a good one.
 Out of domain for both, TETHER removes two to thirteen times as much error
 as the bidirectional baseline on every metric, while being the only causal
 entry and $54\times$ smaller ($177$k trained parameters against $9.64$M). It is not uniform, and the exception is worth naming: on Vid13 TETHER is
-$0.020$\,px behind the baseline and, more importantly, $0.012$\,px
-\emph{worse than the raw prediction it refines} --- the one recording of
-five where the intervention is a net harm and the bidirectional method is
-not. The $38$-channel A2 head leads on three metrics of four here, and
-across three seeds reduces EPE by $5.20\pm0.13\%$ against $4.83\pm0.15\%$,
-the two seed ranges not overlapping. In domain the same comparison favours us far more ($4.58\%$ against
+$0.020$\,px behind the baseline and $0.012$\,px \emph{worse than the raw
+prediction it refines}, the one recording of five where the intervention is
+a net harm and the bidirectional method is not. The $38$-channel A2 head
+leads on three metrics of four here and across three seeds reduces EPE by
+$5.20\pm0.13\%$ against $4.83\pm0.15\%$, the ranges not overlapping. In domain the same comparison favours us far more ($4.58\%$ against
 $0.25\%$ EPE), which is why we report DRENDS instead.
 
 TC-Stereo \cite{zeng2024tcstereo} needs privileged inputs our interface
@@ -1061,11 +1058,7 @@ domain --- and it is almost invisible to anyone validating in domain
 only, which is what makes it worth stating.
 
 
-\paragraph{No-reference temporal behaviour on D4D}
-TETHER reduces prediction-space temporal inconsistency by $53.9\%$ --- worth
-little, since copy-previous removes $97.3\%$ without even aligning and
-warped-previous scores \emph{exactly} zero by construction. The ordering
-inverts against geometric quality, so we make no D4D geometric claim.
+
 
 
 \section{Analysis}
@@ -1092,11 +1085,10 @@ intervene. And the effective weight $w_t$, recovered from the convex form,
 scores AUROC
 $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7 as a predictor
 of harmful intervention: an intervention magnitude, not an uncertainty.
-That does not contradict the intervention ratios above: the gain
-factorises exactly into a count and a magnitude term
-($B^+/H^+=2.839=1.642\times1.728$ on D7), neither needing $w_t$ to rank
-anything. The policy is good on average and uninformative per pixel, which
-makes the oracle gap a ranking problem.
+That does not contradict the intervention ratios: the gain factorises into
+a count and a magnitude term ($B^+/H^+=2.839=1.642\times1.728$ on D7),
+neither needing $w_t$ to rank anything. The policy is good on average and
+uninformative per pixel, which makes the oracle gap a ranking problem.
 
 
 % ============================================================
@@ -1106,20 +1098,32 @@ makes the oracle gap a ranking problem.
 \section{Discussion and Limitations}
 
 \paragraph{What the splits support.}
-The matched-baseline and horizon closure is development work on D2: it
-supports mechanism analysis and the pre-frozen $H=4$ operating point, not
-confirmation. Transfer is demonstrated along both axes and their
-combination, but one external domain does not establish universal
-robustness, and DRENDS supplies a temporally filtered ToF reference rather
-than independent stereo ground truth. Per-backbone D7 margins come from one
-seed and the three-seed study bounds only the pooled effect, so individual
-rows are not separated from one another.
+The closure is development work on D2: it supports mechanism analysis and
+the pre-frozen $H=4$ operating point, not confirmation. Transfer is shown
+along both axes and their combination, but one external domain does not
+establish universal robustness, and DRENDS supplies a temporally filtered
+ToF reference rather than independent stereo ground truth. Per-backbone D7
+margins come from one seed and the three-seed study bounds only the pooled
+effect.
 
 \paragraph{What the metrics cannot say.}
-No-reference temporal consistency is gameable --- replaying warped history
-scores exactly zero --- so we make no D4D geometric claim. Pull-warp support
-detects out-of-frame sampling but not internal disocclusion, so newly
-visible anatomy may inherit stale geometry.
+No-reference temporal consistency is gameable: on D4D we reduce it by
+$53.9\%$, but copy-previous removes $97.3\%$ without aligning and
+warped-previous scores exactly zero by construction, so we make no D4D
+geometric claim. Pull-warp support detects out-of-frame sampling but not
+internal disocclusion.
+
+\paragraph{What does not improve downstream.}
+SCARED-C supplies corrected per-frame poses, so geometry can be accumulated
+in one world frame and the disagreement between views of a point measured:
+what a map fuses rather than what a frame scores. Over three D2 sequences,
+$200$ frames each, against a ground-truth floor of $0.04$--$0.08$\,mm,
+refinement makes that disagreement \emph{worse} in five cases of six, by
+$7.1\%$ of the excess on average. Raw is memoryless, so two views differ
+only by their own noise, while a recurrent output carries the history that
+produced it: per-frame accuracy is bought by making each frame a function of
+its past, which is what fusion does not want. We claim single-frame
+perception geometry, not mapping.
 
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and
@@ -1153,16 +1157,16 @@ $2.9$--$10.4\times$ more Bad1 pixels than it introduces, and holds at
 $5.15\pm0.35\%$ Bad1 across three seeds.
 Zero-shot transfer to DRENDS improves all $100$ cells.
 
-Four results bound what may be claimed. The no-reference consistency
-metric is won outright by a policy that merely replays warped history, so
-smoothness cannot stand in for correctness. The fusion weight inverts its
-relation to harm between development and held-out data, so it is an
+Five results bound what may be claimed. The no-reference consistency metric
+is won outright by a policy that merely replays warped history. The fusion
+weight inverts its relation to harm between splits, so it is an
 intervention magnitude, not an uncertainty. Development gains carry
 selection optimism that held-out gains do not: across seeds the D2 effect
-spans $5.03$ points, the D7 effect $0.69$. And a module that declares a support must apply it to what it emits: a
-contract whose violation is almost invisible in domain and costs the whole
-metric-depth tail out of it, a hazard for flow-aligned plug-in modules
-generally, not a property of ours.
+spans $5.03$ points, the D7 effect $0.69$. A module that declares a support
+must apply it to what it emits, a contract almost invisible in domain that
+costs the whole metric-depth tail out of it. And world-frame reconstruction
+consistency does not improve, so the claim is single-frame geometry rather
+than mapping.
 
 What remains open is where to intervene: the oracle over the module's own
 action space is far from reached, and the head's weight is a magnitude, not
@@ -1173,7 +1177,7 @@ a ranking.
 % 27 entries at default itemsep spill two references onto a ninth page; the
 % list is compacted rather than the evidence cut.
 \begin{thebibliography}{99}
-\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.},
@@ -1334,10 +1338,10 @@ in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
 (CVPR)}, 2020.
 
 \bibitem{recasens2021endodepth}
-D.~Recasens \emph{et al.},
-``Endo-Depth-and-Motion: Reconstruction and tracking in endoscopic
-videos using depth networks and photometric constraints,''
-\emph{IEEE Robotics and Automation Letters}, vol.~6, no.~4, 2021.
+D.~Recasens \emph{et al.}, ``Endo-Depth-and-Motion: Reconstruction and
+tracking in endoscopic videos using depth networks and photometric
+constraints,'' \emph{IEEE Robotics and Automation Letters}, vol.~6, no.~4,
+2021.
 
 \end{thebibliography}
 

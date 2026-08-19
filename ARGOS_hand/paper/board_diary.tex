@@ -16219,5 +16219,59 @@ itself. And a stale ``60 cells'' survived in the conclusion after the grid went
 to $100$; the DRENDS numbers had been regenerated everywhere the
 \texttt{NOTE} pointed, and the conclusion was not one of the places it pointed.
 
+
+\section*{19 August, Small Hours: The Downstream Measurement Says No}
+
+The review's blocking objection is that the paper claims a robotics contribution
+without showing anything downstream improves. SCARED-C's corrected poses made the
+measurement possible, and it is now done: three D2 sequences, both heads, $200$
+frames each, disagreement between views about the same world point.
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+Sequence & Head & excess raw & excess refined & change \\
+\midrule
+\texttt{kf\_2} & canonical & $0.2236$ & $0.2402$ & $-7.4\%$ \\
+\texttt{kf\_2} & A2        & $0.2236$ & $0.2629$ & $-17.6\%$ \\
+\texttt{kf\_3} & canonical & $0.1898$ & $0.2199$ & $-15.9\%$ \\
+\texttt{kf\_3} & A2        & $0.1898$ & $0.2316$ & $-22.0\%$ \\
+\texttt{kf\_4} & canonical & $0.1805$ & $0.1771$ & $+1.9\%$ \\
+\texttt{kf\_4} & A2        & $0.1805$ & $0.1929$ & $-6.8\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Millimetres of excess over a ground-truth floor of $0.04$--$0.08$\,mm. Refinement
+makes multi-view reconstruction consistency \emph{worse} in five cells of six,
+by $7.1\%$ on average for the canonical head and $15.5\%$ for A2.
+
+\paragraph{This is not the metric contradicting itself.} The frame-to-frame
+figure quoted earlier --- excess $p2p$ down $36.2\%$ --- measured agreement
+between \emph{consecutive} frames after flow warping, each in its own camera
+frame. This measures agreement between \emph{many} frames in one world frame. A
+refiner can improve the first and damage the second at the same time, and the
+mechanism is not mysterious: raw is memoryless, so two views of a point disagree
+only by their own noise, while a recurrent output depends on the history that
+produced it, and two views reached through different histories carry different
+bias. Temporal refinement buys per-frame accuracy by making each frame a
+function of its past, and that is precisely what a multi-view fusion does not
+want.
+
+\paragraph{What it costs the paper.} The downstream experiment the review demands
+now exists and it does not support the claim it was meant to support. The honest
+report is that per-frame geometry improves and map-level consistency does not,
+which bounds the contribution to single-frame perception rather than mapping.
+That is a real limitation and it goes in the paper, not in a drawer --- and it is
+worth more to state it than to have no downstream measurement at all, which was
+the position this morning.
+
+\paragraph{And a second mark against A2.} A2 is worse than canonical on all three
+sequences here. Its ledger now carries two consistent negatives, unconfined D2
+EPE and world-frame drift, against the Bad1 endpoint, the seed spread, the
+unbounded-recurrence robustness, the runtime and the out-of-domain margin. The
+promotion still follows the pre-registered rule, which was decided on D2 Bad1
+alone, but ``A2 is simply better'' was never the claim and is now clearly false.
+
 \end{document}
 
