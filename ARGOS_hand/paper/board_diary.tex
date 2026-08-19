@@ -16273,5 +16273,43 @@ unbounded-recurrence robustness, the runtime and the out-of-domain margin. The
 promotion still follows the pre-registered rule, which was decided on D2 Bad1
 alone, but ``A2 is simply better'' was never the claim and is now clearly false.
 
+
+\section*{19 August, Small Hours: The Negative Result Survives Its Own Falsification}
+
+A finding that says our own method makes something worse deserves a serious
+attempt to break it before it is believed, and the obvious break is that the
+refined branch of the new script is simply wrong. If refinement were worse
+frame-by-frame as well, the multi-view number would be measuring a bug.
+
+Same run, same frames, same support, both numbers printed together:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& raw & refined & change \\
+\midrule
+per-frame disparity MAE       & $0.1807$\,px & $0.1748$\,px & $+3.2\%$ \\
+multi-view world-frame excess & $0.2236$\,mm & $0.2402$\,mm & $-7.4\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Refinement does its usual job and damages multi-view consistency at the same
+time. The finding is coherent, so it stands. The three spread figures also
+reproduced the earlier run to the digit, which is the determinism check arriving
+for free a second time.
+
+\paragraph{Why this is the strongest form of the result.} Stated as ``refinement
+hurts reconstruction'' it invites the reply that the pipeline is broken. Stated
+as ``$+3.2\%$ per frame and $-7.4\%$ across views, measured together'', it is a
+statement about what temporal recurrence is and is not for --- and the paper now
+carries both numbers in one sentence rather than the bad one alone.
+
+\paragraph{A detail worth recording.} The verification script was written into
+\texttt{/tmp} and submitted; the job dispatched and died on \texttt{No such file
+or directory}. The login node's \texttt{/tmp} is not the compute node's.
+Everything a batch job executes has to live on shared storage, which every
+working launcher in \texttt{scripts/} already did and this one-off did not.
+
 \end{document}
 
