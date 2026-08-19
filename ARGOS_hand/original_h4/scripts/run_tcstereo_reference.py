@@ -6,11 +6,16 @@ furthest in construction: it is causal, but it *replaces* the stereo network and
 its own hidden state, so it cannot be attached to a frozen backbone. Its temporal
 propagation (`core/tc_stereo.py:119-137`) additionally warps the previous disparity by a
 rigid 6-DoF reprojection built from per-frame camera poses, intrinsics and baseline.
-SCARED-C supplies no per-frame pose, and deformable tissue violates the rigid-scene
-assumption regardless, so its temporal path is not merely unavailable here but wrong for
-the data. We therefore run the network the only way the data permits --- `params=None` on
-every frame, which is its single-frame stereo path --- and report it as what it is: an
-integrated 16.7M-parameter architecture evaluated zero-shot, not a temporal rival.
+SCARED-C *does* supply per-frame poses -- correcting them is what the dataset is for, and
+this file previously claimed the opposite -- so the temporal path is runnable and only the
+rigid-scene assumption remains questionable on deforming tissue, which is a result to
+measure rather than a reason to skip.
+
+What *this* run reports is the frame path only: `params=None` on every frame, its
+single-frame stereo path, an integrated 16.7M-parameter architecture evaluated zero-shot
+and not a temporal rival. The temporal run is a separate entry point because it needs
+per-frame state carried across the sequence -- K, T, previous_T, baseline, last_disp,
+last_net_list and fmap1 -- rather than a flag on this one.
 
 The point of the row is to answer the obvious reviewer question ("why refine a frozen
 network instead of using a better one?") on identical frames and identical ground truth.
@@ -171,7 +176,8 @@ def main() -> None:
             "params": None,
             "reason": "its propagation warps the previous disparity by a rigid 6-DoF "
                       "reprojection from per-frame pose, intrinsics and baseline; SCARED-C "
-                      "provides no per-frame pose and deformable tissue is not rigid",
+                      "does supply per-frame poses, so this run reports the frame path by "
+                      "choice of entry point, not by unavailability",
             "consequence": "this is TC-Stereo's single-frame stereo path, reported as an "
                            "integrated-architecture reference and not as a temporal rival"},
         "invalid_penalty_px": INVALID_PENALTY_PX,
