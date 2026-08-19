@@ -188,7 +188,7 @@ $0.4921$ to $0.4645$ over three independently trained seeds
 ($5.61\pm0.42\%$), and Bad1 and RMSE decrease for every backbone.
 Zero-shot evaluation on five DRENDS recordings with all five estimators,
 two unseen in training, improves disparity EPE, Bad3 and metric depth in all
-$100$ cells ($-5.40$, $-19.51$, $-4.02$, $-3.47\%$), completing the transfer
+$25$ recording--backbone cells ($-5.40$, $-19.51$, $-4.02$, $-3.47\%$), completing the transfer
 matrix across backbone and domain.
 Confining the fused output to the support the module already declares is
 load-bearing: without it, zero-padded out-of-bounds memory turns rare pixels
@@ -260,8 +260,10 @@ forward--backward confidence weighting recover only a small fraction of
 TETHER's gain.
 In contrast, a ground-truth oracle shows that the aligned memory contains
 substantially more useful information than the current policy exploits.
-This indicates that the core problem is not obtaining temporal evidence,
-but identifying \emph{where and how much} of it should be used.
+This indicates that the core problem is not obtaining temporal evidence but
+deciding how much of it to use --- and Sec.~\ref{sec:analysis} shows the head
+decides \emph{how much} well and \emph{where} no better than chance, which is
+what leaves the oracle gap open.
 
 A second question is how such intervention should be evaluated. Smoothness
 is not correctness --- a stale prediction can be smooth and wrong --- and
@@ -327,7 +329,15 @@ constraint.
 
 \paragraph{What can actually be compared.}
 We are aware of no published method that is simultaneously causal, black-box
-and estimator-agnostic. The closest, StereoDiffusion
+and estimator-agnostic. CODD \cite{li2023codd}, whose two-gate decision we
+build on, is causal but not black-box: its fusion network consumes matching
+features from its own stereo network, which a cached third-party backbone does
+not expose. The $142$-channel configuration of Sec.~\ref{sec:ablations} began
+as the closest reproduction of it our interface admits --- its projection
+replaced by our warp, and a frozen ResNet-18 standing in for the features it
+would have taken from the estimator --- so the comparison against it in
+Table~\ref{tab:ablations} is the nearest thing to running CODD here.
+The closest black-box method, StereoDiffusion
 \cite{xu2024stereodiffusion}, ships no implementation; neural disparity
 refinement \cite{aleotti2021ndr} and blind video temporal consistency
 \cite{lai2018blind} publish code whose weights are no longer retrievable.
@@ -657,11 +667,12 @@ selected on development fused EPE. That budget deserves scrutiny, since
 selection fires at epoch $8$, $11$ and $11$ across the three seeds and two of
 those are the penultimate epoch. What the curves show is a plateau rather
 than a climb: from epoch~5 the mean epoch-to-epoch movement in validation EPE
-($0.0025$--$0.0046$ across the three seeds) is as large as everything still
-gained after it
-($0.0041$--$0.0054$), and the seed whose minimum falls earliest ends the run
-\emph{above} that minimum. The epoch at which the minimum lands is therefore
-drawn from the noise rather than from a trend.
+($0.0025$--$0.0046$ across the three seeds) is comparable to everything still
+gained after it ($0.0041$--$0.0054$), and all three seeds end the run above
+their own minimum. The two are not strictly comparable --- one is a single
+step, the other a cumulative gain over several --- so this supports the
+weaker claim that the epoch of the minimum is uninformative, not that the
+curve has converged.
 \TODO{convergence probe: the shipped model retrained for $100$ epochs against
 the locked $12$, from training\_runs/convergence\_probe\_A2\_no\_learned\_
 evidence\_100ep. Eight times the budget, because doubling it would only move
@@ -712,12 +723,17 @@ $\delta_{1,2,3}$.
 
 \paragraph{Temporal fidelity.}
 At horizons $k\in\{1,2,4,8\}$ the framework defines grid-based temporal
-change error (DTCE) and, given correspondence, motion-compensated
+change error (DTCE), $|\Delta\text{prediction}-\Delta\text{target}|$ on fixed
+support, and, given correspondence, motion-compensated
 $\TEPE_{\mathrm{corr}}$ and prediction consistency, estimated-flow
-correspondences marked as proxies. Every DTCE figure in this paper is at lag
+correspondences marked as proxies. DTCE scores agreement with the
+\emph{reference} change, not stillness: a frozen prediction has
+$\Delta{=}0$ and is penalised by the whole of the reference motion, so
+the degenerate replay that wins the no-reference score of
+Sec.~\ref{sec:limits} does not win this one. Every DTCE figure here is at lag
 $k{=}4$ unless stated, and we report the other lags where they disagree. We do
-not build on the motion-compensated family: it improves in all $20/20$ D7
-backbone--horizon cases but the two measures disagree on D2.
+not build on the motion-compensated family: it improves on all five D7
+backbones at all four horizons but the two measures disagree on D2.
 
 
 \paragraph{Intervention harm and benefit.}
@@ -884,8 +900,9 @@ EPE degrades by $19.17\%$, Bad1 by $143.48\%$ and temporal stability by
 $28.13\%$
 (Table~\ref{tab:closure}). Within the bounded range EPE alone does not select
 an operating point --- it improves from $2.49\%$ at $H{=}1$ through $3.69\%$
-at $H{=}4$ to $3.73\%$ at $H{=}6$ before falling to $3.52\%$ at $H{=}8$, a
-spread of a quarter of a point across the whole grid --- while newly broken
+at $H{=}4$ to $3.73\%$ at $H{=}6$ before falling to $3.52\%$ at $H{=}8$. EPE
+does reject $H{=}1$, by $1.24$ points; among the three horizons it does not
+separate, the spread is $0.21$ --- while newly broken
 pixels rise monotonically with the horizon, from $0.052\%$ to $0.128\%$. We
 froze $H{=}4$ before D7 opened, on that risk--gain trade rather than on EPE,
 and it is the last horizon at which grid-based temporal change error also
@@ -905,9 +922,11 @@ choice on breakage rather than on stability.
 \subsection{Cross-Backbone Development Behaviour}
 
 $H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:grid}), from $1.41\%$ to $8.19\%$, and all six
-unseen-backbone sequence groups improve; on D7 the mean excluding Stereo
-Anywhere is $5.15\%$.
+(Table~\ref{tab:grid}), from $1.41\%$ to $8.19\%$ averaging per-sequence
+reductions --- $1.70\%$ to $8.04\%$ from the pooled cells the table prints ---
+and all six unseen-backbone sequence groups improve; on D7 the mean excluding
+Stereo Anywhere is $5.15\%$. One D2 cell worsens, S$^2$M$^2$-S on
+keyframe~$2$, by $0.28\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
@@ -941,10 +960,16 @@ prohibited.
 
 Pooled over five backbones the relative Bad1 reduction is
 $12.73\pm0.32\%$ on D2 and $5.84\pm0.22\%$ on held-out D7; EPE gives
-$4.13\pm0.38\%$ and $5.61\pm0.42\%$. Paired sequence-level bootstrap
-intervals are $[8.96,16.60]$ and $[4.00,8.71]$ for Bad1 and $[2.55,5.67]$
-and $[4.03,7.28]$ for EPE, with no resample in which refinement failed to
-help.
+$4.13\pm0.38\%$ and $5.61\pm0.42\%$, where $\pm$ is the standard deviation
+over the three seeds throughout this paper and \emph{range} always means
+min--max. A paired bootstrap over the $15$ and $20$ backbone--sequence cells
+gives $[8.96,16.60]$ and $[4.00,8.71]$ for Bad1 and $[2.55,5.67]$ and
+$[4.03,7.28]$ for EPE, positive in every resample. We report those intervals
+as descriptive only: the cells share three and four underlying sequences, so
+they are not independent draws and the interval is narrower than the evidence
+warrants. The distribution-free statement the splits can carry is that the
+effect is positive in $3/3$ and $4/4$ sequences, a sign test at $p=0.125$ and
+$p=0.0625$.
 
 The spread is the strongest argument for the shipped configuration, and it
 is not what we found first. The $142$-channel ablation is stable on the
@@ -992,8 +1017,14 @@ never seen ex-vivo liver and pancreas manipulation against a
 time-of-flight reference. The shared input is its own RAFT-Stereo
 \emph{robust} prediction, so TETHER is driven on that exact array over all
 five recordings ($7476$ frames) under one support neither method
-influences. One asymmetry favours the baseline: it is bidirectional and
-consumes future frames, which our setting forbids.
+influences. Two asymmetries run in opposite directions and both belong here.
+The baseline is bidirectional and consumes future frames, which our setting
+forbids. We, on the other hand, are trained on surgical endoscopy and it is
+running weights fitted to natural-image stereo, so ``out of domain'' is not
+symmetric: neither has seen DRENDS, but only one of us has seen this kind of
+scene. The same holds of TC-Stereo below. We therefore read the margin as an
+upper bound on our advantage, and an in-domain baseline remains the
+comparison we cannot run.
 
 \begin{table}[!ht]
 \centering
@@ -1029,9 +1060,14 @@ $1.18$\,px on comparable disparities. What follows compares two refiners of
 a weak prediction, not a claim that either recovers a good one.
 
 Out of domain for both, TETHER removes between $1.7$ and $14$ times as much
-error as the bidirectional baseline, on every metric, while being the only
-causal entry and $62\times$ smaller ($155$k trained parameters against
-$9.64$M). It is not uniform, and the exception is worth naming: on Vid13
+error as the bidirectional baseline, on all four metrics we score, while
+being the only causal entry and carrying $62\times$ fewer trained parameters
+($155$k against $9.64$M). That ratio is about training cost, not about
+deployment: our system also runs frozen SEA-RAFT, $8.88$M parameters and
+$26.2$ of our $28.9$\,ms, so at system level the two are comparable in size
+and we make no efficiency claim. The largest of the four ratios, $14\times$ on
+Bad1, divides our $1.53$ points by the baseline's $0.11$ and is not a stable
+statistic; the absolute deltas are the reportable form. It is not uniform, and the exception is worth naming: on Vid13
 TETHER is $0.022$\,px behind the baseline and $0.013$\,px \emph{worse than
 the raw prediction it refines}, the one recording of five where the
 intervention is a net harm and the bidirectional method is not.
@@ -1107,7 +1143,10 @@ about how it would do.
 Zero-shot DRENDS, one SCARED-trained checkpoint, five recordings $\times$
 five estimators $\times$ four metrics. Relative change in \%, negative is
 better; each entry is the mean over the five recordings of the per-recording
-relative change. Every one of the $100$ cells improves. Nothing is adapted,
+relative change. Every one of the $25$ recording--backbone cells improves on each of the four metrics. The
+four are not independent evidence --- depth is the same disparity field
+through one calibration --- so we count cells, not cell-metric products.
+Nothing is adapted,
 retrained or tuned for this domain, and two of the five estimators were never
 seen in temporal-head training.
 }
@@ -1124,7 +1163,7 @@ Stereo Anywhere       & seen   & $-6.21$ & $-23.54$ & $-4.60$ & $-4.09$ \\
 CREStereo             & unseen & $-5.62$ & $-19.07$ & $-4.12$ & $-3.67$ \\
 Fast-FoundationStereo & unseen & $-4.70$ & $-15.80$ & $-3.50$ & $-2.97$ \\
 \midrule
-All $100$ cells       &        & $-5.40$ & $-19.51$ & $-4.02$ & $-3.47$ \\
+All $25$ cells        &        & $-5.40$ & $-19.51$ & $-4.02$ & $-3.47$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1133,7 +1172,7 @@ We evaluate the frozen checkpoint on five DRENDS recordings with all five
 estimators, two excluded from temporal-head training, $7476$ frames each.
 Nothing is adapted, retrained or tuned for this domain. Disparity EPE, Bad3,
 metric depth MAE and metric depth RMSE improve in \emph{every} one of the
-$100$ cells (Table~\ref{tab:drends}), by $-5.40\%$, $-19.51\%$, $-4.02\%$
+$25$ recording--backbone cells (Table~\ref{tab:drends}), by $-5.40\%$, $-19.51\%$, $-4.02\%$
 and $-3.47\%$ on average. The two unseen estimators are not distinguishable
 from the three seen ones, which is the claim.
 
@@ -1144,8 +1183,11 @@ the estimator matters, it matters as much as the recording does.
 
 Averaged over backbones, the mean EPE reduction is $3.96\%$ for seen and
 $2.67\%$ for unseen estimators on D2, $5.80\%$ and $4.79\%$ on held-out D7,
-and $5.57\%$ and $5.16\%$ on DRENDS: every combination is positive, and the
-shift that costs more is the backbone, not the domain.
+and $5.57\%$ and $5.16\%$ on DRENDS: every combination is positive. We do not
+read an ordering into it. On D2 the seen advantage is carried entirely by
+Stereo Anywhere, and without it the seen mean falls to $1.85\%$ against
+$2.67\%$ unseen --- the ordering reverses. Five backbones cannot support a
+claim about which axis costs more, and we withdraw the one we drew.
 This establishes zero-shot geometric transfer under a ToF-derived metric
 reference; it does not establish universal cross-domain robustness, and
 DRENDS remains a non-independent reference.
@@ -1156,7 +1198,11 @@ DRENDS remains a non-independent reference.
 
 Four design choices were ablated under a pre-registration naming held-out
 Bad1 as the endpoint and the three-seed spread ($0.37$ points) as the
-threshold below which a difference is not read; A4 remains a single run.
+threshold below which a difference is not read; A4 remains a single run. A
+separate later registration governs \emph{promotion} of a variant to the
+shipped model and decides that on development only, which is how the
+$38$-channel head was promoted; the two rules are distinct and we apply each
+where it belongs.
 
 \begin{table}[!ht]
 \centering
@@ -1205,23 +1251,23 @@ The learned evidence is not what makes the module work; it is what makes its
 training unstable, and it costs $157{,}504$ frozen parameters, three forward
 passes per frame and $13.8\%$ of the runtime to do so. Its apparent advantage
 on the development closure ($4.05\%$ against $3.69\%$) is a seed-0 artefact:
-over three seeds \steer\ leads there too, $4.13\%$ against $3.55\%$. Running
-the context branch at full resolution instead of a quarter was the one
-deviation whose single-run margin exceeded the threshold, and it has now had
-the same three-seed check as the rest. The margin survives and shrinks doing
-so: on held-out Bad1 it reduces $5.68\pm0.16\%$ against the base
-configuration's $5.15\pm0.34\%$, $+0.54$ points where the single run read
-$+0.70$. The pre-registration names the development split as the decision ---
-the same rule, fixed before A2's extra seeds existed, applied here unchanged
---- and there it reduces $8.10\pm0.97\%$ against $8.40\%$, $0.29$ points
-\emph{worse} inside a $2.53$-point spread. The rule therefore returns it to
-the ablation table, and at $16\times$ the context-branch compute we report it
-there rather than adopting it. We state the split rather than resolving it: a
-reader who weighs the held-out endpoint above the pre-registered one is
-looking at a deviation that beat its base on three seeds out of three, and
-the honest description of this row is an open question we did not buy, not a
-decision the evidence settled. The unconstrained-output deviation disqualifies itself with
-an EPE gain collapsing to $0.05\%$.
+over three seeds \steer\ leads there too, $4.13\%$ against $3.55\%$. Two rows
+need the registered rule read out loud, because it does not favour us.
+Running the context branch at full resolution instead of a quarter reduces
+held-out Bad1 by $5.68\pm0.16\%$ against the base configuration's
+$5.15\pm0.34\%$ over three seeds each: it \emph{wins} the registered
+endpoint, by $0.54$ points against a $0.37$-point threshold, an outcome the
+registration did not enumerate. We do not adopt it, and the ground is cost
+rather than accuracy --- $16\times$ the context-branch compute --- which the
+registration required us to report if this happened. Ablating convexity (A4)
+posts the largest held-out Bad1 reduction in the table, $6.02\%$, on one
+seed, and we reject it on EPE, which the registration names as reported but
+not as the endpoint; that reading was chosen after seeing the result and we
+mark it as such. Its registered consequence we do honour: the falsification
+clause said that if A4 matched or beat the canonical model on held out, the
+claim attributing cross-backbone transfer to the convex action space must be
+withdrawn rather than softened. It is withdrawn --- that claim appears
+nowhere in this paper.
 
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
@@ -1261,6 +1307,7 @@ only, which is what makes it worth stating.
 
 
 \section{Analysis}
+\label{sec:analysis}
 
 The closure isolates four requirements. Alignment is necessary but not
 sufficient: the aligned memory carries a $12.30\%$ oracle ceiling, yet
@@ -1301,7 +1348,8 @@ $142$-channel configuration is the same shape and further from chance
 ($0.366$--$0.381$ and $0.496$--$0.506$), so this is a property of the
 formulation and not of the evidence space. It does not contradict the
 intervention ratios, which factorise into a
-count and a magnitude term needing no per-pixel ranking: $B^+/H^+$ is $2.03$
+count and a magnitude term needing no per-pixel ranking: on this analysis'
+own support $B^+/H^+$ is $2.03$
 on D2 and $2.86$ on D7, and per-cell oracle recovery rises from $32.9\%$ on
 D2 to $42.7\%$ on held-out D7. A policy can therefore
 be good on average and uninformative per pixel, which is what makes the
@@ -1313,6 +1361,7 @@ oracle gap a ranking problem rather than a capacity one.
 % ============================================================
 
 \section{Discussion and Limitations}
+\label{sec:limits}
 
 \paragraph{What the splits support.}
 The closure is development work on D2: it supports mechanism analysis and
@@ -1407,7 +1456,8 @@ frozen $H=4$ checkpoint improves all five estimators on held-out D7 in
 EPE, Bad1 and RMSE at once, including two excluded from training, recovers
 $3.8$--$11.1\times$ more Bad1 pixels than it introduces, and holds at
 $5.84\pm0.22\%$ Bad1 across three seeds.
-Zero-shot transfer to DRENDS improves all $100$ cells.
+Zero-shot transfer to DRENDS improves all $25$ recording--backbone cells on
+every metric.
 
 Five results bound what may be claimed. The no-reference consistency metric
 is won outright by a policy that merely replays warped history. The fusion
