@@ -363,8 +363,9 @@ and re-tied to raw geometry the frozen network produced independently
 colour scale, differing by $0.108$\,px on average. \textbf{(b)} One time
 step; dashed grey is frozen, the single orange block is the only trained
 component and emits one scalar $w_t$ rather than geometry. \textbf{(c)} The
-evidence space: none of the $142$ channels carries ground truth, backbone
-identity or a future frame.
+evidence space: none of the $38$ channels carries ground truth, backbone
+identity or a future frame, and none is produced by a learned feature
+extractor.
 }
 \label{fig:system}
 \end{figure*}
@@ -438,13 +439,13 @@ S_t,
 \right).
 \end{equation}
 
-The head consumes one 38-channel tensor at two resolutions. At quarter
-resolution, 25 channels of disparity geometry: 16 disparity
-self-correlations of the raw and aligned candidates over a dilated
-$3\times3$ neighbourhood with the centre removed, and 9 raw-to-aligned
-cross-correlations over the same neighbourhood with the centre kept. At
-cache resolution, 13: raw disparity, aligned memory, their signed and
-absolute residual, 6 motion components and 3 RGB.
+The head consumes one 38-channel tensor at two resolutions
+(Fig.~\ref{fig:system}c). At quarter resolution, 25 channels of disparity
+geometry: 16 disparity self-correlations of the raw and aligned candidates
+over a dilated $3\times3$ neighbourhood with the centre removed, and 9
+raw-to-aligned cross-correlations over the same neighbourhood with the
+centre kept. At cache resolution, 13: raw disparity, aligned memory, their
+signed and absolute residual, 6 motion components and 3 RGB.
 
 Nothing in this space is learned and no network evaluates it. An earlier
 configuration added 104 further quarter-resolution channels built from a
