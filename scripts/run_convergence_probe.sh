@@ -24,8 +24,13 @@ if [ "${1:-}" = "--node" ]; then
     echo "picked physical GPU $CUDA_VISIBLE_DEVICES of: $(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | tr '\n' ' ')"
     export CUDA_VISIBLE_DEVICES PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     cd "$ROOT" || exit 1
+    # 20 workers, matching the shipped run exactly. At 12 the probe's validation curve sat
+    # systematically below the shipped one at all nine epochs compared -- too consistent in
+    # sign to dismiss as GPU nondeterminism. Whether the cause is the worker count or the
+    # non-determinism of mixed precision was not worth establishing: matching removes the
+    # question, and a probe answering a methodological objection cannot carry one of its own.
     "$PY" -m model_design.train_convergence_probe --epochs "${EPOCHS:-100}" \
-          --workers 12 --preload-workers 12 || { echo "PROBE FAILED"; exit 1; }
+          --workers 20 --preload-workers 20 || { echo "PROBE FAILED"; exit 1; }
     echo "CONVERGENCE PROBE DONE"
     exit 0
 fi
