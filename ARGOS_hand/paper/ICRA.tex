@@ -172,12 +172,11 @@ $0.59\%$ for the best matched fixed/EMA blend and $0.87\%$ for the best tuned
 unlearned residual rule, and those blends buy mean error with bad pixels while
 the learned gate does not. One frozen checkpoint improves all five evaluated
 estimators on held-out SCARED-C D7, including two excluded from temporal-head
-training, with mean backbone EPE $0.4921\rightarrow0.4645$ over three seeds
-($5.61\pm0.42\%$; $0.4651$ for the seed-0 checkpoint the tables report), and
-improves every one of $25$ recording--backbone cells zero-shot on DRENDS.
-We additionally introduce a refinement-centric evaluation protocol measuring
-introduced error alongside recovered error under fixed, prediction-independent
-support, and apply it to our own claims.
+training (mean backbone EPE $0.4921\rightarrow0.4645$ over three seeds,
+$5.61\pm0.42\%$), and every one of $25$ recording--backbone cells zero-shot on
+DRENDS. We additionally introduce a refinement-centric evaluation protocol
+measuring introduced error alongside recovered error under fixed,
+prediction-independent support, and apply it to our own claims.
 
 \end{abstract}
 
@@ -332,12 +331,11 @@ TETHER at three scales. \textbf{(a)} Bounded recurrence: memory carries the
 re-tied to raw geometry the frozen network produced independently (teal). The
 five frames are consecutive; the two disparity rows share one colour scale and
 differ by $0.126$\,px on average, with one fitted plane removed from all ten
-panels so the anatomy is visible under a $7$\,px depth ramp (the same plane
-from both rows, so their difference is untouched). \textbf{(b)} One time step;
-dashed grey is frozen, the single orange block is the only trained component
-and emits one scalar per pixel, $w_t$, rather than geometry. \textbf{(c)} The
-evidence space: none of the $38$ channels carries ground truth, backbone
-identity or a future frame, and none comes from a learned extractor.}
+panels so the anatomy is visible under a $7$\,px depth ramp. \textbf{(b)} One
+time step; dashed grey is frozen, the single orange block is the only trained
+component and emits one scalar per pixel, $w_t$, rather than geometry.
+\textbf{(c)} The evidence space: none of the $38$ channels carries ground
+truth, backbone identity or a future frame.}
 \label{fig:system}
 \end{figure*}
 
@@ -569,9 +567,8 @@ One frozen TETHER checkpoint, seed $0$, across five estimators and three
 arenas; every EPE and Bad1 cell is raw$\rightarrow$TETHER, lower is better.
 Two estimators were excluded from temporal-head training, so the lower-right
 block is the joint shift usually left unmeasured. DTCE is the macro reduction
-in temporal change error at lag $k{=}4$, higher is better; it is
-backbone-dependent on development and reported there in
-Sec.~\ref{sec:horizon}.
+in temporal change error at lag $k{=}4$, higher is better; on development it is
+backbone-dependent (Sec.~\ref{sec:horizon}).
 }
 \label{tab:grid}
 \scriptsize
@@ -754,20 +751,16 @@ $B^+/H^+$.
 \label{sec:bida}
 
 BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
-stabiliser we could run. We compare on DRENDS because only there is
-\emph{neither} method in domain: we train on ex-vivo porcine tissue, it has
-never seen ex-vivo liver and pancreas manipulation against a
-time-of-flight reference. The shared input is its own RAFT-Stereo
-\emph{robust} prediction, so TETHER is driven on that exact array over all
-five recordings ($7476$ frames) under one support neither method
-influences. Two asymmetries run in opposite directions and both belong here.
-The baseline is bidirectional and consumes future frames, which our setting
-forbids. We, on the other hand, are trained on surgical endoscopy and it is
-running weights fitted to natural-image stereo, so ``out of domain'' is not
-symmetric: neither has seen DRENDS, but only one of us has seen this kind of
-scene. The same holds of TC-Stereo below. We therefore read the margin as an
-upper bound on our advantage, and an in-domain baseline remains the
-comparison we cannot run.
+stabiliser we could run. We compare on DRENDS because neither method is in
+domain there; the shared input is its own RAFT-Stereo \emph{robust}
+prediction, so TETHER is driven on that exact array over all five recordings
+($7476$ frames) under one support neither influences. Two asymmetries run in
+opposite directions and both belong here: the baseline is bidirectional and
+consumes future frames, which our setting forbids, but we are trained on
+surgical endoscopy while it runs weights fitted to natural-image stereo, so
+only one of us has seen this kind of scene. The same holds of TC-Stereo below.
+We therefore read the margin as an upper bound on our advantage, and an
+in-domain baseline remains the comparison we cannot run.
 
 On $117.4$M pixels of common support, raw EPE $1.199$ becomes $1.175$ under
 the baseline and $\mathbf{1.131}$ under \steer; Bad1 $44.92\%$ becomes
@@ -932,9 +925,8 @@ Forensics in the supplement.
 Alignment is necessary but not sufficient: the aligned memory carries a
 $12.74\%$ oracle ceiling that indiscriminate use does not collect
 (Table~\ref{tab:closure}). The mechanism is alignment plus learned graded
-intervention plus bounded recurrence, not smoothing, and the head never
-solves stereo matching --- it receives two meaningful candidates and chooses
-between them.
+intervention plus bounded recurrence, not smoothing; the head never solves
+stereo matching, it chooses between two candidates.
 
 \paragraph{What each branch of $w_t=r_tf_t$ does.}
 Suppressing either factor at inference, the trained head unchanged, separates
@@ -1011,11 +1003,10 @@ robust across estimators and do not claim raw difficulty as its cause.
 Mapping benefit is conditional, not general.
 
 \paragraph{Cost, and where it is.}
-The head is compact but the deployed system also runs frozen stereo and
-two SEA-RAFT passes: $28.90$\,ms overhead at $95.2$\,MB peak VRAM on an
-H100. The frozen estimator dominates that budget by up to an order of
-magnitude, so the end-to-end rate is set by the backbone, from $11.6$\,FPS
-on Fast-FoundationStereo (overhead $33.5\%$) to $1.4$\,FPS on
+The head is compact but the deployed system also runs frozen stereo and two
+SEA-RAFT passes: $28.90$\,ms overhead at $95.2$\,MB peak VRAM on an H100. The
+frozen estimator dominates, so the end-to-end rate is set by the backbone,
+$11.6$\,FPS on Fast-FoundationStereo (overhead $33.5\%$) to $1.4$ on
 StereoAnywhere ($4.0\%$); \emph{no real-time claim is made}.
 
 Stage timing locates it: the two SEA-RAFT passes are $26.2$ of the
@@ -1051,16 +1042,15 @@ evidence space rather than of the protocol. A module that declares a support
 must apply it to what it emits. And world-frame reconstruction consistency
 improves held out while degrading on development, for every backbone we
 tried, so mapping benefit is conditional on something we can demonstrate but
-not yet name. What remains open is \emph{where} to intervene: the oracle over
-the module's own action space is far from reached.
+not yet name. What remains open is \emph{where} to intervene.
 
 
 \balance
-% 27 entries at default itemsep spill two references onto a ninth page; the
-% list is compacted rather than the evidence cut.
+% 27 entries at default itemsep spill onto a further page; the list is
+% compacted rather than the evidence cut.
 \begin{thebibliography}{99}
 \footnotesize
-\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
+\setlength{\itemsep}{-1pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.},
@@ -1217,14 +1207,12 @@ vol.~44, no.~9, 2022.
 \bibitem{poggi2020uncertainty}
 M.~Poggi \emph{et al.},
 ``On the uncertainty of self-supervised monocular depth estimation,''
-in \emph{Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition
-(CVPR)}, 2020.
+in \emph{Proc. CVPR}, 2020.
 
 \bibitem{recasens2021endodepth}
 D.~Recasens \emph{et al.}, ``Endo-Depth-and-Motion: Reconstruction and
-tracking in endoscopic videos using depth networks and photometric
-constraints,'' \emph{IEEE Robotics and Automation Letters}, vol.~6, no.~4,
-2021.
+tracking in endoscopic videos,'' \emph{IEEE Robot. Autom. Lett.}, vol.~6,
+no.~4, 2021.
 
 \end{thebibliography}
 

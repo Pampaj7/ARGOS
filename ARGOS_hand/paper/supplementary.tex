@@ -16,6 +16,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{multirow}
@@ -945,5 +946,65 @@ Z.~Zeng \emph{et al.},
 ``Temporally consistent stereo matching,''
 in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
 \end{thebibliography}
+
+
+\section{Material Moved from the Main Paper}
+
+The main paper is eight pages. Four objects that were in it are now here in
+full, and nothing measured was deleted to make room.
+
+\paragraph{Table: out-of-domain head-to-head with BiDAStabilizer.}
+Five DRENDS recordings, $117.4$M pixels of common support, neither method in
+domain.
+
+\begin{center}
+\begin{tabular}{lccccccc}
+\toprule
+Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE & $\mathrm{DTCE}_1$ & $\mathrm{DTCE}_4$ \\
+\midrule
+Raw            & ---          & $1.199$ & $44.92$ & $4.54$ & $1.876$ & $0.242$ & $0.340$ \\
+BiDAStabilizer & no           & $1.175$ & $44.81$ & $4.32$ & $1.776$ & $\mathbf{0.085}$ & $\mathbf{0.214}$ \\
+TETHER         & \textbf{yes} & $\mathbf{1.131}$ & $\mathbf{43.39}$ & $\mathbf{3.94}$ & $\mathbf{1.710}$ & $0.139$ & $0.294$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two best columns belong to different rows. The bidirectional baseline is
+the more temporally stable method and the less accurate one, at every lag and
+in each of the five recordings.
+
+\paragraph{Table: per-backbone DRENDS transfer.}
+Relative change in \%, negative is better; each entry is the mean over the
+five recordings.
+
+\begin{center}
+\begin{tabular}{llrrrr}
+\toprule
+Backbone & Status & EPE & Bad3 & Depth MAE & Depth RMSE \\
+\midrule
+S$^2$M$^2$-S          & seen   & $-4.86$ & $-18.44$ & $-3.65$ & $-3.06$ \\
+RAFT-Stereo           & seen   & $-5.63$ & $-20.71$ & $-4.22$ & $-3.58$ \\
+Stereo Anywhere       & seen   & $-6.21$ & $-23.54$ & $-4.60$ & $-4.09$ \\
+CREStereo             & unseen & $-5.62$ & $-19.07$ & $-4.12$ & $-3.67$ \\
+Fast-FoundationStereo & unseen & $-4.70$ & $-15.80$ & $-3.50$ & $-2.97$ \\
+\midrule
+All $25$ cells        &        & $-5.40$ & $-19.51$ & $-4.02$ & $-3.47$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Figure: per-frame Bad1 scatter.}
+Raw against refined for every scored frame of each split --- five backbones,
+all sequences, no selection. On held-out D7, $56\%$ of $15{,}535$ frames
+improve against $14\%$ worsened; on development D2, $45\%$ against $18\%$.
+The worsened band hugs the diagonal while the improved mass extends far from
+it, which is the count-versus-magnitude asymmetry behind $B^+/H^+$.
+
+\begin{center}
+\includegraphics[width=0.62\columnwidth]{frame_scatter.pdf}
+\end{center}
+
+\paragraph{TC-Stereo, evidence-space construction, head widths, stage timing.}
+These already have sections of their own above.
 
 \end{document}
