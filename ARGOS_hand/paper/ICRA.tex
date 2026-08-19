@@ -1225,14 +1225,16 @@ receives two meaningful candidates and chooses between them.
 \paragraph{What each branch of $w_t=r_tf_t$ does.}
 Each factor can be suppressed at inference with the trained head unchanged,
 which separates what the reset gate contributes from what the fusion weight
-contributes.
-\TODO{fusion-only and reset-only closure on the shipped head: EPE
-reduction, NewBad1 and $B^+/H^+$ against \steer's own $3.69\%$ / $0.063\%$,
-from branch\_ablation rerun with ablation\_h4:factory\_a2. On the
-$142$-channel head fusion alone recovered $4.01\%$ of $4.05\%$ while more
-than doubling newly broken pixels and dropping $B^+/H^+$ to $2.15$, and reset
-alone was worse on both; the shipped head is expected to behave the same way
-but has not been measured.}
+contributes. Fusion alone keeps most of the gain, $3.49\%$ against $3.69\%$,
+but breaks a third more pixels ($0.084\%$ NewBad1 against $0.063\%$) and
+drops $B^+/H^+$ from $1.85$ to $1.72$. Reset alone keeps $2.23\%$ and breaks
+$0.211\%$, more than three times as many. The two factors therefore do
+different jobs: the fusion weight sets how much is gained, the reset gate
+sets how little is broken, and a paper reporting only the product and only
+mean error would have seen neither. On the $142$-channel configuration the
+same decomposition is flatter in EPE ($4.01\%$ against $4.05\%$) and the
+count asymmetry is the whole of it, so the reset gate earns more of the mean
+gain in the shipped head than in the one it replaced.
 
 Ablating the convexity constraint (A4) collapses mean EPE gain to $0.05\%$
 while improving RMSE and worst case: the failure is broad degradation of

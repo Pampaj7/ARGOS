@@ -1,0 +1,114 @@
+{
+  "CUDA_VISIBLE_DEVICES": "0",
+  "branch": "fusion_only",
+  "canonical_closure": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_evaluation/experimental_closure/d2",
+    "summary_sha256": "644c4be3c48d2b75aa3720b988f07da4c27d5cca3f3cc7ecc45f63721918a223"
+  },
+  "complete_method_set": false,
+  "dataset": "scared-d2",
+  "dense_predictions_written": false,
+  "freeze": {
+    "path": "",
+    "verified": true
+  },
+  "methods_requested": [
+    "canonical_h4"
+  ],
+  "module_provenance": {
+    "canonical_h4": {
+      "branch": "fusion_only",
+      "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A2_no_learned_evidence/checkpoints/best_validation.pt",
+      "checkpoint_sha256": "5c78cb73ba5f5bc39ca3bed58a5e3ccf41be4c954ec8ffae43417b80ad33a300",
+      "declared_change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+      "horizon": 4,
+      "module": "branch_ablation",
+      "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+      "reset_protocol": "frozen A2_no_learned_evidence head; inference horizon=4",
+      "rule": "w = f_t",
+      "seed": null,
+      "training_provenance": {
+        "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+        "declared": {
+          "change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+          "everything_else": "unchanged",
+          "field": "disable_learned_stereo_evidence",
+          "implementation": "an existing flag in train.py; no code change",
+          "locked_value": false,
+          "new_value": true,
+          "rationale": "Tests whether the head needs learned features at all. This is the variant that removes the frozen extractor from the deployed system, so it is the one with a runtime consequence."
+        },
+        "locked_training": {
+          "alpha_reg": 0.2,
+          "backbones": [
+            "S2M2-S",
+            "RAFT-Stereo",
+            "StereoAnywhere"
+          ],
+          "batch_size": 4,
+          "clip_length": 4,
+          "coverage_threshold": 0.5,
+          "epochs": 12,
+          "gradient_clip_norm": 1.0,
+          "learned_stereo_evidence": true,
+          "learning_rate": 0.0002,
+          "memory_state": "recurrent",
+          "mixed_precision_cuda": true,
+          "optimizer": "AdamW",
+          "scheduler": null,
+          "seed": 0,
+          "tau_fusion_native_px": 1.0,
+          "tau_reset_native_px": 5.0,
+          "train_dataset_ids": [
+            1,
+            3,
+            6
+          ],
+          "validation_dataset_ids": [
+            2
+          ],
+          "weight_decay": 0.0001
+        },
+        "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A2_no_learned_evidence",
+        "patch": {
+          "config_field": "disable_learned_stereo_evidence",
+          "cue_channels": 38,
+          "patched": null,
+          "value": true
+        },
+        "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+        "variant": "A2_no_learned_evidence"
+      },
+      "variant": "A2_no_learned_evidence",
+      "variant_of": "canonical_h4_masked"
+    }
+  },
+  "not_rerun": {
+    "baseline_policies": "model-free; identical under any head",
+    "raw_vs_aligned_memory_oracle": "GT-only; never runs the adapter"
+  },
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_evaluation/experimental_closure/d2_branch_fusion_only_tether",
+  "project": "ARGOS v2",
+  "scope": {
+    "backbones": [
+      "S2M2-S",
+      "RAFT-Stereo",
+      "StereoAnywhere",
+      "CREStereo",
+      "Fast-FoundationStereo"
+    ],
+    "max_frames": null,
+    "method_report_count": 225,
+    "protocol": "paper_d2_strict_all_anchors",
+    "sequences": [
+      "dataset_2_keyframe_2",
+      "dataset_2_keyframe_3",
+      "dataset_2_keyframe_4"
+    ],
+    "smoke": false,
+    "summary_row_count": 240
+  },
+  "shard": null,
+  "status": "COMPLETE",
+  "summary_row_count": 15
+}

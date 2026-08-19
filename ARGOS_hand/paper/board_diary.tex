@@ -16718,4 +16718,37 @@ upper bound on what removal costs and a lower bound on what a head trained witho
 it could do. The experiment that would settle it --- retraining without the cue ---
 is the one not run.
 
+\section*{19 August, Evening: Which Branch Does the Work, on the Head That Ships}
+
+The branch decomposition existed only for the $142$-channel configuration, which
+is now the ablation, and the paper was discussing it under a heading naming the
+shipped model. Rerun where it belongs:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& EPE red. & NewBad1 & $B^+/H^+$ \\
+\midrule
+$w=r_tf_t$ & $\mathbf{3.69\%}$ & $\mathbf{0.063\%}$ & $\mathbf{1.85}$ \\
+$w=f_t$    & $3.49\%$ & $0.084\%$ & $1.72$ \\
+$w=r_t$    & $2.23\%$ & $0.211\%$ & $1.21$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The conclusion survives the change of head and gets easier to state. Fusion sets
+how much is gained, the reset gate sets how little is broken.
+
+What changes is the strength of the first half. On the $142$-channel head the EPE
+column was almost flat --- $4.01$ against $4.05$, one part in a hundred --- so the
+entire argument for keeping the reset gate rested on the broken-pixel count, and I
+wrote at the time that reading EPE alone would call the gate redundant. On the
+shipped head the gate earns $0.20$ points of mean error as well, five times the
+margin it had before. The same removal of learned evidence that tightened the seed
+spread eightfold also made the two factors less interchangeable.
+
+So the paper now makes the same point with two independent columns supporting it
+rather than one, which is a better position than the one I was defending this
+morning.
+
 \end{document}

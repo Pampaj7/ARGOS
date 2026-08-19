@@ -1,0 +1,16 @@
+dataset,split,backbone,sequence,method,diagnostic_gt_only,raw_epe_macro_sequence,candidate_epe_macro_sequence,gain,protocol,primary_aggregate
+SCARED-C,d2,S2M2-S,dataset_2_keyframe_2,canonical_h4,0,0.23985362272843197,0.2404921399451059,-0.0006385172166739339,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,RAFT-Stereo,dataset_2_keyframe_2,canonical_h4,0,0.22000361082684627,0.21654993530610603,0.003453675520740246,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,StereoAnywhere,dataset_2_keyframe_2,canonical_h4,0,0.27317287220436703,0.24819298603838413,0.0249798861659829,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,CREStereo,dataset_2_keyframe_2,canonical_h4,0,0.2276260123089807,0.218311543754137,0.009314468554843691,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,Fast-FoundationStereo,dataset_2_keyframe_2,canonical_h4,0,0.22587961640266582,0.22214375029644534,0.003735866106220481,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,S2M2-S,dataset_2_keyframe_3,canonical_h4,0,0.24656748553902377,0.24714526966031067,-0.000577784121286895,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,RAFT-Stereo,dataset_2_keyframe_3,canonical_h4,0,0.24789362992539068,0.2462988623216976,0.0015947676036930925,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,StereoAnywhere,dataset_2_keyframe_3,canonical_h4,0,0.2974957696593449,0.2672411262968498,0.03025464336249506,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,CREStereo,dataset_2_keyframe_3,canonical_h4,0,0.24677711116526346,0.2457519914201402,0.0010251197451232597,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,Fast-FoundationStereo,dataset_2_keyframe_3,canonical_h4,0,0.2528891168644528,0.25115852122939264,0.0017305956350601726,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,S2M2-S,dataset_2_keyframe_4,canonical_h4,0,0.32484409998499836,0.3112619508702535,0.013582149114744868,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,RAFT-Stereo,dataset_2_keyframe_4,canonical_h4,0,0.339441558661367,0.3257373563566225,0.013704202304744506,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,StereoAnywhere,dataset_2_keyframe_4,canonical_h4,0,0.33587538360479624,0.32013169267058117,0.01574369093421507,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,CREStereo,dataset_2_keyframe_4,canonical_h4,0,0.3260217854118338,0.3126638233624692,0.013357962049364625,paper_d2_strict_all_anchors,macro_sequence
+SCARED-C,d2,Fast-FoundationStereo,dataset_2_keyframe_4,canonical_h4,0,0.338686779166332,0.3255452865750941,0.013141492591237924,paper_d2_strict_all_anchors,macro_sequence
