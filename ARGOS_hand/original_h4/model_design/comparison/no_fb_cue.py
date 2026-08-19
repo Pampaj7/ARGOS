@@ -23,12 +23,13 @@ import sys
 from pathlib import Path
 from typing import Any, Mapping
 
+from model_design.comparison.ablation_horizons import AblationHorizon
 from model_design.comparison.canonical_h4 import CanonicalH4
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class NoFBCue(CanonicalH4):
+class _ConstantFBCue:
     def __init__(self, *, value: float = 1.0, horizon: int | None = 4, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.value, self.horizon = value, horizon
@@ -58,6 +59,9 @@ class NoFBCue(CanonicalH4):
                 flow_magnitude=evidence.flow_magnitude,
                 forward_backward_confidence=constant,
                 warp_support=evidence.warp_support, aligned_valid=evidence.aligned_validity,
+                # TETHER's builder forces this to False and ignores the extractor, so the
+                # same call serves both heads: `include_learned_stereo_evidence` is the
+                # 142-channel head's switch, not a claim about which head is running.
                 include_learned_stereo_evidence=True)
             output = model(cues, frame["raw"], evidence.aligned_past_disparity)
             support = (frame["raw_valid"].bool() & evidence.aligned_validity.bool()
@@ -69,5 +73,27 @@ class NoFBCue(CanonicalH4):
                 "diagnostics": {"update_magnitude": update, "fb_constant": self.value}}
 
 
-def factory(*, value: float = 1.0, horizon: int = 4, device: str = "cuda:0", **_: Any) -> NoFBCue:
-    return NoFBCue(value=value, horizon=horizon, device=device)
+class NoFBCue(_ConstantFBCue, CanonicalH4):
+    """The 142-channel learned-evidence head, now the paper's ablation."""
+
+
+class NoFBCueTether(_ConstantFBCue, AblationHorizon):
+    """TETHER, the shipped 38-channel head.
+
+    The cue survives recanonicalisation: it is one of the six motion channels
+    (`codd_style_fusion.py`, the `motion` concat), which sits in the tail shared by both
+    branches of the builder. Dropping the learned stereo evidence removed 104 correlation
+    channels and left C^FB exactly where it was, so the saving has to be measured on the
+    head the paper actually ships rather than inherited from the ablation's number.
+    """
+
+    def __init__(self, *, variant: str = "A2_no_learned_evidence", **kwargs: Any) -> None:
+        super().__init__(variant=variant, **kwargs)
+
+
+HEADS = {"tether": NoFBCueTether, "learned_evidence": NoFBCue}
+
+
+def factory(*, value: float = 1.0, horizon: int = 4, device: str = "cuda:0",
+            head: str = "tether", **_: Any) -> _ConstantFBCue:
+    return HEADS[head](value=value, horizon=horizon, device=device)

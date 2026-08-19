@@ -45,7 +45,11 @@ def run(config: argparse.Namespace) -> None:
     if not (CANONICAL_D2 / "summary.csv").is_file():
         raise RuntimeError("the canonical D2 closure must exist first; its baseline policy "
                            "rows and its oracle are the reference this run is compared against")
-    output = config.output or RESULTS / f"d2_nofb_c{config.constant:g}"
+    # The bare name belongs to the 142-channel head because that is what already wrote
+    # there; the shipped head takes the suffix. Naming it the other way round would have
+    # aimed a TETHER run at a directory holding the ablation's numbers.
+    suffix = "" if config.head == "learned_evidence" else f"_{config.head}"
+    output = config.output or RESULTS / f"d2_nofb_c{config.constant:g}{suffix}"
     if output.resolve() == CANONICAL_D2.resolve():
         raise ValueError("a promoted head may not write the canonical closure root")
 
@@ -57,6 +61,7 @@ def run(config: argparse.Namespace) -> None:
                 "freeze": {"path": str(freeze.get("path", "")), "verified": True},
                 "canonical_closure": {"path": str(CANONICAL_D2),
                                       "summary_sha256": sha256(CANONICAL_D2 / "summary.csv")},
+                "head": config.head,
                 "shard": getattr(config, "shard", None),
                 "complete_method_set": tuple(config.methods) == tuple(CANONICAL_HORIZONS),
                 "not_rerun": {"baseline_policies": "model-free; identical under any head",
@@ -68,7 +73,7 @@ def run(config: argparse.Namespace) -> None:
     rows: list[dict[str, Any]] = []
     try:
         for name in config.methods:
-            adapter = no_fb_cue.factory(value=config.constant,
+            adapter = no_fb_cue.factory(value=config.constant, head=config.head,
                                         horizon=CANONICAL_HORIZONS[name], device=config.device)
             manifest["module_provenance"][name] = adapter.describe()
             reports: list[tuple[dict[str, Any], Mapping[str, Any]]] = []
@@ -95,6 +100,8 @@ def run(config: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--constant", type=float, default=1.0)
+    parser.add_argument("--head", default="tether", choices=sorted(no_fb_cue.HEADS),
+                        help="the shipped 38-channel head, or the 142-channel ablation")
     parser.add_argument("--methods", nargs="+", default=["canonical_h4"], choices=list(CANONICAL_HORIZONS))
     parser.add_argument("--backbones", nargs="+", default=list(ALL_BACKBONES))
     parser.add_argument("--sequences", nargs="+")
