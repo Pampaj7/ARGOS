@@ -17,7 +17,11 @@ ROOT=/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4
 SELF=$(readlink -f "$0")
 if [ "${1:-}" = "--node" ]; then
     shift
+    # num=2 above is what makes this work. With num=1 LSF grants one device and this
+    # override can name the other, which CUDA then cannot see at all -- measured the hard
+    # way: "No CUDA GPUs are available" from a pin that looked reasonable.
     CUDA_VISIBLE_DEVICES=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | sort -t, -k2 -nr | head -1 | cut -d, -f1)
+    echo "picked physical GPU $CUDA_VISIBLE_DEVICES of: $(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | tr '\n' ' ')"
     export CUDA_VISIBLE_DEVICES PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     cd "$ROOT" || exit 1
     "$PY" -m model_design.train_convergence_probe --epochs "${EPOCHS:-100}" \
@@ -27,4 +31,4 @@ if [ "${1:-}" = "--node" ]; then
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
 exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=12GB]" \
-     -gpu "num=1:mode=shared" -env "all, EPOCHS=${EPOCHS:-100}" -J argos_converge "$SELF --node $*"
+     -gpu "num=2:mode=shared" -env "all, EPOCHS=${EPOCHS:-100}" -J argos_converge "$SELF --node $*"
