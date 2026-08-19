@@ -1044,17 +1044,26 @@ self-check that warps ground-truth disparity between two frames with the
 method's own operator scores $0.0202$\,px under this convention against
 $3.64$ and $2.07$\,px for the two alternatives, which is how we know it is
 the intended one.
-On the same D2 support, its frame path alone scores EPE $0.524$ and Bad1
-$9.05\%$; with the temporal path enabled,
-\TODO{EPE and Bad1 from run\_tcstereo\_temporal.py over all three D2
-keyframes; the file currently on disk is a sixty-frame timing run, not a
-result}
---- against $0.303$/$2.09\%$ raw and
+On the same D2 support, $18.0$M pixels over all three keyframes, its frame
+path alone scores EPE $0.524$ and Bad1 $9.05\%$; enabling its temporal path
+makes both \emph{worse}, $0.622$ and $10.37\%$ --- against $0.303$/$2.09\%$
+raw and
 \TODO{\steer\ on the same support, from compare\_bidastabilizer.py rerun
 with ablation\_h4:factory\_a2}
-for us. The rigid-scene assumption behind its warp is violated by deforming
-tissue; that is a property of the method meeting this data, and measuring it
-is the point.
+for us.
+
+The temporal measure is where the difference is categorical, and it is the
+reason we report it for the competitors and not only for ourselves. Grid-based
+temporal change error rises from $0.073$ to $0.406$\,px at lag $1$ and from
+$0.135$ to $0.592$ at lag $8$: between three and five times \emph{less}
+temporally consistent than the frozen prediction it refines, at every lag. A
+method built for temporal consistency, run as its authors specify with a pose
+convention validated to $0.02$\,px, degrades temporal consistency fourfold on
+this data. The rigid-scene assumption behind its warp is what deforming tissue
+violates, and a rigid warp of a deforming surface introduces exactly the
+frame-to-frame disagreement the metric counts. That is a property of the
+method meeting this data rather than a defect of the method, and it is the
+argument for a refiner that is told nothing about scene geometry.
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}

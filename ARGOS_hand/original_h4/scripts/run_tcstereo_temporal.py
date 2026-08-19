@@ -248,7 +248,13 @@ def main() -> None:
     from run_tcstereo_reference import INVALID_PENALTY_PX, load_tcstereo, metrics
 
     device = torch.device(args.device)
-    model = load_tcstereo(Path(args.checkpoint), device)
+    # Loading the competitor's weights is pointless when every stack is already on disk and
+    # the pass is a rescore. It also means a rescore needs no GPU at all, which matters
+    # because adding a metric later must not cost another five hours of driving.
+    stacks_present = all((OUT / f"{s}_prediction_stack.npz").is_file() for s in args.sequences)
+    model = None if (stacks_present and not args.max_frames) else load_tcstereo(Path(args.checkpoint), device)
+    if model is None:
+        print("every prediction stack is on disk: rescoring without driving the model", flush=True)
     rows = []
 
     for sequence in args.sequences:

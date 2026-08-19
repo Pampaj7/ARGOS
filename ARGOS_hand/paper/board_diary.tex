@@ -16751,4 +16751,50 @@ So the paper now makes the same point with two independent columns supporting it
 rather than one, which is a better position than the one I was defending this
 morning.
 
+\section*{19 August, Night: The Competitor's Temporal Path Makes It Worse}
+
+TC-Stereo entered this paper with its temporal path switched off, justified by a
+claim that was false, and the retraction left a run owing. It has now landed, over
+all three D2 keyframes, $18.0$M pixels, with the pose convention validated
+beforehand at $0.0202$\,px against $3.64$ and $2.07$ for the two wrong frames.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& EPE & Bad1 & $\mathrm{DTCE}_{k=1}$ \\
+\midrule
+raw & $0.303$ & $2.09\%$ & $0.073$ \\
+TC-Stereo, frame path & $0.524$ & $9.05\%$ & --- \\
+TC-Stereo, temporal path & $0.622$ & $10.37\%$ & $0.406$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Turning on the temporal path makes the method worse per frame. That was possible.
+What was not expected is the size of the temporal result: change error rises from
+$0.073$ to $0.406$\,px at lag~1 and from $0.135$ to $0.592$ at lag~8, three to five
+times \emph{less} temporally consistent than the prediction it refines --- at every
+lag, with no lag disagreeing.
+
+A method whose entire purpose is temporal consistency, run the way its authors
+specify, degrades temporal consistency fourfold on surgical video.
+
+The mechanism is not mysterious and the paper predicted it in prose before the run
+existed: the propagation warps previous disparity by a \emph{rigid} $6$-DoF
+reprojection. Tissue deforms. A rigid warp of a deforming surface puts geometry in
+the wrong place, and the wrong place changes from frame to frame, which is exactly
+the disagreement the metric counts. The pose is right --- that is what the
+self-check bought --- and the scene is what is wrong for the assumption.
+
+Two things I want recorded honestly. First, this is a strong claim about someone
+else's method, so the failure modes were closed deliberately: the chaining follows
+their own \texttt{evaluate\_stereo.py} rather than my reading of the paper, the
+pose convention was scored against two wrong alternatives before any accuracy
+number was computed, and the released weights and iteration count are unmodified.
+Second, the result exists at all only because the run was caught at a quarter of
+the way through and made to save its prediction stacks. Rescoring for a metric
+nobody had asked for yet took ninety seconds on a CPU. Without that it would have
+been another five hours of GPU, and the honest likelihood is that it would simply
+never have been measured.
+
 \end{document}

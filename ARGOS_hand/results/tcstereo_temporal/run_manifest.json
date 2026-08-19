@@ -1,0 +1,14 @@
+{
+  "project": "ARGOS v2",
+  "generated_at": "2026-08-19T19:14:57.835713+00:00",
+  "purpose": "TC-Stereo with its temporal path enabled on SCARED-C's corrected poses",
+  "input_boundary": "/dtu/p1/leopam/ARGOS/ARGOS_hand/external_comparison/results/bidastabilizer_raftstereo_robust/d2_full",
+  "tcstereo_checkpoint": "/dtu/p1/leopam/ARGOS/external/comparison_methods/Temporally-Consistent-Stereo-Matching/checkpoints/sceneflow.pth",
+  "iters": 32,
+  "temporal_path_enabled": true,
+  "pose_source": "SCARED-C corrected per-frame poses, conjugated R1 . pose . R1^T into the rectified frame; validated by --self-check against two wrong conventions before scoring",
+  "self_check_run": false,
+  "invalid_penalty_px": 1000.0,
+  "training_performed": false,
+  "threshold_tuning_performed": false
+}
