@@ -195,16 +195,30 @@ def geometry(sequence: str, frame_ids: list[str], grid: tuple[int, int]):
     return poses, intrinsics * np.array([[scale], [scale], [1.0]]), baseline_mm, scale
 
 
-def score(sequence, tc, gt, gt_valid, raw_valid, frames):
-    """Rows for both supports, used whether the stack was just driven or reloaded."""
+def score(sequence, tc, gt, gt_valid, raw_valid, frames, raw=None):
+    """Rows for both supports, used whether the stack was just driven or reloaded.
+
+    Temporal change error is reported beside the geometry. This is the paper's only causal
+    *and* temporal rival, so scoring it per frame alone cannot say whether its own temporal
+    path made the sequence more consistent -- which is the question it exists to answer.
+    """
     from run_tcstereo_reference import metrics
+    from temporal_competitor_metrics import dtce
     out = []
     for support_name, support in (("gt", gt_valid), ("gt_and_raw", gt_valid & raw_valid)):
         row = metrics(tc, gt, support)
-        if row:
-            out.append({"sequence": sequence, "frames": frames, "support": support_name,
-                        "method": "tcstereo_sceneflow_temporal", "causal": "yes",
-                        "frozen_backbone": "no"} | row)
+        if not row:
+            continue
+        temporal = {}
+        if raw is not None:
+            scores = dtce({"raw": raw, "tcstereo": tc}, gt, support)
+            temporal = {f"DTCE_k{k}": scores.get("tcstereo", {}).get(k, {}).get("DTCE_px")
+                        for k in (1, 2, 4, 8)}
+            temporal |= {f"raw_DTCE_k{k}": scores.get("raw", {}).get(k, {}).get("DTCE_px")
+                         for k in (1, 2, 4, 8)}
+        out.append({"sequence": sequence, "frames": frames, "support": support_name,
+                    "method": "tcstereo_sceneflow_temporal", "causal": "yes",
+                    "frozen_backbone": "no"} | row | temporal)
     return out
 
 
@@ -262,7 +276,7 @@ def main() -> None:
             if list(stored["frame_ids"]) == frame_ids:
                 print(f"{sequence}: reusing stored stack, scoring only", flush=True)
                 tc = stored["disparity"].astype(np.float64)
-                rows.extend(score(sequence, tc, gt, gt_valid, raw_valid, T))
+                rows.extend(score(sequence, tc, gt, gt_valid, raw_valid, T, raw))
                 continue
             print(f"{sequence}: stored stack does not match the boundary, re-driving",
                   flush=True)
@@ -308,7 +322,7 @@ def main() -> None:
                             disparity=tc.astype(np.float32),
                             frame_ids=np.asarray(frame_ids))
 
-        rows.extend(score(sequence, tc, gt, gt_valid, raw_valid, T))
+        rows.extend(score(sequence, tc, gt, gt_valid, raw_valid, T, raw))
         print(f"{sequence}: {T} frames done", flush=True)
 
     OUT.mkdir(parents=True, exist_ok=True)

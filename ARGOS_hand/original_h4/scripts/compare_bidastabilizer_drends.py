@@ -27,6 +27,8 @@ from pathlib import Path
 
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 ROOT = Path(__file__).resolve().parents[1]
 ARGOS = ROOT.parents[1]
 BIDA = ARGOS / "ARGOS_hand/external_comparison/results/bidastabilizer_drends"
@@ -75,6 +77,7 @@ def main() -> None:
             sys.path.insert(0, path)
     from argos_freezed.alignment.sea_raft_adapter import SEARAFTFlowAdapter
     from model_design.comparison.run_comparison import drive, load_factory
+    from temporal_competitor_metrics import dtce
 
     device = torch.device(args.device)
     adapter = load_factory(args.module)(device=args.device)
@@ -115,11 +118,22 @@ def main() -> None:
         # One support for all three, chosen before any prediction is seen and influenced
         # by none of them.
         support = gt_valid & raw_valid
+
+        # Temporal change error beside the geometry. A table that scores temporal methods
+        # only per frame cannot say whether either made the sequence more consistent, which
+        # is the whole reason both exist. The bidirectional baseline consumes future frames
+        # and should win this column; a causal method staying close to it is the strongest
+        # form of the comparison, and losing is a finding the metric section already warns
+        # about. Not printing it was the only indefensible option.
+        stacks = {"raw": raw, "bidastabilizer": bida, "tether": tether}
+        temporal = dtce(stacks, gt, support)
+
+        scored = {name: metrics(values, gt, support)
+                  | {f"DTCE_k{k}": temporal.get(name, {}).get(k, {}).get("DTCE_px")
+                     for k in (1, 2, 4, 8)}
+                  for name, values in stacks.items()}
         rows.append({"recording": recording, "frames": count,
-                     "pixels": int(support.sum()),
-                     "raw": metrics(raw, gt, support),
-                     "bidastabilizer": metrics(bida, gt, support),
-                     "tether": metrics(tether, gt, support)})
+                     "pixels": int(support.sum())} | scored)
         current = rows[-1]
         # Flushed, and the partial result is written after every recording. A five-hour
         # run whose only output arrives at the end is unobservable while it matters and
@@ -146,7 +160,10 @@ def main() -> None:
                        "cross-backbone table"),
               "module": args.module, "capped": args.max_frames is not None,
               "per_recording": rows,
-              "pooled": {method: {metric: pooled(method, metric) for metric in ("EPE", "Bad1", "Bad3", "RMSE")}
+              "pooled": {method: {metric: pooled(method, metric)
+                                  for metric in ("EPE", "Bad1", "Bad3", "RMSE",
+                                                 "DTCE_k1", "DTCE_k2", "DTCE_k4", "DTCE_k8")
+                                  if all(row[method].get(metric) is not None for row in rows)}
                          for method in ("raw", "bidastabilizer", "tether")}}
     out.mkdir(parents=True, exist_ok=True)
     (out / "comparison.json").write_text(json.dumps(record, indent=2) + "\n")

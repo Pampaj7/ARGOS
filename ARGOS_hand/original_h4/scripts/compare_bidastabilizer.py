@@ -28,6 +28,8 @@ from pathlib import Path
 
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 ROOT = Path(__file__).resolve().parents[1]
 ARGOS = ROOT.parents[1]
 BIDA = ARGOS / "ARGOS_hand/external_comparison/results/bidastabilizer_raftstereo_robust/d2_full"
@@ -109,11 +111,22 @@ def main() -> None:
 
         # One support for all three conditions; neither method can influence it.
         support = gt_valid & raw_valid
+
+        # Temporal change error alongside the geometry, because a table that scores a
+        # *temporal* method only on per-frame geometry cannot say whether it made the
+        # sequence more consistent. The bidirectional baseline sees the future and should
+        # win this column; that is exactly why it is worth printing.
+        from temporal_competitor_metrics import dtce
+        temporal = dtce({"raw": raw, "bidastabilizer": bida, "tether": ours}, gt, support)
+
         for name, prediction in (("raw", raw), ("bidastabilizer", bida), ("tether", ours)):
             row = metrics(prediction, gt, support)
             if row:
+                lags = temporal.get(name, {})
                 rows.append({"sequence": sequence, "frames": T, "method": name,
-                             "causal": {"raw": "n/a", "bidastabilizer": "no", "tether": "yes"}[name]} | row)
+                             "causal": {"raw": "n/a", "bidastabilizer": "no", "tether": "yes"}[name]}
+                            | row
+                            | {f"DTCE_k{k}": lags.get(k, {}).get("DTCE_px") for k in (1, 2, 4, 8)})
         print(f"{sequence}: {T} frames, support {int(support.sum())} px", flush=True)
 
     args.output.mkdir(parents=True, exist_ok=True)
@@ -127,8 +140,10 @@ def main() -> None:
     for name in ("raw", "bidastabilizer", "tether"):
         sub = [r for r in rows if r["method"] == name]
         n = sum(r["pixels"] for r in sub)
+        keys = ("EPE", "Bad1", "Bad3", "RMSE", "P95", "InvalidRate") + tuple(
+            f"DTCE_k{k}" for k in (1, 2, 4, 8))
         pooled[name] = {m: sum(r[m] * r["pixels"] for r in sub) / n
-                        for m in ("EPE", "Bad1", "Bad3", "RMSE", "P95", "InvalidRate")} | {"pixels": n}
+                        for m in keys if all(r.get(m) is not None for r in sub)} | {"pixels": n}
     (args.output / "pooled.json").write_text(json.dumps(pooled, indent=2) + "\n")
     (args.output / "run_manifest.json").write_text(json.dumps({
         "project": "ARGOS v2", "generated_at": datetime.now(timezone.utc).isoformat(),
