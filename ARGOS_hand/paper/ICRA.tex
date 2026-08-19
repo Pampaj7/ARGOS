@@ -179,13 +179,12 @@ two unseen in training, improves disparity EPE, Bad3 and metric depth in all
 $100$ cells, completing the transfer matrix across backbone and domain.
 Confining the fused output to the support the module already declares is
 load-bearing: without it, zero-padded out-of-bounds memory turns rare pixels
-into invalid predictions and produces a metric-depth tail previously
-attributed to the external domain.
+invalid and produces a metric-depth tail previously attributed to the
+external domain.
 
 We additionally introduce a refinement-centric evaluation framework
 measuring geometry, temporal fidelity, introduced and recovered error,
-frame tails and selective risk under fixed, prediction-independent
-support.
+frame tails and selective risk under fixed support.
 
 \end{abstract}
 
@@ -350,16 +349,15 @@ which is why we treat refinement as an intervention on that geometry.
 \centering
 \includegraphics[width=\textwidth]{figure_assets/Temporal_consistency_taxonomy.pdf}
 \caption{
-TETHER at three scales. \textbf{(a)} Bounded recurrence. Memory carries the
+TETHER at three scales. \textbf{(a)} Bounded recurrence: memory carries the
 \emph{fused} disparity forward, and every $H{=}4$ frames the chain is cut
 and re-tied to raw geometry the frozen network produced independently
 (teal). The five frames are consecutive and the two disparity rows share one
-colour scale, differing by $0.108$\,px on average.
-\textbf{(b)} One time step. Dashed grey is frozen; the single orange block
-is the only trained component, and it emits one scalar $w_t$ rather than
-geometry. \textbf{(c)} The evidence space: none of the $142$ channels carries ground
-truth, backbone identity or a future frame, which is what lets one head
-serve heterogeneous estimators.
+colour scale, differing by $0.108$\,px on average. \textbf{(b)} One time
+step; dashed grey is frozen, the single orange block is the only trained
+component and emits one scalar $w_t$ rather than geometry. \textbf{(c)} The
+evidence space: none of the $142$ channels carries ground truth, backbone
+identity or a future frame.
 }
 \label{fig:system}
 \end{figure*}
@@ -436,12 +434,12 @@ S_t,
 The head consumes one 142-channel tensor at two resolutions. At quarter
 resolution: 64 frozen ResNet-18 layer-1 features \cite{he2016resnet}, 9
 feature-matching cost curves sampling the right features at $d{-}1,d,d{+}1$
-for the raw and aligned candidates and their difference, 6 support
-indicators for those samples, 32 disparity and appearance
-self-correlations, and 18 current-to-aligned-past cross-correlations, the
-last two families over a dilated $3\times3$ neighbourhood. At cache
-resolution, 13: raw disparity, aligned memory, signed and absolute
-residual, 6 motion and 3 RGB. A2 keeps the 38 needing no learned features.
+for the raw and aligned candidates and their difference, their 6 support
+indicators, 32 disparity and appearance self-correlations and 18
+current-to-aligned-past cross-correlations, the last two families over a
+dilated $3\times3$ neighbourhood. At cache resolution, 13: raw disparity,
+aligned memory, signed and absolute residual, 6 motion, 3 RGB. A2 keeps the
+38 needing no learned features.
 
 Normalisation is fixed before training: disparities clipped to $[0,64]$ and
 scaled by $64$, signed residuals to $[-16,16]$ scaled by $16$, flow on
@@ -469,10 +467,9 @@ Sec.~\ref{sec:ablations} shows does not perform worse.
 The effective temporal weight is
 $w_t=r_tf_t$.
 
-Temporal evidence is only defined where the aligned memory is itself
-usable. We therefore define the per-pixel \emph{support} as the
-conjunction of the current raw validity, the aligned temporal validity,
-and the warp support,
+Temporal evidence is only defined where the aligned memory is usable, so
+the per-pixel \emph{support} is the conjunction of current raw validity,
+aligned temporal validity and warp support,
 %
 \begin{equation}
 S_t
@@ -511,21 +508,17 @@ d_t^{\fused}
 \max(d_t^{\raw},\widetilde m_t),
 \end{equation}
 %
-and off the support the module is the exact identity on raw geometry.
+and off the support the module is the exact identity on raw geometry: the
+refiner cannot synthesize disparity outside the interval spanned by its two
+candidates.
 
-The refiner therefore cannot synthesize arbitrary disparity outside the
-interval spanned by its two candidates.
-
-Applying \eqref{eq:support} to the output --- rather than only computing
-it --- is a load-bearing part of the contract, not a formality. The
-causal pull-warp uses zero padding, so an out-of-bounds sample returns
-$\widetilde m_t=0$ \emph{exactly}. An unmasked convex blend at such a
-pixel can therefore drive $d_t^{\fused}$ to zero, producing an invalid
-disparity where the frozen stereo estimator produced a valid one, and
-the bounded recurrence of Sec.~\ref{sec:recurrence} then carries that
-zero forward until the next raw re-anchor. Section~\ref{sec:masking}
-quantifies the effect: it is invisible on SCARED-C and dominates the
-external-domain metric-depth tail.
+Applying \eqref{eq:support} to the output, not only computing it, is
+load-bearing. The pull-warp uses zero padding, so an out-of-bounds sample
+returns $\widetilde m_t=0$ \emph{exactly}; an unmasked blend there drives
+$d_t^{\fused}$ to zero, producing an invalid disparity where the frozen
+estimator produced a valid one, and bounded recurrence carries it to the
+next re-anchor. Sec.~\ref{sec:masking} quantifies it: invisible on SCARED-C,
+and the whole external-domain metric-depth tail.
 
 The exact trainable parameter count is 177,338, and masking changes no
 parameter, no threshold, and no training procedure.
@@ -577,14 +570,13 @@ candidate. Training support $M$ is the intersection of GT coverage,
 current validity, aligned temporal validity and warp support.
 
 The objective is
-$\mathcal{L}=\mathcal{L}_{disp}+\mathcal{L}_{reset}+\mathcal{L}_{fusion}$.
-The reconstruction term is
+$\mathcal{L}=\mathcal{L}_{disp}+\mathcal{L}_{reset}+\mathcal{L}_{fusion}$,
+unweighted, with
 $\mathcal{L}_{disp}=\mu_M[\operatorname{Huber}_{\delta=1}(d_t^{\fused}-g_t)]$.
-The two decision terms supervise the branches directly against
-$\Delta_t$ at native margins $\tau_r^{n}=5$\,px and $\tau_f^{n}=1$\,px
-(cache scale $0.703125$ and $0.140625$): writing $R^{\pm}$ and
-$F^{\pm}$ for the sets where $\Delta_t$ exceeds $\pm\tau_r^c$ and
-$\pm\tau_f^c$, and $F^0$ for $|\Delta_t|\leq\tau_f^c$,
+The decision terms supervise the branches against $\Delta_t$ at native
+margins $\tau_r^{n}=5$\,px and $\tau_f^{n}=1$\,px, scaled to the cache grid
+by $0.140625$: writing $R^{\pm}$, $F^{\pm}$ for the sets where $\Delta_t$
+exceeds $\pm\tau_r^c$, $\pm\tau_f^c$ and $F^0$ for $|\Delta_t|\leq\tau_f^c$,
 %
 \begin{align}
 \mathcal{L}_{reset} &= \mu_{R^+}[r_t]+\mu_{R^-}[1-r_t],\\
@@ -730,8 +722,7 @@ micro statistics are retained secondarily.
 One frozen TETHER checkpoint, canonical seed $0$, across five estimators and
 three arenas; every cell is raw$\rightarrow$TETHER, lower is better. Two
 estimators were excluded from temporal-head training, so the lower-right
-block is the joint shift usually left unmeasured. Macro-sequence
-aggregation.
+block is the joint shift usually left unmeasured.
 }
 \label{tab:grid}
 \scriptsize
@@ -778,11 +769,10 @@ Figures here pool all five backbones and every D2 sequence before taking a
 ratio, so $0.276202$ is one raw mean over fifteen cells; reductions per
 backbone or per arena average per-cell relative reductions instead.
 
-Raw D2 EPE is $0.276202$. Canonical $H=4$ reaches $0.265028$ ($4.05\%$),
-the best matched fixed blend ($w=0.5$, algebraically identical to EMA2)
-only $0.274562$ ($0.59\%$), and the raw-versus-memory oracle $0.242223$
-($12.30\%$): almost seven times the best fixed blend under an identical
-state machine. Per backbone, against whichever fixed or EMA policy is best \emph{for that
+Raw D2 EPE is $0.276202$; canonical $H=4$ reaches $0.265028$ ($4.05\%$),
+the best fixed blend ($w=0.5$, algebraically identical to EMA2) $0.274562$
+($0.59\%$), the raw-versus-memory oracle $0.242223$ ($12.30\%$): almost
+seven times the best fixed blend under one state machine. Per backbone, against whichever fixed or EMA policy is best \emph{for that
 backbone}, the ratio ranges $4.4\times$ to $12.5\times$ and is $5.6\times$
 excluding Stereo Anywhere: the absolute gain depends on that estimator, the
 margin over smoothing does not. Forward--backward confidence is the informative failure --- one of TETHER's
@@ -797,36 +787,36 @@ improvement is not alignment, averaging or smoothing.
 \centering
 \scriptsize
 \caption{
-Horizon sweep on D2: EPE reduction (\%) and benefit-to-harm ratio, higher
-better in both. A2 is the $38$-channel variant of
-Sec.~\ref{sec:ablations}.
+Bounded horizons on D2. EPE reduction (\%), higher better; NewBad1 (\%) is
+the rate the intervention breaks, lower better. A2 is the $38$-channel
+variant of Sec.~\ref{sec:ablations}; continuous recurrence is $-62.69\%$
+and $-19.17\%$.
 }
 \label{tab:horizon}
 \begin{tabular}{lccc}
 \toprule
-$H$ & \multicolumn{2}{c}{EPE reduction} & $B^+/H^+$ \\
+$H$ & \multicolumn{2}{c}{EPE reduction} & NewBad1 \\
 \cmidrule(lr){2-3}
  & Canonical & A2 & Canonical \\
 \midrule
-$1$ & $2.61$ & $2.49$ & $2.39$ \\
-$2$ & $3.24$ & $3.02$ & $2.50$ \\
-$4$ & $4.05$ & $3.69$ & $\mathbf{2.53}$ \\
-$6$ & $\mathbf{4.18}$ & $\mathbf{3.73}$ & $2.30$ \\
-$8$ & $4.09$ & $3.52$ & $2.04$ \\
-cont. & $-62.69$ & $-19.17$ & --- \\
+$1$ & $2.61$ & $2.49$ & $\mathbf{.036}$ \\
+$2$ & $3.24$ & $3.02$ & $.038$ \\
+$4$ & $4.05$ & $3.69$ & $.047$ \\
+$6$ & $\mathbf{4.18}$ & $\mathbf{3.73}$ & $.068$ \\
+$8$ & $4.09$ & $3.52$ & $.128$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Recurrence must be bounded: with no re-anchor the canonical head loses
 $62.69\%$ of EPE. $H=6$ gives the lowest EPE for both heads and we do not
-ship it: $B^+/H^+$ peaks at $H=4$ for both heads independently ($1.85$ for
-A2), and the $0.13$ points $H=6$ buys cost $45\%$ more newly broken pixels,
-$2.7\times$ at $H=8$. $H=4$ is the maximum on the axis this
-paper argues matters, and was frozen before D7 opened. The table also says
-what the evidence space is for: A2 is behind at every bounded horizon and
-further behind as it lengthens, yet degrades three times less once the
-bound is removed.
+ship it, for the reason the last two columns carry: $B^+/H^+$ peaks at
+$H=4$ for both independently ($1.85$ for A2), and the $0.13$ points $H=6$
+buys are paid for with $45\%$ more broken pixels. $H=4$ was frozen before
+D7 opened and is also the maximum on the axis this paper argues matters.
+The table also says what the evidence space is for: A2 is behind at every
+bounded horizon and further behind as it lengthens, yet degrades three
+times less once the bound is removed.
 
 
 \subsection{Cross-Backbone Development Behaviour}
@@ -919,9 +909,7 @@ consumes future frames, which our setting forbids.
 \caption{
 Out-of-domain common support, five DRENDS recordings, $117.4$M pixels;
 \emph{neither} method has seen this domain. Every row refines the same
-frozen RAFT-Stereo \emph{robust} predictions; lower is better. Reductions
-against raw: $2.0/0.2/4.7/5.3\%$ baseline, $5.5/3.1/12.3/9.5$ TETHER,
-$5.7/3.4/13.2/8.9$ A2.
+frozen RAFT-Stereo \emph{robust} predictions; lower is better.
 }
 \label{tab:bida}
 \begin{tabular}{lccccc}
@@ -1003,8 +991,8 @@ a difference is not read; A3 and A4 remain single runs.
 \centering
 \scriptsize
 \caption{
-Held-out \emph{relative reduction} (\%), not error: higher is better.
-Canonical and A2 are three-seed means.
+Held-out relative reduction (\%), not error: higher is better. Canonical
+and A2 are three-seed means.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{4pt}
@@ -1078,17 +1066,15 @@ doubles newly broken pixels ($0.096\%$ against $0.047\%$) and drops
 $B^+/H^+$ to $2.15$; reset alone is worse on both. On EPE the reset gate
 looks redundant, on harm it is what makes the intervention safe.
 
-Ablating that constraint (A4, Table~\ref{tab:ablations}) collapses mean
-EPE gain to $0.05\%$ while improving RMSE and worst case: the failure is
-broad degradation of pixels already close, not occasional large error. The
-constraint buys mean accuracy, not safety from large corrections, and we
-withdraw the attribution of transfer to it.
+Ablating that constraint (A4) collapses mean EPE gain to $0.05\%$ while
+improving RMSE and worst case: the failure is broad degradation of pixels
+already close, not occasional large error, so the constraint buys mean
+accuracy rather than safety from large corrections.
 
 Two limits are worth stating. TETHER captures $37.2\%$ of the
-raw-versus-memory oracle gain and $34.5\%$ of the continuous oracle its
-action space could reach, so the open problem is deciding \emph{where} to
-intervene. And the effective weight $w_t$, recovered from the convex form,
-scores AUROC
+raw-versus-memory oracle gain and $34.5\%$ of the continuous oracle, so the
+open problem is deciding \emph{where} to intervene. And the effective weight
+$w_t$, recovered from the convex form, scores AUROC
 $0.366$--$0.382$ on D2 but $0.496$--$0.506$ on held-out D7 as a predictor
 of harmful intervention: an intervention magnitude, not an uncertainty.
 That does not contradict the intervention ratios: the gain factorises into
