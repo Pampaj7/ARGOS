@@ -1033,9 +1033,17 @@ In domain the ordering is the same and the margin is wider,
 from compare\_bidastabilizer.py rerun with ablation\_h4:factory\_a2}, which
 is why we report the neutral arena instead.
 
-TC-Stereo \cite{zeng2024tcstereo} is the integrated-architecture reference.
-Its temporal path warps the previous disparity by a rigid $6$-DoF
-reprojection from per-frame pose, intrinsics and baseline. SCARED-C supplies
+TC-Stereo \cite{zeng2024tcstereo} is the integrated-architecture reference,
+and what follows is not a claim that it is a weaker method. We run its
+released SceneFlow weights, its most general pretraining, unmodified and at
+its own iteration count, on surgical video it has never seen and was never
+adapted to. It is therefore doubly outside its operating conditions: out of
+its training domain, and --- because its temporal path warps the previous
+disparity by a \emph{rigid} $6$-DoF reprojection from per-frame pose,
+intrinsics and baseline --- outside its stated scene assumption as well. Its
+frame path already scores worse than the frozen prediction we refine, before
+any temporal component is involved, which is the size of the domain gap
+rather than of the architecture. SCARED-C supplies
 corrected per-frame poses --- producing them is what the dataset is for ---
 so the path is runnable here, and we run it. The pose frame is the one thing
 that must be right: SCARED-C poses live in each frame's native camera while
@@ -1062,8 +1070,13 @@ convention validated to $0.02$\,px, degrades temporal consistency fourfold on
 this data. The rigid-scene assumption behind its warp is what deforming tissue
 violates, and a rigid warp of a deforming surface introduces exactly the
 frame-to-frame disagreement the metric counts. That is a property of the
-method meeting this data rather than a defect of the method, and it is the
-argument for a refiner that is told nothing about scene geometry.
+method meeting this data rather than a defect of the method: a co-designed
+temporal architecture encodes assumptions about the scene, and assumptions do
+not transfer even when weights are retrained. That is the argument for a
+refiner told nothing about scene geometry, not an argument that this
+particular method is poorly built. A TC-Stereo trained on deforming surgical
+tissue is an experiment nobody has run, ours included, and we make no claim
+about how it would do.
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
