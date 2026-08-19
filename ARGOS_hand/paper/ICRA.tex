@@ -1243,18 +1243,21 @@ accuracy rather than safety from large corrections.
 
 Two limits are worth stating. Against the raw-versus-memory oracle of
 Table~\ref{tab:closure}, \steer\ recovers $30.0\%$ of the available gain on
-D2, so the open problem is deciding \emph{where} to intervene. And the
+D2 as a ratio of the pooled quantities, $32.9\%$ averaging per-cell recovery,
+so the open problem is deciding \emph{where} to intervene. And the
 effective weight $w_t$, recovered from the convex form, is an intervention
-magnitude rather than an uncertainty: on the $142$-channel head it ranked
-harmful intervention at AUROC $0.366$--$0.381$ on D2 and $0.496$--$0.506$ on
-held-out D7, inverting between the splits.
-\TODO{selective-risk analysis on the shipped head --- AUROC of the recovered
-$w_t$ per split and the $B^+/H^+$ count/magnitude factorisation --- from
-analyze\_oracle\_and\_risk.py rerun with ablation\_h4:factory\_a2}
-That would not contradict the intervention ratios, which factorise into a
-count and a magnitude term needing no per-pixel ranking. A policy can be good
-on average and uninformative per pixel, which is what makes the oracle gap a
-ranking problem.
+magnitude rather than an uncertainty: it ranks harmful intervention at AUROC
+$0.393$--$0.408$ on D2 and $0.488$--$0.507$ on held-out D7, below chance on
+the split it was tuned on and at chance on the split it was not. The
+$142$-channel configuration is the same shape and further from chance
+($0.366$--$0.381$ and $0.496$--$0.506$), so this is a property of the
+formulation and not of the evidence space. It does not contradict the
+intervention ratios, which factorise into a
+count and a magnitude term needing no per-pixel ranking: $B^+/H^+$ is $2.03$
+on D2 and $2.86$ on D7, and per-cell oracle recovery rises from $32.9\%$ on
+D2 to $42.7\%$ on held-out D7. A policy can therefore
+be good on average and uninformative per pixel, which is what makes the
+oracle gap a ranking problem rather than a capacity one.
 
 
 % ============================================================
