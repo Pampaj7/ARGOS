@@ -1168,7 +1168,6 @@ the first row below; the indented rows are deviations from that
 configuration. Three-seed means where marked.
 }
 \label{tab:ablations}
-\setlength{\tabcolsep}{4pt}
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{lccc}
 \toprule
@@ -1178,7 +1177,7 @@ Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\
 \midrule
 $+$ learned evidence (3 seeds) & $142$ ch & $5.06$ & $5.15\pm0.34$ \\
 \quad no appearance           & $78$ ch  & $4.93$ & $4.88$ \\
-\quad full-res context        & $142$ ch & $5.61$ & $5.85$ \\
+\quad full-res context (3 seeds) & $142$ ch & $5.24\pm0.52$ & $5.68\pm0.16$ \\
 \quad unconstrained output    & $142$ ch & $0.05$ & $6.02$ \\
 \bottomrule
 \end{tabular}
@@ -1205,13 +1204,21 @@ training unstable, and it costs $157{,}504$ frozen parameters, three forward
 passes per frame and $13.8\%$ of the runtime to do so. Its apparent advantage
 on the development closure ($4.05\%$ against $3.69\%$) is a seed-0 artefact:
 over three seeds \steer\ leads there too, $4.13\%$ against $3.55\%$. Running
-the context branch at full resolution instead of a quarter is the one
-deviation whose margin exceeds the threshold on a single run, and it is under
-the same three-seed check as the rest,
-\TODO{A3 at seeds 1 and 2: D7 EPE and Bad1 reduction from
-ablation\_A3\_single\_resolution\_seed\_\{1,2\}, both training now};
-at $16\times$ the context-branch compute we report it as an ablation rather
-than adopting it. The unconstrained-output deviation disqualifies itself with
+the context branch at full resolution instead of a quarter was the one
+deviation whose single-run margin exceeded the threshold, and it has now had
+the same three-seed check as the rest. The margin survives and shrinks doing
+so: on held-out Bad1 it reduces $5.68\pm0.16\%$ against the base
+configuration's $5.15\pm0.34\%$, $+0.54$ points where the single run read
+$+0.70$. The pre-registration names the development split as the decision ---
+the same rule, fixed before A2's extra seeds existed, applied here unchanged
+--- and there it reduces $8.10\pm0.97\%$ against $8.40\%$, $0.29$ points
+\emph{worse} inside a $2.53$-point spread. The rule therefore returns it to
+the ablation table, and at $16\times$ the context-branch compute we report it
+there rather than adopting it. We state the split rather than resolving it: a
+reader who weighs the held-out endpoint above the pre-registered one is
+looking at a deviation that beat its base on three seeds out of three, and
+the honest description of this row is an open question we did not buy, not a
+decision the evidence settled. The unconstrained-output deviation disqualifies itself with
 an EPE gain collapsing to $0.05\%$.
 
 \subsection{The Support Contract Is Load-Bearing}

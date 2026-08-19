@@ -16848,4 +16848,45 @@ and the second run exits loudly. Verification that matters: the reissued numbers
 reproduce the previously recorded EPEs exactly --- $1.1988$ raw, $1.1746$ BiDA,
 $1.1311$ TETHER --- so only the speed changed.
 
+
+\section*{A3 at three seeds: the margin survives, the rule sends it back}
+
+A3 --- the context branch at full resolution instead of a quarter --- was the one
+deviation whose single run beat its base by more than the declared seed spread, which
+is precisely the case where a single run cannot be believed. Two more seeds:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& seed 0 & seed 1 & seed 2 \\
+\midrule
+D7 EPE reduction  & $5.61$ & $4.65$ & $5.46$ \\
+D7 Bad1 reduction & $5.85$ & $5.53$ & $5.67$ \\
+D2 Bad1 reduction & $9.22$ & $7.55$ & $7.54$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Held-out Bad1: $5.68\pm0.16$ against the base configuration's $5.15\pm0.34$. The
+margin does not vanish. It shrinks from $+0.70$ points on one run to $+0.54$ over
+three, still outside the spread, $1.6\sigma$.
+
+The pre-registration names D2 as the decision split, and there A3 reduces
+$8.10\pm0.97$ against $8.40$ --- $0.29$ points on the wrong side, well inside the
+$2.53$-point canonical spread. The rule returns it to the ablation table, so that is
+where it stays, at $16\times$ the context-branch compute.
+
+I want to be exact about what this is, because the comfortable reading is available
+and it is not the true one. This is not ``the single run was seed luck''. Seed~0 was
+the most favourable of the three, so the effect was overstated, but the effect is
+there on every seed. What sends A3 back is the split we declared in advance, not the
+disappearance of its advantage. A reader who weighs held-out performance above our
+pre-registered development endpoint is looking at a deviation that beat its base
+three times out of three, and the paper now says so in those words rather than
+reporting a verdict and letting the reader assume the evidence was one-sided.
+
+The rule earns its keep by being uncomfortable here. It promoted A2 --- the deviation
+that became the shipped model --- on the same criterion two days ago. A rule that only
+ever confirms what we wanted is not a rule.
+
 \end{document}

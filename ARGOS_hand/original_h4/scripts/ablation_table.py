@@ -35,7 +35,11 @@ CANONICAL = RESULTS / "scared_masked"
 # before the extra seeds were trained. Reading it as a single run -- which this script did
 # until the seeds were noticed sitting unused on disk -- reproduces exactly the mistake the
 # comment above records, with the roles reversed.
-VARIANT_SEEDS = {"a2": ("a2", "a2_seed1", "a2_seed2")}
+VARIANT_SEEDS = {"a2": ("a2", "a2_seed1", "a2_seed2"),
+                 # A3 is the one deviation that beat its base by more than the declared
+                 # seed spread on a single run, which is exactly the case where a single
+                 # run cannot be trusted. Same treatment, same reason as A2.
+                 "a3": ("a3", "a3_seed1", "a3_seed2")}
 VARIANTS = {
     "a1": ("A1", "no appearance channels", "$142\\rightarrow78$ ch"),
     "a2": ("A2", "no learned evidence", "$142\\rightarrow38$ ch"),
