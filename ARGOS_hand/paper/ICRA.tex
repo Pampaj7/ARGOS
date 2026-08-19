@@ -787,36 +787,34 @@ improvement is not alignment, averaging or smoothing.
 \centering
 \scriptsize
 \caption{
-Bounded horizons on D2. EPE reduction (\%), higher better; NewBad1 (\%) is
-the rate the intervention breaks, lower better. A2 is the $38$-channel
-variant of Sec.~\ref{sec:ablations}; continuous recurrence is $-62.69\%$
-and $-19.17\%$.
+Bounded horizons on D2, canonical head. Gain keeps rising to $H=6$ and
+breakage rises faster, so neither column alone selects an operating point;
+their ratio $B^+/H^+$ peaks at the shipped $H=4$. Continuous recurrence is
+$-62.69\%$. A2 behaves the same way, peaking at $H=4$ with $B^+/H^+=1.85$.
 }
 \label{tab:horizon}
 \begin{tabular}{lccc}
 \toprule
-$H$ & \multicolumn{2}{c}{EPE reduction} & NewBad1 \\
-\cmidrule(lr){2-3}
- & Canonical & A2 & Canonical \\
+$H$ & EPE red. & NewBad1 & $B^+/H^+$ \\
 \midrule
-$1$ & $2.61$ & $2.49$ & $\mathbf{.036}$ \\
-$2$ & $3.24$ & $3.02$ & $.038$ \\
-$4$ & $4.05$ & $3.69$ & $.047$ \\
-$6$ & $\mathbf{4.18}$ & $\mathbf{3.73}$ & $.068$ \\
-$8$ & $4.09$ & $3.52$ & $.128$ \\
+$1$          & $2.61$          & $\mathbf{0.036}$ & $2.39$ \\
+$2$          & $3.24$          & $0.038$          & $2.50$ \\
+$4$ (shipped)& $4.05$          & $0.047$          & $\mathbf{2.53}$ \\
+$6$          & $\mathbf{4.18}$ & $0.068$          & $2.30$ \\
+$8$          & $4.09$          & $0.128$          & $2.04$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Recurrence must be bounded: with no re-anchor the canonical head loses
-$62.69\%$ of EPE. $H=6$ gives the lowest EPE for both heads and we do not
-ship it, for the reason the last two columns carry: $B^+/H^+$ peaks at
-$H=4$ for both independently ($1.85$ for A2), and the $0.13$ points $H=6$
-buys are paid for with $45\%$ more broken pixels. $H=4$ was frozen before
-D7 opened and is also the maximum on the axis this paper argues matters.
-The table also says what the evidence space is for: A2 is behind at every
-bounded horizon and further behind as it lengthens, yet degrades three
-times less once the bound is removed.
+$62.69\%$ of EPE. Neither of the first two columns picks an operating point
+--- gain rises to $H=6$, breakage rises throughout --- and the question is
+what a point of EPE is worth in broken pixels. Their ratio answers it:
+$B^+/H^+$ peaks at $H=4$, for A2 independently as well, and the $0.13$
+points $H=6$ buys cost $45\%$ more breakage, $2.7\times$ at $H=8$. $H=4$ was
+frozen before D7 opened. Across the sweep A2 is behind at every bounded
+horizon and further behind as it lengthens, yet degrades three times less
+once the bound is removed ($-19.17\%$ against $-62.69\%$).
 
 
 \subsection{Cross-Backbone Development Behaviour}
