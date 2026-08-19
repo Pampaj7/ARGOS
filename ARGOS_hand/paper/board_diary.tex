@@ -12,6 +12,14 @@
 \usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
+% Packages the pasted reports assumed and the diary's own preamble never loaded.
+\usepackage{bbm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{threeparttable}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{microtype}
@@ -42,6 +50,46 @@
 
 \author{ARGOS Internal Research Note}
 \date{\today}
+
+% The diary quotes reports written for venues that use natbib, but it carries no
+% bibliography of its own, so \citep would be an undefined control sequence. Printing the
+% key is the honest rendering: the reference is a note about which paper, not a citation.
+% Notation macros carried over from ICRA.tex, so blocks pasted from the paper render
+% here without keeping two copies of the definitions in step.
+\providecommand{\steer}{\textsc{TETHER}}
+\providecommand{\raw}{\mathrm{raw}}
+\providecommand{\mem}{\mathrm{mem}}
+\providecommand{\fused}{\mathrm{fused}}
+\providecommand{\warp}{\mathcal{W}}
+\providecommand{\EPE}{\mathrm{EPE}}
+\providecommand{\HUR}{\mathrm{HUR}}
+\providecommand{\BUR}{\mathrm{BUR}}
+\providecommand{\HPlus}{H^{+}}
+\providecommand{\BPlus}{B^{+}}
+\providecommand{\Bad}{\mathrm{Bad}}
+\providecommand{\DTCE}{\mathrm{DTCE}}
+\providecommand{\TEPE}{\mathrm{TEPE}}
+\providecommand{\OPW}{\mathrm{OPW}}
+\providecommand{\AURC}{\mathrm{AURC}}
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\citep}[1]{[#1]}
+\providecommand{\citet}[1]{[#1]}
+
+% Carried up from a report that was pasted in below with its own preamble.
+\definecolor{good}{RGB}{32,120,75}
+\definecolor{bad}{RGB}{180,45,45}
+\definecolor{accent}{RGB}{35,85,150}
+\definecolor{lightgray}{RGB}{245,245,245}
+\newcommand{\good}[1]{\textcolor{good}{#1}}
+\newcommand{\bad}[1]{\textcolor{bad}{#1}}
+\newcommand{\method}{EGBM-CARE}
+\newcommand{\smodel}{S2M2}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    urlcolor=accent,
+    citecolor=accent
+}
 
 \begin{document}
 
@@ -3947,46 +3995,19 @@ selectivity. EGBM-v3-CARE-S should therefore be interpreted as a safety-oriented
 temporal refinement architecture whose main contribution is more reliable
 correction control rather than longer temporal memory.
 
-\documentclass[11pt,a4paper]{article}
+% Report 1's \appendix switched \thesection to \Alph, and every report pasted in after it
+% inherited that: past the twenty-sixth section LaTeX raises a fatal "Counter too large",
+% which it did thirty-two times. Numbering returns to arabic here, where report 2 begins.
+\renewcommand{\thesection}{\arabic{section}}
+\setcounter{section}{0}
 
-\usepackage[margin=2.2cm]{geometry}
-\usepackage{booktabs}
-\usepackage{tabularx}
-\usepackage{array}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{enumitem}
-\usepackage{hyperref}
-\usepackage{microtype}
-\usepackage{caption}
+\section*{ARGOS Temporal Stereo Refinement: From Universal Refinement to
+Lightweight Domain Adaptation}
 
-\definecolor{good}{RGB}{32,120,75}
-\definecolor{bad}{RGB}{180,45,45}
-\definecolor{accent}{RGB}{35,85,150}
-\definecolor{lightgray}{RGB}{245,245,245}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=accent,
-    urlcolor=accent,
-    citecolor=accent
-}
-
-\newcommand{\good}[1]{\textcolor{good}{#1}}
-\newcommand{\bad}[1]{\textcolor{bad}{#1}}
-\newcommand{\method}{EGBM-CARE}
-\newcommand{\smodel}{S2M2}
-
-\title{
-    \textbf{ARGOS Temporal Stereo Refinement}\\
-    \large From Universal Refinement to Lightweight Domain Adaptation
-}
-\author{}
-\date{\today}
-
-
-\maketitle
+% This report was pasted in with its own preamble, which silently broke the diary:
+% a second \documentclass mid-document is a fatal error, so nothing compiled from
+% here on. Its definitions moved to the preamble above and the title became a
+% section, which is what it always was.
 
 
 \section{Original Objective}
@@ -11718,9 +11739,11 @@ generated immutable raw observations.
 % \usepackage{graphicx}
 % \usepackage{xcolor}
 
-\newcommand{\clip}{\operatorname{clip}}
-\newcommand{\warp}{\mathcal{W}}
-\newcommand{\ind}{\mathbb{I}}
+% \providecommand, not \newcommand: the preamble already carries \warp from ICRA.tex, and
+% a mid-document \newcommand for a name that exists is a fatal error rather than a clash.
+\providecommand{\clip}{\operatorname{clip}}
+\providecommand{\warp}{\mathcal{W}}
+\providecommand{\ind}{\mathbb{I}}
 
 % ================================================================
 \section{Immutable Raw Multi-Anchor Temporal Refinement}
@@ -16439,5 +16462,110 @@ died. \texttt{tail} on a job list selects by submission order, which has no
 relation to what the jobs are doing; they have to be killed by identifier after
 looking at what each one is.
 
-\end{document}
+\section*{19 August, Afternoon: The Cue That Costs Forty-One Per Cent of the Runtime}
 
+The forward-backward confidence $C^{\mathrm{FB}}_t$ is expensive in a very specific
+way: producing it requires the reverse optical-flow pass, which is $13.7$ of the
+module's $33.5$~ms. Nothing else in the module costs so much for one channel. The
+paper would like to propose dropping it, and cannot do so while saying only that the
+saving is large --- ``we did not measure it'' is the review's complaint about a
+different section and would be no better here.
+
+So the cue was replaced by a constant at inference, the trained head otherwise
+untouched, on the fifteen cells of the D2 closure:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& EPE red. & cells worse \\
+\midrule
+head as trained & $4.046\%$ & --- \\
+$C^{\mathrm{FB}} := 1.0$ & $3.977\%$ & $12/15$ \\
+$C^{\mathrm{FB}} := 0.5$ & $3.945\%$ & $12/15$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two constants, because if the answer depended on which one, the head would be reading
+the cue's \emph{level} rather than its variation, and that would be a different
+finding. It does not: the two agree to a third of a tenth of a point and break the
+same twelve cells. Two per cent of the effect for forty-one per cent of the runtime.
+
+This is an upper bound on the cost and a lower bound on what is achievable. A head
+\emph{trained} without the cue could learn to read the remaining channels differently
+and would likely do better; what is measured here is a trained head deprived of an
+input it was trained to use.
+
+\paragraph{The number is not the shipped model's.} It was measured on the
+$142$-channel configuration, which is now the ablation. Assuming it transferred would
+have repeated the support-contract mistake exactly --- a result quoted for a head it
+was never run on. Two readings were available and only the code settles which is
+right. Counting the shipped head's thirteen native-resolution channels (raw
+disparity, aligned memory, signed residual, absolute residual, six motion, three RGB)
+leaves no room for a confidence channel, which suggests the cue is already absent and
+the $13.7$~ms already free. The builder says otherwise: $C^{\mathrm{FB}}$ is one of
+the \emph{six motion channels}, and that concatenation sits in the tail shared by
+both branches. Removing the learned stereo evidence deleted $104$ correlation
+channels and left the cue exactly where it was. The shipped head still consumes it,
+the saving still has to be earned, and the measurement is running on the right head.
+
+\section*{19 August, Afternoon: Running the Competitor the Way It Was Built}
+
+TC-Stereo entered the paper with its temporal path switched off, justified by the
+claim that SCARED-C ships no per-frame pose. The claim was false, it was retracted in
+three places, and the retraction left the comparison owing a run. It is the only
+rival here that is causal \emph{and} temporal --- BiDAStabilizer is bidirectional,
+and this method carries its own state --- so with the path disabled the paper was
+comparing against a single-frame network while calling it a temporal baseline.
+
+The one thing genuinely ours to get right was the frame the poses live in. SCARED-C's
+poses map the keyframe into each frame's \emph{native} camera; the disparity being
+warped is \emph{rectified}; the two differ by $R_1$, so the pose must be conjugated,
+$R_1 T R_1^{\top}$. A wrong frame here does not raise an error. It warps to the wrong
+place and returns a plausible number, which is the most dangerous kind of bug this
+paper can have.
+
+The self-check warps ground truth between frames using the method's own \texttt{warp}
+and asks which convention lands on the ground truth actually observed there:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+& median $|\Delta d|$ \\
+\midrule
+intended, $R_1 T R_1^{\top}$ & $\mathbf{0.0202}$~px \\
+transposed order & $3.6412$~px \\
+identity relative & $2.0723$~px \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two orders of magnitude. That is the margin the first world-frame check failed to
+produce --- it passed at $1.70$~mm while applying \emph{no} pose passed at $1.85$,
+and it was thrown away for having no discriminating power. This one also validates
+the baseline it recovers ($4.143$~mm) and, incidentally, that the $144{\times}180$
+evaluation grid is a resize rather than a crop: a crop would move the principal point
+and the intended convention would stop winning.
+
+Three pieces of friction are worth recording, because none is about stereo.
+\texttt{softsplat} has no CPU kernel --- it asserts false --- so even the geometry
+check needs the GPU. \texttt{cupy}~13 removed \texttt{compile\_with\_cache}. And the
+vendored kernel passes its include paths as one space-separated token that
+\texttt{nvrtc} rejects. All three are packaging drift rather than differences in what
+the method computes, so they are shimmed in our runner and the competitor's released
+source is left byte-identical.
+
+\paragraph{The diary had stopped compiling.} Adding these entries was how I found it.
+A report pasted in months ago brought its own \verb|\documentclass| into the middle
+of the document, which is fatal, so nothing after line~3950 had been typeset since.
+Behind it were four more failures the first had been hiding: an \verb|\appendix| from
+the very first report that every later report inherited, so the section counter ran
+past~Z and raised ``Counter too large'' thirty-two times; \verb|\citep| with no
+natbib and no bibliography; \verb|\mathbbm| and the algorithm environments with no
+package; and a mid-document \verb|\newcommand| for a name the preamble already held.
+The instruction is to update the diary at every result, and I had been appending to a
+file that had not produced a page in its second half for a long time. It compiles now
+--- 186 pages --- and the fix that matters is that the failure was silent: appending
+text to a broken document looks exactly like appending text to a working one.
+
+\end{document}
