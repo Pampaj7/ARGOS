@@ -378,10 +378,11 @@ TETHER at three scales. \textbf{(a)} Bounded recurrence: memory carries the
 \emph{fused} disparity forward, and every $H{=}4$ frames the chain is cut
 and re-tied to raw geometry the frozen network produced independently
 (teal). The five frames are consecutive and the two disparity rows share one
-colour scale, differing by
-\TODO{mean $|$fused $-$ raw$|$ over the window, from the regenerated
-figure\_assets panels driven by ablation\_h4:factory\_a2}
-on average. \textbf{(b)} One time
+colour scale, differing by $0.126$\,px on average. One fitted plane is removed
+from all ten disparity panels: the surface is smooth at this resolution, a
+$7$\,px depth ramp carrying about $1$\,px of anatomy, so an absolute rendering
+shows a gradient and no scene. The same plane is subtracted from both rows, so
+the difference between them is untouched. \textbf{(b)} One time
 step; dashed grey is frozen, the single orange block is the only trained
 component and emits one scalar per pixel, $w_t$, rather than geometry.
 \textbf{(c)} The
