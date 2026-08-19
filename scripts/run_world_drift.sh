@@ -21,7 +21,12 @@ if [ "${1:-}" = "--node" ]; then
     export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
     cd "$ROOT" || exit 1
     echo "host=$(hostname) gpu=$CUDA_VISIBLE_DEVICES"
-    for SEQ in dataset_2_keyframe_2 dataset_2_keyframe_3 dataset_2_keyframe_4; do
+    # D2 is development and D7 is held out. The measurement is the same either way, and a
+    # negative result that only exists on the split we tuned on would be the weakest form of
+    # it -- so both are run and reported together.
+    SEQS="dataset_2_keyframe_2 dataset_2_keyframe_3 dataset_2_keyframe_4"
+    SEQS="$SEQS dataset_7_keyframe_1 dataset_7_keyframe_2 dataset_7_keyframe_3 dataset_7_keyframe_4"
+    for SEQ in $SEQS; do
         for SPEC in "canonical:model_design.comparison.canonical_h4_masked:factory" \
                     "a2:model_design.comparison.ablation_h4:factory_a2"; do
             NAME="${SPEC%%:*}"; MODULE="${SPEC#*:}"

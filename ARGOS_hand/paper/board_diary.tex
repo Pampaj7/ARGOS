@@ -16311,5 +16311,48 @@ or directory}. The login node's \texttt{/tmp} is not the compute node's.
 Everything a batch job executes has to live on shared storage, which every
 working launcher in \texttt{scripts/} already did and this one-off did not.
 
+
+\section*{19 August, Dawn: Held-Out D7 Reverses the Downstream Result}
+
+Three hours ago I put a negative downstream finding into the paper: world-frame
+reconstruction consistency gets \emph{worse} under refinement, five cells of six.
+It was measured on D2 only. D7 is now done and it reverses.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Split & canonical & A2 \\
+\midrule
+D2, development ($3$ sequences) & $-7.1\%$ \; ($1/3$) & $-15.5\%$ \; ($0/3$) \\
+D7, held out ($4$ sequences)    & $\mathbf{+9.9\%}$ \; ($4/4$) & $\mathbf{+11.7\%}$ \; ($4/4$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+On the split we did not tune on, refinement improves multi-view consistency by
+about ten percent, on every sequence, for both heads --- and A2 beats canonical
+there as well, which removes the second of the two marks against it recorded
+last night.
+
+\paragraph{What separates the splits.} Not the metric and not the code: the
+amount of error available to remove. Raw excess over the ground-truth floor is
+$0.55$--$1.11$\,mm on D7 against $0.18$--$0.22$ on D2, three to five times
+larger. Where the raw prediction is poor, alignment recovers geometry a map can
+fuse. Where it already sits near the reference floor, the history each frame
+carries costs more than the correction gains. That is a sharper claim than
+either half alone, and it is only visible because both halves were measured.
+
+\paragraph{The mistake was generalising from the development split.}
+The mechanism I wrote into the paper --- recurrence makes each frame a function
+of its past, which fusion does not want --- is still the right explanation for
+the D2 half. What was wrong was presenting it as the whole finding when only the
+tuned split had been measured. The paper now states both directions and the
+condition that separates them, and the conclusion's list of bounds says mapping
+benefit is conditional rather than absent.
+
+Second time tonight that a partial measurement pointed the wrong way, after the
+closure cells. The pattern is the same and so is the lesson: measure the held-out
+half before writing the sentence, not after.
+
 \end{document}
 

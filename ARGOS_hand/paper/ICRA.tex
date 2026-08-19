@@ -1114,16 +1114,15 @@ internal disocclusion.
 \paragraph{What does not improve downstream.}
 SCARED-C supplies corrected per-frame poses, so geometry can be accumulated
 in one world frame and the disagreement between views of a point measured:
-what a map fuses rather than what a frame scores. Over three D2 sequences,
-$200$ frames each, against a ground-truth floor of $0.04$--$0.08$\,mm,
-refinement makes that disagreement \emph{worse} in five cases of six, by
-$7.1\%$ of the excess on average --- while on the same frames and support it
-improves per-frame disparity MAE by $3.2\%$. Raw is memoryless, so two views
-differ
-only by their own noise, while a recurrent output carries the history that
-produced it: per-frame accuracy is bought by making each frame a function of
-its past, which is what fusion does not want. We claim single-frame geometry,
-not mapping.
+what a map fuses rather than what a frame scores. On held-out D7 refinement
+reduces that disagreement in $4/4$ sequences and for both heads, by $9.9\%$
+of the excess over a ground-truth floor of $0.04$--$0.08$\,mm ($11.7\%$ for
+A2). On development D2 it \emph{increases} it by $7.1\%$. The splits differ
+in how much there is to remove --- raw excess is $0.55$--$1.11$\,mm on D7
+against $0.18$--$0.22$ on D2 --- so where the raw prediction is poor,
+alignment recovers geometry a map can fuse, and where it already sits near
+the reference floor the history each frame carries costs more than the
+correction gains. Mapping benefit is therefore conditional, not general.
 
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and
@@ -1165,8 +1164,8 @@ selection optimism that held-out gains do not: across seeds the D2 effect
 spans $5.03$ points, the D7 effect $0.69$. A module that declares a support
 must apply it to what it emits, a contract almost invisible in domain that
 costs the whole metric-depth tail out of it. And world-frame reconstruction
-consistency does not improve, so the claim is single-frame geometry rather
-than mapping.
+consistency improves only where the raw prediction is poor, so mapping
+benefit is conditional.
 
 What remains open is where to intervene: the oracle over the module's own
 action space is far from reached, and the head's weight is a magnitude, not
