@@ -139,5 +139,13 @@ def factory_a3(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A3_single_resolution", device=device)
 
 
+def factory_a3_seed1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A3_single_resolution", seed=1, device=device)
+
+
+def factory_a3_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A3_single_resolution", seed=2, device=device)
+
+
 def factory_a4(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A4_relaxed_convexity", device=device)
