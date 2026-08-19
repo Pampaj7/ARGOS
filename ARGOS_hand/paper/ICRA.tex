@@ -778,7 +778,7 @@ three-seed spread.
 }
 \label{tab:grid}
 \scriptsize
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{ll|cc|ccc|ccc}
 \toprule
 & &
@@ -822,7 +822,7 @@ the smoothing policies buy it with bad pixels, and the harder they blend the
 worse that trade becomes.
 }
 \label{tab:closure}
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{lrrrr}
 \toprule
 Policy & EPE & Bad1 & DTCE$_{k=4}$ & NewBad1 \\
@@ -999,16 +999,21 @@ consumes future frames, which our setting forbids.
 \caption{
 Out-of-domain common support, five DRENDS recordings, $117.4$M pixels;
 \emph{neither} method has seen this domain. Every row refines the same
-frozen RAFT-Stereo \emph{robust} predictions; lower is better.
+frozen RAFT-Stereo \emph{robust} predictions; lower is better. DTCE$_k$ is
+the temporal change error at lag $k$, in px, on the same support. The two
+best columns belong to different rows, and that is the finding: the
+bidirectional baseline is the more temporally stable method and the less
+accurate one.
 }
 \label{tab:bida}
-\begin{tabular}{lccccc}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lccccccc}
 \toprule
-Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
+Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE & DTCE$_1$ & DTCE$_4$ \\
 \midrule
-Raw               & ---          & $1.199$ & $44.92$ & $4.54$ & $1.876$ \\
-BiDAStabilizer    & no           & $1.175$ & $44.81$ & $4.32$ & $1.776$ \\
-TETHER            & \textbf{yes} & $\mathbf{1.131}$ & $\mathbf{43.39}$ & $\mathbf{3.94}$ & $\mathbf{1.710}$ \\
+Raw               & ---          & $1.199$ & $44.92$ & $4.54$ & $1.876$ & $0.242$ & $0.340$ \\
+BiDAStabilizer    & no           & $1.175$ & $44.81$ & $4.32$ & $1.776$ & $\mathbf{0.085}$ & $\mathbf{0.214}$ \\
+TETHER            & \textbf{yes} & $\mathbf{1.131}$ & $\mathbf{43.39}$ & $\mathbf{3.94}$ & $\mathbf{1.710}$ & $0.139$ & $0.294$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1035,9 +1040,13 @@ $4.6\%$ reduction against $0.3\%$. We report the neutral arena instead
 because that margin is measured where we are in domain and it is not.
 
 The temporal measure reverses the ordering, and we report it for that reason.
-Grid-based change error falls $52\%$ for the bidirectional baseline against
-$15\%$ for us at lag~$1$ ($0.073\rightarrow0.035$ against $0.062$), and
-$24\%$ against $4\%$ at lag~$4$. A method that sees the future is markedly
+On the arena of Table~\ref{tab:bida}, change error falls $64.9\%$ for the
+bidirectional baseline against $42.5\%$ for us at lag~$1$
+($0.242\rightarrow0.085$ against $0.139$), and $37.2\%$ against $13.8\%$ at
+lag~$4$; the ordering is the same in each of the five recordings and at
+every lag we measured. In domain it does not change either: on D2 the
+reductions are $52\%$ against $15\%$ at lag~$1$ and $24\%$ against $4\%$ at
+lag~$4$. A method that sees the future is markedly
 more temporally stable than one that does not, which is what should happen,
 and it is simultaneously the less accurate of the two on every geometric
 metric here. That is the paper's own warning turned on its own comparison:
@@ -1101,7 +1110,7 @@ retrained or tuned for this domain, and two of the five estimators were never
 seen in temporal-head training.
 }
 \label{tab:drends}
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{llrrrr}
 \toprule
 Backbone & Status & EPE & Bad3 & \multicolumn{1}{c}{Depth} & \multicolumn{1}{c}{Depth} \\
@@ -1160,7 +1169,7 @@ configuration. Three-seed means where marked.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{4pt}
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{lccc}
 \toprule
 Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\

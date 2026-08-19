@@ -16797,4 +16797,55 @@ nobody had asked for yet took ninety seconds on a CPU. Without that it would hav
 been another five hours of GPU, and the honest likelihood is that it would simply
 never have been measured.
 
+
+\section*{DRENDS agrees with D2: we win the geometry, BiDA wins the clock}
+
+The head-to-head table in the paper is the DRENDS one, because it is the only arena
+where neither method is in domain. Until now it carried four geometric columns and
+no temporal one --- which, for a comparison between two temporal refiners, was the
+one omission with no defence. The DTCE columns are in it now, over all five
+recordings and $117.4$M pixels of common support:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& EPE & Bad1 & $\mathrm{DTCE}_{k=1}$ & $\mathrm{DTCE}_{k=4}$ \\
+\midrule
+raw            & $1.199$ & $44.92\%$ & $0.242$ & $0.340$ \\
+BiDAStabilizer & $1.175$ & $44.81\%$ & $0.085$ & $0.214$ \\
+TETHER         & $1.131$ & $43.39\%$ & $0.139$ & $0.294$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The bidirectional baseline reduces change error by $64.9\%$ at lag~1 where we reduce
+it by $42.5\%$, and it is behind us on every geometric column. The same split D2
+already showed ($52\%$ against $15\%$), on a different dataset, with a different
+ordering of the two methods' domain advantage --- and it holds in each of the five
+recordings separately and at every lag. A method that reads the future is more
+temporally stable than one that cannot, and is simultaneously the less accurate of
+the two. The two best entries in the table sit in different rows, and I have written
+the caption to say so rather than bolding our way around it.
+
+This is our own warning applied to our own comparison. If a reader were handed the
+consistency column alone they would rank these two methods the wrong way round.
+
+Two process notes, both unflattering. The run that produced these numbers took five
+hours the first time and two minutes per recording the second, and nothing about the
+model changed: every \texttt{npz[key]} decompresses the entire array, so indexing
+one frame out of a $466$\,MB deflate-compressed stack inside a per-frame loop
+inflated the whole thing, about $1.7$\,TB of discarded decompression per recording,
+on one core, with the GPU idle behind it. The same pattern was in five scripts,
+including the TC-Stereo run whose slowdown I had blamed on GPU contention earlier
+the same evening. Contention was real and secondary. Slow code that is also
+contended looks exactly like contended code.
+
+Second: I killed a job by an identifier I had rather than one I had looked up, and
+the id was two launches stale, so the run I meant to stop kept going and a second
+one started writing the same output directory. Caught by timestamps, not by design.
+The comparison script now takes an exclusive \texttt{flock} on its output directory
+and the second run exits loudly. Verification that matters: the reissued numbers
+reproduce the previously recorded EPEs exactly --- $1.1988$ raw, $1.1746$ BiDA,
+$1.1311$ TETHER --- so only the speed changed.
+
 \end{document}
