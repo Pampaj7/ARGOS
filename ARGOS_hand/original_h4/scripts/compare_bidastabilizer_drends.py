@@ -21,6 +21,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import time
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -47,11 +49,26 @@ def ground_truth(recording: str, frames: int) -> tuple[np.ndarray, np.ndarray]:
     ~1500 depth maps to keep the first 24 makes a smoke test as slow as a real run, which
     defeats the point of having one.
     """
+    from concurrent.futures import ThreadPoolExecutor
+
     from model_design.comparison import drends_evaluation as base
     records, info = base.load_drends_records(recording, frames)
     scale = base.CANONICAL_SIZE[0] / 1280.0
-    depth, valid, _coverage = zip(*(base._depth(item["_depth_left"], item["_mask_left"], scale)
-                                    for item in records))
+    # Fifteen hundred depth/mask pairs per recording, each decoded and resized independently.
+    # Serially this is a quarter of an hour of one core per recording with the GPU sitting
+    # idle behind it, which is most of what the run costs. Both halves are OpenCV and release
+    # the GIL, so threads are enough and there is nothing to pickle. `map` preserves order,
+    # which the disparity stack depends on.
+    workers = int(os.environ.get("GT_WORKERS", "16"))
+    started = time.time()
+    print(f"  {recording}: decoding {len(records)} depth/mask pairs on {workers} threads",
+          flush=True)
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        depth, valid, _coverage = zip(*pool.map(
+            lambda item: base._depth(item["_depth_left"], item["_mask_left"], scale), records))
+    # Printed because a silent phase is indistinguishable from a hung one, which is exactly
+    # how a quarter-hour of single-threaded decoding went unnoticed.
+    print(f"  {recording}: ground truth ready in {time.time() - started:.0f} s", flush=True)
     product_mm = info["focal_baseline_native_px_m"] * 1000.0 * scale
     disparity = np.asarray([product_mm / np.maximum(value, 1e-6) for value in depth])[:frames]
     return disparity.astype(np.float64), np.asarray(valid)[:frames].astype(bool)
