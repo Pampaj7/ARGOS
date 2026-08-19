@@ -16354,5 +16354,51 @@ Second time tonight that a partial measurement pointed the wrong way, after the
 closure cells. The pattern is the same and so is the lesson: measure the held-out
 half before writing the sentence, not after.
 
+
+\section*{19 August, Morning: The Unlearned Rule Beats the Baselines and Not the Head}
+
+The review's third objection is the one that could have retired contribution~(ii):
+the closure's baselines are spatially constant except for a deliberately badly
+scaled one, and the obvious middle ground --- a two-parameter spatially varying
+rule on the raw-versus-memory residual --- was never tested. Six of sixteen grid
+points are complete, each on all fifteen cells:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+$\alpha$ & $\tau{=}0.25$ & $\tau{=}0.5$ \\
+\midrule
+$0.3$ & $0.34\%$ & $0.38\%$ \\
+$0.5$ & $0.54\%$ & $0.56\%$ \\
+$0.8$ & $0.75\%$ & --- \\
+$1.0$ & $\mathbf{0.76\%}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Against $0.59\%$ for the best fixed or EMA blend and $4.05\%$ for the learned
+head.
+
+\paragraph{Both halves of that matter.} The unlearned rule \emph{beats} every
+constant baseline the paper had, so the review was right that the closure was
+missing its strongest competitor and the paper was quietly flattering itself. And
+it reaches about a fifth of the learned head, so contribution~(ii) survives a
+much harder test than the one it passed before.
+
+\paragraph{What bounds the unmeasured points.} As $\tau$ grows the rule degenerates
+exactly into the fixed-weight baselines --- $w \rightarrow \alpha$ everywhere ---
+whose best is $0.59\%$, and at $\alpha{=}1$ with large $\tau$ it becomes ungated
+memory propagation, which the closure already measures as strongly negative. The
+maximum is therefore interior and the two endpoints are known, which is why the
+partial grid is informative here in a way the partial \emph{cells} earlier tonight
+were not. Ten points remain and nothing goes in the paper until they land.
+
+\paragraph{A distinction worth keeping.} Twice tonight a partial measurement
+pointed the wrong way, and both times the incompleteness was \emph{within} a
+measurement --- cells missing from a mean. Here every point is complete on all
+fifteen cells and only the grid is partial. Those are different risks: the first
+biases a number, the second only leaves a better number possibly unfound, and the
+analytic limits above bound how much better it could be.
+
 \end{document}
 
