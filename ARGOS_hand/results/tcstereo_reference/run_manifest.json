@@ -24,10 +24,15 @@
   "iters": 32,
   "temporal_path_disabled": {
     "params": null,
-    "reason": "its propagation warps the previous disparity by a rigid 6-DoF reprojection from per-frame pose, intrinsics and baseline; SCARED-C provides no per-frame pose and deformable tissue is not rigid",
-    "consequence": "this is TC-Stereo's single-frame stereo path, reported as an integrated-architecture reference and not as a temporal rival"
+    "reason": "this run reports TC-Stereo's single-frame stereo path by choice of entry point. Its temporal path warps the previous disparity by a rigid 6-DoF reprojection from per-frame pose, intrinsics and baseline; SCARED-C does supply corrected per-frame poses, so the path is runnable and is run separately by run_tcstereo_temporal.py",
+    "consequence": "an integrated-architecture reference, not a temporal rival"
   },
   "invalid_penalty_px": 1000.0,
   "training_performed": false,
-  "threshold_tuning_performed": false
+  "threshold_tuning_performed": false,
+  "correction": {
+    "corrected_at": "2026-08-19T12:14:16.744246+00:00",
+    "what_was_wrong": "this manifest justified disabling the temporal path by asserting that SCARED-C provides no per-frame pose. It does. The claim was retracted in the paper, the runner's docstring and here.",
+    "what_changed": "the justification only. No metric, frame, support or checkpoint in this run depends on it, so the numbers stand unaltered."
+  }
 }
