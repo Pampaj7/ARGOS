@@ -1319,14 +1319,22 @@ are $26.2$ of the $28.9$\,ms, against $0.67$ for the evidence tensor and
 $1.00$ for the head. The evidence tensor is that cheap because \steer\
 builds no learned features; the $142$-channel ablation spends $5.13$\,ms
 there, a $13.8\%$ difference in the total. The reverse SEA-RAFT pass exists
-only to compute $C^{FB}_t$, so dropping it would free nearly three times as
-much again --- but $C^{FB}_t$ survives into the shipped evidence space as one
-of the six motion channels, so the saving is not free. On the $142$-channel
-head, replacing the cue with a constant costs $0.069$ points of its own
-$4.046\%$ D2 closure at $1.0$ and $0.101$ at $0.5$, with $12$ of $15$ cells
-worse in both cases.
-\TODO{same substitution on the shipped head, from the no\_fb\_cue sweep with
-ablation\_h4:factory\_a2}
+only to compute $C^{FB}_t$, which reaches the head as one of the six motion
+channels, so dropping that pass would free $13.1$ of the $28.9$\,ms --- $45\%$
+of the module --- if the cue can be spared.
+
+It can. Replacing it with a constant at inference, the trained head otherwise
+untouched, moves the D2 closure from $3.69\%$ to $3.74\%$ at $1.0$ and
+$3.79\%$ at $0.5$, worsening $4$ and $3$ of the fifteen cells: not a cost but
+a small gain, and one an order of magnitude inside the $\pm0.38$ point seed
+spread, so the honest reading is that the cue contributes nothing this head
+uses. The $142$-channel configuration behaves oppositely --- the same
+substitution costs it $0.069$ and $0.101$ points of its own $4.046\%$, with
+$12$ of $15$ cells worse --- which is consistent with the rest of the
+ablation: the learned evidence made the head sensitive to a cue that the
+geometric evidence space renders redundant. We report this rather than ship
+it, since it is measured on development only and on a head trained with the
+cue present; a head trained without it is the experiment we have not run.
 We evaluate perception geometry, not downstream control, and demonstrate
 neither clinical safety nor patient benefit.
 

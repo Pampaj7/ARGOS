@@ -16671,4 +16671,51 @@ gate is at $+12.84\%$. Naive temporal averaging trades tail correctness for mean
 That is the finding, it was in the reports the whole time, and the paper was spending
 its strongest evidence as a footnote to a weaker version of itself.
 
+\section*{19 August, Evening: The Cue Costs Nothing on the Head That Ships}
+
+The forward--backward confidence was measured on the $142$-channel head this
+morning: replacing it with a constant cost $0.069$ points of that head's $4.046\%$
+D2 closure at $1.0$ and $0.101$ at $0.5$, breaking $12$ of $15$ cells both times.
+A small price for $41\%$ of the runtime, and the entry said so.
+
+The same substitution on the head the paper actually ships goes the other way:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& D2 closure & cells worse \\
+\midrule
+\textsc{tether} as trained & $3.694\%$ & --- \\
+$C^{\mathrm{FB}} := 1.0$ & $3.744\%$ & $4/15$ \\
+$C^{\mathrm{FB}} := 0.5$ & $3.785\%$ & $3/15$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Not a cost. A small \emph{gain}, in both constants, breaking a quarter as many
+cells. This is exactly why the morning's number could not be inherited, and it is
+worth recording that the reason I gave for re-measuring was the wrong one: I argued
+that $C^{\mathrm{FB}}$ survives into the shipped evidence space as one of the six
+motion channels, so the saving still had to be earned. It survives, and it is not
+earned --- it is free.
+
+The sign flip is consistent with the rest of the ablation rather than mysterious.
+The learned evidence made the head sensitive to a cue that the geometric evidence
+space renders redundant: the same $104$ channels whose removal tightened the seed
+spread eightfold were also what gave $C^{\mathrm{FB}}$ something to be useful for.
+
+What this buys, if it holds: the reverse SEA-RAFT pass exists only to produce
+$C^{\mathrm{FB}}_t$, and it is $13.1$ of the module's $28.9$\,ms. Forty-five per
+cent of the temporal module, for a change in accuracy an order of magnitude inside
+the seed spread.
+
+Two reasons the paper reports this instead of shipping it. It is development-set
+evidence, fifteen cells on D2, and the module's operating point was frozen before
+D7 opened precisely so that decisions of this kind are not made on the split that
+tunes them. And the head under test was \emph{trained} with the cue: feeding it a
+constant asks a trained network to ignore an input it learned to weigh, which is an
+upper bound on what removal costs and a lower bound on what a head trained without
+it could do. The experiment that would settle it --- retraining without the cue ---
+is the one not run.
+
 \end{document}
