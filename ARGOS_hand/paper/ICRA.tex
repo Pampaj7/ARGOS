@@ -661,10 +661,11 @@ than a climb: from epoch~5 the epoch-to-epoch movement in validation EPE
 ($0.0041$--$0.0054$), and the seed whose minimum falls earliest ends the run
 \emph{above} that minimum. The epoch at which the minimum lands is therefore
 drawn from the noise rather than from a trend.
-\TODO{convergence probe: the shipped model retrained for $24$ epochs against
+\TODO{convergence probe: the shipped model retrained for $100$ epochs against
 the locked $12$, from training\_runs/convergence\_probe\_A2\_no\_learned\_
-evidence\_24ep. Not eligible for selection; if it keeps improving that is a
-limitation to report.}
+evidence\_100ep. Eight times the budget, because doubling it would only move
+the question. Not eligible for selection; if it keeps improving that is a
+limitation to report, not a model to adopt.}
 One ablation (A4) diverges after epoch $10$, which best-validation selection
 catches.
 
