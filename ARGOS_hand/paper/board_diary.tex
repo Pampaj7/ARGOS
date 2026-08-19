@@ -16889,4 +16889,139 @@ The rule earns its keep by being uncomfortable here. It promoted A2 --- the devi
 that became the shipped model --- on the same criterion two days ago. A rule that only
 ever confirms what we wanted is not a rule.
 
+
+\section*{Three reviewers, and the pre-registration we had been quoting wrong}
+
+I put three max-reasoning readers on the paper --- method and claims, statistics
+and aggregation, structure and page budget --- after having verified every number
+in it myself against the runs on disk. Fifty table cells, the horizon grid, the
+runtime stages, the seed bootstrap, the drift cells, the frame scatter: all
+reproduce exactly. What the readers found was not arithmetic.
+
+\subsection*{The one that matters}
+
+Two of them independently found the same thing, and they were right. The paper
+quoted its own pre-registration two ways in two places, and the reading it
+invoked was the one that kept the shipped model.
+
+There are two registrations. The ablation registration names \emph{held-out
+Bad1} as the endpoint. A separate, later one governs \emph{promotion} of a
+variant to the shipped model and decides on development only --- which is how
+the $38$-channel head was promoted. I applied the promotion rule to A3 earlier
+tonight and wrote a paragraph explaining why A3 goes back to the ablation table
+under it. That paragraph was using the wrong rule.
+
+Under the right one, A3 \emph{wins}: $5.68\pm0.16$ against $5.15\pm0.34$ on
+held-out Bad1, $0.54$ points against a $0.37$-point declared threshold, three
+seeds each. The registration enumerated what to do if A3 matched and what to do
+if it lost. It did not enumerate winning. We decline it anyway, on $16\times$
+the context-branch compute --- and the registration's own honest note had
+required exactly that: ``If it wins, that trade has to be reported, not
+hidden.''
+
+A4 is worse for us. It posts the largest held-out Bad1 reduction in the table,
+$6.02\%$, and we reject it on EPE, a metric the registration names as reported
+but not as the endpoint. That reading was chosen after seeing the result, and
+the paper now says so in those words. Its falsification clause did fire: ``If
+A4 matches or beats the canonical model on held-out D7, the Analysis sentence
+attributing transfer to the convex action space must be withdrawn rather than
+softened.'' I went looking for that sentence expecting to have to delete it.
+It was already gone --- withdrawn during an earlier pass, for a different
+reason. The paper now records that the clause fired and that the claim is
+absent, which is the difference between honouring a rule and happening to
+comply with it.
+
+\subsection*{The oracle belonged to the ablation}
+
+The closure reported a $12.30\%$ raw-versus-memory ceiling and said TETHER
+recovers $30.0\%$ of it. Both numbers were built on the $142$-channel head's
+aligned memory. The script that re-runs a promoted head declared the oracle
+``GT-only; never runs the adapter'' and copied it forward from the canonical
+closure, and that declaration is exactly half true: ground truth does the
+selecting and never touches the adapter, but it selects between raw and the
+\emph{aligned memory}, which under $H{=}4$ is the previous fused output on
+three frames out of four. A different head gives a different memory and
+therefore a different ceiling.
+
+Recomputed on the shipped head's own memory: ceiling $12.74\%$, recovery
+$29.0\%$ pooled and $25.2\%$ per cell. The gap we have to close is larger than
+we said. The re-run reproduces the original canonical\_h4 gain to the sixth
+decimal, so nothing but the oracle changed.
+
+Related, and worse in kind: the paper wrote ``$30.0\%$ as a ratio of the pooled
+quantities, $32.9\%$ averaging per-cell recovery'', which reads as one
+measurement under two aggregations. They were two different measurements on two
+different supports, and the true per-cell figure is \emph{below} the pooled one,
+not above. The sentence pointed the wrong way.
+
+\subsection*{Smaller, but each one a claim}
+
+\begin{itemize}
+\item ``A spread of a quarter of a point across the whole grid.'' The grid spans
+$1.24$ points. $0.21$ is the spread after EPE rejects $H{=}1$ --- a different
+sentence, and the one we meant.
+\item The conclusion cited $5.03$ and $0.69$ points of seed spread as the
+paper's finding. Those are the ablation's; the shipped head spans $0.60$ and
+$0.40$. As written the sentence was false of the model it concludes about.
+\item ``The shift that costs more is the backbone, not the domain.'' On D2 the
+seen advantage is carried entirely by Stereo Anywhere; without it the ordering
+reverses ($1.85$ against $2.67$). Withdrawn.
+\item ``All $100$ cells'' multiplied four correlated metrics into the count.
+$25$ recording--backbone cells, four metrics each.
+\item The bootstrap resamples backbone--sequence cells, not sequences, and they
+share three and four underlying sequences. Reported as descriptive, with the
+sign test the splits can actually carry ($p=0.125$, $p=0.0625$).
+\item ``$62\times$ smaller'' omits the $8.88$M frozen SEA-RAFT that does the
+alignment and $26.2$ of our $28.9$\,ms.
+\item The $14\times$ Bad1 ratio divides by the baseline's $0.11$ points.
+\item TC-Stereo: pixel-pooled values quoted with the macro multiple. Four to six
+times, not three to five --- we were understating our own result.
+\item Seventeen sweep points, not sixteen, and the optimum is interior.
+\end{itemize}
+
+One reviewer accused us of a defect we do not have: that DTCE is gameable by
+staleness, so a stale prediction wins it. DTCE is
+$|\Delta\text{prediction}-\Delta\text{target}|$ --- a frozen prediction has
+$\Delta{=}0$ and is charged the whole of the reference motion. But a careful
+reader misread it, which is a defect of the paper and not of the reader, so the
+definition now says so where it is defined.
+
+The hardest objection --- ``you never run CODD, your own acknowledged parent''
+--- had its answer sitting in our own source the whole time. The docstring of
+\texttt{codd\_style\_fusion.py} reads: ``CODD obtains matching features from its
+stereo network; cached ARGOS backbones do not expose those features.'' The
+$142$-channel configuration \emph{is} the faithful-as-possible CODD
+reproduction, with its projection replaced by our warp and a frozen ResNet-18
+standing in for the features. The comparison the reviewer wanted has been in
+Table~V since the beginning; the paper simply never said what that row was.
+
+\subsection*{Completing a grid that was shaped to flatter us}
+
+The world-frame drift claim was ``$23$ cells in which the sign never changes:
+all $15$ D2 negative, all $8$ D7 positive''. That asymmetry was not a design.
+D2 had five backbones on three sequences; D7 had five backbones on keyframe~1
+and RAFT-Stereo alone on the other three. The favourable half rested on a
+smaller and differently-shaped support, and the paper never said so.
+
+Twelve cells later: $35$ cells, all $15$ D2 negative ($-32.1$ to $-5.4\%$), all
+$20$ D7 positive ($+7.2$ to $+17.8\%$). The claim survives on the complete grid.
+The raw-excess ranges are still disjoint, so the mechanism is still unsettled
+and we still do not claim raw difficulty as the cause.
+
+\subsection*{Eleven pages to eight}
+
+No measured result was deleted. The BiDAStabilizer table, the per-backbone
+DRENDS table and the frame scatter moved to the supplement, which already
+carried all three. What was compressed rather than moved was repetition: the
+support contract was stated five times, smoothness-is-not-correctness three,
+the $142$-channel instability three, and the conclusion restated every number
+in the paper a second time.
+
+Every self-critical result stayed in the main text at full length. That was the
+constraint I set before cutting, and the list is worth writing down because the
+temptation runs the other way: the Vid13 net harm, the AUROC below chance, the
+D2 mapping degradation, the no-reference gameability, the epoch-selection noise,
+the per-backbone negative DTCE on D2, A3 winning the registered endpoint, and an
+oracle gap that tonight got larger rather than smaller.
+
 \end{document}
