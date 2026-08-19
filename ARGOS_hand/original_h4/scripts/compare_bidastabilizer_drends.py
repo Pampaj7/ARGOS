@@ -20,6 +20,7 @@ which neither method influences. An invalid prediction on valid support is penal
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import time
@@ -95,6 +96,17 @@ def main() -> None:
     from argos_freezed.alignment.sea_raft_adapter import SEARAFTFlowAdapter
     from model_design.comparison.run_comparison import drive, load_factory
     from temporal_competitor_metrics import dtce
+
+    # Two runs sharing an output directory silently interleave their partial writes, which
+    # is how a stale job id in a bkill turned into two live jobs writing one comparison.json.
+    # An exclusive lock makes the second one fail loudly instead.
+    args.output.mkdir(parents=True, exist_ok=True)
+    lock = (args.output / ".run.lock").open("w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        raise SystemExit(f"another run already holds {args.output}; refusing to interleave")
+    lock.write(f"{os.getpid()}\n"); lock.flush()
 
     device = torch.device(args.device)
     adapter = load_factory(args.module)(device=args.device)
