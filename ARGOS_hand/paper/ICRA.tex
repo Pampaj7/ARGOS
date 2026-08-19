@@ -797,57 +797,60 @@ improvement is not alignment, averaging or smoothing.
 \centering
 \scriptsize
 \caption{
-Horizon sweep on D2, EPE reduction (\%), pooled as elsewhere here. A2 is
-the $38$-channel variant of Sec.~\ref{sec:ablations}.
+Horizon sweep on D2: EPE reduction (\%) and benefit-to-harm ratio, higher
+better in both. A2 is the $38$-channel variant of
+Sec.~\ref{sec:ablations}.
 }
 \label{tab:horizon}
-\begin{tabular}{lcc}
+\begin{tabular}{lccc}
 \toprule
-$H$ & Canonical & A2 \\
+$H$ & \multicolumn{2}{c}{EPE reduction} & $B^+/H^+$ \\
+\cmidrule(lr){2-3}
+ & Canonical & A2 & Canonical \\
 \midrule
-$1$ & $2.61$ & $2.49$ \\
-$2$ & $3.24$ & $3.02$ \\
-$4$ & $\mathbf{4.05}$ & $3.69$ \\
-$6$ & $4.18$ & $3.73$ \\
-$8$ & $4.09$ & $3.52$ \\
-continuous & $-62.69$ & $\mathbf{-19.17}$ \\
+$1$ & $2.61$ & $2.49$ & $2.39$ \\
+$2$ & $3.24$ & $3.02$ & $2.50$ \\
+$4$ & $4.05$ & $3.69$ & $\mathbf{2.53}$ \\
+$6$ & $\mathbf{4.18}$ & $\mathbf{3.73}$ & $2.30$ \\
+$8$ & $4.09$ & $3.52$ & $2.04$ \\
+cont. & $-62.69$ & $-19.17$ & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Recurrence must be bounded: with no re-anchor the canonical head loses
-$62.69\%$ of EPE, and gains stop growing with the horizon, $H=8$ buying
-$0.04$ points over $H=4$. $H=6$ is lower by $0.14\%$, bought at a cost in intervention risk
-($B^+/H^+$ degrades $2.53\rightarrow2.30\rightarrow2.04$ while NewBad1
-nearly triples), so $H=4$ is the frozen risk--gain operating point, chosen
-before D7 was opened. The table also says what the evidence space is for:
-A2 is behind at every bounded horizon and further behind as it lengthens,
-yet degrades three times less once the bound is removed.
+$62.69\%$ of EPE. $H=6$ gives the lowest EPE for both heads and we do not
+ship it: $B^+/H^+$ peaks at $H=4$ for both heads independently ($1.85$ for
+A2), and the $0.13$ points $H=6$ buys cost $45\%$ more newly broken pixels,
+$2.7\times$ at $H=8$. $H=4$ is the maximum on the axis this
+paper argues matters, and was frozen before D7 opened. The table also says
+what the evidence space is for: A2 is behind at every bounded horizon and
+further behind as it lengthens, yet degrades three times less once the
+bound is removed.
 
 
 \subsection{Cross-Backbone Development Behaviour}
 
 Canonical $H=4$ improves all five estimators in mean D2 EPE
 (Table~\ref{tab:grid}), from $2.17\%$ to $8.44\%$, and all six
-unseen-backbone sequence groups improve. On D7 the mean excluding Stereo
-Anywhere is $4.14\%$, with RAFT-Stereo alone at $6.10\%$.
+unseen-backbone sequence groups improve; on D7 the mean excluding Stereo
+Anywhere is $4.14\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
 
 We next evaluate the already frozen $H=4$ policy on held-out D7. All five
-backbones improve, including both architectures unseen during
-temporal-head training: mean backbone EPE decreases
-$0.4921 \rightarrow 0.4696$, or $4.57\%$.
+backbones improve, including both unseen during temporal-head training:
+mean EPE decreases $0.4921 \rightarrow 0.4696$, or $4.57\%$.
 
 The improvement is not restricted to the mean: Bad1 and RMSE decrease for
-every backbone on both splits, P99 decreases in all ten backbone--split
-cases and maximum error in nine of ten, most strongly for Stereo Anywhere
-on D2 ($33.27$ to $14.88$ px).
-InvalidRate stays zero in all ten SCARED-C backbone--split evaluations ---
-a property of SCARED-C, not of the module: Sec.~\ref{sec:masking} shows an
-unmasked output does introduce invalid predictions on external domains,
-which the support contract of \eqref{eq:fusion} prevents.
+every backbone on both splits, P99 in all ten backbone--split cases and
+maximum error in nine of ten, most strongly for Stereo Anywhere on D2
+($33.27$ to $14.88$ px).
+InvalidRate stays zero in all ten SCARED-C backbone--split evaluations, a
+property of SCARED-C not of the module: Sec.~\ref{sec:masking} shows an
+unmasked output does introduce invalid predictions out of domain, which the
+support contract of \eqref{eq:fusion} prevents.
 
 The EPE gain is therefore not bought by a worse bad-pixel rate or a
 broader tail. New bad pixels do appear and are measured below. The joint unseen-backbone /
@@ -882,10 +885,9 @@ collapses to $0.69$. Selection optimism sits in the split used to select.
 \caption{
 Per-frame Bad1, raw against refined, for \emph{every} scored frame of each
 split --- five backbones, all sequences, no selection. Points below the
-diagonal are improved. On D7 half improve against $13\%$ worsened, and the
-worsened band hugs the diagonal while the improved mass extends far from it:
-the frame-level form of the count-versus-magnitude asymmetry behind
-$B^+/H^+$.
+diagonal are improved. On D7 half improve against $13\%$ worsened, the
+worsened band hugging the diagonal while the improved mass extends far from
+it: the frame-level count-versus-magnitude asymmetry behind $B^+/H^+$.
 }
 \label{fig:trace}
 \end{figure}
@@ -918,8 +920,8 @@ consumes future frames, which our setting forbids.
 Out-of-domain common support, five DRENDS recordings, $117.4$M pixels;
 \emph{neither} method has seen this domain. Every row refines the same
 frozen RAFT-Stereo \emph{robust} predictions; lower is better. Reductions
-against raw are $2.0/0.2/4.7/5.3\%$ for the baseline, $5.5/3.1/12.3/9.5$
-for TETHER and $5.7/3.4/13.2/8.9$ for its A2 head.
+against raw: $2.0/0.2/4.7/5.3\%$ baseline, $5.5/3.1/12.3/9.5$ TETHER,
+$5.7/3.4/13.2/8.9$ A2.
 }
 \label{tab:bida}
 \begin{tabular}{lccccc}
