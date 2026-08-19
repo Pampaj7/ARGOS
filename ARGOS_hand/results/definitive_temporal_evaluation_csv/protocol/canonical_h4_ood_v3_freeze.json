@@ -1,0 +1,151 @@
+{
+  "freeze_id": "canonical_h4_ood_v3",
+  "status": "FROZEN_PRE_RUN",
+  "frozen_on": "2026-08-15",
+  "write_once": true,
+  "output": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v3",
+    "must_not_exist_before_run": true,
+    "publication": "run_definitive_evaluation.py staged_directory; refuse reuse, overwrite, or merge"
+  },
+  "module": "model_design.comparison.canonical_h4:factory",
+  "method": {
+    "name": "canonical_h4",
+    "checkpoint_selection": "D2-only frozen selection",
+    "policy": "fixed H=4 causal recurrence; raw t-1 immediately after reset; preceding fused otherwise",
+    "future_access": false
+  },
+  "immutable_inputs": {
+    "canonical_h4_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt",
+      "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"
+    },
+    "canonical_h4_policy": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_policy.json",
+      "sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d"
+    },
+    "canonical_h4": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/canonical_h4.py",
+      "sha256": "4148ee8b4b6d6662c1519bfdf9e850868d0fe7bb923d34617ccfaf6f757593c8"
+    },
+    "run_comparison": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+      "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+    },
+    "definitive_evaluation": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+      "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+    },
+    "run_definitive_evaluation": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+      "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+    },
+    "drends_evaluation": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/drends_evaluation.py",
+      "sha256": "38214918bd328ab269b49c8191fbd6213af79d16c7c1aa9db0932f25da9f9473"
+    },
+    "unified_metrics": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+      "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+    },
+    "sea_raft_adapter": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/alignment/sea_raft_adapter.py",
+      "sha256": "764a9b64de3846cd710a41eb853720171b3fa79abe6e1191d4f438de92733148"
+    },
+    "sea_raft_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    "d4d_context_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/d4d_s2m2_zero_shot/context_manifest.csv",
+      "sha256": "291ab53221171a1e6d845dea8503a7e9fb5c76a533810b5f1a7486d9412b3766"
+    },
+    "d4d_index": {
+      "path": "/dtu/p1/leopam/ARGOS/results/03_temporal_refinement/ood/d4d_s2m2_zero_shot/d4d_index.csv",
+      "sha256": "fceb60798ad018e1ce3ecaa527b2563dc80d3b34f84421d9a95e66c41a3e90d8"
+    },
+    "d4d_raft_stereo_frame_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/frame_manifest.csv",
+      "sha256": "be00d465246083afe5233f052c978c80c46b13139cbdfb7fff32b9c5303d8dbc"
+    },
+    "d4d_raft_stereo_metadata": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/RAFT-Stereo/D4D/metadata.json",
+      "sha256": "63f079950ffcc8a4dbc75fe888cefb828468d1d1dc6b8aa35c757d11337ac7e0"
+    },
+    "d4d_stereoanywhere_frame_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/frame_manifest.csv",
+      "sha256": "be00d465246083afe5233f052c978c80c46b13139cbdfb7fff32b9c5303d8dbc"
+    },
+    "d4d_stereoanywhere_metadata": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/StereoAnywhere/D4D/metadata.json",
+      "sha256": "a8cef3a2ca5af38f83fcd6198571c9be90bd44cb198bc74e7ea1b7c1e3a7bd6f"
+    },
+    "drends_vid14_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/dataset/DRENDS/processed/temporal_stereo_gt_curated/temporal_pilot_manifest.json",
+      "sha256": "66d288502a1fd259e774858c1bcdf08f5c0034712f18776ec4814f1e6a0bca7b"
+    },
+    "drends_vid14_quality_report": {
+      "path": "/dtu/p1/leopam/ARGOS/dataset/DRENDS/processed/temporal_stereo_gt_curated/temporal_pilot_quality_report.json",
+      "sha256": "6d68b4cb79e7bb50cb71d6c995a598a47e4ef3ed93b5188c524a3f00c3fdf51f"
+    },
+    "drends_raft_stereo_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/RAFT-Stereo/models/raftstereo-middlebury.pth",
+      "sha256": "d22e84c0e431bf31d7cc66902c40601859eb40b35ef7f4399ea81276c2915819"
+    }
+  },
+  "evaluation_scope": {
+    "datasets": [
+      "d4d",
+      "servct",
+      "drends"
+    ],
+    "d4d": {
+      "backbones": [
+        "RAFT-Stereo",
+        "StereoAnywhere"
+      ],
+      "contexts": "all complete contexts selected from the frozen context manifest and D4D index; source-availability filtering remains the frozen driver behavior",
+      "frozen_inventory": {
+        "context_rows": 156,
+        "index_rows": 156,
+        "cache_frame_count_per_backbone": 416,
+        "cache_completion_status": true,
+        "disparity_convention": "positive_left_disparity"
+      },
+      "metric_scope": "no_reference_prediction_space",
+      "applicability": "NO_REFERENCE_DIAGNOSTIC"
+    },
+    "servct": {
+      "backbones": [
+        "RAFT-Stereo",
+        "StereoAnywhere"
+      ],
+      "metric_scope": "not_applicable",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "static stereo pairs have no temporal adjacency"
+    },
+    "drends": {
+      "recording": "Vid14_Pancreas_High",
+      "frames": 1500,
+      "backbone": "RAFT-Stereo",
+      "metric_scope": "tof_reference_nonindependent",
+      "applicability": "APPLICABLE_WITH_CAVEAT",
+      "caveat": "The reference is temporally smoothed ToF, not independent stereo-disparity ground truth."
+    }
+  },
+  "exclusions": {
+    "d2_consumed": false,
+    "d7_consumed": false,
+    "max_frames": false,
+    "smoke": false,
+    "tuning": false,
+    "threshold_calibration": false,
+    "dense_predictions_written": false,
+    "joint_unseen_backbone_and_ood_claim": "UNAVAILABLE: only the frozen D4D RAFT-Stereo and StereoAnywhere caches are in scope."
+  },
+  "pre_run_attestation": {
+    "gpu_or_evaluation_run_started": false,
+    "hashes_verified_before_freeze": true,
+    "json_validated_before_freeze": true
+  }
+}

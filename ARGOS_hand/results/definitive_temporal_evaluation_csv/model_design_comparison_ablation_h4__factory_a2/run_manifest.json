@@ -1,0 +1,123 @@
+{
+  "comparison_driver": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+    "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+  },
+  "consumed_input_hashes": {
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/model_design_comparison_ablation_h4__factory_a2/runs/d4d/model_design_comparison_ablation_h4__factory_a2/d4d_diagnostics.csv": "62d9c00108d0b4f6c7a73bd3bd0ed47c357c4b5e510ff125904991f4613f1f69",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/model_design_comparison_ablation_h4__factory_a2/runs/d4d/model_design_comparison_ablation_h4__factory_a2/run_manifest.json": "3f0b67d46c340b3fc012a5e4f02fbaf5774b537a13271db6925e69dceffe261b"
+  },
+  "consumed_input_hashes_note": "wrapper post-read integrity snapshot; source manifests do not predeclare every report/diagnostic/applicability artifact",
+  "datasets": [
+    "d4d"
+  ],
+  "dense_predictions_written": false,
+  "evaluator": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+    "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+  },
+  "mode": "compile",
+  "module_provenance": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A2_no_learned_evidence/checkpoints/best_validation.pt",
+    "checkpoint_sha256": "5c78cb73ba5f5bc39ca3bed58a5e3ccf41be4c954ec8ffae43417b80ad33a300",
+    "declared_change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+    "module": "ablation_h4",
+    "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+    "seed": null,
+    "training_provenance": {
+      "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+      "declared": {
+        "change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+        "everything_else": "unchanged",
+        "field": "disable_learned_stereo_evidence",
+        "implementation": "an existing flag in train.py; no code change",
+        "locked_value": false,
+        "new_value": true,
+        "rationale": "Tests whether the head needs learned features at all. This is the variant that removes the frozen extractor from the deployed system, so it is the one with a runtime consequence."
+      },
+      "locked_training": {
+        "alpha_reg": 0.2,
+        "backbones": [
+          "S2M2-S",
+          "RAFT-Stereo",
+          "StereoAnywhere"
+        ],
+        "batch_size": 4,
+        "clip_length": 4,
+        "coverage_threshold": 0.5,
+        "epochs": 12,
+        "gradient_clip_norm": 1.0,
+        "learned_stereo_evidence": true,
+        "learning_rate": 0.0002,
+        "memory_state": "recurrent",
+        "mixed_precision_cuda": true,
+        "optimizer": "AdamW",
+        "scheduler": null,
+        "seed": 0,
+        "tau_fusion_native_px": 1.0,
+        "tau_reset_native_px": 5.0,
+        "train_dataset_ids": [
+          1,
+          3,
+          6
+        ],
+        "validation_dataset_ids": [
+          2
+        ],
+        "weight_decay": 0.0001
+      },
+      "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A2_no_learned_evidence",
+      "patch": {
+        "config_field": "disable_learned_stereo_evidence",
+        "cue_channels": 38,
+        "patched": null,
+        "value": true
+      },
+      "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+      "variant": "A2_no_learned_evidence"
+    },
+    "variant": "A2_no_learned_evidence",
+    "variant_of": "canonical_h4_masked"
+  },
+  "output_hashes": {
+    "applicability.csv": "242c4a33728a7e12ddff60556dd1955448de24873e5608e1b4951eed817e3ad5",
+    "d4d_no_reference_metrics.csv": "ab6060747764b338d92415232cd7448c26b86282cf7ebdf1f75db6e8605f1d58",
+    "d4d_no_reference_summary.csv": "d63ee6b820bb52ffab91eae4a8f09c4cc6df6e1bce1ca565a5b0ab4a492fdaca",
+    "definitive_table.csv": "22036b688e5542fc8c8f8746fdb52169b6d6bf3cc0f2e1f90878bc8113114e97",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/applicability.json": "378dc88d9f6ad093b334ae7259bb103dde2b8d33b51d0e86a368b7fb8a62ec6a",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/d4d_diagnostics.csv": "62d9c00108d0b4f6c7a73bd3bd0ed47c357c4b5e510ff125904991f4613f1f69",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/run_manifest.json": "3f0b67d46c340b3fc012a5e4f02fbaf5774b537a13271db6925e69dceffe261b",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/summary.csv": "e399b7fd7e0e7f463a8bb7e6fd1529fb9b455f58c4742949135cd598a0ef4c9b",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/summary.json": "e963589b0dfd3f4603faaaff024e82241a8fc802d36090b8699876d8096fb956",
+    "tables/d4d.csv": "22036b688e5542fc8c8f8746fdb52169b6d6bf3cc0f2e1f90878bc8113114e97"
+  },
+  "outputs": [
+    "applicability.csv",
+    "d4d_no_reference_metrics.csv",
+    "d4d_no_reference_summary.csv",
+    "definitive_table.csv",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/applicability.json",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/d4d_diagnostics.csv",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/run_manifest.json",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/summary.csv",
+    "runs/d4d/model_design_comparison_ablation_h4__factory_a2/summary.json",
+    "tables/d4d.csv"
+  ],
+  "project": "ARGOS v2",
+  "source_root": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/model_design_comparison_ablation_h4__factory_a2/runs",
+  "source_runs": {
+    "d4d": {
+      "manifest_sha256": "3f0b67d46c340b3fc012a5e4f02fbaf5774b537a13271db6925e69dceffe261b",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/model_design_comparison_ablation_h4__factory_a2/runs/d4d/model_design_comparison_ablation_h4__factory_a2"
+    }
+  },
+  "status": "COMPLETE",
+  "unified_metrics": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+    "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+  },
+  "wrapper": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+    "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "backbones": {
+    "CREStereo": {
+      "bootstrap": {
+        "depth_MAE": {
+          "ci_lower": -0.16606659519160596,
+          "ci_upper": 40864.18390755794,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": 13831.290886733408,
+          "improvement": false,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        },
+        "disparity_EPE": {
+          "ci_lower": -0.5372526413149483,
+          "ci_upper": -0.11422980008421557,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": -0.3077527268178578,
+          "improvement": true,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        }
+      },
+      "gate_pass": {
+        "efficacy": false,
+        "frame_degradation": false,
+        "identity_clean": false,
+        "tail_vs_raw": false,
+        "update_safety": false
+      },
+      "macro_session_delta": {
+        "depth_MAE": 13831.290886733412,
+        "disparity_EPE": -0.3077527268178577
+      },
+      "specimen_delta": {
+        "specimen_2": {
+          "depth_MAE": -0.12351870922652441,
+          "disparity_EPE": -0.14319113798149274
+        },
+        "specimen_3": {
+          "depth_MAE": 23052.23382369517,
+          "disparity_EPE": -0.4174604527087684
+        }
+      },
+      "status": "FAIL",
+      "tail_refined_vs_raw": {
+        "Bad3": [
+          0.14135571859726545,
+          0.14860912805912616
+        ],
+        "DepthBad10": [
+          0.12398607648313434,
+          0.13136128828832677
+        ],
+        "DepthInvalid": [
+          1.7311027551002455e-06,
+          0.0
+        ],
+        "DepthP99": [
+          52.95140689605794,
+          52.02225423921701
+        ],
+        "InvalidRate": [
+          1.7311027551002455e-06,
+          0.0
+        ],
+        "P99": [
+          34.21476494026185,
+          36.006416602134706
+        ]
+      }
+    },
+    "Fast-FoundationStereo": {
+      "bootstrap": {
+        "depth_MAE": {
+          "ci_lower": 88.25221344855719,
+          "ci_upper": 2825.976175462859,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": 1078.0371584563754,
+          "improvement": false,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        },
+        "disparity_EPE": {
+          "ci_lower": -0.939588178517589,
+          "ci_upper": -0.27198207537775354,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": -0.5693433489785787,
+          "improvement": true,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        }
+      },
+      "gate_pass": {
+        "efficacy": false,
+        "frame_degradation": true,
+        "identity_clean": false,
+        "tail_vs_raw": true,
+        "update_safety": true
+      },
+      "macro_session_delta": {
+        "depth_MAE": 1078.0371584563752,
+        "disparity_EPE": -0.5693433489785793
+      },
+      "specimen_delta": {
+        "specimen_2": {
+          "depth_MAE": 2460.0829548486336,
+          "disparity_EPE": -0.6540068159638355
+        },
+        "specimen_3": {
+          "depth_MAE": 156.6732941948697,
+          "disparity_EPE": -0.512901037655074
+        }
+      },
+      "status": "FAIL",
+      "tail_refined_vs_raw": {
+        "Bad3": [
+          0.17040877009899447,
+          0.18934501480385973
+        ],
+        "DepthBad10": [
+          0.1503072580917248,
+          0.16779004458670194
+        ],
+        "DepthInvalid": [
+          0.0,
+          0.0
+        ],
+        "DepthP99": [
+          52.46995011243678,
+          53.07808698664868
+        ],
+        "InvalidRate": [
+          0.0,
+          0.0
+        ],
+        "P99": [
+          35.59456457901002,
+          37.326465877532925
+        ]
+      }
+    },
+    "RAFT-Stereo": {
+      "status": "CONTROL"
+    },
+    "StereoAnywhere": {
+      "status": "CONTROL"
+    }
+  },
+  "frozen_gates": {
+    "efficacy": "both unseen: session-macro disparity EPE and depth MAE delta<0; paired 10k seed0 CI upper<0; both specimen macro-session deltas<0",
+    "frame_degradation": "both unseen: FrameDegradation Mean/P95/P99/Worst <= seen-control worst plus fixed tolerance (0.02px for every disparity frame statistic; 20mm for every depth frame statistic)",
+    "identity_clean": "both unseen: clean-good IdentityPreservation at Bad1/3/5 and depth Bad2/5/10 >= max(.95, seen-control minimum-.01)",
+    "tail_vs_raw": "both unseen: session-macro disparity Bad3/P99/InvalidRate and depth BadMM10/P99/InvalidRate refined<=raw",
+    "update_safety": "both unseen: HUR/HPlus/NewBad1/3/5 and depth HUR/HPlus/NewBad2/5/10 <= seen-control worst plus fixed tolerance (rates .01; disparity HPlus .02px; depth HPlus 20mm)",
+    "verdict": "PASS only all gates for both unseen; FAIL if an efficacy mean is non-negative or any tail/update/identity/frame gate fails; otherwise NOT_CONFIRMED. Gates frozen before evaluation; never tuned on unseen results."
+  },
+  "joint_unseen_backbone_and_ood": "FAIL",
+  "project": "ARGOS v2",
+  "protocol": "joint_d4d_v4"
+}

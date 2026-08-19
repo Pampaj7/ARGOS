@@ -1,0 +1,113 @@
+{
+  "comparison_driver": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+    "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+  },
+  "consumed_input_hashes": {
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/d4d/model_design_comparison_canonical_h4__factory/d4d_diagnostics.csv": "9a47f373746c11dfd1685633f69957d3232b5beaf8195684d9ba810a8c3a43b1",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/d4d/model_design_comparison_canonical_h4__factory/run_manifest.json": "674eccf732d550a35b6e9629ae35abe16a191f5ce8e45e0e438cb7666c528b3b",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/drends/model_design_comparison_canonical_h4__factory/reports/RAFT-Stereo/Vid14_Pancreas_High.json": "ed6dbaf61c98d77c0e4459d162603183dc309ea10324e0fac7a7fe6d776f0f83",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/drends/model_design_comparison_canonical_h4__factory/run_manifest.json": "9c629de2f3be420f94fa4acce1ac25ec5e25ba36df7588bd0bb529c6daa3f768",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/servct/model_design_comparison_canonical_h4__factory/applicability.json": "a9aee1900189663f182884dfe6980be242d90c91430a1f9174393621df1d86ec",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/servct/model_design_comparison_canonical_h4__factory/run_manifest.json": "14f677287381bb20b5b6de9b7c26d408c3054e90338837e51085010e5623838f"
+  },
+  "consumed_input_hashes_note": "wrapper post-read integrity snapshot; source manifests do not predeclare every report/diagnostic/applicability artifact",
+  "datasets": [
+    "d4d",
+    "servct",
+    "drends"
+  ],
+  "dense_predictions_written": false,
+  "evaluator": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+    "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+  },
+  "mode": "compile",
+  "module_provenance": {
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt",
+    "checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+    "code": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/canonical_h4.py",
+    "code_sha256": "4148ee8b4b6d6662c1519bfdf9e850868d0fe7bb923d34617ccfaf6f757593c8",
+    "module": "canonical_h4",
+    "policy": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_policy.json",
+    "policy_sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d",
+    "reset_protocol": "fixed H=4; raw t-1 after re-anchor; preceding fused otherwise"
+  },
+  "output_hashes": {
+    "applicability.csv": "1791307e6166e65641ca822c9b8aeb66b1ef49da30e5b8a5e6ba27f65d1b54c3",
+    "d4d_no_reference_metrics.csv": "4d6567f0230194db04bd8e66b80225c97919da9c30967b7dba272d1c4f179895",
+    "d4d_no_reference_summary.csv": "7ba05dfe70626bc692cd02dc6254e019bbffdd353872655e8947d47ab68afdd7",
+    "definitive_table.csv": "a3b55e79c0a79d6d2c280139af9e55363cabca7dcadc36cd173daba4f3310bc9",
+    "drends_aggregate_metrics.csv": "9d65d8a4fb14e847b0bc6b56d04ef8d3cbff56d672994d04ee6030643e4d87fb",
+    "drends_per_frame_metrics.csv": "f0b643578fc9dd6b9db0bf66d9760e2ac3653fc0e3724e44e8a8091f494e1b5b",
+    "drends_per_sequence_metrics.csv": "34ab3ceb80a072c6fee71feb9d1f23a51ae810d38737ec75f4eb74e2906552ec",
+    "external_ood_attestation.json": "7c1f4e400e35cac48951cf1959b286d76dffdd4f865c0f873ebe5d38de1c92c7",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/applicability.json": "378dc88d9f6ad093b334ae7259bb103dde2b8d33b51d0e86a368b7fb8a62ec6a",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/d4d_diagnostics.csv": "9a47f373746c11dfd1685633f69957d3232b5beaf8195684d9ba810a8c3a43b1",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/run_manifest.json": "674eccf732d550a35b6e9629ae35abe16a191f5ce8e45e0e438cb7666c528b3b",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/summary.csv": "e399b7fd7e0e7f463a8bb7e6fd1529fb9b455f58c4742949135cd598a0ef4c9b",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/summary.json": "e963589b0dfd3f4603faaaff024e82241a8fc802d36090b8699876d8096fb956",
+    "runs/drends/model_design_comparison_canonical_h4__factory/applicability.json": "b3066e22d7ffe4ab02d43eb77eae933f77e09e864e9457eabf4598a4e5d02d7d",
+    "runs/drends/model_design_comparison_canonical_h4__factory/reports/RAFT-Stereo/Vid14_Pancreas_High.json": "ed6dbaf61c98d77c0e4459d162603183dc309ea10324e0fac7a7fe6d776f0f83",
+    "runs/drends/model_design_comparison_canonical_h4__factory/run_manifest.json": "9c629de2f3be420f94fa4acce1ac25ec5e25ba36df7588bd0bb529c6daa3f768",
+    "runs/drends/model_design_comparison_canonical_h4__factory/summary.json": "ce883903daa761bfcb0c1eb8999683d4f66e2b8734baed1726ab54b868a6caf3",
+    "runs/servct/model_design_comparison_canonical_h4__factory/applicability.json": "a9aee1900189663f182884dfe6980be242d90c91430a1f9174393621df1d86ec",
+    "runs/servct/model_design_comparison_canonical_h4__factory/run_manifest.json": "14f677287381bb20b5b6de9b7c26d408c3054e90338837e51085010e5623838f",
+    "runs/servct/model_design_comparison_canonical_h4__factory/summary.csv": "939d00f53b3641c00032ffc6cfef6a9dd45408932442c481924d17e47e7ebf1b",
+    "runs/servct/model_design_comparison_canonical_h4__factory/summary.json": "233316e528ae32ee224fe175a3aea4df6b4b3a4e5d3887fd077efc1515b0d468",
+    "tables/d4d.csv": "b2ae116e3daf3a66911aba83aa24b86d8522c36462c9ef5a6b8c646702f91f9a",
+    "tables/drends.csv": "e6c19daf6eccf4fa76104ea2e0300036ee65002ec6cde749a5a5a7f5827cfc1e",
+    "tables/serv_ct.csv": "34edbdc4a1816214fc1e9e8c0b94deb66b279d6ec55b55fc79b15440ce2589dd"
+  },
+  "outputs": [
+    "applicability.csv",
+    "d4d_no_reference_metrics.csv",
+    "d4d_no_reference_summary.csv",
+    "definitive_table.csv",
+    "drends_aggregate_metrics.csv",
+    "drends_per_frame_metrics.csv",
+    "drends_per_sequence_metrics.csv",
+    "external_ood_attestation.json",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/applicability.json",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/d4d_diagnostics.csv",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/run_manifest.json",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/summary.csv",
+    "runs/d4d/model_design_comparison_canonical_h4__factory/summary.json",
+    "runs/drends/model_design_comparison_canonical_h4__factory/applicability.json",
+    "runs/drends/model_design_comparison_canonical_h4__factory/reports/RAFT-Stereo/Vid14_Pancreas_High.json",
+    "runs/drends/model_design_comparison_canonical_h4__factory/run_manifest.json",
+    "runs/drends/model_design_comparison_canonical_h4__factory/summary.json",
+    "runs/servct/model_design_comparison_canonical_h4__factory/applicability.json",
+    "runs/servct/model_design_comparison_canonical_h4__factory/run_manifest.json",
+    "runs/servct/model_design_comparison_canonical_h4__factory/summary.csv",
+    "runs/servct/model_design_comparison_canonical_h4__factory/summary.json",
+    "tables/d4d.csv",
+    "tables/drends.csv",
+    "tables/serv_ct.csv"
+  ],
+  "project": "ARGOS v2",
+  "source_root": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs",
+  "source_runs": {
+    "d4d": {
+      "manifest_sha256": "674eccf732d550a35b6e9629ae35abe16a191f5ce8e45e0e438cb7666c528b3b",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/d4d/model_design_comparison_canonical_h4__factory"
+    },
+    "drends": {
+      "manifest_sha256": "9c629de2f3be420f94fa4acce1ac25ec5e25ba36df7588bd0bb529c6daa3f768",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/drends/model_design_comparison_canonical_h4__factory"
+    },
+    "servct": {
+      "manifest_sha256": "14f677287381bb20b5b6de9b7c26d408c3054e90338837e51085010e5623838f",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/servct/model_design_comparison_canonical_h4__factory"
+    }
+  },
+  "status": "COMPLETE",
+  "unified_metrics": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+    "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+  },
+  "wrapper": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+    "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "attestation_version": 5,
+  "checks": {
+    "d4d_diagnostics": 504,
+    "dense_predictions_written": false,
+    "drends_eligible_frames": 1499,
+    "servct_temporal_h4": "NOT_APPLICABLE"
+  },
+  "freeze": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/canonical_h4_ood_v7_freeze.json",
+    "sha256": "55c848540383f91c403f8217d2f7908c7e1e4b73c3b032840bebc70ff168bf6a"
+  },
+  "inventory": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/canonical_h4_ood_v7_input_inventory.json",
+    "sha256": "67b53674823d77336daf22f524e442d2c45998fd23e9bf722bc5f9e258dd17a6"
+  },
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7",
+  "project": "ARGOS v2",
+  "source_backbones": {
+    "d4d": [
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ],
+    "drends": [
+      "RAFT-Stereo"
+    ],
+    "servct": [
+      "RAFT-Stereo",
+      "StereoAnywhere"
+    ]
+  },
+  "source_runs": {
+    "d4d": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/d4d/model_design_comparison_canonical_h4__factory/run_manifest.json",
+      "sha256": "674eccf732d550a35b6e9629ae35abe16a191f5ce8e45e0e438cb7666c528b3b"
+    },
+    "drends": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/drends/model_design_comparison_canonical_h4__factory/run_manifest.json",
+      "sha256": "9c629de2f3be420f94fa4acce1ac25ec5e25ba36df7588bd0bb529c6daa3f768"
+    },
+    "servct": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/runs/servct/model_design_comparison_canonical_h4__factory/run_manifest.json",
+      "sha256": "14f677287381bb20b5b6de9b7c26d408c3054e90338837e51085010e5623838f"
+    }
+  },
+  "status": "COMPLETE_EXTERNAL_OOD"
+}

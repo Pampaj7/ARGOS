@@ -1,0 +1,142 @@
+{
+  "dense_predictions_written": false,
+  "freeze_id": "joint_d4d_v1",
+  "freeze_version": 1,
+  "immutable_sources_and_checkpoints": {
+    "backbone_registry": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/argos_v2/backbones.py",
+      "sha256": "dc4d46a34b384ed91f665c3a048c98ee1011e2282027073664ef38895c692925"
+    },
+    "bida_pull_warp": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/alignment/bida_pull_warp.py",
+      "sha256": "a729232af2c6c0bf53ee40f899a5fa9281316dff691b86fb07f73ad8c5267a46"
+    },
+    "cache_builder_base": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/build_multidomain_backbone_cache.py",
+      "sha256": "256a3ea3beb926a38a898bcd3cd4d102546902d8e3746b07ebc093c7db052c83"
+    },
+    "canonical_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt",
+      "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"
+    },
+    "canonical_h4": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/canonical_h4.py",
+      "sha256": "4148ee8b4b6d6662c1519bfdf9e850868d0fe7bb923d34617ccfaf6f757593c8"
+    },
+    "canonical_policy": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_policy.json",
+      "sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d"
+    },
+    "comparison_driver": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+      "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+    },
+    "crestereo_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/stereo_matching_crestereo/stereo_matching_crestereo/epoch-570.pth",
+      "sha256": "ca00d7f586935b2087016336004adde5fc38a2785aea9a1dc6372fa79b76d028"
+    },
+    "crestereo_wrapper": {
+      "path": "/dtu/p1/leopam/ARGOS/scripts/scared/eval_scared_external_native.py",
+      "sha256": "04b78c5fcff7044f99f46b88053bc1a616a0221996d25c7cf45125d1d2601b1b"
+    },
+    "d4d_flow_adapter": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/external_components/bidavideo.py",
+      "sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+    },
+    "fast_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/Fast-FoundationStereo/weights/onnx/20_30_48/320x736/20_30_48_iters_4_res_320x736.onnx",
+      "sha256": "30a057d15959be17f06163445614242c00bc00b2ac01a4ef0f62aedcda969758"
+    },
+    "fast_config": {
+      "path": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/Fast-FoundationStereo/weights/onnx/20_30_48/320x736/20_30_48_iters_4_res_320x736.yaml",
+      "sha256": "0423f381536ef6a77038533f3e25338ceb9e45c5c7a31f80e59b4cf7132249e5"
+    },
+    "frozen_codd": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/provenance/codd_style_fusion.py",
+      "sha256": "393defbb12a5cb33fbd8be361f23be5beda2b8f62abfe91a4cde01e451d205dc"
+    },
+    "joint_cache_builder": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/build_joint_d4d_backbone_cache.py",
+      "sha256": "3d3514cf89595f1ce07d7bdbdad300d9b5e7d90574c5746d3b9d751489c6271c"
+    },
+    "launcher": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_joint_d4d_v1.py",
+      "sha256": "ff87000335f0df1b78898e9ddb6490475ef575a0628d64543d1a229f5b7e369f"
+    },
+    "sea_raft/__init__.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sea_raft/corr.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/corr.py",
+      "sha256": "f69e8be999c91ffdbe1026b41c3fda3e57f987e7ed99e78f9c76dec047d8099a"
+    },
+    "sea_raft/datasets.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/datasets.py",
+      "sha256": "2cfaa0bd2a35919362dfc966a7ce2676d560d4e8f106ebfb4ca96d349f036773"
+    },
+    "sea_raft/extractor.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/extractor.py",
+      "sha256": "452674c670f741faa542c208b9d882c1d48199bfd496d4079965273a4c9db686"
+    },
+    "sea_raft/layer.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/layer.py",
+      "sha256": "580f4cced2b5f3551667b4b4b24b8ff7cd024ef4e3f8723bf3c5fbb7baf74563"
+    },
+    "sea_raft/loss.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/loss.py",
+      "sha256": "12396473603867e32cd1f25ba9123adbcc4709430593df957dd97c24ca41e2fb"
+    },
+    "sea_raft/raft.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/raft.py",
+      "sha256": "dbe30b1fa3144a2ed24f82f4d88994059aa9bf7b40e42cdf20455b2a5b83bab7"
+    },
+    "sea_raft/update.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/update.py",
+      "sha256": "fc9bd0ab9fde896e5bb98a88ef8eb0c9082e97a390495de8b6ceb26fb080f6ac"
+    },
+    "sea_raft/utils/__init__.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/utils/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sea_raft/utils/augmentor.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/utils/augmentor.py",
+      "sha256": "191a2cba51c93f9b9f3b65cf336c69862300dd8c52903c83add64bbbe3aac731"
+    },
+    "sea_raft/utils/flow_transforms.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/utils/flow_transforms.py",
+      "sha256": "db1c6081e13037a00657700bf47afcbf9a9a893df4aa0e19ff0282b7af8914e3"
+    },
+    "sea_raft/utils/flow_viz.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/utils/flow_viz.py",
+      "sha256": "72595c16479265fea80add4f1691b4e35321b898f3da0a0f2ee19f6f8d831d26"
+    },
+    "sea_raft/utils/frame_utils.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/utils/frame_utils.py",
+      "sha256": "2751693efdf5724cf9f91882187ccf7f7ba578d0983d42bbfcf2af57e2127c78"
+    },
+    "sea_raft/utils/utils.py": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/core/utils/utils.py",
+      "sha256": "04d88de0f161db56f856776e05d4337cecaadabdc1decc104b22c6ea642f11ae"
+    },
+    "sea_raft_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/bidavideo/third_party/SEA-RAFT/models/Tartan-C-T-TSKH-spring540x960-S.pth",
+      "sha256": "1a21575ed6ca2c6945fb8e25c4169d241cf59ee5d12b8802c01c965206268cac"
+    },
+    "unified_metrics": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+      "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+    }
+  },
+  "input_inventory": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/joint_d4d_v1_input_inventory.json",
+    "sha256": "1ea245c3a804cfbbbbc49cb1089987650e4149d5028ca45d03591368821f6c75"
+  },
+  "module": "model_design.comparison.canonical_h4:factory",
+  "no_threshold_tuning": true,
+  "no_training": true,
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/joint_d4d_v1",
+  "project": "ARGOS v2",
+  "status": "FROZEN_PRE_RUN",
+  "write_once": true
+}

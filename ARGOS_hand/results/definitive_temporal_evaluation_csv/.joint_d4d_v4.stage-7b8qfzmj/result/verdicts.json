@@ -1,0 +1,253 @@
+{
+  "backbones": {
+    "CREStereo": {
+      "bootstrap": {
+        "depth_MAE": {
+          "ci_lower": -0.16606659519160596,
+          "ci_upper": 40864.18390755794,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": 13831.290886733408,
+          "improvement": false,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        },
+        "disparity_EPE": {
+          "ci_lower": -0.5372526413149483,
+          "ci_upper": -0.11422980008421557,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": -0.3077527268178578,
+          "improvement": true,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        }
+      },
+      "macro_session_delta": {
+        "depth_MAE": 13831.290886733412,
+        "disparity_EPE": -0.3077527268178577
+      },
+      "safety_against_controls": {
+        "depth_HPlus": {
+          "control_worst_plus_tolerance": 1199.5606606459044,
+          "raw_identity_reference": 0.0,
+          "value": 13832.052924172047
+        },
+        "depth_HUR": {
+          "control_worst_plus_tolerance": 0.41152966047733053,
+          "raw_identity_reference": 0.0,
+          "value": 0.38203370156572886
+        },
+        "depth_thresholds_10.0_NewBad": {
+          "control_worst_plus_tolerance": 0.030190944724374794,
+          "raw_identity_reference": 0.0,
+          "value": 0.010281127258950373
+        },
+        "depth_thresholds_2.0_NewBad": {
+          "control_worst_plus_tolerance": 0.058483174703716306,
+          "raw_identity_reference": 0.0,
+          "value": 0.045686432177368334
+        },
+        "depth_thresholds_5.0_NewBad": {
+          "control_worst_plus_tolerance": 0.042245118561572016,
+          "raw_identity_reference": 0.0,
+          "value": 0.025108208707623546
+        },
+        "disparity_HPlus": {
+          "control_worst_plus_tolerance": 0.7241113761416529,
+          "raw_identity_reference": 0.0,
+          "value": 0.17139786020449652
+        },
+        "disparity_HUR": {
+          "control_worst_plus_tolerance": 0.41088680884950973,
+          "raw_identity_reference": 0.0,
+          "value": 0.3807805729473138
+        },
+        "disparity_thresholds_1.0_NewBad": {
+          "control_worst_plus_tolerance": 0.051658974574839735,
+          "raw_identity_reference": 0.0,
+          "value": 0.042616147023080836
+        },
+        "disparity_thresholds_3.0_NewBad": {
+          "control_worst_plus_tolerance": 0.033967815239473266,
+          "raw_identity_reference": 0.0,
+          "value": 0.013008573032866571
+        },
+        "disparity_thresholds_5.0_NewBad": {
+          "control_worst_plus_tolerance": 0.026276582777377752,
+          "raw_identity_reference": 0.0,
+          "value": 0.006607056526652383
+        }
+      },
+      "specimen_delta": {
+        "specimen_2": {
+          "depth_MAE": -0.12351870922652441,
+          "disparity_EPE": -0.14319113798149274
+        },
+        "specimen_3": {
+          "depth_MAE": 23052.23382369517,
+          "disparity_EPE": -0.4174604527087684
+        }
+      },
+      "status": "FAIL",
+      "tail_refined_vs_raw": {
+        "Bad3": [
+          0.14135571859726545,
+          0.14860912805912616
+        ],
+        "DepthBad10": [
+          0.12398607648313434,
+          0.13136128828832677
+        ],
+        "DepthInvalidRate": [
+          1.7311027551002455e-06,
+          0.0
+        ],
+        "DepthP99": [
+          52.95140689605794,
+          52.02225423921701
+        ],
+        "InvalidRate": [
+          1.7311027551002455e-06,
+          0.0
+        ],
+        "P99": [
+          34.21476494026185,
+          36.006416602134706
+        ]
+      }
+    },
+    "Fast-FoundationStereo": {
+      "bootstrap": {
+        "depth_MAE": {
+          "ci_lower": 88.25221344855719,
+          "ci_upper": 2825.976175462859,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": 1078.0371584563754,
+          "improvement": false,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        },
+        "disparity_EPE": {
+          "ci_lower": -0.939588178517589,
+          "ci_upper": -0.27198207537775354,
+          "confidence": 0.95,
+          "difference_candidate_minus_baseline": -0.5693433489785787,
+          "improvement": true,
+          "lower_is_better": true,
+          "reason": null,
+          "sequence_count": 20
+        }
+      },
+      "macro_session_delta": {
+        "depth_MAE": 1078.0371584563752,
+        "disparity_EPE": -0.5693433489785793
+      },
+      "safety_against_controls": {
+        "depth_HPlus": {
+          "control_worst_plus_tolerance": 1199.5606606459044,
+          "raw_identity_reference": 0.0,
+          "value": 1079.2924605012654
+        },
+        "depth_HUR": {
+          "control_worst_plus_tolerance": 0.41152966047733053,
+          "raw_identity_reference": 0.0,
+          "value": 0.3605430635873452
+        },
+        "depth_thresholds_10.0_NewBad": {
+          "control_worst_plus_tolerance": 0.030190944724374794,
+          "raw_identity_reference": 0.0,
+          "value": 0.008772186874552727
+        },
+        "depth_thresholds_2.0_NewBad": {
+          "control_worst_plus_tolerance": 0.058483174703716306,
+          "raw_identity_reference": 0.0,
+          "value": 0.033577133016913646
+        },
+        "depth_thresholds_5.0_NewBad": {
+          "control_worst_plus_tolerance": 0.042245118561572016,
+          "raw_identity_reference": 0.0,
+          "value": 0.014910159132766995
+        },
+        "disparity_HPlus": {
+          "control_worst_plus_tolerance": 0.7241113761416529,
+          "raw_identity_reference": 0.0,
+          "value": 0.14458087362486563
+        },
+        "disparity_HUR": {
+          "control_worst_plus_tolerance": 0.41088680884950973,
+          "raw_identity_reference": 0.0,
+          "value": 0.3591121121181127
+        },
+        "disparity_thresholds_1.0_NewBad": {
+          "control_worst_plus_tolerance": 0.051658974574839735,
+          "raw_identity_reference": 0.0,
+          "value": 0.03029138843145527
+        },
+        "disparity_thresholds_3.0_NewBad": {
+          "control_worst_plus_tolerance": 0.033967815239473266,
+          "raw_identity_reference": 0.0,
+          "value": 0.011755777234486975
+        },
+        "disparity_thresholds_5.0_NewBad": {
+          "control_worst_plus_tolerance": 0.026276582777377752,
+          "raw_identity_reference": 0.0,
+          "value": 0.00682175112730869
+        }
+      },
+      "specimen_delta": {
+        "specimen_2": {
+          "depth_MAE": 2460.0829548486336,
+          "disparity_EPE": -0.6540068159638355
+        },
+        "specimen_3": {
+          "depth_MAE": 156.6732941948697,
+          "disparity_EPE": -0.512901037655074
+        }
+      },
+      "status": "FAIL",
+      "tail_refined_vs_raw": {
+        "Bad3": [
+          0.17040877009899447,
+          0.18934501480385973
+        ],
+        "DepthBad10": [
+          0.1503072580917248,
+          0.16779004458670194
+        ],
+        "DepthInvalidRate": [
+          0.0,
+          0.0
+        ],
+        "DepthP99": [
+          52.46995011243678,
+          53.07808698664868
+        ],
+        "InvalidRate": [
+          0.0,
+          0.0
+        ],
+        "P99": [
+          35.59456457901002,
+          37.326465877532925
+        ]
+      }
+    },
+    "RAFT-Stereo": {
+      "status": "CONTROL"
+    },
+    "StereoAnywhere": {
+      "status": "CONTROL"
+    }
+  },
+  "frozen_gates": {
+    "efficacy": "both unseen: disparity EPE and depth MAE macro-session delta<0, 95% paired bootstrap upper<0, both specimens<0",
+    "safety": "raw identity reference has zero update harm; HUR/HPlus/NewBad must remain at or below seen-control worst plus fixed tolerance (HUR/NewBad 0.01; HPlus 0.02px), tail Bad/Invalid/P99 must not exceed raw; depth uses the same 0.01 rate tolerance and 20mm HPlus tolerance",
+    "unit": "session; 20 equal-weight sessions; no tuning",
+    "verdict": "PASS requires every efficacy+safety condition for both unseen; FAIL if either efficacy mean>=0 or a named safety metric increases; otherwise NOT_CONFIRMED"
+  },
+  "joint_unseen_backbone_and_ood": "FAIL",
+  "project": "ARGOS v2",
+  "protocol": "joint_d4d_v2"
+}

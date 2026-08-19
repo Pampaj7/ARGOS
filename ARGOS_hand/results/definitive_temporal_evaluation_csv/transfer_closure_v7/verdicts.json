@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "status": "COMPLETE_STATIC_CLOSURE",
+  "method": "canonical_h4",
+  "source_artifacts": [
+    {
+      "role": "D7 completed confirmation manifest",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_evaluation/experimental_closure/d7_confirmation/run_manifest.json",
+      "sha256": "4646d72ddfa079326ef07cdeddd41d0685a6ea7d757cb37a3da938343d1c3f2b"
+    },
+    {
+      "role": "D7 completed confirmation metrics",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_evaluation/experimental_closure/d7_confirmation/summary.csv",
+      "sha256": "5020bb6e0a6aa85d1fe239f14c08837c79164717d5847e197886514b6a6a8ec4"
+    },
+    {
+      "role": "D7 scope-defect attestation",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_evaluation/experimental_closure/protocol/d7_scope_attestation_v1.json",
+      "sha256": "06202d38afd1014c2701271f14ff233dc685b0abbb48e09c0a935e9ba262e335"
+    },
+    {
+      "role": "external OOD v7 manifest",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/run_manifest.json",
+      "sha256": "c15144e61080c93e644377cda0a8fca2d0c39cbe9682924596bb0453cfd4528c"
+    },
+    {
+      "role": "external OOD v7 attestation",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/external_ood_attestation.json",
+      "sha256": "7c1f4e400e35cac48951cf1959b286d76dffdd4f865c0f873ebe5d38de1c92c7"
+    },
+    {
+      "role": "D4D no-reference summary",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/d4d_no_reference_summary.csv",
+      "sha256": "7ba05dfe70626bc692cd02dc6254e019bbffdd353872655e8947d47ab68afdd7"
+    },
+    {
+      "role": "DRENDS aggregate metrics",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/canonical_h4_ood_v7/drends_aggregate_metrics.csv",
+      "sha256": "9d65d8a4fb14e847b0bc6b56d04ef8d3cbff56d672994d04ee6030643e4d87fb"
+    }
+  ],
+  "verdicts": {
+    "unseen_backbone_transfer_within_scared_c": {
+      "verdict": "PASS",
+      "scope": "SCARED-C D7 only; CREStereo and Fast-FoundationStereo; frozen H4; macro-sequence EPE",
+      "attested_gate": "PASS"
+    },
+    "external_ood_transfer": {
+      "verdict": "NOT_CONFIRMED",
+      "reason": "D4D provides no-reference diagnostics only; DRENDS is a single-sequence ToF-reference pilot with a severe refined tail."
+    },
+    "joint_unseen_backbone_and_external_ood_transfer": {
+      "verdict": "UNAVAILABLE",
+      "reason": "No completed evaluation crosses both axes."
+    }
+  },
+  "limitations": {
+    "d7_historical_non_blind": true,
+    "d7_scope_metadata_defect": "Attested metadata-only defect: source manifest says D2 scope, while normal report payloads identify D7 and h4_only_common_support.",
+    "tuning_or_reselection": "none",
+    "oracle_rows": "excluded",
+    "drends_tail": "Central spatial metrics improve, but refined RMSE worsens and refined maxima hit 1000 px / 10000 mm; external OOD remains not confirmed."
+  },
+  "d7_macro_sequence_epe": [
+    {"backbone": "S2M2-S", "status": "seen", "raw": 0.517635817, "refined": 0.500710881, "gain": 0.016924936},
+    {"backbone": "RAFT-Stereo", "status": "seen", "raw": 0.467080861, "refined": 0.438697217, "gain": 0.028383643},
+    {"backbone": "StereoAnywhere", "status": "seen", "raw": 0.477363436, "refined": 0.44467719, "gain": 0.032686246},
+    {"backbone": "CREStereo", "status": "unseen", "raw": 0.516463127, "refined": 0.495546296, "gain": 0.020916831},
+    {"backbone": "Fast-FoundationStereo", "status": "unseen", "raw": 0.481883921, "refined": 0.466750803, "gain": 0.015133118}
+  ]
+}

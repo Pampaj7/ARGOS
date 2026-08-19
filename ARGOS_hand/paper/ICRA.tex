@@ -1028,10 +1028,21 @@ $9.64$M). It is not uniform, and the exception is worth naming: on Vid13
 TETHER is $0.022$\,px behind the baseline and $0.013$\,px \emph{worse than
 the raw prediction it refines}, the one recording of five where the
 intervention is a net harm and the bidirectional method is not.
-In domain the ordering is the same and the margin is wider,
-\TODO{D2 common-support EPE and Bad1 for \steer\ against BiDAStabilizer,
-from compare\_bidastabilizer.py rerun with ablation\_h4:factory\_a2}, which
-is why we report the neutral arena instead.
+In domain the ordering is the same and the margin is far wider: on the D2
+common support \steer\ takes EPE $0.3029\rightarrow0.2889$ and Bad1
+$2.09\rightarrow1.80\%$ where the baseline reaches $0.3021$ and $1.99\%$, a
+$4.6\%$ reduction against $0.3\%$. We report the neutral arena instead
+because that margin is measured where we are in domain and it is not.
+
+The temporal measure reverses the ordering, and we report it for that reason.
+Grid-based change error falls $52\%$ for the bidirectional baseline against
+$15\%$ for us at lag~$1$ ($0.073\rightarrow0.035$ against $0.062$), and
+$24\%$ against $4\%$ at lag~$4$. A method that sees the future is markedly
+more temporally stable than one that does not, which is what should happen,
+and it is simultaneously the less accurate of the two on every geometric
+metric here. That is the paper's own warning turned on its own comparison:
+smoothness is not correctness, and a reader given only a consistency score
+would rank these two the wrong way round.
 
 TC-Stereo \cite{zeng2024tcstereo} is the integrated-architecture reference,
 and what follows is not a claim that it is a weaker method. We run its
@@ -1055,10 +1066,7 @@ the intended one.
 On the same D2 support, $18.0$M pixels over all three keyframes, its frame
 path alone scores EPE $0.524$ and Bad1 $9.05\%$; enabling its temporal path
 makes both \emph{worse}, $0.622$ and $10.37\%$ --- against $0.303$/$2.09\%$
-raw and
-\TODO{\steer\ on the same support, from compare\_bidastabilizer.py rerun
-with ablation\_h4:factory\_a2}
-for us.
+raw and $0.289$/$1.80\%$ for us.
 
 The temporal measure is where the difference is categorical, and it is the
 reason we report it for the competitors and not only for ourselves. Grid-based
@@ -1303,9 +1311,7 @@ No-reference temporal consistency is gameable, which we show on D4D
 contract is unresolved, so we make no geometric claim on it and use it only
 as the substrate for this control. The module reduces the no-reference score
 by
-\TODO{shipped-head reduction from the D4D degenerate-policy run with
-ablation\_h4:factory\_a2; the $142$-channel head scored $53.9\%$},
-but copy-previous removes $97.3\%$ and warped-previous scores exactly zero by
+$53.9\%$, but copy-previous removes $97.3\%$ and warped-previous scores exactly zero by
 construction. Pull-warp support detects out-of-frame sampling but not
 internal disocclusion.
 

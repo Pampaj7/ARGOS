@@ -1,0 +1,40 @@
+{
+  "dense_predictions_written": false,
+  "freeze": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/joint_d4d_v5_freeze_bundle/freeze.json",
+    "sha256": "4f98e3a0f1c6c36c7682b0da131a0a171266dcdc97ff9b38b90deccea72dda15"
+  },
+  "inventory": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/joint_d4d_v5_freeze_bundle/inventory.json",
+    "sha256": "c0c0630256cc2b63eb50afefce92da9232dd58e98f03350c1d43ee99967af31f"
+  },
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/joint_d4d_v5",
+  "output_hashes": {
+    "aggregate_metrics.csv": "c4a2e4521f7cc5b79d50f9dcae7c0985cf1c7bfb08d457913c981c327a08a203",
+    "d4d_no_reference_diagnostics.csv": "c7bdedda209945ef6f562495feff3c42b6426136a7203d8bcc60dec5a72181cc",
+    "joint_d4d_v5_attestation.json": "8d6db6e12ea160ae24ca344d6f6c08045d5a85a8858033f53425f2854d320d0a",
+    "per_anchor_metrics.csv": "2c84dbead66dded0c900a2dc37abfcfd7c057e941683f57249c37e4f0b68917a",
+    "per_session_metrics.csv": "b7f6ddbcd6297634371164cea497b956a1fb13ac5f56b9cfd6fa71c074fbc67f",
+    "per_specimen_metrics.csv": "bcb9966ea12d3741e40460071131cd5b4fb4a80509841782dcada7b7e1a9400b",
+    "safety_aggregate.csv": "502d5b72981462f4c1bdb12a8bea0540f23761db152175abda68cf05de256da8",
+    "safety_per_anchor.csv": "e819599730cdc9bfdda599f505098975ca95ebe3c340cc90c684d9b54a5d95f0",
+    "safety_per_session.csv": "99b8e2d927507ecf44adb5d1b1b090cb0ec364f12d2e96e4338301e3e2958e82",
+    "safety_per_specimen.csv": "aeb978aed9a9c4d386f3c372676d5990a2ac7e4f3864883f017a000ec9cb83b5",
+    "verdicts.json": "77cc8fe39752d9bd01b992c71bc9af04d1fd7a85f69808dde503b9f94a837fd9"
+  },
+  "outputs": [
+    "aggregate_metrics.csv",
+    "d4d_no_reference_diagnostics.csv",
+    "joint_d4d_v5_attestation.json",
+    "per_anchor_metrics.csv",
+    "per_session_metrics.csv",
+    "per_specimen_metrics.csv",
+    "safety_aggregate.csv",
+    "safety_per_anchor.csv",
+    "safety_per_session.csv",
+    "safety_per_specimen.csv",
+    "verdicts.json"
+  ],
+  "project": "ARGOS v2",
+  "status": "COMPLETE"
+}

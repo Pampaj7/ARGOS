@@ -1,0 +1,139 @@
+{
+  "atomic_publication": "directory rename of freeze.json, inventory.json and retrospective attestation",
+  "dense_predictions_written": false,
+  "freeze_id": "joint_d4d_v2",
+  "freeze_version": 2,
+  "immutable_sources_and_checkpoints": {
+    "cache_backbone_registry": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/argos_v2/backbones.py",
+      "sha256": "dc4d46a34b384ed91f665c3a048c98ee1011e2282027073664ef38895c692925"
+    },
+    "canonical_provenance": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/canonical_h4_provenance.py",
+      "sha256": "a985f093676a8290e823d116f0099d977e42e16be71f25b671c9e37f08de4af6"
+    },
+    "crestereo_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/stereo_matching_crestereo/stereo_matching_crestereo/epoch-570.pth",
+      "sha256": "ca00d7f586935b2087016336004adde5fc38a2785aea9a1dc6372fa79b76d028"
+    },
+    "d4d_cache_builder": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/build_multidomain_backbone_cache.py",
+      "sha256": "256a3ea3beb926a38a898bcd3cd4d102546902d8e3746b07ebc093c7db052c83"
+    },
+    "d4d_keyframe_gt": {
+      "path": "/dtu/p1/leopam/ARGOS/scripts/temporal_refinement/ood/d4d/d4d_keyframe_gt.py",
+      "sha256": "0614e6f6233f05d0e7819f1fc34a0196c1690799eac906ef9f44c31aec07b371"
+    },
+    "fast_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/external/frame_stereo_repos/Fast-FoundationStereo/weights/onnx/20_30_48/320x736/20_30_48_iters_4_res_320x736.onnx",
+      "sha256": "30a057d15959be17f06163445614242c00bc00b2ac01a4ef0f62aedcda969758"
+    },
+    "frozen_stereo_photometric": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/provenance/stereo_photometric.py",
+      "sha256": "7ab78bead1b38478ec61a1923101b7f421e4e475b184107a1758617ec9bb7924"
+    },
+    "inference_manifest": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/inference_manifest.json",
+      "sha256": "6c0237b3240215266442e0febde128d3244148152a09ff65b8ed1513a6ab8475"
+    },
+    "inference_manifest/bidavideo_alignment": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/external_components/bidavideo.py",
+      "sha256": "133a13f8a4dd89065f736484f1dba1811b40e0f1272d0bbec87d74074bf5c530"
+    },
+    "inference_manifest/cache_io": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/argos_v2/cache_io.py",
+      "sha256": "1b93eb0c3aaae0a84e8d548e976878b6ac64fab86b065df6b2d8749c4de2de03"
+    },
+    "inference_manifest/canonical_h4_checkpoint": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_best_validation.pt",
+      "sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725"
+    },
+    "inference_manifest/canonical_h4_policy": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/checkpoints/codd_style_h4_policy.json",
+      "sha256": "3f20f0cf628e983990a3aa3b30189a218b628dc9a3b85b86c177844a12e2285d"
+    },
+    "inference_manifest/codd_bounded_memory": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/models/codd_bounded_memory.py",
+      "sha256": "53a7468a93a78009d294eb0cfc30be825d4f6f7a726d2abcdc2822d1730f5b04"
+    },
+    "inference_manifest/codd_style_fusion": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/models/codd_style_fusion.py",
+      "sha256": "4b1a22c638214371055012087f93e9faf8a3b087a40a0b969341f33e05187a49"
+    },
+    "inference_manifest/frozen_bida_pull_warp": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/alignment/bida_pull_warp.py",
+      "sha256": "a729232af2c6c0bf53ee40f899a5fa9281316dff691b86fb07f73ad8c5267a46"
+    },
+    "inference_manifest/frozen_codd_cues": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/experiments/02_massive_training/scripts/provenance/codd_style_fusion.py",
+      "sha256": "393defbb12a5cb33fbd8be361f23be5beda2b8f62abfe91a4cde01e451d205dc"
+    },
+    "inference_manifest/frozen_resnet18": {
+      "path": "/zhome/1e/4/234278/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth",
+      "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+    },
+    "inference_manifest/frozen_sea_raft_adapter": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_FREEZED/src/argos_freezed/alignment/sea_raft_adapter.py",
+      "sha256": "764a9b64de3846cd710a41eb853720171b3fa79abe6e1191d4f438de92733148"
+    },
+    "inference_manifest/fusion_audit_helpers": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/run_codd_style_fusion_mechanism_audit.py",
+      "sha256": "21cc5abfd219e069b9eff30a8d003a5b69b002bbbe1d2392ed8062e55ddaa28d"
+    },
+    "inference_manifest/fusion_probe_helpers": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/run_codd_style_fusion_probe.py",
+      "sha256": "5d9e067a788a6d97110f9fbfa8446b67e229cc1a3b539be681eeb3493cda0b54"
+    },
+    "inference_manifest/scared_c_data": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/argos_v2/scared_c_data.py",
+      "sha256": "b1b3a2311c14e34e56a2587e97cc93b689c9c290808bd0c4a4963224b53a18c9"
+    },
+    "inference_manifest/scared_c_paths": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/argos_v2/paths.py",
+      "sha256": "40bab48b70e1f65bed2c3d23d8c8455ff5ef2982e4cf19384c6e82ac70334294"
+    },
+    "inference_manifest/scared_c_sequences": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/scripts/argos_v2/sequences.py",
+      "sha256": "8897aaca651afb1c110e22013451c856ccef6beff215c7989aa9e1e7f8f4faff"
+    },
+    "inference_manifest/stereo_photometric": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/external_components/stereo_photometric.py",
+      "sha256": "7ab78bead1b38478ec61a1923101b7f421e4e475b184107a1758617ec9bb7924"
+    },
+    "inference_manifest/temporal_pair_dataset": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/data/temporal_pair_dataset.py",
+      "sha256": "c64abc285c41d4698cb4f6ef33742bd379db8c8c43f0f243edd08dede9c3f701"
+    },
+    "joint_cache_builder": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/scripts/build_joint_d4d_backbone_cache.py",
+      "sha256": "3d3514cf89595f1ce07d7bdbdad300d9b5e7d90574c5746d3b9d751489c6271c"
+    },
+    "unified_metrics": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+      "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+    },
+    "v1_reused_evaluator": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_joint_d4d_v1.py",
+      "sha256": "ff87000335f0df1b78898e9ddb6490475ef575a0628d64543d1a229f5b7e369f"
+    },
+    "v2_launcher": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_joint_d4d_v2.py",
+      "sha256": "cf16bd087a16d7e4cabda00034d940c60040a8676dcfaa282e863b2c13b82550"
+    }
+  },
+  "input_inventory": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/joint_d4d_v2_freeze_bundle/inventory.json",
+    "sha256": "4533b7f521aa6f3aa03481734c37ea3834c10b0bca9d7f3aa6a6cef46700bf73"
+  },
+  "module": "model_design.comparison.canonical_h4:factory",
+  "no_threshold_tuning": true,
+  "no_training": true,
+  "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/joint_d4d_v2",
+  "project": "ARGOS v2",
+  "retrospective_cache_build_attestation": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/protocol/joint_d4d_v2_freeze_bundle/cache_build_retrospective_attestation.json",
+    "sha256": "72a82a86b3b2c3c59619d471216d0bc3186a968d4aa1582df5ff65a4d362cc3c"
+  },
+  "status": "FROZEN_PRE_RUN",
+  "write_once": true
+}

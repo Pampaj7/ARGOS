@@ -1,0 +1,102 @@
+{
+  "attestation_version": 5,
+  "build_logs": {
+    "CREStereo": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/joint_shift_cache_logs/cres_d4d.log",
+      "sha256": "7bc41f10cd39e18e4e6b08497674ef51c40274f70d7dced4cfa80c76c8489376"
+    },
+    "Fast-FoundationStereo": {
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/definitive_temporal_evaluation_csv/joint_shift_cache_logs/fast_foundation_d4d.log",
+      "sha256": "30820aead62e3cac5f23ad3abe98e97d65550b6fdaff0bbedc44daf06385371f"
+    }
+  },
+  "cache_build_authority": "explicit user authorization after the V1 audit",
+  "claim": "Binds currently observed cache bytes, metadata, logs and backbone checkpoint hashes only; it is not proof that those bytes were frozen before cache construction.",
+  "contemporaneous_pre_cache_freeze": false,
+  "kind": "RETROSPECTIVE_POST_BUILD_CACHE_ATTESTATION",
+  "metadata_checkpoint_sha256": {
+    "CREStereo": "ca00d7f586935b2087016336004adde5fc38a2785aea9a1dc6372fa79b76d028",
+    "Fast-FoundationStereo": "30a057d15959be17f06163445614242c00bc00b2ac01a4ef0f62aedcda969758"
+  },
+  "project": "ARGOS v2",
+  "unseen_cache_bundles": {
+    "CREStereo": {
+      ".complete": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/CREStereo/D4D/.complete",
+        "sha256": "0501d406f99f7a7b2ec4c7ba11772a6336e4c7705707457bdc61619537d5a064"
+      },
+      "disparity.npy": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/CREStereo/D4D/disparity.npy",
+        "sha256": "7bad0b9eccb5e3896cf5cd27571a287bf790d987ce08b5beedbd264b7918d323"
+      },
+      "frame_ids.npy": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/CREStereo/D4D/frame_ids.npy",
+        "sha256": "bb2bc228a90023dfd4cc5b37db639853ab9a78a62efccf6749d93e6b472b2ffd"
+      },
+      "frame_manifest.csv": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/CREStereo/D4D/frame_manifest.csv",
+        "sha256": "f04e1d441250b4f82398c748d28afe42fc52cf3374eeff5280373e9d4eb1cf5a"
+      },
+      "metadata.json": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/CREStereo/D4D/metadata.json",
+        "sha256": "5fae1dc6b53cb07632f73f9a68bfb7b425f8e87d06cbe73bd6e8cd95f84ef1d9"
+      },
+      "valid_mask.npy": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/CREStereo/D4D/valid_mask.npy",
+        "sha256": "cf90318763049972284d76414455e87229ee5baa32e13c2040be6d1100d0d73b"
+      }
+    },
+    "Fast-FoundationStereo": {
+      ".complete": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/Fast-FoundationStereo/D4D/.complete",
+        "sha256": "c4e7d36e4e0e3ad755adf8e6ee567830954e8c577637390816697392bb176f7f"
+      },
+      "disparity.npy": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/Fast-FoundationStereo/D4D/disparity.npy",
+        "sha256": "d31e5f95e18ec562a74c516c066f9744eb6dedf5520a31501249511eb40ce49a"
+      },
+      "frame_ids.npy": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/Fast-FoundationStereo/D4D/frame_ids.npy",
+        "sha256": "bb2bc228a90023dfd4cc5b37db639853ab9a78a62efccf6749d93e6b472b2ffd"
+      },
+      "frame_manifest.csv": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/Fast-FoundationStereo/D4D/frame_manifest.csv",
+        "sha256": "f04e1d441250b4f82398c748d28afe42fc52cf3374eeff5280373e9d4eb1cf5a"
+      },
+      "metadata.json": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/Fast-FoundationStereo/D4D/metadata.json",
+        "sha256": "d5c264a00df7d82494b21b8d690a370a2c2e450a5fe795111b481b14e4c137ea"
+      },
+      "valid_mask.npy": {
+        "path": "/dtu/p1/leopam/ARGOS/ARGOS-V2/cache_multidomain_backbones/Fast-FoundationStereo/D4D/valid_mask.npy",
+        "sha256": "cf90318763049972284d76414455e87229ee5baa32e13c2040be6d1100d0d73b"
+      }
+    }
+  },
+  "v4_cache_semantics": {
+    "CREStereo": {
+      "domain": "D4D",
+      "rectified": true,
+      "sessions": 20,
+      "unique_cohort_frames": 224
+    },
+    "Fast-FoundationStereo": {
+      "domain": "D4D",
+      "rectified": true,
+      "sessions": 20,
+      "unique_cohort_frames": 224
+    },
+    "RAFT-Stereo": {
+      "domain": "D4D",
+      "rectified": true,
+      "sessions": 20,
+      "unique_cohort_frames": 224
+    },
+    "StereoAnywhere": {
+      "domain": "D4D",
+      "rectified": true,
+      "sessions": 20,
+      "unique_cohort_frames": 224
+    }
+  }
+}
