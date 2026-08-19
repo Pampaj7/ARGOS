@@ -28,6 +28,7 @@ import argparse
 import csv
 import json
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -241,6 +242,7 @@ def main() -> None:
         baseline = torch.tensor([[baseline_mm]]).float().to(device)
 
         tc = np.empty_like(raw)
+        started = time.time()
         # The state TC-Stereo carries between frames, named as its own evaluate_stereo.py
         # names it. `params` stays None on the first frame: there is nothing to warp yet.
         flow_q = net_list = fmap1 = previous_T = None
@@ -263,8 +265,10 @@ def main() -> None:
             tc[i] = disparity[0, 0].float().cpu().numpy()
             flow_q, net_list, fmap1 = output["flow_q"], output["net_list"], output["fmap1"]
             previous_T = current_T
-            if i % 100 == 0:
-                print(f"  {sequence} {i}/{T}", flush=True)
+            if i % 25 == 0:
+                rate = (time.time() - started) / max(i, 1)
+                print(f"  {sequence} {i}/{T}  {rate:.2f} s/frame  "
+                      f"eta {(T - i) * rate / 60:.0f} min", flush=True)
 
         for support_name, support in (("gt", gt_valid), ("gt_and_raw", gt_valid & raw_valid)):
             row = metrics(tc, gt, support)
