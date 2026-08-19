@@ -151,8 +151,9 @@ for Frozen Surgical Stereo}
 
 \begin{abstract}
 
-Dense stereo is attractive for robotic surgery because it provides metric
-geometry without active illumination, yet modern estimators are applied
+Dense stereo is attractive for robotic surgery because it recovers metric
+geometry from the imaging the platform already carries, yet modern
+estimators are applied
 independently to each frame and can fluctuate under specularities, weak
 texture, tissue deformation, tool occlusions and camera motion.
 We ask whether temporal information can improve frozen stereo predictions
@@ -289,9 +290,9 @@ left unmeasured, and it improves every one of the fifteen.
 \emph{(iii)} We introduce a refinement-centric protocol under fixed,
 prediction-independent support that scores introduced error alongside
 recovered error, and show it changes conclusions: under a matched state
-machine every fixed and EMA blend lowers mean EPE while \emph{raising} the
-bad-pixel rate, a trade the learned gate does not make and mean error does
-not reveal. Applied to our own claims it is equally unkind --- degenerate
+machine, every fixed or EMA blend that recovers a meaningful share of the
+gain buys it by \emph{raising} the bad-pixel rate, a trade the learned gate
+does not make and mean error does not reveal. Applied to our own claims it is equally unkind --- degenerate
 history-replay controls win the no-reference consistency metric, and the
 head's own weight inverts its relation to harm across splits.
 
@@ -756,8 +757,10 @@ One frozen TETHER checkpoint, seed $0$, across five estimators and three
 arenas; every EPE and Bad1 cell is raw$\rightarrow$TETHER, lower is better.
 Two estimators were excluded from temporal-head training, so the lower-right
 block is the joint shift usually left unmeasured. DTCE is the reduction in
-grid-based temporal change error at lag $k{=}4$, in \%, higher is better; on
-the development split it is backbone-dependent and we report it only where it
+grid-based temporal change error at lag $k{=}4$, in \%, higher is better,
+averaging per-sequence relative reductions as every per-backbone reduction in
+this paper does; on the development split it is backbone-dependent and we
+report it only where it
 is confirmatory (Sec.~\ref{sec:horizon}). Sec.~\ref{sec:seeds} gives the
 three-seed spread.
 }
@@ -778,11 +781,11 @@ three-seed spread.
 \cmidrule(lr){8-10}
 Backbone & Status & EPE & Bad1 (\%) & EPE & Bad1 (\%) & DTCE & EPE & Bad1 (\%) & DTCE \\
 \midrule
-S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2658}$ & $1.39\rightarrow\mathbf{1.27}$ & $.5176\rightarrow\mathbf{.4992}$ & $6.44\rightarrow\mathbf{6.03}$ & $5.9$ & $1.3477\rightarrow\mathbf{1.2812}$ & $62.55\rightarrow\mathbf{58.98}$ & $11.9$ \\
-RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2623}$ & $1.60\rightarrow\mathbf{1.43}$ & $.4671\rightarrow\mathbf{.4296}$ & $6.09\rightarrow\mathbf{5.75}$ & $9.1$ & $1.3125\rightarrow\mathbf{1.2371}$ & $58.83\rightarrow\mathbf{55.19}$ & $9.5$ \\
-Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2779}$ & $2.18\rightarrow\mathbf{1.74}$ & $.4774\rightarrow\mathbf{.4408}$ & $6.23\rightarrow\mathbf{5.77}$ & $13.2$ & $1.3685\rightarrow\mathbf{1.2834}$ & $62.73\rightarrow\mathbf{57.99}$ & $14.2$ \\
-CREStereo & unseen & $.2668\rightarrow\mathbf{.2583}$ & $1.57\rightarrow\mathbf{1.40}$ & $.5165\rightarrow\mathbf{.4912}$ & $6.35\rightarrow\mathbf{6.05}$ & $6.7$ & $1.3027\rightarrow\mathbf{1.2296}$ & $55.17\rightarrow\mathbf{52.21}$ & $12.2$ \\
-Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2658}$ & $1.60\rightarrow\mathbf{1.44}$ & $.4819\rightarrow\mathbf{.4645}$ & $5.92\rightarrow\mathbf{5.65}$ & $3.4$ & $1.2838\rightarrow\mathbf{1.2228}$ & $54.88\rightarrow\mathbf{52.06}$ & $10.4$ \\
+S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2658}$ & $1.39\rightarrow\mathbf{1.27}$ & $.5176\rightarrow\mathbf{.4992}$ & $6.44\rightarrow\mathbf{6.03}$ & $6.5$ & $1.3477\rightarrow\mathbf{1.2812}$ & $62.55\rightarrow\mathbf{58.98}$ & $11.3$ \\
+RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2623}$ & $1.60\rightarrow\mathbf{1.43}$ & $.4671\rightarrow\mathbf{.4296}$ & $6.09\rightarrow\mathbf{5.75}$ & $7.3$ & $1.3125\rightarrow\mathbf{1.2371}$ & $58.83\rightarrow\mathbf{55.19}$ & $8.5$ \\
+Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2779}$ & $2.18\rightarrow\mathbf{1.74}$ & $.4774\rightarrow\mathbf{.4408}$ & $6.23\rightarrow\mathbf{5.77}$ & $7.9$ & $1.3685\rightarrow\mathbf{1.2834}$ & $62.73\rightarrow\mathbf{57.99}$ & $13.9$ \\
+CREStereo & unseen & $.2668\rightarrow\mathbf{.2583}$ & $1.57\rightarrow\mathbf{1.40}$ & $.5165\rightarrow\mathbf{.4912}$ & $6.35\rightarrow\mathbf{6.05}$ & $6.4$ & $1.3027\rightarrow\mathbf{1.2296}$ & $55.17\rightarrow\mathbf{52.21}$ & $11.8$ \\
+Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2658}$ & $1.60\rightarrow\mathbf{1.44}$ & $.4819\rightarrow\mathbf{.4645}$ & $5.92\rightarrow\mathbf{5.65}$ & $4.3$ & $1.2838\rightarrow\mathbf{1.2228}$ & $54.88\rightarrow\mathbf{52.06}$ & $9.6$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -803,8 +806,8 @@ $k{=}4$. Every row shares the frozen predictions, the alignment, the support
 contract, the $H{=}4$ state machine and the evaluation code --- only the
 policy changes, and the six rows above the rule load no checkpoint. The full
 grid of fifteen policies is in the text. Mean EPE is not the whole story:
-every matched smoothing policy lowers it while \emph{raising} the bad-pixel
-rate.
+the smoothing policies buy it with bad pixels, and the harder they blend the
+worse that trade becomes.
 }
 \label{tab:closure}
 \setlength{\tabcolsep}{3pt}
@@ -849,11 +852,13 @@ smoothing does not.
 
 Two rows carry more than the mean. Forward--backward confidence is the
 informative failure --- one of \steer's own cues, yet used directly as the
-weight it worsens EPE by $2.17\%$ and Bad1 by $32.35\%$. And every matched
-smoothing policy that helps EPE at all \emph{hurts} Bad1: the best fixed
-blend buys $0.59\%$ of mean error at the price of $2.64\%$ more bad pixels,
-EMA3 buys $0.30\%$ at the price of $8.88\%$. Averaging trades tail
-correctness for mean error; the learned gate does not make that trade, and
+weight it worsens EPE by $2.17\%$ and Bad1 by $32.35\%$. And the matched
+smoothing policies buy mean error with bad pixels, the more so the harder
+they blend: the two weakest fixed settings move neither metric by a
+hundredth of a point, $w{=}0.3$ costs $0.18\%$ more bad pixels for $0.49\%$
+of EPE, the best fixed blend costs $2.64\%$ for $0.59\%$, and EMA3 costs
+$8.88\%$ for $0.30\%$. Averaging trades tail correctness for mean error
+as soon as it does real work; the learned gate does not make that trade, and
 mean EPE alone does not show it.
 
 
@@ -875,10 +880,10 @@ $H{=}6$ for $k{=}4$.
 
 Two caveats belong with that, because neither is visible in the pooled
 number. At $k{=}1$ DTCE improves at every horizon we tried, so the sign
-change is a property of the longer lags and not of the metric. And on D2 the
-pooled improvement is carried by one backbone: $+21.0\%$ for Stereo
-Anywhere against $+1.4\%$, $+0.1\%$, $-1.5\%$ and $-1.6\%$ for the other
-four. On both confirmation splits it is positive for every backbone
+change is a property of the longer lags and not of the metric. And on D2 the improvement is
+carried by one backbone and is \emph{negative} for three: $+14.0\%$ for
+Stereo Anywhere and $+0.8\%$ for CREStereo against $-0.3\%$, $-2.0\%$ and
+$-2.3\%$ for the rest. On both confirmation splits it is positive for every backbone
 (Table~\ref{tab:grid}), which is why we report it there and rest the horizon
 choice on breakage rather than on stability.
 
@@ -1139,9 +1144,9 @@ three-seed treatment under a rule fixed before the extra seeds were trained
 --- decided on D2 Bad1, with D7 reported afterwards and taking no part in the
 choice --- and it stays ahead on both endpoints with a spread eight times
 tighter ($0.32$ against $2.53$ points of D2 Bad1). Out of domain the same
-ordering holds: across three seeds each on DRENDS it reduces EPE by
-$5.20\pm0.13\%$ against $4.83\pm0.15\%$, the two seed ranges not
-overlapping.
+ordering holds: on the three backbones carrying three seeds of each
+configuration, DRENDS EPE falls by $5.20\pm0.13\%$ against $4.83\pm0.15\%$,
+the two seed ranges not overlapping.
 
 The learned evidence is not what makes the module work; it is what makes its
 training unstable, and it costs $157{,}504$ frozen parameters, three forward
@@ -1273,10 +1278,10 @@ of the excess over a ground-truth floor of $0.06$--$0.21$\,mm ($9.9\%$ for
 the $142$-channel ablation). On development D2 it \emph{increases} it by
 $15.5\%$ ($7.1\%$ for the ablation). The splits differ
 in how much there is to remove --- raw excess is $0.55$--$1.11$\,mm on D7
-against $0.18$--$0.22$ on D2 --- so where the raw prediction is poor,
-alignment recovers geometry a map can fuse, and where it already sits near
-the reference floor the history each frame carries costs more than the
-correction gains. Mapping benefit is therefore conditional, not general.
+against $0.18$--$0.22$ on D2 --- which suggests alignment recovers geometry a
+map can fuse where the raw prediction is poor, and costs more than it gains
+where the raw already sits near the reference floor. Mapping benefit is
+conditional, not general.
 The reversal is not an artefact of one estimator. Repeating the measurement
 across five backbones, two of them excluded from temporal-head training,
 gives $23$ cells in which the sign never changes: all $15$ D2 cells are
@@ -1321,8 +1326,9 @@ heterogeneous stereo estimators without touching their internals or using
 future frames. Its gain is not temporal averaging: on development D2 it
 reduces EPE by $3.69\%$ against $0.59\%$ for the best matched fixed blend
 and $0.87\%$ for the best tuned unlearned residual rule under an identical
-state machine --- and every one of those matched blends lowers mean error
-while raising the bad-pixel rate, a trade the learned gate does not make ---
+state machine --- and those blends buy mean error with bad pixels, the best
+fixed one costing $2.64\%$ more of them, a trade the learned gate does not
+make ---
 while direct flow-confidence weighting and unbounded recurrence degrade
 accuracy, the latter by $19.17\%$. A
 frozen $H=4$ checkpoint improves all five estimators on held-out D7 in
@@ -1339,8 +1345,9 @@ selection optimism that held-out gains do not: across seeds the D2 effect
 spans $5.03$ points, the D7 effect $0.69$. A module that declares a support
 must apply it to what it emits, a contract almost invisible in domain that
 costs the whole metric-depth tail out of it. And world-frame reconstruction
-consistency improves only where the raw prediction is poor, so mapping
-benefit is conditional.
+consistency improves on the held-out split while degrading on development,
+for every backbone we tried, so mapping benefit is conditional on something
+we can demonstrate but not yet name.
 
 What remains open is where to intervene: the oracle over the module's own
 action space is far from reached, and the head's weight is a magnitude, not
