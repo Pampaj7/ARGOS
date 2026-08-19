@@ -45,11 +45,11 @@
 % float, and with six of them that is most of a column. Twenty lines of prose
 % trimming had failed to move the page count because each saving simply let a
 % float rise into the gap. This is spacing, not font size -- nothing is shrunk.
-\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
-\setlength{\floatsep}{10pt plus 2pt minus 2pt}
-\setlength{\intextsep}{10pt plus 2pt minus 2pt}
-\setlength{\dblfloatsep}{10pt plus 2pt minus 2pt}
-\setlength{\dbltextfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{8pt plus 2pt minus 2pt}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{array}
@@ -175,13 +175,12 @@ on held-out SCARED-C D7, including CREStereo and Fast-FoundationStereo,
 excluded from temporal-head training. Mean backbone EPE decreases from
 $0.4921$ to $0.4696$, and Bad1 and RMSE decrease for every backbone.
 Zero-shot evaluation on five DRENDS recordings with all five estimators,
-two of them unseen in training, improves disparity EPE, Bad3 and metric
-depth in all $100$ recording--backbone--metric cells, completing the
-transfer matrix across both the backbone and the domain shift.
-We further show that confining the fused output to the support the module
-already declares is load-bearing: without it, zero-padded out-of-bounds
-memory turns rare pixels into invalid predictions and produces a
-metric-depth tail previously attributed to the external domain.
+two unseen in training, improves disparity EPE, Bad3 and metric depth in all
+$100$ cells, completing the transfer matrix across backbone and domain.
+Confining the fused output to the support the module already declares is
+load-bearing: without it, zero-padded out-of-bounds memory turns rare pixels
+into invalid predictions and produces a metric-depth tail previously
+attributed to the external domain.
 
 We additionally introduce a refinement-centric evaluation framework
 measuring geometry, temporal fidelity, introduced and recovered error,
@@ -205,8 +204,8 @@ because depth is recovered passively from images the platform already
 provides.
 
 It is also hard. Endoscopic scenes carry weak texture, non-Lambertian
-tissue, specular highlights, blood, smoke, deformable anatomy, rapid
-viewpoint change and frequent tool occlusion
+tissue, specularities, blood, smoke, deformable anatomy, rapid viewpoint
+change and tool occlusion
 \cite{allan2021scared,edwards2022servct}. Modern estimators
 \cite{lipson2021raftstereo,li2022crestereo,bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}
 give increasingly strong frame-wise disparity, but nothing in a
@@ -250,10 +249,10 @@ substantially more useful information than the current policy exploits.
 This indicates that the core problem is not obtaining temporal evidence,
 but identifying \emph{where and how much} of it should be used.
 
-A second question is how such intervention should be evaluated.
-Smoothness is not correctness --- a stale prediction can be smooth and
-geometrically wrong --- and lower mean EPE does not reveal whether
-refinement introduces new bad pixels or rare catastrophic frames.
+A second question is how such intervention should be evaluated. Smoothness
+is not correctness --- a stale prediction can be smooth and wrong --- and
+lower mean EPE does not reveal whether refinement introduces new bad pixels
+or rare catastrophic frames.
 We therefore evaluate refinement relative to the frozen upstream
 prediction and explicitly separate geometry, temporal fidelity,
 benefit, harm, and tail behavior.
@@ -351,17 +350,16 @@ which is why we treat refinement as an intervention on that geometry.
 \centering
 \includegraphics[width=\textwidth]{figure_assets/Temporal_consistency_taxonomy.pdf}
 \caption{
-TETHER at three scales. \textbf{(a)} Bounded recurrence. Temporal memory carries the \emph{fused}
-disparity forward, and every $H{=}4$ frames the chain is cut and re-tied to
-raw geometry the frozen network produced independently (teal). The five
-frames are consecutive and the two disparity rows share one colour scale,
-differing by $0.108$\,px on average: the intervention is sub-pixel by
-design.
+TETHER at three scales. \textbf{(a)} Bounded recurrence. Memory carries the
+\emph{fused} disparity forward, and every $H{=}4$ frames the chain is cut
+and re-tied to raw geometry the frozen network produced independently
+(teal). The five frames are consecutive and the two disparity rows share one
+colour scale, differing by $0.108$\,px on average.
 \textbf{(b)} One time step. Dashed grey is frozen; the single orange block
 is the only trained component, and it emits one scalar $w_t$ rather than
-geometry. \textbf{(c)} The evidence space: none of the $142$ channels
-carries ground truth, backbone identity or a future frame, which is what
-lets one head serve heterogeneous estimators.
+geometry. \textbf{(c)} The evidence space: none of the $142$ channels carries ground
+truth, backbone identity or a future frame, which is what lets one head
+serve heterogeneous estimators.
 }
 \label{fig:system}
 \end{figure*}
@@ -435,18 +433,20 @@ S_t,
 \right).
 \end{equation}
 
-The head consumes a single 142-channel tensor built at two resolutions,
-itemised in Fig.~\ref{fig:system}(c): 129 quarter-resolution channels of
-matching and frozen appearance evidence, including 64 frozen ResNet-18
-layer-1 channels \cite{he2016resnet}, upsampled and concatenated with 13
-cache-grid channels of disparity, motion and RGB.
+The head consumes one 142-channel tensor at two resolutions. At quarter
+resolution: 64 frozen ResNet-18 layer-1 features \cite{he2016resnet}, 9
+feature-matching cost curves sampling the right features at $d{-}1,d,d{+}1$
+for the raw and aligned candidates and their difference, 6 support
+indicators for those samples, 32 disparity and appearance
+self-correlations, and 18 current-to-aligned-past cross-correlations, the
+last two families over a dilated $3\times3$ neighbourhood. At cache
+resolution, 13: raw disparity, aligned memory, signed and absolute
+residual, 6 motion and 3 RGB. A2 keeps the 38 needing no learned features.
 
-Normalisation is fixed before training: disparities clipped to $[0,64]$
-and scaled by $64$, signed residuals clipped to $[-16,16]$ and scaled by
-$16$, flow components on $[-32,32]$ and magnitude on $[0,32]$, and
-ImageNet-normalised RGB for the frozen features. No ground truth,
-backbone identity or future-frame signal enters this space, which is
-what lets one head serve heterogeneous estimators.
+Normalisation is fixed before training: disparities clipped to $[0,64]$ and
+scaled by $64$, signed residuals to $[-16,16]$ scaled by $16$, flow on
+$[-32,32]$ and magnitude on $[0,32]$, ImageNet-normalised RGB. No ground
+truth, backbone identity or future frame enters this space.
 
 
 \subsection{Reset-and-Fusion Decision Head}
@@ -455,17 +455,16 @@ The decision structure is inspired by CODD \cite{li2023codd}.
 We do not claim reset/fusion or convex interpolation as novel in
 isolation.
 
-The cache-grid pathway maps the 142-channel input to 24 channels through
-a $3\times3$ convolution, GroupNorm, SiLU, and a residual block.
-A coarse pathway expands to 48 channels at one-quarter resolution,
-followed by three 48-channel residual blocks.
+The cache-grid pathway maps the 142-channel input to 24 channels through a
+$3\times3$ convolution, GroupNorm, SiLU and a residual block; a coarse
+pathway expands to 48 channels at one-quarter resolution followed by three
+48-channel residual blocks.
 
 A full-resolution reset branch predicts $r_t=\sigma(z_t^r)$, while the
 coarse fusion branch predicts $f_t=\uparrow_4[\sigma(z_t^f)]$. Running the
-context branch coarsely is a compute choice, not a requirement: at
-identical parameter count it costs about $16\times$ less than the
-full-resolution alternative, which Sec.~\ref{sec:ablations} shows does not
-perform worse.
+context branch coarsely is a compute choice, not a requirement: it costs
+about $16\times$ less than the full-resolution alternative, which
+Sec.~\ref{sec:ablations} shows does not perform worse.
 
 The effective temporal weight is
 $w_t=r_tf_t$.
@@ -728,11 +727,11 @@ micro statistics are retained secondarily.
 \begin{table*}[!t]
 \centering
 \caption{
-One frozen TETHER checkpoint, canonical seed $0$, across five estimators
-and three arenas; every cell is raw$\rightarrow$TETHER, lower is better. Two
+One frozen TETHER checkpoint, canonical seed $0$, across five estimators and
+three arenas; every cell is raw$\rightarrow$TETHER, lower is better. Two
 estimators were excluded from temporal-head training, so the lower-right
-block is the joint backbone--domain shift usually left unmeasured.
-Macro-sequence aggregation; Sec.~\ref{sec:seeds} gives the seed spread.
+block is the joint shift usually left unmeasured. Macro-sequence
+aggregation.
 }
 \label{tab:grid}
 \scriptsize
@@ -885,10 +884,9 @@ collapses to $0.69$. Selection optimism sits in the split used to select.
 Per-frame Bad1, raw against refined, for \emph{every} scored frame of each
 split --- five backbones, all sequences, no selection. Points below the
 diagonal are improved. On D7 half improve against $13\%$ worsened, and the
-worsened band hugs the diagonal while the improved mass extends far from
-it: the frame-level form of the count-versus-magnitude asymmetry behind
-$B^+/H^+$. Disparity \emph{maps} are not shown --- the intervention is
-sub-pixel on disparities of about $8$\,px.
+worsened band hugs the diagonal while the improved mass extends far from it:
+the frame-level form of the count-versus-magnitude asymmetry behind
+$B^+/H^+$.
 }
 \label{fig:trace}
 \end{figure}
