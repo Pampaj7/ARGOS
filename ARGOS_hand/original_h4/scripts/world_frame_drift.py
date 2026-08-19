@@ -323,6 +323,20 @@ def score(sequence: str, backbone: str, frames: int, min_views: int,
                                    "p95_mm": float(np.percentile(spread, 95))}
         print(f"  {name:8s} n={pixels:8,}  median {np.median(spread):8.4f} mm  "
               f"mean {spread.mean():8.4f}  p95 {np.percentile(spread, 95):8.4f}")
+    # Per-frame accuracy on the same support, as a coherence check on the whole result.
+    # If refinement were worse frame-by-frame as well, the refined branch would be broken
+    # rather than the finding interesting, and the multi-view number would mean nothing.
+    per_frame = {}
+    for name, source in (("raw", raw), ("refined", refined)):
+        error = np.abs(np.asarray(source, np.float64) - gt_grid)[support]
+        per_frame[name] = {"disparity_mae_px": float(error.mean()),
+                           "disparity_median_px": float(np.median(error))}
+    record["per_frame"] = per_frame
+    print(f"  per-frame disparity MAE on the same support: raw "
+          f"{per_frame['raw']['disparity_mae_px']:.4f} -> refined "
+          f"{per_frame['refined']['disparity_mae_px']:.4f} px "
+          f"({100 * (per_frame['raw']['disparity_mae_px'] - per_frame['refined']['disparity_mae_px']) / per_frame['raw']['disparity_mae_px']:+.2f}%)")
+
     gt_floor = record["results"]["gt"]["median_mm"]
     for name in ("raw", "refined"):
         record["results"][name]["excess_over_gt_mm"] = record["results"][name]["median_mm"] - gt_floor
