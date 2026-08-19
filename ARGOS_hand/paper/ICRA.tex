@@ -1119,11 +1119,13 @@ in one world frame and the disagreement between views of a point measured:
 what a map fuses rather than what a frame scores. Over three D2 sequences,
 $200$ frames each, against a ground-truth floor of $0.04$--$0.08$\,mm,
 refinement makes that disagreement \emph{worse} in five cases of six, by
-$7.1\%$ of the excess on average. Raw is memoryless, so two views differ
+$7.1\%$ of the excess on average --- while on the same frames and support it
+improves per-frame disparity MAE by $3.2\%$. Raw is memoryless, so two views
+differ
 only by their own noise, while a recurrent output carries the history that
 produced it: per-frame accuracy is bought by making each frame a function of
-its past, which is what fusion does not want. We claim single-frame
-perception geometry, not mapping.
+its past, which is what fusion does not want. We claim single-frame geometry,
+not mapping.
 
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and
