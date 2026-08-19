@@ -1,0 +1,45 @@
+{
+  "sequence": "dataset_2_keyframe_4",
+  "backbone": "StereoAnywhere",
+  "module": "model_design.comparison.ablation_h4:factory_a2",
+  "frames": 200,
+  "min_views": 3,
+  "grid": [
+    144,
+    180
+  ],
+  "metric": "per-keyframe-pixel standard deviation of world-frame Z, mm",
+  "results": {
+    "gt": {
+      "pixels": 296941,
+      "median_mm": 0.03870709477317675,
+      "mean_mm": 0.05632444912284592,
+      "p95_mm": 0.13128796682995342
+    },
+    "raw": {
+      "pixels": 281490,
+      "median_mm": 0.21470963687111316,
+      "mean_mm": 0.23239802278845648,
+      "p95_mm": 0.45647814665220865,
+      "excess_over_gt_mm": 0.17600254209793642
+    },
+    "refined": {
+      "pixels": 281431,
+      "median_mm": 0.2241409718668701,
+      "mean_mm": 0.24797071661161457,
+      "p95_mm": 0.509720155126526,
+      "excess_over_gt_mm": 0.18543387709369336
+    }
+  },
+  "per_frame": {
+    "raw": {
+      "disparity_mae_px": 0.4678475250718519,
+      "disparity_median_px": 0.428403377532959
+    },
+    "refined": {
+      "disparity_mae_px": 0.47040722344538877,
+      "disparity_median_px": 0.4272003173828125
+    }
+  },
+  "excess_reduction_pct": -5.358635667039899
+}

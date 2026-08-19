@@ -1,0 +1,45 @@
+{
+  "sequence": "dataset_7_keyframe_2",
+  "backbone": "RAFT-Stereo",
+  "module": "model_design.comparison.canonical_h4_masked:factory",
+  "frames": 200,
+  "min_views": 3,
+  "grid": [
+    144,
+    180
+  ],
+  "metric": "per-keyframe-pixel standard deviation of world-frame Z, mm",
+  "results": {
+    "gt": {
+      "pixels": 23498,
+      "median_mm": 0.1369051280459886,
+      "mean_mm": 0.17022237539406584,
+      "p95_mm": 0.35003033594312927
+    },
+    "raw": {
+      "pixels": 23068,
+      "median_mm": 0.6890971127726402,
+      "mean_mm": 0.9303762672753034,
+      "p95_mm": 2.4803526227758264,
+      "excess_over_gt_mm": 0.5521919847266517
+    },
+    "refined": {
+      "pixels": 23106,
+      "median_mm": 0.6448391009671761,
+      "mean_mm": 0.900571488476016,
+      "p95_mm": 2.4252983801509447,
+      "excess_over_gt_mm": 0.5079339729211876
+    }
+  },
+  "per_frame": {
+    "raw": {
+      "disparity_mae_px": 0.18227785783324443,
+      "disparity_median_px": 0.08907699584960938
+    },
+    "refined": {
+      "disparity_mae_px": 0.16746465766612892,
+      "disparity_median_px": 0.0873565673828125
+    }
+  },
+  "excess_reduction_pct": 8.014968168611295
+}

@@ -16568,4 +16568,49 @@ file that had not produced a page in its second half for a long time. It compile
 --- 186 pages --- and the fix that matters is that the failure was silent: appending
 text to a broken document looks exactly like appending text to a working one.
 
+\section*{19 August, Afternoon: The Backbone Does Not Move the Sign, and the Confound Survives}
+
+On RAFT-Stereo the world-frame drift result split cleanly: on D2, where the raw
+prediction's excess over the ground-truth floor is $0.18$--$0.22$\,mm, the module
+makes accumulated drift \emph{worse}; on D7, where the excess is $0.55$--$1.11$\,mm,
+it makes it better. Two readings fit that equally well. Either the module helps
+where the raw signal is poor --- a statement about raw quality, which would
+generalise --- or it helps on D7, which is a statement about one dataset and
+would not.
+
+Backbones were supposed to separate them, because their raw quality differs on the
+\emph{same} sequences. Twenty-three cells later, five estimators including two never
+seen in temporal-head training:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& raw excess & drift reduction & sign \\
+\midrule
+D2, $15$ cells & $0.171$--$0.290$\,mm & $-32.1$ to $-5.4\%$ & $15/15$ negative \\
+D7, $8$ cells & $0.552$--$1.113$\,mm & $+8.7$ to $+15.4\%$ & $8/8$ positive \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The half that worked: \emph{the backbone does not move the sign.} Not one cell
+crosses over, and the two unseen estimators behave exactly like the three seen
+ones. Whatever governs this, it is not the estimator, and that is worth reporting
+because it was not obvious --- the module could easily have been repairing one
+backbone's characteristic failure.
+
+The half that did not: \emph{the confound survives.} The two raw-excess ranges
+remain disjoint, and by a factor of two ($0.290$ against $0.552$). No backbone
+makes D2 as hard as D7, so the experiment cannot tell raw quality from split ---
+which is precisely the question it was built to answer. Worse for the raw-quality
+reading, the ordering does not even hold \emph{within} D2: S$^2$M$^2$-S at
+$0.269$\,mm excess loses $32.1\%$ while the same backbone at $0.290$\,mm loses only
+$16.5\%$. If raw difficulty were the governing variable, that pair should not
+happen.
+
+So the paper says what was measured: the condition is robust across backbones, and
+this experiment does not establish that raw quality is what sets it. Writing it as
+``helps where the raw is poor'' would be inventing the result the design failed to
+deliver. The honest version is weaker and is the one that goes in.
+
 \end{document}
