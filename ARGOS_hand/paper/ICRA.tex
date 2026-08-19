@@ -212,26 +212,20 @@ volume, hidden state, confidence head or training pipeline. We keep one
 inductive bias from the video-stereo literature --- decide whether
 motion-aligned history should influence the current estimate, and constrain
 the correction to a convex interpolation between the two --- and redesign
-everything around it for a black-box interface: the integrated motion pathway
-becomes frozen SEA-RAFT, backbone-specific representations become a shared
-external evidence space, and the same head is evaluated unchanged across
-architectures.
+everything around it for a black-box interface.
 
-These restrictions raise a question: does the learned head add anything simple
-temporal averaging would not? Matched fixed fusion, EMA, warped-memory
-propagation and direct forward--backward confidence weighting recover only a
-small fraction of TETHER's gain, while a ground-truth oracle shows the aligned
-memory carries far more than the policy exploits. The core problem is
-therefore not obtaining temporal evidence but deciding how much of it to use
---- and Sec.~\ref{sec:analysis} shows the head decides \emph{how much} well
-and \emph{where} no better than chance, which is what leaves the oracle gap
-open.
-
-A second question is how such an intervention should be evaluated. Smoothness
-is not correctness, and lower mean EPE does not reveal whether refinement
-introduces new bad pixels or rare catastrophic frames, so we evaluate relative
-to the frozen upstream prediction and separate geometry, temporal fidelity,
-benefit, harm and tail behaviour.
+Does the learned head add anything simple temporal averaging would not?
+Matched fixed fusion, EMA, warped-memory propagation and forward--backward
+confidence weighting recover only a small fraction of TETHER's gain, while a
+ground-truth oracle shows the aligned memory carries far more than the policy
+exploits. The core problem is therefore not obtaining temporal evidence but
+deciding how much of it to use --- and Sec.~\ref{sec:analysis} shows the head
+decides \emph{how much} well and \emph{where} no better than chance, which is
+what leaves the oracle gap open. A second question is how such an intervention
+should be evaluated: smoothness is not correctness, and lower mean EPE does
+not reveal whether refinement introduces new bad pixels or rare catastrophic
+frames, so we evaluate relative to the frozen upstream prediction and separate
+geometry, temporal fidelity, benefit, harm and tail behaviour.
 
 Our contributions are three.
 
@@ -331,7 +325,7 @@ as an intervention on that geometry.
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure_assets/Temporal_consistency_taxonomy.pdf}
+\includegraphics[width=0.80\textwidth]{figure_assets/Temporal_consistency_taxonomy.pdf}
 \caption{
 TETHER at three scales. \textbf{(a)} Bounded recurrence: memory carries the
 \emph{fused} disparity forward, and every $H{=}4$ frames the chain is cut and
@@ -637,7 +631,7 @@ Unbounded corrected recurrence    & $-19.17$ & $-143.48$ & $-28.13$ & $2.858$ \\
 \midrule
 \steer, $H{=}4$                   & $\mathbf{3.69}$ & $\mathbf{12.84}$ & $\mathbf{4.99}$ & $\mathbf{0.063}$ \\
 \midrule
-Raw-vs-memory oracle (ceiling)    & $12.30$ & $20.91$ & $9.70$ & $0.000$ \\
+Raw-vs-memory oracle (ceiling)    & $12.74$ & $21.87$ & $10.01$ & $0.000$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -936,7 +930,7 @@ Forensics in the supplement.
 \label{sec:analysis}
 
 Alignment is necessary but not sufficient: the aligned memory carries a
-$12.30\%$ oracle ceiling that indiscriminate use does not collect
+$12.74\%$ oracle ceiling that indiscriminate use does not collect
 (Table~\ref{tab:closure}). The mechanism is alignment plus learned graded
 intervention plus bounded recurrence, not smoothing, and the head never
 solves stereo matching --- it receives two meaningful candidates and chooses
@@ -956,9 +950,12 @@ not occasional large error, so the constraint buys mean accuracy rather than
 safety from large corrections.
 
 Two limits are worth stating. Against the raw-versus-memory oracle of
-Table~\ref{tab:closure}, \steer\ recovers $30.0\%$ of the available gain
-on D2 pooled and $26.0\%$ averaging per-cell recovery, so the open problem
-is deciding \emph{where} to intervene. And the effective weight $w_t$,
+Table~\ref{tab:closure}, \steer\ recovers $29.0\%$ of the available gain on
+D2 pooled and $25.2\%$ averaging per-cell recovery, so the open problem is
+deciding \emph{where} to intervene. That ceiling is measured on \steer's own
+aligned memory: under $H{=}4$ the memory is the previous fused output on three
+frames of four, so the oracle belongs to whichever head produced it and cannot
+be carried across configurations. And the effective weight $w_t$,
 recovered from the convex form, is an intervention magnitude rather than an
 uncertainty: it ranks harmful intervention at AUROC $0.393$--$0.408$ on D2 and
 $0.488$--$0.507$ on held-out D7, below chance on the split it was tuned on and
