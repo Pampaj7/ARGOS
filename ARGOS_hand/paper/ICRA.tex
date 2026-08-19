@@ -665,12 +665,11 @@ $\delta_{1,2,3}$.
 
 \paragraph{Temporal fidelity.}
 At horizons $k\in\{1,2,4,8\}$ the framework defines grid-based temporal
-change error and, given correspondence, motion-compensated
-$\TEPE_{\mathrm{corr}}$, warped depth DTCE and prediction consistency
-(OPW), estimated-flow correspondences marked as proxies. We do not build on
-the motion-compensated family: it improves in all $20/20$ D7
-backbone--horizon cases but the two measures disagree on D2, which needs
-more space than this length allows.
+change error (DTCE, used in Table~\ref{tab:horizon}) and, given
+correspondence, motion-compensated $\TEPE_{\mathrm{corr}}$ and prediction
+consistency, estimated-flow correspondences marked as proxies. We do not
+build on the motion-compensated family: it improves in all $20/20$ D7
+backbone--horizon cases but the two measures disagree on D2.
 
 
 \paragraph{Intervention harm and benefit.}
@@ -787,34 +786,37 @@ improvement is not alignment, averaging or smoothing.
 \centering
 \scriptsize
 \caption{
-Bounded horizons on D2, canonical head. Gain keeps rising to $H=6$ and
-breakage rises faster, so neither column alone selects an operating point;
-their ratio $B^+/H^+$ peaks at the shipped $H=4$. Continuous recurrence is
-$-62.69\%$. A2 behaves the same way, peaking at $H=4$ with $B^+/H^+=1.85$.
+Bounded horizons on D2, canonical head, reductions in \%. EPE improves to
+$H=6$, but $H=4$ is the last horizon at which the module also leaves the
+prediction \emph{more} temporally stable than raw: DTCE changes sign after
+it, and A2 flips at the same place. Continuous recurrence: $-62.69$ EPE,
+$-80.01$ DTCE.
 }
 \label{tab:horizon}
 \begin{tabular}{lccc}
 \toprule
-$H$ & EPE red. & NewBad1 & $B^+/H^+$ \\
+$H$ & EPE red. & NewBad1 & DTCE red. \\
 \midrule
-$1$          & $2.61$          & $\mathbf{0.036}$ & $2.39$ \\
-$2$          & $3.24$          & $0.038$          & $2.50$ \\
-$4$ (shipped)& $4.05$          & $0.047$          & $\mathbf{2.53}$ \\
-$6$          & $\mathbf{4.18}$ & $0.068$          & $2.30$ \\
-$8$          & $4.09$          & $0.128$          & $2.04$ \\
+$1$           & $2.61$          & $\mathbf{0.036}$ & $5.19$ \\
+$2$           & $3.24$          & $0.038$          & $4.39$ \\
+$4$ (shipped) & $4.05$          & $0.047$          & $\mathbf{3.37}$ \\
+$6$           & $\mathbf{4.18}$ & $0.068$          & $-5.54$ \\
+$8$           & $4.09$          & $0.128$          & $-12.24$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Recurrence must be bounded: with no re-anchor the canonical head loses
-$62.69\%$ of EPE. Neither of the first two columns picks an operating point
---- gain rises to $H=6$, breakage rises throughout --- and the question is
-what a point of EPE is worth in broken pixels. Their ratio answers it:
-$B^+/H^+$ peaks at $H=4$, for A2 independently as well, and the $0.13$
-points $H=6$ buys cost $45\%$ more breakage, $2.7\times$ at $H=8$. $H=4$ was
-frozen before D7 opened. Across the sweep A2 is behind at every bounded
-horizon and further behind as it lengthens, yet degrades three times less
-once the bound is removed ($-19.17\%$ against $-62.69\%$).
+Recurrence must be bounded: with no re-anchor the head loses $62.69\%$ of
+EPE and $80.01\%$ of temporal stability. Within the bounded range EPE alone
+does not select an operating point, since it improves to $H=6$; but a
+temporal refiner whose output is \emph{less} temporally stable than its
+input has defeated itself, and that is what happens after $H=4$. DTCE
+improves $3.37\%$ at $H=4$ and degrades $5.54\%$ at $H=6$, at every lag
+$k\in\{2,4,8\}$ and for A2 independently; breakage agrees, and $B^+/H^+$
+peaks at $H=4$ for both heads. DTCE is gameable across policies but not
+along this axis: a longer horizon puts more memory in the output, the
+direction that would game it, and scores worse. $H=4$ was frozen before D7
+opened.
 
 
 \subsection{Cross-Backbone Development Behaviour}
@@ -1098,10 +1100,9 @@ effect.
 
 \paragraph{What the metrics cannot say.}
 No-reference temporal consistency is gameable: on D4D we reduce it by
-$53.9\%$, but copy-previous removes $97.3\%$ without aligning and
-warped-previous scores exactly zero by construction, so we make no D4D
-geometric claim. Pull-warp support detects out-of-frame sampling but not
-internal disocclusion.
+$53.9\%$, but copy-previous removes $97.3\%$ and warped-previous scores
+exactly zero by construction, so we make no D4D geometric claim. Pull-warp
+support detects out-of-frame sampling but not internal disocclusion.
 
 \paragraph{What does not improve downstream.}
 SCARED-C supplies corrected per-frame poses, so geometry can be accumulated
