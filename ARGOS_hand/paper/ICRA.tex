@@ -904,7 +904,8 @@ more than it breaks (Fig.~\ref{fig:trace}).
 BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
 stabiliser we could run. We compare on DRENDS because only there is
 \emph{neither} method in domain: we train on ex-vivo porcine tissue, it has
-never seen synthetic colonoscopy. The shared input is its own RAFT-Stereo
+never seen ex-vivo liver and pancreas manipulation against a
+time-of-flight reference. The shared input is its own RAFT-Stereo
 \emph{robust} prediction, so TETHER is driven on that exact array over all
 five recordings ($7476$ frames) under one support neither method
 influences. One asymmetry favours the baseline: it is bidirectional and
@@ -937,7 +938,7 @@ The regime is hard and the Bad1 column says so: DRENDS ground-truth
 disparity averages $9.89$\,px and spans $8.42$--$11.89$ between the $5$th
 and $95$th percentiles, so a raw EPE of $1.199$\,px is a third of the
 scene's disparity spread and a $1$\,px threshold rejects $44.9\%$ of pixels.
-Not an artefact of synthetic data: SCARED-C D7 keyframe~$3$ sits at raw EPE
+Not a property of one dataset: SCARED-C D7 keyframe~$3$ sits at raw EPE
 $1.18$\,px on comparable disparities. What follows compares two refiners of
 a weak prediction, not a claim that either recovers a good one.
 
