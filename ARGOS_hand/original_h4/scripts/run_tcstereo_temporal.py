@@ -195,6 +195,19 @@ def geometry(sequence: str, frame_ids: list[str], grid: tuple[int, int]):
     return poses, intrinsics * np.array([[scale], [scale], [1.0]]), baseline_mm, scale
 
 
+def score(sequence, tc, gt, gt_valid, raw_valid, frames):
+    """Rows for both supports, used whether the stack was just driven or reloaded."""
+    from run_tcstereo_reference import metrics
+    out = []
+    for support_name, support in (("gt", gt_valid), ("gt_and_raw", gt_valid & raw_valid)):
+        row = metrics(tc, gt, support)
+        if row:
+            out.append({"sequence": sequence, "frames": frames, "support": support_name,
+                        "method": "tcstereo_sceneflow_temporal", "causal": "yes",
+                        "frozen_backbone": "no"} | row)
+    return out
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--checkpoint", default=str(TCSTEREO / "checkpoints/sceneflow.pth"))
@@ -241,6 +254,19 @@ def main() -> None:
         k_raw = torch.from_numpy(k_grid).float().to(device)[None]
         baseline = torch.tensor([[baseline_mm]]).float().to(device)
 
+        # A sequence whose stack exists was already driven; its metrics are recomputed from
+        # that stack rather than skipped, so a resumed run still writes a complete CSV.
+        stack_path = OUT / f"{sequence}_prediction_stack.npz"
+        if stack_path.is_file() and not args.max_frames:
+            stored = np.load(stack_path, allow_pickle=False)
+            if list(stored["frame_ids"]) == frame_ids:
+                print(f"{sequence}: reusing stored stack, scoring only", flush=True)
+                tc = stored["disparity"].astype(np.float64)
+                rows.extend(score(sequence, tc, gt, gt_valid, raw_valid, T))
+                continue
+            print(f"{sequence}: stored stack does not match the boundary, re-driving",
+                  flush=True)
+
         tc = np.empty_like(raw)
         started = time.time()
         # The state TC-Stereo carries between frames, named as its own evaluate_stereo.py
@@ -270,12 +296,19 @@ def main() -> None:
                 print(f"  {sequence} {i}/{T}  {rate:.2f} s/frame  "
                       f"eta {(T - i) * rate / 60:.0f} min", flush=True)
 
-        for support_name, support in (("gt", gt_valid), ("gt_and_raw", gt_valid & raw_valid)):
-            row = metrics(tc, gt, support)
-            if row:
-                rows.append({"sequence": sequence, "frames": T, "support": support_name,
-                             "method": "tcstereo_sceneflow_temporal", "causal": "yes",
-                             "frozen_backbone": "no"} | row)
+        # The prediction stack, not only its metrics. Grid-based temporal change error is
+        # computed from consecutive predictions and from nothing else, so a run that keeps
+        # only summary numbers cannot ever be given a temporal metric without being redone.
+        # The competitor's own comparison table is the reason: it is the paper's only causal
+        # *and* temporal rival, and reporting it without a temporal measure is the gap the
+        # review objected to. BiDAStabilizer needs no equivalent -- its refined stack is
+        # already on the frozen boundary.
+        OUT.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(OUT / f"{sequence}_prediction_stack.npz",
+                            disparity=tc.astype(np.float32),
+                            frame_ids=np.asarray(frame_ids))
+
+        rows.extend(score(sequence, tc, gt, gt_valid, raw_valid, T))
         print(f"{sequence}: {T} frames done", flush=True)
 
     OUT.mkdir(parents=True, exist_ok=True)

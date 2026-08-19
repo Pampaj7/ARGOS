@@ -14,7 +14,10 @@ ROOT=/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4
 SELF=$(readlink -f "$0")
 if [ "${1:-}" = "--node" ]; then
     shift
-    CUDA_VISIBLE_DEVICES=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | sort -t, -k2 -nr | head -1 | cut -d, -f1)
+    # GPU=<index> pins the device, but only among the devices LSF granted this job. With
+    # -gpu num=1 the job sees exactly one, renumbered to 0, so GPU=1 hides it and CUDA finds
+    # nothing: the physical device is LSF's choice, not ours. Left in for the num=2 case.
+    CUDA_VISIBLE_DEVICES=${GPU:-$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | sort -t, -k2 -nr | head -1 | cut -d, -f1)}
     # softsplat JIT-compiles its kernel through cupy, which asks cupy for CUDA_HOME only
     # when the variable is unset -- and cupy returns None here, because /usr/local/cuda on
     # this node carries runtime libraries with no headers and no nvcc. CUDA_HOME is used
@@ -28,5 +31,8 @@ if [ "${1:-}" = "--node" ]; then
     exit 0
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
+# -env rejects an empty assignment, so the option is only passed when GPU is actually set.
+ENVOPT=()
+[ -n "${GPU:-}" ] && ENVOPT=(-env "all, GPU=$GPU")
 exec bsub -I -q p1i -app h100app -n 2 -R "span[hosts=1] rusage[mem=10GB]" \
-     -gpu "num=1:mode=shared" -J argos_tctemp "$SELF --node $*"
+     -gpu "num=1:mode=shared" "${ENVOPT[@]}" -J argos_tctemp "$SELF --node $*"
