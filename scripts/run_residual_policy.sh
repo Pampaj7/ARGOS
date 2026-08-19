@@ -22,7 +22,12 @@ if [ "${1:-}" = "--node" ]; then
     # ninety minutes across four jobs, and the points are independent. Each job owns its own
     # output directories, so parallel runs cannot race on the same one.
     for ALPHA in ${ALPHAS:-0.3 0.5 0.8 1.0}; do
-        for TAU in 0.25 0.5 1.0 2.0; do
+        # tau grid refined after the first two slices: the ridge sits at the SMALLEST tau
+        # sampled (0.76% at alpha=1, tau=0.25, falling to 0.20% at tau=0.5), and the rule
+        # must return to zero as tau -> 0 because w vanishes wherever the residual is not
+        # already zero. So the optimum is bracketed below 0.5 and the original grid put one
+        # sample in the interval that contains it.
+        for TAU in ${TAUS:-0.1 0.15 0.25 0.5 1.0 2.0}; do
             DEST="$OUT/a${ALPHA}_t${TAU}"
             if [ -f "$DEST/summary.csv" ]; then echo "=== a=$ALPHA t=$TAU already done"; continue; fi
             [ -d "$DEST" ] && mv "$DEST" "${DEST}.incomplete-$(date +%s)"
