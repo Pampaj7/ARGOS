@@ -153,18 +153,21 @@ without modifying the estimator, accessing its internals, or using future
 frames.
 
 We present \steer, a causal plug-and-play temporal refiner for frozen
-stereo. At each frame, preceding disparity is motion-aligned to the
-current view using frozen SEA-RAFT, and a shared 142-channel external
-evidence representation feeds a 177,338-parameter CODD-inspired
-reset-and-fusion head that predicts a bounded interpolation between the
-current stereo estimate and that aligned memory.
+stereo. At each frame, preceding disparity is motion-aligned to the current
+view using frozen SEA-RAFT, and a shared 38-channel external evidence
+representation of disparity, motion and image geometry feeds a
+154,874-parameter CODD-inspired reset-and-fusion head that predicts a
+bounded interpolation between the current stereo estimate and that aligned
+memory. No learned appearance features and no frozen backbone enter that
+evidence.
 Corrected recurrence is explicitly bounded and periodically re-anchored
 to independently predicted raw geometry.
 
 A controlled development-set closure shows the learned policy is not
-explained by temporal smoothing: on SCARED-C D2, canonical $H=4$ reduces
-mean EPE by $4.05\%$ against $0.59\%$ for the best matched fixed/EMA blend,
-while flow-confidence weighting and ungated memory propagation degrade
+explained by temporal smoothing: on SCARED-C D2, $H=4$ reduces mean EPE by
+$3.69\%$ against $0.59\%$ for the best matched fixed/EMA blend and $0.87\%$
+for the best tuned unlearned rule on the raw-versus-memory residual, while
+flow-confidence weighting and ungated memory propagation degrade
 accuracy.
 The raw-versus-memory oracle exposes a $12.30\%$ ceiling, of which TETHER
 recovers $37.2\%$; continuous corrected-state recurrence increases EPE by
@@ -173,10 +176,12 @@ $62.69\%$, supporting bounded memory.
 One frozen $H=4$ checkpoint improves all five evaluated stereo estimators
 on held-out SCARED-C D7, including CREStereo and Fast-FoundationStereo,
 excluded from temporal-head training. Mean backbone EPE decreases from
-$0.4921$ to $0.4696$, and Bad1 and RMSE decrease for every backbone.
+$0.4921$ to $0.4645$ over three independently trained seeds
+($5.61\pm0.42\%$), and Bad1 and RMSE decrease for every backbone.
 Zero-shot evaluation on five DRENDS recordings with all five estimators,
 two unseen in training, improves disparity EPE, Bad3 and metric depth in all
-$100$ cells, completing the transfer matrix across backbone and domain.
+$100$ cells ($-5.40$, $-19.51$, $-4.02$, $-3.47\%$), completing the transfer
+matrix across backbone and domain.
 Confining the fused output to the support the module already declares is
 load-bearing: without it, zero-padded out-of-bounds memory turns rare pixels
 invalid and produces a metric-depth tail previously attributed to the
@@ -261,13 +266,15 @@ Our contributions are three.
 \emph{(i)} We formulate surgical temporal stereo refinement as a \emph{causal
 plug-and-play adaptation problem} over frozen, heterogeneous estimators,
 needing neither future frames nor backbone internals, and instantiate it
-as \steer: a 177,338-parameter reset-and-fusion head over causal
-SEA-RAFT alignment, a shared 142-channel external evidence space,
-support-confined convex fusion and bounded corrected-state recurrence.
+as \steer: a 154,874-parameter reset-and-fusion head over causal
+SEA-RAFT alignment, a shared 38-channel external evidence space of
+disparity, motion and image geometry, support-confined convex fusion and
+bounded corrected-state recurrence.
 
 \emph{(ii)} We show through a matched-baseline closure that the gain is not
-temporal smoothing --- $4.05\%$ against $0.59\%$ for the best fixed blend
-under an identical state machine --- and that one frozen checkpoint
+temporal smoothing --- $3.69\%$ against $0.59\%$ for the best fixed blend
+and $0.87\%$ for the best tuned unlearned residual rule, under an identical
+state machine --- and that one frozen checkpoint
 transfers along both axes: to estimators excluded from training on
 held-out D7, and to an unseen domain, the first measurement of the two
 shifts combined.
@@ -431,15 +438,21 @@ S_t,
 \right).
 \end{equation}
 
-The head consumes one 142-channel tensor at two resolutions. At quarter
-resolution: 64 frozen ResNet-18 layer-1 features \cite{he2016resnet}, 9
-feature-matching cost curves sampling the right features at $d{-}1,d,d{+}1$
-for the raw and aligned candidates and their difference, their 6 support
-indicators, 32 disparity and appearance self-correlations and 18
-current-to-aligned-past cross-correlations, the last two families over a
-dilated $3\times3$ neighbourhood. At cache resolution, 13: raw disparity,
-aligned memory, signed and absolute residual, 6 motion, 3 RGB. A2 keeps the
-38 needing no learned features.
+The head consumes one 38-channel tensor at two resolutions. At quarter
+resolution, 25 channels of disparity geometry: 16 disparity
+self-correlations of the raw and aligned candidates over a dilated
+$3\times3$ neighbourhood with the centre removed, and 9 raw-to-aligned
+cross-correlations over the same neighbourhood with the centre kept. At
+cache resolution, 13: raw disparity, aligned memory, their signed and
+absolute residual, 6 motion components and 3 RGB.
+
+Nothing in this space is learned and no network evaluates it. An earlier
+configuration added 104 further quarter-resolution channels built from a
+frozen ResNet-18 --- appearance self- and cross-correlations and
+feature-matching cost curves --- for $142$ in total; Sec.~\ref{sec:ablations}
+reports it as an ablation, because it costs an extra $157{,}504$ frozen
+parameters and three forward passes per frame and does not survive a
+three-seed comparison.
 
 Normalisation is fixed before training: disparities clipped to $[0,64]$ and
 scaled by $64$, signed residuals to $[-16,16]$ scaled by $16$, flow on
@@ -453,7 +466,7 @@ The decision structure is inspired by CODD \cite{li2023codd}.
 We do not claim reset/fusion or convex interpolation as novel in
 isolation.
 
-The cache-grid pathway maps the 142-channel input to 24 channels through a
+The cache-grid pathway maps the 38-channel input to 24 channels through a
 $3\times3$ convolution, GroupNorm, SiLU and a residual block; a coarse
 pathway expands to 48 channels at one-quarter resolution followed by three
 48-channel residual blocks.
@@ -520,8 +533,9 @@ estimator produced a valid one, and bounded recurrence carries it to the
 next re-anchor. Sec.~\ref{sec:masking} quantifies it: invisible on SCARED-C,
 and the whole external-domain metric-depth tail.
 
-The exact trainable parameter count is 177,338, and masking changes no
-parameter, no threshold, and no training procedure.
+The exact trainable parameter count is 154,874, with no frozen feature
+extractor in the loop; masking changes no parameter, no threshold and no
+training procedure.
 
 Reset output bias is initialized to $-2$, while fusion is initialized
 with zero bias, producing conservative initial temporal intervention.
@@ -553,7 +567,7 @@ On a sequence boundary the first output is raw.
 After a re-anchor, previous raw disparity is used as state.
 Otherwise, the previous fused output is propagated.
 
-The canonical policy permits four corrected-state uses before a raw
+The shipped policy permits four corrected-state uses before a raw
 re-anchor.
 Thus $H$ denotes state lifetime rather than a temporal input window.
 
@@ -591,9 +605,9 @@ is a consequence of the decision, never a training target.
 \section{Experimental Protocol}
 \label{sec:experimental}
 
-\subsection{Canonical Training}
+\subsection{Training}
 
-The canonical temporal refiner is trained on temporally curated SCARED-C
+The temporal refiner is trained on temporally curated SCARED-C
 data derived from SCARED \cite{allan2021scared}.
 
 Training uses frozen predictions from S$^2$M$^2$-S
@@ -603,7 +617,7 @@ Anywhere \cite{bartolomei2025stereoanywhere}; CREStereo
 \cite{wen2026fastfoundationstereo} are excluded from temporal-head
 training, and no backbone identity is ever given to \steer.
 
-The canonical configuration trains on D1, D3 and D6 with D2 for
+Training uses D1, D3 and D6 with D2 for
 development and D7 held out, over 8{,}616 frames giving 8{,}606 causal
 pairs from three seen backbones, using non-overlapping $H=4$ clips,
 batch size 4, 12 epochs of AdamW at $2\times10^{-4}$ with weight decay
@@ -621,7 +635,7 @@ We report five curated recordings ---
 \texttt{Vid12\_Pancreas\_Ext}, \texttt{Vid13\_Pancreas\_Med} and
 \texttt{Vid14\_Pancreas\_High} --- $7476$ frames, evaluated with all five
 stereo estimators.
-The zero-shot claim applies only to the SCARED-trained canonical
+The zero-shot claim applies only to the SCARED-trained
 checkpoint: no DRENDS data enters training, checkpoint selection or
 threshold calibration.
 
@@ -718,10 +732,11 @@ micro statistics are retained secondarily.
 \begin{table*}[!t]
 \centering
 \caption{
-One frozen TETHER checkpoint, canonical seed $0$, across five estimators and
-three arenas; every cell is raw$\rightarrow$TETHER, lower is better. Two
+One frozen TETHER checkpoint, seed $0$, across five estimators and three
+arenas; every cell is raw$\rightarrow$TETHER, lower is better. Two
 estimators were excluded from temporal-head training, so the lower-right
-block is the joint shift usually left unmeasured.
+block is the joint shift usually left unmeasured. Sec.~\ref{sec:seeds}
+gives the three-seed spread.
 }
 \label{tab:grid}
 \scriptsize
@@ -740,11 +755,11 @@ block is the joint shift usually left unmeasured.
 \cmidrule(lr){7-8}
 Backbone & Status & EPE & Bad1 (\%) & EPE & Bad1 (\%) & EPE & Bad1 (\%) \\
 \midrule
-S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2645}$ & $1.39\rightarrow\mathbf{1.29}$ & $.5176\rightarrow\mathbf{.5010}$ & $6.44\rightarrow\mathbf{6.08}$ & $1.3477\rightarrow\mathbf{1.2840}$ & $62.55\rightarrow\mathbf{59.32}$ \\
-RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2614}$ & $1.60\rightarrow\mathbf{1.49}$ & $.4671\rightarrow\mathbf{.4397}$ & $6.09\rightarrow\mathbf{5.84}$ & $1.3125\rightarrow\mathbf{1.2414}$ & $58.83\rightarrow\mathbf{55.48}$ \\
-Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2767}$ & $2.18\rightarrow\mathbf{1.75}$ & $.4774\rightarrow\mathbf{.4449}$ & $6.23\rightarrow\mathbf{5.83}$ & $1.3685\rightarrow\mathbf{1.2882}$ & $62.73\rightarrow\mathbf{58.50}$ \\
-CREStereo & unseen & $.2668\rightarrow\mathbf{.2578}$ & $1.57\rightarrow\mathbf{1.44}$ & $.5165\rightarrow\mathbf{.4957}$ & $6.35\rightarrow\mathbf{6.11}$ & $1.3027\rightarrow\mathbf{1.2350}$ & $55.17\rightarrow\mathbf{52.51}$ \\
-Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2647}$ & $1.60\rightarrow\mathbf{1.48}$ & $.4819\rightarrow\mathbf{.4668}$ & $5.92\rightarrow\mathbf{5.68}$ & $1.2838\rightarrow\mathbf{1.2257}$ & $54.88\rightarrow\mathbf{52.25}$ \\
+S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2658}$ & $1.39\rightarrow\mathbf{1.27}$ & $.5176\rightarrow\mathbf{.4992}$ & $6.44\rightarrow\mathbf{6.03}$ & $1.3477\rightarrow\mathbf{1.2812}$ & $62.55\rightarrow\mathbf{58.98}$ \\
+RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2623}$ & $1.60\rightarrow\mathbf{1.43}$ & $.4671\rightarrow\mathbf{.4296}$ & $6.09\rightarrow\mathbf{5.75}$ & $1.3125\rightarrow\mathbf{1.2371}$ & $58.83\rightarrow\mathbf{55.19}$ \\
+Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2779}$ & $2.18\rightarrow\mathbf{1.74}$ & $.4774\rightarrow\mathbf{.4408}$ & $6.23\rightarrow\mathbf{5.77}$ & $1.3685\rightarrow\mathbf{1.2834}$ & $62.73\rightarrow\mathbf{57.99}$ \\
+CREStereo & unseen & $.2668\rightarrow\mathbf{.2583}$ & $1.57\rightarrow\mathbf{1.40}$ & $.5165\rightarrow\mathbf{.4912}$ & $6.35\rightarrow\mathbf{6.05}$ & $1.3027\rightarrow\mathbf{1.2296}$ & $55.17\rightarrow\mathbf{52.21}$ \\
+Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2658}$ & $1.60\rightarrow\mathbf{1.44}$ & $.4819\rightarrow\mathbf{.4645}$ & $5.92\rightarrow\mathbf{5.65}$ & $1.2838\rightarrow\mathbf{1.2228}$ & $54.88\rightarrow\mathbf{52.06}$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -768,10 +783,10 @@ Figures here pool all five backbones and every D2 sequence before taking a
 ratio, so $0.276202$ is one raw mean over fifteen cells; reductions per
 backbone or per arena average per-cell relative reductions instead.
 
-Raw D2 EPE is $0.276202$; canonical $H=4$ reaches $0.265028$ ($4.05\%$),
-the best fixed blend ($w=0.5$, algebraically identical to EMA2) $0.274562$
-($0.59\%$), the raw-versus-memory oracle $0.242223$ ($12.30\%$): almost
-seven times the best fixed blend under one state machine. Per backbone, against whichever fixed or EMA policy is best \emph{for that
+Raw D2 EPE is $0.276202$; $H=4$ reaches $0.266010$ ($3.69\%$), the best
+fixed blend ($w=0.5$, algebraically identical to EMA2) $0.274562$
+($0.59\%$), and the raw-versus-memory oracle $0.242223$ ($12.30\%$): six
+times the best fixed blend under one state machine. Per backbone, against whichever fixed or EMA policy is best \emph{for that
 backbone}, the ratio ranges $4.4\times$ to $12.5\times$ and is $5.6\times$
 excluding Stereo Anywhere: the absolute gain depends on that estimator, the
 margin over smoothing does not. Forward--backward confidence is the informative failure --- one of TETHER's
@@ -786,45 +801,45 @@ improvement is not alignment, averaging or smoothing.
 \centering
 \scriptsize
 \caption{
-Bounded horizons on D2, canonical head, reductions in \%. EPE improves to
-$H=6$, but $H=4$ is the last horizon at which the module also leaves the
-prediction \emph{more} temporally stable than raw: DTCE changes sign after
-it, and A2 flips at the same place. Continuous recurrence: $-62.69$ EPE,
-$-80.01$ DTCE.
+Bounded horizons on D2, reductions in \%. EPE improves to $H=6$, but $H=4$
+is the last horizon at which the module also leaves the prediction
+\emph{more} temporally stable than raw: DTCE changes sign after it. The
+$142$-channel ablation flips at the same place. Continuous recurrence:
+$-19.17$ EPE, $-80.01$ DTCE.
 }
 \label{tab:horizon}
 \begin{tabular}{lccc}
 \toprule
 $H$ & EPE red. & NewBad1 & DTCE red. \\
 \midrule
-$1$           & $2.61$          & $\mathbf{0.036}$ & $5.19$ \\
-$2$           & $3.24$          & $0.038$          & $4.39$ \\
-$4$ (shipped) & $4.05$          & $0.047$          & $\mathbf{3.37}$ \\
-$6$           & $\mathbf{4.18}$ & $0.068$          & $-5.54$ \\
-$8$           & $4.09$          & $0.128$          & $-12.24$ \\
+$1$           & $2.49$          & $\mathbf{0.052}$ & $6.84$ \\
+$2$           & $3.02$          & $0.054$          & $6.31$ \\
+$4$ (shipped) & $3.69$          & $0.063$          & $\mathbf{4.99}$ \\
+$6$           & $\mathbf{3.73}$ & $0.079$          & $-3.64$ \\
+$8$           & $3.52$          & $0.128$          & $-10.42$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Recurrence must be bounded: with no re-anchor the head loses $62.69\%$ of
+Recurrence must be bounded: with no re-anchor the head loses $19.17\%$ of
 EPE and $80.01\%$ of temporal stability. Within the bounded range EPE alone
 does not select an operating point, since it improves to $H=6$; but a
 temporal refiner whose output is \emph{less} temporally stable than its
 input has defeated itself, and that is what happens after $H=4$. DTCE
-improves $3.37\%$ at $H=4$ and degrades $5.54\%$ at $H=6$, at every lag
-$k\in\{2,4,8\}$ and for A2 independently; breakage agrees, and $B^+/H^+$
-peaks at $H=4$ for both heads. DTCE is gameable across policies but not
-along this axis: a longer horizon puts more memory in the output, the
-direction that would game it, and scores worse. $H=4$ was frozen before D7
-opened.
+improves $4.99\%$ at $H=4$ and degrades $3.64\%$ at $H=6$, at every lag
+$k\in\{2,4,8\}$ and for the $142$-channel ablation independently; breakage
+agrees, and $B^+/H^+$ peaks at $H=4$ for both. DTCE is gameable across
+policies but not along this axis: a longer horizon puts more memory in the
+output, the direction that would game it, and scores worse. $H=4$ was
+frozen before D7 opened.
 
 
 \subsection{Cross-Backbone Development Behaviour}
 
-Canonical $H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:grid}), from $2.17\%$ to $8.44\%$, and all six
+$H=4$ improves all five estimators in mean D2 EPE
+(Table~\ref{tab:grid}), from $1.41\%$ to $8.19\%$, and all six
 unseen-backbone sequence groups improve; on D7 the mean excluding Stereo
-Anywhere is $4.14\%$.
+Anywhere is $5.15\%$.
 
 
 \subsection{Held-Out Cross-Backbone Confirmation}
@@ -856,18 +871,23 @@ varies, sequences are the resampling unit, and selecting the best seed is
 prohibited.
 
 Pooled over five backbones the relative Bad1 reduction is
-$8.40\pm2.53\%$ on D2 and $5.15\pm0.35\%$ on held-out D7; EPE gives
-$3.55\pm0.45\%$ and $5.07\pm0.44\%$.
+$12.73\pm0.32\%$ on D2 and $5.84\pm0.22\%$ on held-out D7; EPE gives
+$4.13\pm0.38\%$ and $5.61\pm0.42\%$. Paired sequence-level bootstrap
+intervals are $[8.96,16.60]$ and $[4.00,8.71]$ for Bad1 and $[2.55,5.67]$
+and $[4.03,7.28]$ for EPE, with no resample in which refinement failed to
+help.
 
-The held-out effect is stable: $5.15\pm0.35$ Bad1 and $5.07\pm0.44$ EPE,
-with paired sequence-level bootstrap intervals $[4.11,8.02]$ and
-$[3.42,5.80]$ and no resample in which refinement failed to help.
-
-The development split is not, and our protocol explains it. Checkpoints
-are selected on best D2 fused EPE, so on D2 the seeds fall monotonically,
-$10.78\rightarrow8.67\rightarrow5.75$, a $5.03$ point spread; on D7 the
-ordering \emph{inverts}, seed $0$ becomes the weakest, and the spread
-collapses to $0.69$. Selection optimism sits in the split used to select.
+The spread is the strongest argument for the shipped configuration, and it
+is not what we found first. The $142$-channel ablation is stable on the
+held-out split ($5.15\pm0.35$ Bad1) and unstable on development: its seeds
+fall monotonically, $10.78\rightarrow8.67\rightarrow5.75$, a $5.03$ point
+spread, while the ordering inverts on D7 and the spread collapses to
+$0.69$. We first read that as selection optimism, since checkpoints are
+selected on best D2 fused EPE and optimism should sit in the split used to
+select. Removing the learned evidence removes the instability instead:
+$0.32$ points of D2 spread against $2.53$, eight times tighter, with no
+change to the selection rule. The instability was the evidence space, not
+the protocol.
 
 \begin{figure}[!t]
 \centering
@@ -885,8 +905,8 @@ it: the frame-level count-versus-magnitude asymmetry behind $B^+/H^+$.
 \subsection{Refinement as an Intervention}
 
 Across both splits and all five backbones TETHER recovers
-$2.9$--$10.4\times$ as many Bad1 pixels as it introduces, $B^+/H^+$ between
-$1.76$ and $4.59$, identity preservation above $99.87\%$: it repairs far
+$3.8$--$11.1\times$ as many Bad1 pixels as it introduces, $B^+/H^+$ between
+$1.39$ and $3.25$, identity preservation above $99.85\%$: it repairs far
 more than it breaks (Fig.~\ref{fig:trace}).
 
 
@@ -918,8 +938,8 @@ Method & Causal & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
 \midrule
 Raw               & ---          & $1.199$ & $44.92$ & $4.54$ & $1.876$ \\
 BiDAStabilizer    & no           & $1.175$ & $44.81$ & $4.32$ & $1.776$ \\
-TETHER            & \textbf{yes} & $1.133$ & $43.52$ & $3.98$ & $\mathbf{1.699}$ \\
-TETHER, A2 head   & \textbf{yes} & $\mathbf{1.131}$ & $\mathbf{43.39}$ & $\mathbf{3.94}$ & $1.710$ \\
+TETHER            & \textbf{yes} & $\mathbf{1.131}$ & $\mathbf{43.39}$ & $\mathbf{3.94}$ & $1.710$ \\
+\;\; $+142$ ch ablation & \textbf{yes} & $1.133$ & $43.52$ & $3.98$ & $\mathbf{1.699}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -937,9 +957,10 @@ as the bidirectional baseline on every metric, while being the only causal
 entry and $54\times$ smaller ($177$k trained parameters against $9.64$M). It is not uniform, and the exception is worth naming: on Vid13 TETHER is
 $0.020$\,px behind the baseline and $0.012$\,px \emph{worse than the raw
 prediction it refines}, the one recording of five where the intervention is
-a net harm and the bidirectional method is not. The $38$-channel A2 head
-leads on three metrics of four here and across three seeds reduces EPE by
-$5.20\pm0.13\%$ against $4.83\pm0.15\%$, the ranges not overlapping. In domain the same comparison favours us far more ($4.58\%$ against
+a net harm and the bidirectional method is not. Against the $142$-channel
+ablation \steer\ leads on three metrics of four here, and across three
+independently trained seeds each it reduces EPE by $5.20\pm0.13\%$ against
+$4.83\pm0.15\%$, the two seed ranges not overlapping. In domain the same comparison favours us far more ($4.58\%$ against
 $0.25\%$ EPE), which is why we report DRENDS instead.
 
 TC-Stereo \cite{zeng2024tcstereo} needs privileged inputs our interface
@@ -991,32 +1012,42 @@ a difference is not read; A3 and A4 remain single runs.
 \centering
 \scriptsize
 \caption{
-Held-out relative reduction (\%), not error: higher is better. Canonical
-and A2 are three-seed means.
+Held-out relative reduction (\%), not error: higher is better. The four
+deviations were pre-registered against the original $142$-channel
+configuration; dropping its learned evidence is what \steer\ now is, so the
+shipped model is the top row and the configuration it was ablated from is
+the first row below. Three-seed means where marked.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lccc}
 \toprule
-Variant & Change & D7 EPE red. & D7 Bad1 red. \\
+Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\
 \midrule
-Canonical (3 seeds) & --- & $5.06$ & $5.15\pm0.34$ \\
-A1 & $142\rightarrow78$ ch & $4.93$ & $4.88$ \\
-A2 (3 seeds) & $142\rightarrow38$ ch & $\mathbf{5.61\pm0.42}$ & $\mathbf{5.84\pm0.22}$ \\
-A3 & full-resolution context & $5.61$ & $5.85$ \\
-A4 & unconstrained output & $0.05$ & $6.02$ \\
+\steer\ (3 seeds)        & $38$ ch  & $\mathbf{5.61\pm0.42}$ & $\mathbf{5.84\pm0.22}$ \\
+\midrule
+$+$ learned evidence (3 seeds) & $142$ ch & $5.06$ & $5.15\pm0.34$ \\
+$+$ learned evidence, no appearance & $78$ ch & $4.93$ & $4.88$ \\
+$+$ learned evidence, full-res context & $142$ ch & $5.61$ & $5.85$ \\
+$+$ learned evidence, unconstrained output & $142$ ch & $0.05$ & $6.02$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The result is not the one we expected. A1 is indistinguishable; A2, A3 and
-A4 all sit above the canonical mean, so none of the four decisions is
-load-bearing. A2 was then given the canonical model's own three-seed
-treatment under a rule fixed beforehand and stays ahead on both endpoints
-with a spread eight times tighter ($0.32$ against $2.53$ points of D2
-Bad1): the $142$-channel evidence space is not what makes the module work,
-it is what makes its training unstable. A4 disqualifies itself with an EPE
-gain collapsing to $0.05\%$.
+The result is not the one we expected, and it is why the shipped model is
+the smaller one. Three of the four deviations from the $142$-channel
+configuration sit \emph{above} it, so none of those design decisions is
+load-bearing. Removing the learned evidence entirely was then given the same
+three-seed treatment under a rule fixed before the extra seeds were trained
+--- decided on D2 Bad1, with D7 reported afterwards and taking no part in
+the choice --- and it stays ahead on both endpoints with a spread eight
+times tighter ($0.32$ against $2.53$ points of D2 Bad1). The $142$-channel
+evidence space is not what makes the module work; it is what makes its
+training unstable, and it costs $157{,}504$ frozen parameters, three forward
+passes per frame and $13.8\%$ of the runtime to do so. Its one advantage is
+mean accuracy on the development closure, $4.05\%$ against $3.69\%$, which
+does not survive into the held-out split. The unconstrained-output deviation
+disqualifies itself with an EPE gain collapsing to $0.05\%$.
 
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
@@ -1024,7 +1055,9 @@ gain collapsing to $0.05\%$.
 
 The results above use the support-confined output of \eqref{eq:fusion};
 the ablation is a single line, with checkpoint, head, evidence, policy and
-reset schedule identical. On DRENDS the difference is categorical.
+reset schedule identical. It was measured on the $142$-channel
+configuration, and concerns the output mask and the pull-warp padding rather
+than the evidence space. On DRENDS the difference is categorical.
 Unmasked, depth RMSE \emph{regresses} in $14/14$ cells by $+110.4\%$;
 confined, it improves in $15/15$ by $-3.2\%$. Disparity follows more
 quietly, EPE from $-4.30\%$ to $-5.00\%$, and invalid refined pixels go
@@ -1110,7 +1143,8 @@ in one world frame and the disagreement between views of a point measured:
 what a map fuses rather than what a frame scores. On held-out D7 refinement
 reduces that disagreement in $4/4$ sequences and for both heads, by $9.9\%$
 of the excess over a ground-truth floor of $0.04$--$0.08$\,mm ($11.7\%$ for
-A2). On development D2 it \emph{increases} it by $7.1\%$. The splits differ
+the $142$-channel ablation). On development D2 it \emph{increases} it by
+$7.1\%$. The splits differ
 in how much there is to remove --- raw excess is $0.55$--$1.11$\,mm on D7
 against $0.18$--$0.22$ on D2 --- so where the raw prediction is poor,
 alignment recovers geometry a map can fuse, and where it already sits near
@@ -1128,9 +1162,10 @@ StereoAnywhere ($4.6\%$); \emph{no real-time claim is made}.
 Stage timing locates it, on an otherwise idle H100: the two SEA-RAFT
 passes are $26.3$ of the $33.5$\,ms, against $5.13$ for the evidence tensor
 and $1.01$ for the head. The reverse pass exists only to compute
-$C^{FB}_t$. A2 cuts the evidence stage to $0.67$\,ms and the total to
-$28.9$\,ms, a saving of $13.8\%$; dropping the reverse flow would free
-nearly three times as much, at an accuracy cost we have not measured. We
+$C^{FB}_t$; the evidence tensor is $0.67$\,ms here because \steer\ builds no
+learned features, against $5.13$ for the $142$-channel ablation, a $13.8\%$
+difference in the total. Dropping the reverse flow would free nearly three
+times as much again, at an accuracy cost we have not measured. We
 evaluate perception geometry, not downstream control, and demonstrate
 neither clinical safety nor patient benefit.
 
@@ -1140,13 +1175,14 @@ neither clinical safety nor patient benefit.
 TETHER attaches one causal temporal module, trained once, to frozen and
 heterogeneous stereo estimators without touching their internals or using
 future frames. Its gain is not temporal averaging: on development D2 it
-reduces EPE by $4.05\%$ against $0.59\%$ for the best matched fixed blend
-under an identical state machine, while direct flow-confidence weighting
-and unbounded recurrence degrade accuracy, the latter by $62.69\%$. A
+reduces EPE by $3.69\%$ against $0.59\%$ for the best matched fixed blend
+and $0.87\%$ for the best tuned unlearned residual rule under an identical
+state machine, while direct flow-confidence weighting and unbounded
+recurrence degrade accuracy, the latter by $19.17\%$. A
 frozen $H=4$ checkpoint improves all five estimators on held-out D7 in
 EPE, Bad1 and RMSE at once, including two excluded from training, recovers
-$2.9$--$10.4\times$ more Bad1 pixels than it introduces, and holds at
-$5.15\pm0.35\%$ Bad1 across three seeds.
+$3.8$--$11.1\times$ more Bad1 pixels than it introduces, and holds at
+$5.84\pm0.22\%$ Bad1 across three seeds.
 Zero-shot transfer to DRENDS improves all $100$ cells.
 
 Five results bound what may be claimed. The no-reference consistency metric

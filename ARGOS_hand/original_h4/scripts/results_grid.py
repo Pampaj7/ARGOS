@@ -22,8 +22,14 @@ from pathlib import Path
 import numpy as np
 
 RESULTS = Path(__file__).resolve().parents[2] / "results"
-SCARED = RESULTS / "scared_masked/runs/{split}/model_design_comparison_canonical_h4_masked__factory/reports/{backbone}"
-DRENDS = RESULTS / "drends_masked/{backbone}/reports/{backbone}"
+# The proposed model is the 38-channel head; the 142-channel one is the ablation. Both
+# layouts are here because the paper reports the first and the ablation table the second.
+HEADS = {
+    "tether": {"scared": "ablation_eval/a2/**/{split}/**/reports/{backbone}",
+               "drends": "drends_a2/seed0/{backbone}/reports/{backbone}"},
+    "learned_evidence": {"scared": "scared_masked/runs/{split}/model_design_comparison_canonical_h4_masked__factory/reports/{backbone}",
+                         "drends": "drends_masked/{backbone}/reports/{backbone}"},
+}
 BACKBONES = (("S2M2-S", "seen"), ("RAFT-Stereo", "seen"), ("StereoAnywhere", "seen"),
              ("CREStereo", "unseen"), ("Fast-FoundationStereo", "unseen"))
 LABEL = {"S2M2-S": "S$^2$M$^2$-S", "StereoAnywhere": "Stereo Anywhere",
@@ -36,7 +42,8 @@ def arena(pattern: str, backbone: str, **kwargs) -> dict[str, np.ndarray] | None
     A missing directory is a run that has not happened, which the table shows as a gap
     rather than an omission; an empty one is the same thing mid-flight.
     """
-    files = sorted(glob.glob(os.path.join(pattern.format(backbone=backbone, **kwargs), "*.json")))
+    files = sorted(glob.glob(os.path.join(str(RESULTS), pattern.format(backbone=backbone, **kwargs), "*.json"),
+                             recursive=True))
     if not files:
         return None
     out: dict[str, list[float]] = {key: [] for key in ("raw_EPE", "ref_EPE", "raw_Bad1", "ref_Bad1")}
@@ -59,13 +66,15 @@ def cells(data: dict[str, np.ndarray] | None, metric: str, scale: float, digits:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--latex", action="store_true", help="emit the table body only")
+    parser.add_argument("--head", default="tether", choices=sorted(HEADS))
     args = parser.parse_args()
 
     rows, reductions = [], {}
     for backbone, status in BACKBONES:
-        arenas = [arena(str(SCARED), backbone, split="scared-d2"),
-                  arena(str(SCARED), backbone, split="scared-d7"),
-                  arena(str(DRENDS), backbone)]
+        paths = HEADS[args.head]
+        arenas = [arena(paths["scared"], backbone, split="scared-d2"),
+                  arena(paths["scared"], backbone, split="scared-d7"),
+                  arena(paths["drends"], backbone)]
         columns, per_arena = [], []
         for data in arenas:
             epe, epe_red = cells(data, "EPE", 1.0, 4)
