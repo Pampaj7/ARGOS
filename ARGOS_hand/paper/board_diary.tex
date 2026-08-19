@@ -16613,4 +16613,62 @@ this experiment does not establish that raw quality is what sets it. Writing it 
 ``helps where the raw is poor'' would be inventing the result the design failed to
 deliver. The honest version is weaker and is the one that goes in.
 
+\section*{19 August, Afternoon: The Rename Was Complete and the Numbers Were Not}
+
+A word-by-word audit of the paper, cross-checking every numeric claim against the
+run reports, returned seventeen blocking discrepancies with a single cause. The
+recanonicalisation renamed the model and rebuilt Tables~1--4, and stopped there.
+Nearly every number \emph{outside} those tables was still the $142$-channel head's,
+presented as the shipped model's.
+
+What makes this worth recording is why it survived. The lexical rename was
+\emph{perfect}: not one stray ``A2'', not one stray ``canonical'' in the body text,
+every ``$142$-channel'' correctly labelled as the ablation. A search-and-replace pass
+finds nothing to fix, which is exactly why nobody looked again. The damage was
+entirely numeric, and numbers do not carry the name of the model that produced them.
+
+The paper was contradicting itself in public. The abstract said continuous recurrence
+costs $62.69\%$ of EPE; the body said $19.17\%$, three separate times. The DRENDS
+section and the abstract quoted different models for the same hundred cells. The
+runtime paragraph said the evidence tensor costs $5.13$~ms and then, two sentences
+later, $0.67$~ms --- because it had one head's total and the other head's breakdown.
+A reviewer checking that one paragraph would have found the budget failing to add up
+without needing any of our data.
+
+The two figures were the worst of it. Both were generated from the $142$-channel
+head, including Figure~1, the opening visual. The paper's first picture of its own
+method was a picture of its ablation.
+
+And the world-frame drift attributions were \emph{swapped}: the shipped head was
+credited with the ablation's weaker D7 number and the ablation with the stronger one.
+That one is instructive, because both numbers were real, both were in the right
+paragraph, and only the labels were exchanged. No consistency check catches that.
+
+\paragraph{Three deletions that make the paper better.} The horizon table went. Its
+DTCE column --- the sole argument for shipping $H{=}4$ over the lower-EPE $H{=}6$ ---
+is one lag of one aggregation, and the audit found the pooled $+4.99\%$ is carried by
+a single backbone: $+21.0\%$ on Stereo Anywhere against $+1.4$, $+0.1$, $-1.5$ and
+$-1.6$ on the other four. A five-backbone claim resting on one backbone, in a table
+inviting exactly that scrutiny.
+
+Table~3's $142$-channel row went, and this one is almost funny: it held the only bold
+cell the shipped model did not own. Removing it leaves the proposed method best on all
+four metrics against a bidirectional baseline that sees the future. It was also
+indefensible on its own terms --- $142$ is not a designed number, it is $38$ plus the
+leftovers of a frozen ResNet-18, and a reviewer asking ``why $142$ and not $141$?''
+would have received no answer, because there isn't one.
+
+The SERV-CT paragraph went. Temporal refinement on non-consecutive pairs is a literal
+identity, so a geometry column there would print the backbone's number twice. Five
+lines promising a dataset and delivering nothing.
+
+\paragraph{What the closure was burying.} The matched-baseline argument was being made
+on mean EPE, where it reads as a margin: $3.69\%$ against $0.59\%$ for the best fixed
+blend. On Bad1 it is a \emph{sign change}. Every matched smoothing policy lowers mean
+error while \emph{raising} the bad-pixel rate --- fixed $w{=}0.5$ at $-2.64\%$, EMA
+over three frames at $-8.88\%$, confidence-weighted at $-32.35\%$ --- and the learned
+gate is at $+12.84\%$. Naive temporal averaging trades tail correctness for mean error.
+That is the finding, it was in the reports the whole time, and the paper was spending
+its strongest evidence as a footnote to a weaker version of itself.
+
 \end{document}
