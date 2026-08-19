@@ -1,0 +1,22 @@
+{
+  "aggregate": {
+    "frames": 504,
+    "mean_raw_mc_inconsistency": 3.718238621211005,
+    "mean_temporal_module_mc_inconsistency": 1.7159624861293226,
+    "mean_update_magnitude": 1.6891465269455073
+  },
+  "available_specimens": [
+    "specimen_2",
+    "specimen_3"
+  ],
+  "backbones": [
+    "RAFT-Stereo",
+    "StereoAnywhere"
+  ],
+  "geometry_status": "NOT_APPLICABLE",
+  "protocol": "four-frame curated causal windows, past-to-present, reset per context",
+  "unavailable_reason": "cached frames whose four raw left/right source pairs are unavailable were excluded before smoke/limit",
+  "unavailable_windows_by_specimen": {
+    "specimen_1": 72
+  }
+}

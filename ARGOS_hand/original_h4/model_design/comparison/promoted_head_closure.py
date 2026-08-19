@@ -9,12 +9,20 @@ beside it, importing the frozen module rather than modifying it.
 
 What is re-run, and what is not
 -------------------------------
-Only the six learned-head rows. The fifteen baseline policies blend raw against
-flow-aligned raw with a fixed, EMA or forward-backward-confidence weight and load no
-checkpoint at all, so they produce identical numbers whichever head the paper ships; the
-raw-versus-memory oracle is computed from ground truth and never runs the adapter. Both
-are copied forward from the canonical closure by reference, not recomputed, and this
-script refuses to start if that source is missing.
+Only the six learned-head rows, plus the oracle when canonical_h4 is among them. The
+fifteen baseline policies blend raw against flow-aligned raw with a fixed, EMA or
+forward-backward-confidence weight and load no checkpoint at all, so they produce
+identical numbers whichever head the paper ships; those are copied forward from the
+canonical closure by reference, and this script refuses to start if that source is
+missing.
+
+The oracle is not copied forward, and the earlier version of this file said it was --
+justified as "GT-only; never runs the adapter", which is half of the truth. Ground truth
+does the *selecting*, and never runs the adapter. But it selects between raw and the
+aligned memory, and under H=4 that memory is the previous *fused* output on three frames
+out of four. A different head produces a different memory, hence a different ceiling. So
+the oracle belongs to whichever head produced the bundle, and reusing the canonical one
+under a promoted head reports the ablation's ceiling as the shipped model's.
 
 The comparison this supports is a like-for-like one: same sequences, same backbones, same
 support, same protocol, same evaluation code. The only thing that changes is which trained
@@ -30,7 +38,7 @@ from typing import Any, Mapping
 from model_design.comparison.ablation_horizons import AblationHorizon
 from model_design.comparison.definitive_evaluation import evaluate_scared_bundle
 from model_design.comparison.experimental_closure import (CANONICAL_HORIZONS, RESULTS, _row,
-                                                          _scope, load_freeze)
+                                                          _oracle_bundle, _scope, load_freeze)
 from model_design.comparison.run_comparison import (ALL_BACKBONES, _scared, atomic_csv,
                                                     atomic_json, prepare_output, sha256,
                                                     validate_cuda)
@@ -62,8 +70,8 @@ def run(config: argparse.Namespace) -> None:
                                       "summary_sha256": sha256(CANONICAL_D2 / "summary.csv")},
                 "shard": getattr(config, "shard", None),
                 "complete_method_set": tuple(config.methods) == tuple(CANONICAL_HORIZONS),
-                "not_rerun": {"baseline_policies": "model-free; identical under any head",
-                              "raw_vs_aligned_memory_oracle": "GT-only; never runs the adapter"},
+                "not_rerun": {"baseline_policies": "model-free; identical under any head"},
+                "oracle_recomputed": "canonical_h4" in config.methods,
                 "scope": freeze["required_d2_scope"], "dense_predictions_written": False,
                 "module_provenance": {}}
     atomic_json(output / "run_manifest.json", manifest)
@@ -84,6 +92,15 @@ def run(config: argparse.Namespace) -> None:
 
             _scared(config, adapter, save)
             rows.extend(_row(report, name) for report, _ in reports)
+            if name == "canonical_h4":
+                # Same construction as the canonical closure, on this head's own memory.
+                for _report, bundle in reports:
+                    oracle = evaluate_scared_bundle(_oracle_bundle(bundle))
+                    oracle["diagnostic"] = ("GT-only raw-vs-aligned-memory endpoint oracle; never adapter "
+                                            "inference, but the memory it selects against is this head's")
+                    atomic_json(output / "reports" / "raw_vs_aligned_memory_oracle" / bundle["backbone"]
+                                / f"{bundle['sequence_id']}.json", oracle | {"head": config.head})
+                    rows.append(_row(oracle, "raw_vs_aligned_memory_oracle", diagnostic=True))
             atomic_csv(output / "summary.csv", rows)   # partial, so a kill costs one method
             print(f"{name}: {len(reports)} reports", flush=True)
         atomic_csv(output / "summary.csv", rows)

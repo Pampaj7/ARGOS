@@ -656,8 +656,9 @@ $10^{-4}$ and gradient clipping 1.0. The 154{,}874 trainable parameters are
 selected on development fused EPE. That budget deserves scrutiny, since
 selection fires at epoch $8$, $11$ and $11$ across the three seeds and two of
 those are the penultimate epoch. What the curves show is a plateau rather
-than a climb: from epoch~5 the epoch-to-epoch movement in validation EPE
-($0.0025$--$0.0046$) is as large as everything still gained after it
+than a climb: from epoch~5 the mean epoch-to-epoch movement in validation EPE
+($0.0025$--$0.0046$ across the three seeds) is as large as everything still
+gained after it
 ($0.0041$--$0.0054$), and the seed whose minimum falls earliest ends the run
 \emph{above} that minimum. The epoch at which the minimum lands is therefore
 drawn from the noise rather than from a trend.
@@ -856,7 +857,8 @@ recurrence for the learned head, fixed $w\in\{0.1,0.2,0.3,0.5\}$ rising
 monotonically to $0.59\%$, EMA over two and three frames, forward--backward
 confidence as the weight, aligned-memory propagation, and warped raw previous
 at $H{=}1$. A tuned two-parameter rule on the raw-versus-memory residual,
-swept over sixteen $(\alpha,\tau)$ points, reaches $0.87\%$. Per backbone,
+swept over seventeen $(\alpha,\tau)$ points, reaches $0.87\%$ at an interior
+setting. Per backbone,
 against whichever fixed or EMA policy is best \emph{for that backbone}, the
 ratio ranges $3.9\times$ to $9.9\times$ and is $5.0\times$ excluding Stereo
 Anywhere: the absolute gain depends on the estimator, the margin over
@@ -1080,11 +1082,11 @@ raw and $0.289$/$1.80\%$ for us.
 The temporal measure is where the difference is categorical, and it is the
 reason we report it for the competitors and not only for ourselves. Grid-based
 temporal change error rises from $0.073$ to $0.406$\,px at lag $1$ and from
-$0.135$ to $0.592$ at lag $8$: between three and five times \emph{less}
+$0.135$ to $0.592$ at lag $8$: between four and six times \emph{less}
 temporally consistent than the frozen prediction it refines, at every lag. A
 method built for temporal consistency, run as its authors specify with a pose
-convention validated to $0.02$\,px, degrades temporal consistency fourfold on
-this data. The rigid-scene assumption behind its warp is what deforming tissue
+convention validated to $0.02$\,px, degrades temporal consistency more than
+fourfold at every lag on this data. The rigid-scene assumption behind its warp is what deforming tissue
 violates, and a rigid warp of a deforming surface introduces exactly the
 frame-to-frame disagreement the metric counts. That is a property of the
 method meeting this data rather than a defect of the method: a co-designed
@@ -1410,9 +1412,11 @@ Zero-shot transfer to DRENDS improves all $100$ cells.
 Five results bound what may be claimed. The no-reference consistency metric
 is won outright by a policy that merely replays warped history. The fusion
 weight inverts its relation to harm between splits, so it is an
-intervention magnitude, not an uncertainty. Development gains carry
-selection optimism that held-out gains do not: across seeds the D2 effect
-spans $5.03$ points, the D7 effect $0.69$. A module that declares a support
+intervention magnitude, not an uncertainty. Development gains can carry
+selection optimism that held-out gains do not, and the evidence space decides
+whether they do: the $142$-channel configuration spans $5.03$ points of D2
+effect across seeds against $0.69$ on D7, while the shipped head spans $0.60$
+and $0.40$. A module that declares a support
 must apply it to what it emits, a contract almost invisible in domain that
 costs the whole metric-depth tail out of it. And world-frame reconstruction
 consistency improves on the held-out split while degrading on development,
