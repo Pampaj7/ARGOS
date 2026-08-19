@@ -18,7 +18,10 @@ if [ "${1:-}" = "--node" ]; then
     export CUDA_VISIBLE_DEVICES PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
     cd "$ROOT" || exit 1
-    for ALPHA in 0.3 0.5 0.8 1.0; do
+    # One alpha per job: sixteen points at twenty minutes each is six hours in series and
+    # ninety minutes across four jobs, and the points are independent. Each job owns its own
+    # output directories, so parallel runs cannot race on the same one.
+    for ALPHA in ${ALPHAS:-0.3 0.5 0.8 1.0}; do
         for TAU in 0.25 0.5 1.0 2.0; do
             DEST="$OUT/a${ALPHA}_t${TAU}"
             if [ -f "$DEST/summary.csv" ]; then echo "=== a=$ALPHA t=$TAU already done"; continue; fi
@@ -33,4 +36,5 @@ if [ "${1:-}" = "--node" ]; then
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
 exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=10GB]" \
-     -gpu "num=1:mode=shared" -J argos_residual "$SELF --node $*"
+     -gpu "num=1:mode=shared" -env "all, ALPHAS=${ALPHAS:-0.3 0.5 0.8 1.0}" \
+     -J "argos_residual" "$SELF --node $*"
