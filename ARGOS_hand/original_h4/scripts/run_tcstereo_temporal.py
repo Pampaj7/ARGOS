@@ -287,14 +287,18 @@ def main() -> None:
             print(f"{sequence}: stored stack does not match the boundary, re-driving",
                   flush=True)
 
+        # Hoisted out of the frame loop: each `npz[key]` inflates the entire deflate-
+        # compressed array, so reading it per frame decompressed a 466 MB stack once per
+        # frame and threw the rest away. This was most of the wall time, not the model.
+        rgb_left, rgb_right = raw_npz["rgb_left"], raw_npz["rgb_right"]
         tc = np.empty_like(raw)
         started = time.time()
         # The state TC-Stereo carries between frames, named as its own evaluate_stereo.py
         # names it. `params` stays None on the first frame: there is nothing to warp yet.
         flow_q = net_list = fmap1 = previous_T = None
         for i in range(T):
-            left = torch.from_numpy(raw_npz["rgb_left"][i:i + 1].copy()).float().to(device)
-            right = torch.from_numpy(raw_npz["rgb_right"][i:i + 1].copy()).float().to(device)
+            left = torch.from_numpy(rgb_left[i:i + 1].copy()).float().to(device)
+            right = torch.from_numpy(rgb_right[i:i + 1].copy()).float().to(device)
             if float(left.max()) <= 1.5:      # the boundary stores [0,1]; TC-Stereo wants [0,255]
                 left, right = left * 255.0, right * 255.0
             padder = InputPadder(left.shape, divis_by=32)

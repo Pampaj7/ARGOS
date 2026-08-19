@@ -117,11 +117,19 @@ def main() -> None:
             raise RuntimeError(f"{recording}: ground truth {gt.shape} does not match raw {raw.shape}; "
                                "the boundary and the records are on different grids")
 
-        left = [torch.from_numpy(raw_npz["rgb_left"][i:i + 1].copy()).float().to(device) for i in range(count)]
-        right = [torch.from_numpy(raw_npz["rgb_right"][i:i + 1].copy()).float().to(device) for i in range(count)]
+        # Every `npz[key]` decompresses the whole array. Left inside the comprehensions
+        # below, that is one full inflate of a 466 MB deflate-compressed stack per frame:
+        # about 1.7 TB of decompression per recording, all of it discarded. Hoisted, each
+        # array is inflated once.
+        rgb_left = raw_npz["rgb_left"]
+        rgb_right = raw_npz["rgb_right"]
+        raw_disparity = raw_npz["raw_disparity"]
+        raw_valid_all = raw_npz["raw_valid"]
+        left = [torch.from_numpy(rgb_left[i:i + 1].copy()).float().to(device) for i in range(count)]
+        right = [torch.from_numpy(rgb_right[i:i + 1].copy()).float().to(device) for i in range(count)]
         frames = [{"index": i,
-                   "raw": torch.from_numpy(raw_npz["raw_disparity"][i:i + 1].copy()).float().to(device),
-                   "raw_valid": torch.from_numpy(raw_npz["raw_valid"][i:i + 1].copy()).to(device),
+                   "raw": torch.from_numpy(raw_disparity[i:i + 1].copy()).float().to(device),
+                   "raw_valid": torch.from_numpy(raw_valid_all[i:i + 1].copy()).to(device),
                    "rgb": left[i], "right_rgb": right[i]} for i in range(count)]
 
         def flow(current, past):

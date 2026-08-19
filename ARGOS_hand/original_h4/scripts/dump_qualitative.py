@@ -55,11 +55,14 @@ def main() -> None:
     if args.max_frames:
         T = min(T, args.max_frames)
 
-    left = [torch.from_numpy(raw_npz["rgb_left"][i:i + 1].copy()).float().to(device) for i in range(T)]
-    right = [torch.from_numpy(raw_npz["rgb_right"][i:i + 1].copy()).float().to(device) for i in range(T)]
+    # Each `npz[key]` inflates the whole array; hoisted so it happens once, not per frame.
+    rgb_left, rgb_right = raw_npz["rgb_left"], raw_npz["rgb_right"]
+    raw_disparity, raw_valid_all = raw_npz["raw_disparity"], raw_npz["raw_valid"]
+    left = [torch.from_numpy(rgb_left[i:i + 1].copy()).float().to(device) for i in range(T)]
+    right = [torch.from_numpy(rgb_right[i:i + 1].copy()).float().to(device) for i in range(T)]
     frames = [{"index": i,
-               "raw": torch.from_numpy(raw_npz["raw_disparity"][i:i + 1].copy()).float().to(device),
-               "raw_valid": torch.from_numpy(raw_npz["raw_valid"][i:i + 1].copy()).to(device),
+               "raw": torch.from_numpy(raw_disparity[i:i + 1].copy()).float().to(device),
+               "raw_valid": torch.from_numpy(raw_valid_all[i:i + 1].copy()).to(device),
                "rgb": left[i], "right_rgb": right[i]} for i in range(T)]
 
     def flow(current, past):
@@ -97,7 +100,7 @@ def main() -> None:
     for label, i in chosen.items():
         np.savez_compressed(
             OUT / f"{args.sequence}_{label}.npz",
-            rgb_left=raw_npz["rgb_left"][i], raw=raw[i], aligned_memory=memory[i], fused=fused[i],
+            rgb_left=rgb_left[i], raw=raw[i], aligned_memory=memory[i], fused=fused[i],
             gt=gt[i], support=support[i],
             error_raw=np.where(support[i], np.abs(raw[i] - gt[i]), np.nan),
             error_fused=np.where(support[i], np.abs(fused[i] - gt[i]), np.nan),

@@ -120,10 +120,14 @@ def main() -> None:
         gt = evaluation["gt_disparity"][:T, 0].astype(np.float64)
         gt_valid = evaluation["gt_valid"][:T, 0].astype(bool)
 
+        # Hoisted out of the frame loop: each `npz[key]` inflates the entire deflate-
+        # compressed array, so reading it per frame decompressed a 466 MB stack once per
+        # frame and threw the rest away. This was most of the wall time, not the model.
+        rgb_left, rgb_right = raw_npz["rgb_left"], raw_npz["rgb_right"]
         tc = np.empty_like(raw)
         for i in range(T):
-            left = torch.from_numpy(raw_npz["rgb_left"][i:i + 1].copy()).float().to(device)
-            right = torch.from_numpy(raw_npz["rgb_right"][i:i + 1].copy()).float().to(device)
+            left = torch.from_numpy(rgb_left[i:i + 1].copy()).float().to(device)
+            right = torch.from_numpy(rgb_right[i:i + 1].copy()).float().to(device)
             if float(left.max()) <= 1.5:          # the boundary stores [0,1]; TC-Stereo expects [0,255]
                 left, right = left * 255.0, right * 255.0
             padder = InputPadder(left.shape, divis_by=32)

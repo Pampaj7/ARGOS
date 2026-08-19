@@ -95,11 +95,15 @@ def main() -> None:
         gt = evaluation["gt_disparity"][:T, 0].astype(np.float64)
         gt_valid = evaluation["gt_valid"][:T, 0].astype(bool)
 
-        left = [torch.from_numpy(raw_npz["rgb_left"][i:i + 1].copy()).float().to(device) for i in range(T)]
-        right = [torch.from_numpy(raw_npz["rgb_right"][i:i + 1].copy()).float().to(device) for i in range(T)]
+        # Each `npz[key]` inflates the whole array; inside a per-frame loop that is one full
+        # decompression of a deflate-compressed stack per frame. Hoisted, each is inflated once.
+        rgb_left, rgb_right = raw_npz["rgb_left"], raw_npz["rgb_right"]
+        raw_disparity, raw_valid_all = raw_npz["raw_disparity"], raw_npz["raw_valid"]
+        left = [torch.from_numpy(rgb_left[i:i + 1].copy()).float().to(device) for i in range(T)]
+        right = [torch.from_numpy(rgb_right[i:i + 1].copy()).float().to(device) for i in range(T)]
         frames = [{"index": i,
-                   "raw": torch.from_numpy(raw_npz["raw_disparity"][i:i + 1].copy()).float().to(device),
-                   "raw_valid": torch.from_numpy(raw_npz["raw_valid"][i:i + 1].copy()).to(device),
+                   "raw": torch.from_numpy(raw_disparity[i:i + 1].copy()).float().to(device),
+                   "raw_valid": torch.from_numpy(raw_valid_all[i:i + 1].copy()).to(device),
                    "rgb": left[i], "right_rgb": right[i]} for i in range(T)]
 
         def flow(current, past):
