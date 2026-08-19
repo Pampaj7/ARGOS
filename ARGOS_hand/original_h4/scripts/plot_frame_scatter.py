@@ -23,7 +23,9 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNS = ROOT.parent / "results" / "scared_masked" / "runs"
+# The proposed model's runs. This pointed at "scared_masked" -- the 142-channel ablation --
+# so Figure 2 showed the wrong model under a caption naming TETHER.
+RUNS = ROOT.parent / "results" / "ablation_eval" / "a2" / "runs"
 SPLITS = (("scared-d2", "D2 development"), ("scared-d7", "D7 held out"))
 
 

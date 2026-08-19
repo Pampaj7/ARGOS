@@ -31,7 +31,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 ARGOS = ROOT.parents[1]
 BIDA = ARGOS / "ARGOS_hand/external_comparison/results/bidastabilizer_raftstereo_robust/d2_full"
-OUT = ROOT.parent / "results" / "bida_common_support"
+OUT_DEFAULT = ROOT.parent / "results" / "bida_common_support"
 SEQUENCES = ("dataset_2_keyframe_2", "dataset_2_keyframe_3", "dataset_2_keyframe_4")
 
 
@@ -58,6 +58,8 @@ def metrics(prediction: np.ndarray, gt: np.ndarray, mask: np.ndarray) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--output", type=Path, default=OUT_DEFAULT,
+                        help="one directory per head; the default holds the 142-channel run")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--sequences", nargs="+", default=list(SEQUENCES))
     parser.add_argument("--max-frames", type=int)
@@ -114,8 +116,8 @@ def main() -> None:
                              "causal": {"raw": "n/a", "bidastabilizer": "no", "tether": "yes"}[name]} | row)
         print(f"{sequence}: {T} frames, support {int(support.sum())} px", flush=True)
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    with (OUT / "bida_common_support.csv").open("w", newline="") as handle:
+    args.output.mkdir(parents=True, exist_ok=True)
+    with (args.output / "bida_common_support.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
@@ -127,8 +129,8 @@ def main() -> None:
         n = sum(r["pixels"] for r in sub)
         pooled[name] = {m: sum(r[m] * r["pixels"] for r in sub) / n
                         for m in ("EPE", "Bad1", "Bad3", "RMSE", "P95", "InvalidRate")} | {"pixels": n}
-    (OUT / "pooled.json").write_text(json.dumps(pooled, indent=2) + "\n")
-    (OUT / "run_manifest.json").write_text(json.dumps({
+    (args.output / "pooled.json").write_text(json.dumps(pooled, indent=2) + "\n")
+    (args.output / "run_manifest.json").write_text(json.dumps({
         "project": "ARGOS v2", "generated_at": datetime.now(timezone.utc).isoformat(),
         "purpose": "Raw / BiDAStabilizer / TETHER on identical inputs and identical support",
         "input_boundary": str(BIDA), "module": args.module,

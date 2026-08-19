@@ -8,7 +8,7 @@ for p in (str(ROOT),str(ROOT/"scripts"),str(ARGOS/"ARGOS_FREEZED/src"),str(ARGOS
 from argos_freezed.alignment.sea_raft_adapter import SEARAFTFlowAdapter
 from model_design.comparison.run_comparison import drive, load_factory
 dev=torch.device("cuda:0")
-ad=load_factory("model_design.comparison.canonical_h4_masked:factory")(device="cuda:0")
+ad=load_factory("model_design.comparison.ablation_h4:factory_a2")(device="cuda:0")
 fm=SEARAFTFlowAdapter(device=dev)
 raw=np.load(B/"raw.npz",allow_pickle=False)
 # warm-up well before the window so the recurrent state is in steady state

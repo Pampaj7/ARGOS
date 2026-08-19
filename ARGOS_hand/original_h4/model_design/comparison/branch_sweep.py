@@ -45,7 +45,9 @@ def run(config: argparse.Namespace) -> None:
     if not (CANONICAL_D2 / "summary.csv").is_file():
         raise RuntimeError("the canonical D2 closure must exist first; its baseline policy "
                            "rows and its oracle are the reference this run is compared against")
-    output = config.output or RESULTS / f"d2_branch_{config.branch}"
+    # The bare name belongs to the 142-channel head, which already wrote there.
+    suffix = "" if config.head == "learned_evidence" else f"_{config.head}"
+    output = config.output or RESULTS / f"d2_branch_{config.branch}{suffix}"
     if output.resolve() == CANONICAL_D2.resolve():
         raise ValueError("a promoted head may not write the canonical closure root")
 
@@ -70,7 +72,8 @@ def run(config: argparse.Namespace) -> None:
         for name in config.methods:
             factory = (branch_ablation.factory_reset_only if config.branch == "reset_only"
                        else branch_ablation.factory_fusion_only)
-            adapter = factory(horizon=CANONICAL_HORIZONS[name], device=config.device)
+            adapter = factory(horizon=CANONICAL_HORIZONS[name], device=config.device,
+                              head=config.head)
             manifest["module_provenance"][name] = adapter.describe()
             reports: list[tuple[dict[str, Any], Mapping[str, Any]]] = []
 
@@ -96,6 +99,8 @@ def run(config: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--branch", required=True, choices=("reset_only", "fusion_only"))
+    parser.add_argument("--head", default="tether", choices=sorted(branch_ablation.HEADS),
+                        help="the shipped 38-channel head, or the 142-channel ablation")
     parser.add_argument("--methods", nargs="+", default=["canonical_h4"], choices=list(CANONICAL_HORIZONS))
     parser.add_argument("--backbones", nargs="+", default=list(ALL_BACKBONES))
     parser.add_argument("--sequences", nargs="+")

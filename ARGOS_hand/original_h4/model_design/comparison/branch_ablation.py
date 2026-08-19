@@ -20,13 +20,19 @@ import sys
 from pathlib import Path
 from typing import Any, Mapping
 
+from model_design.comparison.ablation_horizons import AblationHorizon
 from model_design.comparison.canonical_h4 import CanonicalH4
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class BranchAblation(CanonicalH4):
-    """Canonical head, one factor of the temporal weight suppressed at inference."""
+class _BranchSuppression:
+    """One factor of the temporal weight suppressed at inference.
+
+    Shared between the two heads: TETHER's cue builder forces the learned-evidence
+    flag off itself and ignores the extractor, so the step body does not branch on
+    which head is underneath.
+    """
 
     def __init__(self, *, branch: str, horizon: int | None = 4, **kwargs: Any) -> None:
         if branch not in {"reset_only", "fusion_only"}:
@@ -79,9 +85,39 @@ class BranchAblation(CanonicalH4):
                                 "temporal_weight": float(weight[support].mean()) if bool(support.any()) else 0.0}}
 
 
-def factory_reset_only(*, device: str = "cuda:0", horizon: int = 4, **_: Any) -> BranchAblation:
-    return BranchAblation(branch="reset_only", horizon=horizon, device=device)
+class BranchAblation(_BranchSuppression, CanonicalH4):
+    """The 142-channel learned-evidence head, now the paper's ablation."""
 
 
-def factory_fusion_only(*, device: str = "cuda:0", horizon: int = 4, **_: Any) -> BranchAblation:
-    return BranchAblation(branch="fusion_only", horizon=horizon, device=device)
+class BranchAblationTether(_BranchSuppression, AblationHorizon):
+    """TETHER, the shipped 38-channel head.
+
+    The paper discusses which factor of $w_t = r_t f_t$ does the work under a heading that
+    names TETHER, while the only runs on disk were the 142-channel head's. Since the two
+    factors are a property of the architecture the paper ships, the question has to be
+    asked of that architecture.
+    """
+
+    def __init__(self, *, variant: str = "A2_no_learned_evidence", **kwargs: Any) -> None:
+        super().__init__(variant=variant, **kwargs)
+
+
+HEADS = {"tether": BranchAblationTether, "learned_evidence": BranchAblation}
+
+
+def factory_reset_only(*, device: str = "cuda:0", horizon: int = 4,
+                       head: str = "learned_evidence", **_: Any):
+    return HEADS[head](branch="reset_only", horizon=horizon, device=device)
+
+
+def factory_fusion_only(*, device: str = "cuda:0", horizon: int = 4,
+                        head: str = "learned_evidence", **_: Any):
+    return HEADS[head](branch="fusion_only", horizon=horizon, device=device)
+
+
+def factory_reset_only_tether(*, device: str = "cuda:0", horizon: int = 4, **_: Any):
+    return BranchAblationTether(branch="reset_only", horizon=horizon, device=device)
+
+
+def factory_fusion_only_tether(*, device: str = "cuda:0", horizon: int = 4, **_: Any):
+    return BranchAblationTether(branch="fusion_only", horizon=horizon, device=device)

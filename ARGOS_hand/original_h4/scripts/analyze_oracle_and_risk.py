@@ -28,7 +28,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]                      # ARGOS_hand/original_h4
 COMPARISON = ROOT / "model_design/comparison"
-OUT = ROOT.parent / "results" / "oracle_risk_analysis"
+OUT_ROOT = ROOT.parent / "results" / "oracle_risk_analysis"
 BINS = 2000                                                     # score resolution for streaming AUROC/AURC
 EPS = 1e-6
 DISAGREEMENT_FLOOR = 1e-3                                       # |memory - raw| below this cannot be an intervention
@@ -189,7 +189,11 @@ def analyse(bundle: dict, accumulators: dict, reliability: dict) -> None:
 
 def run(args: argparse.Namespace) -> None:
     run_comparison, canonical_h4 = _import_driver()
-    adapter = canonical_h4.factory(device=args.device)
+    # The head was hardcoded, which is how the paper ended up quoting this analysis for a
+    # model it was never run on. Selecting it names the output directory too, so the two
+    # heads' numbers cannot land in the same place.
+    from model_design.comparison.run_comparison import load_factory
+    adapter = load_factory(args.module)(device=args.device)
     accumulators: dict = {}
     reliability: dict = {}
 
@@ -225,6 +229,9 @@ def run(args: argparse.Namespace) -> None:
         row["B_plus"] = accumulator.sums["benefit_sum"] / pixels
         rows.append(row)
 
+    # One directory per head, so a rerun cannot overwrite the other head's numbers and a
+    # reader of the results tree can tell which model produced them.
+    OUT = OUT_ROOT if args.module.endswith("canonical_h4:factory") else OUT_ROOT / "a2"
     OUT.mkdir(parents=True, exist_ok=True)
     fields = list(dict.fromkeys(key for row in rows for key in row))
     with (OUT / "oracle_risk_metrics.csv").open("w", newline="") as handle:
@@ -243,6 +250,7 @@ def run(args: argparse.Namespace) -> None:
         }
     (OUT / "risk_curves.json").write_text(json.dumps(curves, indent=2) + "\n")
     (OUT / "run_manifest.json").write_text(json.dumps({
+        "module": args.module,
         "project": "ARGOS v2",
         "purpose": "continuous-fusion oracle ceiling and selective-risk analysis of the frozen canonical H4 head",
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -296,6 +304,7 @@ def main() -> None:
     parser.add_argument("--backbones", nargs="+",
                         default=["S2M2-S", "RAFT-Stereo", "StereoAnywhere", "CREStereo", "Fast-FoundationStereo"])
     parser.add_argument("--sequences", nargs="+")
+    parser.add_argument("--module", default="model_design.comparison.canonical_h4:factory")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--flow-batch-size", type=int, default=32)
     parser.add_argument("--max-frames", type=int)
