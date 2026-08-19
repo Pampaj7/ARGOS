@@ -10,7 +10,12 @@ gained (0.0041--0.0054), so the minimum lands where it does by noise rather than
 But that is still an argument about a curve, and the only thing that settles it is a longer
 curve.
 
-So this runs the locked recipe unchanged except for the epoch count, doubled to 24.
+So this runs the locked recipe unchanged except for the epoch count. The default is 100
+against a locked 12, deliberately far past any plausible budget: doubling to 24 would only
+move the question, since a model still improving at 24 and a model plateaued at 24 are
+distinguished by exactly the argument being tested. At eight times the budget the curve
+either flattens, which closes the question, or it does not, which is a finding worth having
+even though it is an unwelcome one.
 
 Two constraints make it honest. It writes to its own directory, and its checkpoints are
 never eligible for anything: the shipped model stays the one selected under the pre-declared
@@ -33,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--epochs", type=int, default=24)
+    parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--variant", default="A2_no_learned_evidence", choices=sorted(VARIANTS))
     parser.add_argument("--workers", type=int, default=12)
     parser.add_argument("--preload-workers", type=int, default=12)
