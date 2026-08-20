@@ -17443,4 +17443,34 @@ $0.37$ of its own unpinned numbers = droppable at deployment), evaluation
 launched on the existing no-FB module --- the one that produced the D2 number,
 so the convention cannot drift.
 
+
+
+\section*{Retraction: the 51 ms was contention, and the reviewer's fear was founded}
+
+The diary entry of yesterday evening (``the full-resolution context branch
+costs 22 ms, not 3\%'') is retracted. Leonardo asked how $51.1$\,ms of system
+cost squares with a $1.00$\,ms head, and the answer is that it does not: in
+the A3 timing run, the stages \emph{identical} between the two configurations
+inflated fourfold (evidence $5.13 \to 19.92$\,ms, alignment $1.06 \to 3.62$)
+while the only stage the variant actually changes moved $1.01 \to 1.31$. The
+run was taken on a loaded node at 16:42; the baselines are called
+\texttt{quiet} for a reason. The internally consistent reading is the
+opposite of what I wrote: the full-resolution branch costs about $+0.3$\,ms
+--- $16\times$ a ${\sim}0.02$\,ms branch, exactly the method section's
+compute factor --- and the reviewer's suspicion that we declined a better
+configuration to save ${\sim}3\%$ of the module was pointing the right way.
+
+The paper now declines full-res on the registered rule alone
+(indistinguishable in accuracy; the deviation buys nothing the rule can read
+and spends $16\times$ the branch's compute), with no system-milliseconds
+claim. A paired quiet re-measurement of both configurations is queued behind
+the night's jobs; if it contradicts the $+0.3$\,ms reading, that lands here
+too. Error bars added to the A4 trajectory line
+($5.32 \to 1.70\pm1.43$ against $4.13 \to 5.61\pm0.42$).
+
+Lesson filed next to the defaults: a measurement taken to settle an argument
+inherits the argument's urgency, and urgency is how a contaminated number
+gets into a paper the same day it is measured. The quiet-node discipline the
+runtime baselines already encoded was the protocol; I stepped around it.
+
 \end{document}
