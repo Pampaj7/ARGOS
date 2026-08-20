@@ -313,22 +313,19 @@ Sec.~\ref{sec:mapping}, measure it after accumulation rather than only before.
 \section{Method}
 \label{sec:method}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
-\includegraphics[width=0.80\textwidth]{figure_assets/Temporal_consistency_taxonomy.pdf}
+% Panel (a) of the original asset (bounded recurrence as a frame strip) is cropped
+% out: its content is three lines of Sec. III-E and the strip bought no information
+% for a third of a page. The asset is untouched; the crop is the reversible cut.
+\includegraphics[width=\columnwidth, trim=0 0 0 149, clip]{figure_assets/Temporal_consistency_taxonomy.pdf}
 \caption{
-\steer\ at three scales. \textbf{(a)} Bounded recurrence: memory carries the
-\emph{fused} disparity forward, and every $H{=}4$ frames the chain is cut and
-re-tied to raw geometry the frozen network produced independently (teal). The
-five frames are consecutive; the two disparity rows share one colour scale and
-differ by $0.126$\,px on average, with one fitted plane removed from all ten
-panels so the anatomy is visible under a $7$\,px depth ramp. \textbf{(b)} One
-time step; dashed grey is frozen, the single orange block is the only trained
-component and emits one scalar per pixel, $w_t$, rather than geometry.
-\textbf{(c)} The evidence space: none of the $38$ channels carries ground
-truth, backbone identity or a future frame.}
+\textbf{(b)} One time step; dashed grey is frozen, the single orange block is
+the only trained component and emits one scalar per pixel, $w_t$, rather than
+geometry. \textbf{(c)} The evidence space: none of the $38$ channels carries
+ground truth, backbone identity or a future frame.}
 \label{fig:system}
-\end{figure*}
+\end{figure}
 
 \subsection{External Causal Interface}
 
@@ -384,12 +381,14 @@ the correction be convex in the two candidates, are CODD's
 \cite{li2023codd}; the architecture, the motion pathway, the evidence space,
 the supervision and the training are not.
 
-A cache-grid pathway and a quarter-resolution context pathway feed a
+A cache-grid pathway and a quarter-resolution context pathway
+(Fig.~\ref{fig:system}) feed a
 full-resolution reset branch predicting $r_t=\sigma(z_t^r)$ and a coarse
 fusion branch predicting $f_t=\uparrow_4[\sigma(z_t^f)]$, giving the effective
 temporal weight $w_t=r_tf_t$ from $154{,}874$ trainable parameters. Running
-the context branch coarsely is a compute choice costing $16\times$ less than
-full resolution, which Sec.~\ref{sec:ablations} reports as an ablation. Layer
+the context branch coarsely is a compute choice on that branch, $16\times$
+cheaper than full resolution, which Sec.~\ref{sec:ablations} reports as an
+ablation. Layer
 widths are in the supplement.
 
 Temporal evidence is only defined where the aligned memory is usable, so
@@ -950,8 +949,7 @@ the registered endpoint against the configuration it was registered against
 enumerate. It does not win against what we ship: $5.68\pm0.16$ against
 $5.84\pm0.22$ held out, inside the threshold on Bad1 and at it on EPE, so the
 two are indistinguishable by the rule this table is read under. The deviation
-buys nothing the rule can read and spends $16\times$ the context branch's
-compute doing it, so the registered configuration stands.
+buys nothing the rule can read, so the registered configuration stands.
 
 Ablating convexity (A4) posts the largest held-out Bad1 reduction in
 the table, $6.97\pm0.83\%$, but its margin over us ($1.13$ points) is not
