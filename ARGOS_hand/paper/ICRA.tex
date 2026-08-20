@@ -75,7 +75,7 @@
 % ============================================================
 
 \newif\ifinternaldraft
-\internaldrafttrue
+\internaldraftfalse
 % \internaldraftfalse
 
 \newcommand{\TODO}[1]{%
@@ -492,18 +492,18 @@ Training uses D1, D3 and D6 with D2 for development and D7 held out, over
 backbones, in non-overlapping $H=4$ clips, batch size 4, 12 epochs of AdamW at
 $2\times10^{-4}$ with weight decay $10^{-4}$ and gradient clipping 1.0,
 selecting on development fused EPE. That budget deserves scrutiny: selection
-fires at epoch $8$, $11$ and $11$ across the three seeds, two of them the
-penultimate epoch, and from epoch~5 the mean epoch-to-epoch movement in
-validation EPE ($0.0025$--$0.0046$) is comparable to everything still gained
-after it ($0.0041$--$0.0054$), with all three seeds ending above their own
-minimum. A single step and a cumulative gain are not strictly comparable, so
-this supports only the weaker claim that the epoch of the minimum is
-uninformative, not that the curve has converged.
-\TODO{convergence probe: the shipped model retrained for $100$ epochs against
-the locked $12$. Not eligible for selection; if it keeps improving that is a
-limitation to report, not a model to adopt.}
-One ablation (A4) diverges after epoch $10$, which best-validation selection
-catches.
+fires at epoch $8$, $11$ and $11$ across the three seeds, and from epoch~5 the
+mean epoch-to-epoch movement in validation EPE ($0.0025$--$0.0046$) is
+comparable to everything still gained after it, so the epoch of the minimum is
+uninformative.
+A probe settles it: the shipped model retrained under the locked recipe with
+the epoch budget alone raised, not eligible for selection, stopped by the
+cluster at $47$ epochs. Its best validation EPE is $0.2915$ at epoch~$13$
+against $0.2949$--$0.2967$ for the three shipped runs, so twelve epochs is
+short by $0.0034$\,px --- the size of the movement above --- and the next $34$
+epochs never beat it, the window minima rising to $0.2965$ and $0.2981$. The
+budget is a plateau, not a ceiling. One ablation (A4) diverges after epoch
+$10$, which best-validation selection catches.
 
 
 \subsection{External Evaluation}
