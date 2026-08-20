@@ -321,31 +321,35 @@ timed iterations after 30 warmup iterations.
 \begin{table}[htb]
 \centering
 \small
-\caption{Per-stage temporal overhead.}
+\caption{Per-stage temporal overhead, both configurations, measured in the
+same session on an otherwise idle device.}
 \label{sup:runtime}
-\begin{tabular}{lrr}
+\begin{tabular}{lrrr}
 \toprule
-Stage & median (ms) & p95 (ms) \\
+Stage & \steer\ (ms) & p95 & $142$ ch (ms) \\
 \midrule
-SEA-RAFT forward & 13.222 & 13.289 \\
-SEA-RAFT reverse & 13.191 & 13.268 \\
-Alignment        & 1.038  & 1.057 \\
-142-channel evidence & 5.122 & 5.156 \\
-Fusion head      & \textbf{1.027} & 1.043 \\
+SEA-RAFT forward & 13.088 & 13.238 & 13.173 \\
+SEA-RAFT reverse & 13.089 & 13.186 & 13.174 \\
+Alignment        & 1.049  & 1.067  & 1.058 \\
+Evidence tensor  & 0.674  & 0.686  & 5.131 \\
+Fusion head      & \textbf{1.002} & 1.012 & 1.014 \\
 \midrule
-Total overhead   & \textbf{33.601} & \\
-Peak VRAM        & \multicolumn{2}{r}{\textbf{124.2\,MB}} \\
+Total overhead   & \textbf{28.903} & & 33.549 \\
+Peak VRAM        & \textbf{95.2\,MB} & & 137.9\,MB \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Two observations. The $177$k-parameter head costs $1.03$\,ms, $3\%$ of
-the overhead: ``compact head'' is true but not the operative cost, since
-$79\%$ is the two frozen flow passes. And the reverse pass costs
-$13.19$\,ms while feeding only the forward--backward confidence cue,
-whose direct use as a fusion weight worsens EPE by $2.17\%$
-(Table~\ref{sup:closure}); removing it would cut overhead by $39\%$ and
-is the most promising efficiency ablation we have not run.
+Two observations. The $155$k-parameter head costs $1.00$\,ms, $3.5\%$ of the
+overhead: ``compact head'' is true but not the operative cost, since $91\%$ is
+the two frozen flow passes. And the reverse pass costs $13.09$\,ms while
+feeding only the forward--backward confidence cue, whose direct use as a
+fusion weight worsens EPE by $2.17\%$ (Table~\ref{sup:closure}); removing it
+would cut overhead by $45\%$. Substituting a constant for the cue at inference
+costs this head nothing measurable, which is reported in the main paper; a head
+\emph{trained} without the reverse pass is still the experiment we have not
+run. The evidence column is where the two configurations separate: $0.67$\,ms
+against $5.13$, because \steer\ builds no learned features.
 
 % ============================================================
 \section{Three-Dimensional Surface Consistency}
@@ -417,7 +421,9 @@ the GT floor absorbs but does not isolate.
 \section{Larger Training Does Not Move the Operating Point}
 % ============================================================
 
-An augmented-training run keeps the architecture and enlarges the data.
+An augmented-training run keeps the architecture and enlarges the data. Both
+arms here are the $142$-channel configuration, so this compares two training
+regimes and not two heads; we have not repeated it on the shipped head.
 
 \begin{table}[htb]
 \centering
