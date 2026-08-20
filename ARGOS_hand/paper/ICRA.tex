@@ -903,7 +903,7 @@ Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\
 $+$ learned evidence (3 seeds) & $142$ ch & $5.06\pm0.44$ & $5.15\pm0.34$ \\
 \quad no appearance$^{\dagger}$ & $78$ ch  & $4.93$ & $4.88$ \\
 \quad full-res context (3 seeds) & $142$ ch & $5.24\pm0.52$ & $5.68\pm0.16$ \\
-\quad unconstrained output$^{\dagger}$ & $142$ ch & $0.05$ & $6.02$ \\
+\quad unconstrained output (3 seeds) & $142$ ch & $1.70\pm1.43$ & $6.97\pm0.83$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -934,14 +934,24 @@ the registered endpoint against the configuration it was registered against
 ($5.68\pm0.16$ against $5.15\pm0.34$), an outcome the registration did not
 enumerate. It does not win against what we ship, which is ahead on both
 endpoints, so the accuracy argument for it no longer exists and only cost
-remains \B{T2.2}. Ablating convexity (A4) posts the largest held-out Bad1
-reduction, $6.02\%$, on one seed; we reject it on EPE, a metric the
-registration names as reported but not as the endpoint, and that reading was
-chosen after seeing the result. Its registered consequence we honour: the
-falsification clause required that if A4 matched or beat the canonical model
-held out, the claim attributing cross-backbone transfer to the convex action
-space be withdrawn rather than softened. It is withdrawn, and appears nowhere
-in this paper. \B{T2.3}
+remains \B{T2.2}. Ablating convexity (A4) wins the registered endpoint
+outright: $6.97\pm0.83\%$ of held-out Bad1 over three seeds, the largest in
+the table, against the base's $5.15\pm0.34$ and our $5.84\pm0.22$. We still
+decline it, on EPE --- a metric the registration names as reported but not as
+the endpoint, a reading chosen after seeing the first result, which three
+seeds have since made solid: A4's held-out EPE gain is $1.70\pm1.43\%$
+against our $5.61\pm0.42$, and the shape of the loss is the informative
+part. On development the escape term is \emph{ahead} of the convex head
+($5.32$ against $4.13\%$ EPE); held out it collapses, and the drop from
+development to held-out holds in all fifteen backbone--seed pairs. The
+unconstrained output buys in-domain accuracy that does not survive the split
+shift; the convex constraint is what makes the EPE gain transferable across
+it. Its registered consequence we honour: the falsification clause required
+that if A4 matched or beat the canonical model held out, the claim
+attributing \emph{cross-backbone} transfer to the convex action space be
+withdrawn rather than softened. It is withdrawn and appears nowhere in this
+paper; the cross-\emph{split} statement above is a narrower claim, measured
+on A4's own three seeds. \B{T2.3}
 
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
@@ -980,10 +990,10 @@ gained, the reset gate how little is broken, and a paper reporting only the
 product and only mean error would have seen neither.
 Sec.~\ref{sec:mapping} reaches the same division from accumulated geometry.
 
-Ablating convexity (A4) collapses mean EPE gain to $0.05\%$ while improving
-RMSE and worst case: the failure is broad degradation of pixels already close,
-not occasional large error, so the constraint buys mean accuracy rather than
-safety from large corrections.
+Ablating convexity (A4) collapses held-out mean EPE gain to $1.70\pm1.43\%$
+while improving RMSE and worst case: the failure is broad degradation of
+pixels already close, not occasional large error, so the constraint buys mean
+accuracy rather than safety from large corrections.
 
 \begin{figure}[!t]
 \centering
