@@ -17166,4 +17166,37 @@ head's results --- which is precisely why nobody re-ran it. The commit that
 performed the recanonicalisation listed twelve things. At least eight were
 missing from that list.
 
+
+\section*{The defaults were the cause}
+
+Five sweeps found stale numbers in every file I opened. Tonight I stopped
+fixing the outputs and looked at why they were stale, and the answer is
+mechanical rather than careless.
+
+Ten scripts that drive a head defaulted to the $142$-channel one. Their
+launchers pass no \texttt{--module}, because why would they --- the default is
+supposed to be what the project ships. So every bare run produced the
+ablation's numbers under the shipped model's name. Three of those scripts
+wrote to a fixed path with no way to send a second head anywhere else, which is
+the other half of the mechanism: \texttt{evaluate\_temporal\_corrected.py} was
+never re-run after the head changed because re-running it could only have
+destroyed the record it was supposed to be compared against.
+
+All ten now default to the shipped head, and the three that could only
+overwrite route by head instead.
+
+One live bug found while doing it. \texttt{analyze\_oracle\_and\_risk.py} was
+the one script that already routed its output by module --- and it matched
+\texttt{endswith("canonical\_h4:factory")}, so the \emph{masked} spelling of
+the $142$-channel head fell through to the \texttt{a2} directory. The single
+script written to prevent this collision contained the only path by which a
+wrong head could still overwrite the right one's results.
+
+I want to record the shape of this rather than the list. A recanonicalisation
+is not a rename; it is a change to what the word ``default'' denotes. Renaming
+the model in twelve files and leaving the defaults pointing at the old one
+guarantees that every subsequent run quietly undoes the rename. The commit that
+did the recanonicalisation was careful and complete about prose. It did not
+touch a single \texttt{argparse} line.
+
 \end{document}
