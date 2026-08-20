@@ -90,3 +90,21 @@ def factory(*, method: str = "fixed_w0.5_h4", device: str = "cuda:0", **_: Any) 
         return ExperimentalPolicy(POLICIES[method], device=device)
     except KeyError as error:
         raise ValueError(f"unknown experimental policy: {method}") from error
+
+
+def _policy_factory(method: str):
+    """One import-time factory per declared blend.
+
+    `load_factory` addresses `module:name` and passes only `device`, so a single
+    `factory` cannot say WHICH policy it is. These let a run manifest name the blend,
+    which matters when the closure is reproduced outside the split it was written on.
+    """
+    def _factory(*, device: str = "cuda:0", **_: Any) -> ExperimentalPolicy:
+        return factory(method=method, device=device)
+    _factory.__name__ = "factory_" + method.replace(".", "_")
+    _factory.__doc__ = f"Matched baseline {method}; loads no checkpoint."
+    return _factory
+
+
+for _name in POLICIES:
+    globals()["factory_" + _name.replace(".", "_")] = _policy_factory(_name)
