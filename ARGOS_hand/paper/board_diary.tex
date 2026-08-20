@@ -17246,4 +17246,37 @@ frozen point is optimal for a criterion that did not exist when it was frozen.
 None of this is in the paper yet; edits now require authorisation, so this
 entry is the register.
 
+
+
+\section*{The consensus chain runs for the first time, and catches the drift it was built for}
+
+The 38-channel twins of A3 and A4 (the paper's blocker T2.1) went through the
+new protocol: spec, implementation, independent adversarial review by a reader
+who had not seen the implementation, adjudication. The reviewer returned seven
+findings; four changed something.
+
+The one that justifies the whole apparatus: \texttt{train\_ablation\_seed.py}
+carried its own copy of the list of variants that inherit the
+disable-learned-evidence flag, one revision behind. A5--A7 were immune by
+accident (their cue builders force the flag internally), so the divergence was
+invisible until A3b/A4b --- the first variants since A2 whose 38-channelness
+rests on the flag alone. An A3b seed run would have trained the most expensive
+configuration in the repository (full-resolution context on 142 channels) for
+twelve epochs and written a provenance record asserting 38 channels, with the
+error surfacing only at evaluation, a day of H100 later. This is the third
+instance of the same failure shape in one day --- eval-side A5/A6 this
+morning, eval-side A7 caught by the implementer, train-side seed path caught
+by the reviewer --- and all three are copies of a variant list drifting apart.
+The list is now defined once.
+
+Also from the review: the twins' registration compared against seed 0, the
+comparison this project already retracted once (seed 0 is the weakest shipped
+seed held out, so it flatters every variant); now three seeds, 5.84 $\pm$
+0.22. And the registration gained a decision rule written before either twin
+trains, naming the favourable prior it starts from: A3 beat its own base by
+0.70 points, which is exactly why the rule is written down first.
+
+Training is submitted, gated on the A6 job ending. Nothing here touches the
+paper; the twin rows land in Table~III when the checkpoints exist.
+
 \end{document}
