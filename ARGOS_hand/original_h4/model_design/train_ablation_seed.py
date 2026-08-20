@@ -52,7 +52,7 @@ def main() -> None:
 
     settings = train.config(value, output, args)
     settings.seed = args.seed
-    if args.variant == "A2_no_learned_evidence":
+    if args.variant in ablation.SHIPPED_BASE_VARIANTS:
         settings.disable_learned_stereo_evidence = True
 
     gpu = train.validate_cuda()

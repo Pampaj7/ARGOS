@@ -29,6 +29,8 @@ VARIANTS = {
     "A5_no_fb_cue": "A5_no_fb_cue",
     "A6_geometry_only": "A6_geometry_only",
     "A7_half_width": "A7_half_width",
+    "A3b_single_resolution_38ch": "A3b_single_resolution_38ch",
+    "A4b_relaxed_convexity_38ch": "A4b_relaxed_convexity_38ch",
 }
 
 
@@ -103,22 +105,32 @@ class AblationH4(MaskedCanonicalH4):
 
         head_class = {"A4_relaxed_convexity": RelaxedConvexityHead,
                       "A3_single_resolution": SingleResolutionHead,
-                      "A7_half_width": HalfWidthHead}.get(
+                      "A7_half_width": HalfWidthHead,
+                      "A3b_single_resolution_38ch": SingleResolutionHead,
+                      "A4b_relaxed_convexity_38ch": RelaxedConvexityHead}.get(
                           self.variant, CODDStyleFusionHead)
         state = torch.load(self.checkpoint, map_location="cpu", weights_only=False)
         self._model = head_class(state["cue_channels"]).to(self.device).eval().requires_grad_(False)
         self._model.load_state_dict(state["model"], strict=True)
 
-        # A2 removes the learned evidence entirely, so it must not build the extractor:
-        # leaving a zero-valued feature block would hand the head an architecture-side
-        # marker that the trained variant never saw.
-        needs_extractor = self.variant != "A2_no_learned_evidence"
+        # Which base a variant deviates from decides both of the next two choices, so
+        # they are driven by one list. Only the three variants of the 142-channel base
+        # build the frozen extractor; every variant of the shipped head removes the
+        # learned evidence entirely and must not build it, because a zero-valued feature
+        # block would hand the head an architecture-side marker it never saw in training.
+        base_142 = ("A1_no_appearance", "A3_single_resolution", "A4_relaxed_convexity")
+        needs_extractor = self.variant in base_142
         self._extractor = (FrozenResNet18Layer1().to(self.device).eval().requires_grad_(False)
                            if needs_extractor else None)
+        # Every variant of the shipped head TRAINED on 38 channels, so leaving any of them
+        # on the canonical 142-channel builder would score the head on inputs it never saw.
         self._build_cues = {"A1_no_appearance": build_cues_without_appearance,
                             "A2_no_learned_evidence": build_cues_without_learned_evidence,
                             "A5_no_fb_cue": build_cues_without_fb_confidence,
                             "A6_geometry_only": build_cues_geometry_only,
+                            "A7_half_width": build_cues_without_learned_evidence,
+                            "A3b_single_resolution_38ch": build_cues_without_learned_evidence,
+                            "A4b_relaxed_convexity_38ch": build_cues_without_learned_evidence,
                             }.get(self.variant, build_codd_cues)
         expected = self.declared.get("cue_channels")
         if expected is not None and state["cue_channels"] != expected:
@@ -169,6 +181,14 @@ def factory_a6(*, device: str = "cuda:0", **_: Any) -> AblationH4:
 
 def factory_a7(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A7_half_width", device=device)
+
+
+def factory_a3b(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A3b_single_resolution_38ch", device=device)
+
+
+def factory_a4b(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A4b_relaxed_convexity_38ch", device=device)
 
 
 class UnconfinedAblationH4(AblationH4):

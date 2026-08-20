@@ -25,7 +25,16 @@ VARIANTS = {
     "A5_no_fb_cue": "A5_no_fb_cue",
     "A6_geometry_only": "A6_geometry_only",
     "A7_half_width": "A7_half_width",
+    "A3b_single_resolution_38ch": "A3b_single_resolution_38ch",
+    "A4b_relaxed_convexity_38ch": "A4b_relaxed_convexity_38ch",
 }
+# Variants that deviate from the shipped 38-channel head and therefore inherit its
+# disable-learned-evidence flag. One list, imported by train_ablation_seed.py too:
+# the seed script carrying its own copy is how an A3b seed run would silently have
+# trained on 142 channels while writing provenance that says 38.
+SHIPPED_BASE_VARIANTS = ("A2_no_learned_evidence", "A5_no_fb_cue", "A6_geometry_only",
+                         "A7_half_width", "A3b_single_resolution_38ch",
+                         "A4b_relaxed_convexity_38ch")
 
 
 def _train_module():
@@ -83,6 +92,20 @@ def install(runner, variant: str) -> dict:
         runner.CODDStyleFusionHead = HalfWidthHead
         return {"patched": "CODDStyleFusionHead", "from": canonical.__name__,
                 "to": "HalfWidthHead", "width": 32, "trainable_parameters": 70994}
+    # A3b and A4b are A3 and A4 re-asked of the shipped head: the same head class, but
+    # built on the 38-channel evidence space instead of the 142-channel one. The cue
+    # builder needs no patch -- the learned-evidence flag set in main() is what produces
+    # the 38 channels, exactly as it does for A2.
+    if variant == "A3b_single_resolution_38ch":
+        canonical = runner.CODDStyleFusionHead
+        runner.CODDStyleFusionHead = SingleResolutionHead
+        return {"patched": "CODDStyleFusionHead", "from": canonical.__name__,
+                "to": "SingleResolutionHead", "extra_parameters": 0, "cue_channels": 38}
+    if variant == "A4b_relaxed_convexity_38ch":
+        canonical = runner.CODDStyleFusionHead
+        runner.CODDStyleFusionHead = RelaxedConvexityHead
+        return {"patched": "CODDStyleFusionHead", "from": canonical.__name__,
+                "to": "RelaxedConvexityHead", "extra_parameters": 49, "cue_channels": 38}
     raise ValueError(variant)
 
 
@@ -115,9 +138,9 @@ def main() -> None:
         raise RuntimeError("unexpected: base config seed already deviates from the locked recipe")
     if settings.disable_learned_stereo_evidence:
         raise RuntimeError("unexpected: the locked recipe already disables learned stereo evidence")
-    if args.variant in ("A2_no_learned_evidence", "A5_no_fb_cue", "A6_geometry_only",
-                        "A7_half_width"):
-        # A5-A7 deviate from the shipped 38-channel head, so they inherit its one flag.
+    if args.variant in SHIPPED_BASE_VARIANTS:
+        # A5-A7 and the A3b/A4b twins deviate from the shipped 38-channel head, so they
+        # inherit its one flag.
         settings.disable_learned_stereo_evidence = True
 
     record = {
@@ -133,7 +156,9 @@ def main() -> None:
         runner_names = {"note": "runner not loaded in dry-run; patch target verified by name only",
                         "target": "build_codd_cues" if args.variant == "A1_no_appearance"
                                   else "CODDStyleFusionHead" if args.variant in
-                                  ("A4_relaxed_convexity", "A3_single_resolution")
+                                  ("A4_relaxed_convexity", "A3_single_resolution",
+                                   "A7_half_width", "A3b_single_resolution_38ch",
+                                   "A4b_relaxed_convexity_38ch")
                                   else None}
         print(json.dumps(record | {"dry_run": True, "writes": False, "patch": runner_names},
                          indent=2, sort_keys=True))
