@@ -17520,4 +17520,29 @@ six words either way), and nothing else. Twin seeds, extra backbones, and A7
 are explicitly not queued: results without lines to land in are how a paper
 grows back.
 
+
+
+\section*{The held-out per-frame series: the sign survives, the strength does not}
+
+On \texttt{dataset\_7\_keyframe\_4} ($1{,}919$ frames with defined weight, the
+largest held-out sequence), per-frame mean weight against per-frame harm
+gives Spearman $-0.26$ --- against $-0.68$ on the development sequence. Same
+support definition as the D2 series and as Fig.~2 (gt-and-raw validity, not
+the definitive D7 protocol; the two numbers must never be cross-quoted with
+the tables). Support fraction carries a whisper of the opposite sign
+($+0.09$).
+
+The reading sits exactly between the two hypotheses the appendix caveat
+allowed. The frame-level signal does not vanish held out (at $n{=}1{,}919$,
+$-0.26$ is robustly nonzero), so ``the worst frame is a tail, not a trend''
+survives the split; but two thirds of the correlation was development-only,
+the same attenuation pattern as the per-pixel AUROC (benign $0.59$--$0.61$ on
+D2, chance held out) at a coarser granularity that retains more. Proposed
+caption clause, awaiting authorisation: ``(on a held-out sequence the
+correlation weakens to $-0.26$ with the same sign)''. That closes the
+declared caveat either way and adds the fourth independent instrument to the
+selection-optimism thread: seed spread, per-pixel AUROC, the closure's
+development margins, and now the per-frame series, each losing most but not
+all of its development signal held out.
+
 \end{document}
