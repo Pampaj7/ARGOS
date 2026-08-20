@@ -782,26 +782,22 @@ $B^+/H^+$.
 
 
 \subsection{What a Map Fuses, Not What a Frame Scores}
+\label{sec:mapping}
 
 Everything above scores a frame. What a robot consumes is a map, so we measure
-that too, and it is the one place the module's benefit is conditional.
-SCARED-C's corrected poses let geometry be accumulated in one world frame and
-the disagreement between views of a point measured --- what a map fuses rather
-than what a frame scores. On held-out D7 refinement reduces that disagreement
-by $11.7\%$ of the excess over the ground-truth floor, for both heads; on
-development D2 it \emph{increases} it by $15.5\%$. The
-reversal is not an artefact of one estimator: over the full $5\times7$ grid of
-backbones and sequences the sign never changes, all $15$ D2 cells negative
-($-32.1$ to $-5.4\%$) and all $20$ D7 cells positive ($+7.2$ to $+17.8\%$).
-The splits differ in how much there is to remove --- raw excess is
-$0.518$--$1.113$\,mm on D7 against $0.171$--$0.290$ on D2 --- suggesting
-alignment recovers geometry a map can fuse where the raw prediction is poor
-and costs more than it gains where it is not. That does not settle the
-mechanism: the ranges stay disjoint, so no backbone makes D2 as hard as D7,
-and within D2 the ordering does not hold. Mapping benefit is conditional, not
-general, and we do not claim raw difficulty as its cause.
+that too. SCARED-C's corrected poses let geometry be accumulated in one world
+frame and the disagreement between views of a point measured --- the quantity
+a reconstruction actually pays for.
 
-
+On held-out D7 refinement reduces that disagreement by $11.7\%$ of the excess
+over the ground-truth floor, and the sign is not carried by one estimator:
+across the full grid of five backbones and four sequences, \emph{all $20$
+cells improve}, by $+7.2$ to $+17.8\%$. The gain tracks how much geometry
+there is to recover. Raw excess on D7 is $0.518$--$1.113$\,mm, so the aligned
+memory has something a map can fuse; where the raw prediction already sits
+near the reference floor there is correspondingly less to win, and
+Sec.~\ref{sec:limits} reports the split where that leaves the intervention a
+net cost.
 
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
@@ -1012,6 +1008,21 @@ score by $53.9\%$, copy-previous by $97.3\%$, and warped-previous scores
 exactly zero by construction. Pull-warp support detects out-of-frame sampling
 but not internal disocclusion.
 
+\paragraph{When there is nothing to recover.}
+The mapping benefit of Sec.~\ref{sec:mapping} is conditional, and the
+condition is not subtle. On development D2 the same measurement runs the other
+way: refinement \emph{increases} world-frame disagreement by $15.5\%$, and
+again the sign is uniform --- all $15$ cells negative, $-32.1$ to $-5.4\%$.
+The two splits differ by a factor of two in what there is to remove, raw
+excess $0.171$--$0.290$\,mm on D2 against $0.518$--$1.113$ on D7, which is why
+we read the benefit as scaling with the size of the raw error rather than as
+general. We cannot show that this is the mechanism: the two ranges never
+overlap, so no backbone makes D2 as hard as D7, and within D2 the ordering
+does not hold either --- one estimator loses $32.1\%$ at $0.269$\,mm of excess
+and $16.5\%$ at $0.290$. What the grid does establish is that the reversal is
+a property of the split and not of one estimator. A module that refines a
+prediction already close to its reference can cost a map more than it returns.
+
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and two
 SEA-RAFT passes: $28.90$\,ms overhead at $95.2$\,MB peak VRAM on an H100. The
@@ -1050,10 +1061,10 @@ won outright by replaying warped history. The fusion weight inverts its
 relation to harm between splits, so it is an intervention magnitude and not
 an uncertainty. Selection optimism on development is a property of the
 evidence space rather than of the protocol. A module that declares a support
-must apply it to what it emits. And world-frame reconstruction consistency
-improves held out while degrading on development, for every backbone we
-tried, so mapping benefit is conditional on something we can demonstrate but
-not yet name. What remains open is \emph{where} to intervene.
+must apply it to what it emits. And what a map fuses improves held out on
+every backbone we tried while degrading on development, so the benefit scales
+with how much geometry there is to recover rather than being general. What
+remains open is \emph{where} to intervene.
 
 
 \balance
