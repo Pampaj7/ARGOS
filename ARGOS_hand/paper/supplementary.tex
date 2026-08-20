@@ -179,9 +179,9 @@ because it changes the conclusion.
 
 $\TEPE_{\mathrm{corr}}$ and OPW require a correspondence field, supplied
 here from the same SEA-RAFT flows used for warping. Table~\ref{sup:tepe}
-gives the relative change after refinement, on the $142$-channel
-configuration; the family is a diagnostic the paper does not build on, and the
-shipped head is being measured on it separately.
+gives the relative change after refinement on the shipped head. The previous
+version of this table did not match either configuration's stored results and
+has been recomputed from the run of record.
 
 \begin{table}[htb]
 \centering
@@ -194,45 +194,49 @@ after refinement. Negative is better.}
 Split & Backbone & $k{=}1$ & $k{=}2$ & $k{=}4$ & $k{=}8$ \\
 \midrule
 \multicolumn{6}{l}{\emph{$\TEPE_{\mathrm{corr}}$}}\\
-D2 & S$^2$M$^2$-S          & +24.5\% & +40.1\% & +12.9\% & +19.7\% \\
-D2 & RAFT-Stereo           & +24.8\% & +41.1\% & +16.6\% & +23.8\% \\
-D2 & Stereo Anywhere       & +14.5\% & +31.1\% &  +8.5\% & +16.4\% \\
-D2 & CREStereo             & +22.2\% & +39.7\% & +15.3\% & +24.3\% \\
-D2 & Fast-FoundationStereo & +35.9\% & +52.3\% & +21.1\% & +27.8\% \\
-D7 & S$^2$M$^2$-S          & -23.7\% & -21.0\% & -17.4\% & -12.7\% \\
-D7 & RAFT-Stereo           & -12.2\% &  -6.1\% &  -5.6\% &  -5.7\% \\
-D7 & Stereo Anywhere       & -10.3\% &  -4.8\% &  -5.3\% &  -5.7\% \\
-D7 & CREStereo             & -13.6\% &  -6.8\% &  -6.7\% &  -6.4\% \\
-D7 & Fast-FoundationStereo & -10.9\% &  -4.9\% &  -5.6\% &  -6.2\% \\
+D2 & S$^2$M$^2$-S          &  -3.0\% &  +8.6\% &  +3.1\% &  +8.0\% \\
+D2 & RAFT-Stereo           &  -6.8\% &  +6.1\% &  +1.1\% &  +7.1\% \\
+D2 & Stereo Anywhere       & -40.3\% & -29.6\% & -28.6\% & -21.1\% \\
+D2 & CREStereo             & -10.0\% &  +1.7\% &  -2.0\% &  +2.5\% \\
+D2 & Fast-FoundationStereo &  -1.6\% & +10.7\% &  +3.6\% &  +9.6\% \\
+D7 & S$^2$M$^2$-S          & -21.4\% & -13.5\% & -10.4\% &  -7.0\% \\
+D7 & RAFT-Stereo           & -33.4\% & -21.1\% & -14.1\% & -11.9\% \\
+D7 & Stereo Anywhere       & -36.4\% & -25.2\% & -20.6\% & -15.3\% \\
+D7 & CREStereo             & -27.7\% & -16.2\% & -11.3\% &  -8.9\% \\
+D7 & Fast-FoundationStereo & -19.5\% &  -9.3\% &  -6.7\% &  -5.1\% \\
 \midrule
 \multicolumn{6}{l}{\emph{OPW}}\\
-D2 & S$^2$M$^2$-S          &  -8.7\% &  -3.5\% &  -1.8\% &  -1.2\% \\
-D2 & RAFT-Stereo           &  -8.5\% &  -3.4\% &  -1.7\% &  -1.1\% \\
-D2 & Stereo Anywhere       & -12.9\% &  -5.8\% &  -3.0\% &  -1.8\% \\
-D2 & CREStereo             &  -9.5\% &  -3.8\% &  -1.8\% &  -1.2\% \\
-D2 & Fast-FoundationStereo &  -7.3\% &  -3.1\% &  -1.6\% &  -1.2\% \\
-D7 & S$^2$M$^2$-S          & -29.8\% & -22.8\% & -13.5\% &  -7.6\% \\
-D7 & RAFT-Stereo           & -18.5\% & -10.2\% &  -5.1\% &  -3.4\% \\
-D7 & Stereo Anywhere       & -18.1\% &  -9.9\% &  -5.1\% &  -3.4\% \\
-D7 & CREStereo             & -20.3\% & -11.1\% &  -5.9\% &  -3.8\% \\
-D7 & Fast-FoundationStereo & -18.5\% & -10.0\% &  -5.2\% &  -3.6\% \\
+D2 & S$^2$M$^2$-S          & -14.6\% &  -5.8\% &  -2.7\% &  -1.7\% \\
+D2 & RAFT-Stereo           & -16.9\% &  -7.0\% &  -3.3\% &  -2.0\% \\
+D2 & Stereo Anywhere       & -41.1\% & -25.7\% & -14.8\% &  -8.6\% \\
+D2 & CREStereo             & -18.9\% &  -8.7\% &  -4.1\% &  -2.8\% \\
+D2 & Fast-FoundationStereo & -14.9\% &  -6.3\% &  -3.1\% &  -1.9\% \\
+D7 & S$^2$M$^2$-S          & -27.3\% & -15.7\% &  -8.4\% &  -4.3\% \\
+D7 & RAFT-Stereo           & -38.2\% & -22.7\% & -12.1\% &  -8.4\% \\
+D7 & Stereo Anywhere       & -42.1\% & -26.8\% & -17.0\% & -10.1\% \\
+D7 & CREStereo             & -33.6\% & -18.6\% &  -9.6\% &  -5.7\% \\
+D7 & Fast-FoundationStereo & -25.8\% & -12.4\% &  -5.8\% &  -3.1\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 On held-out D7 both improve in all $20/20$ backbone--horizon cases. On
-development D2 they disagree: OPW improves everywhere while
-$\TEPE_{\mathrm{corr}}$ degrades everywhere.
+development D2 they disagree, but not uniformly, and the shape of the
+disagreement is worth stating precisely: OPW improves in all $20$ cells, while
+$\TEPE_{\mathrm{corr}}$ improves in $9$ of $20$ --- at $k{=}1$ for every
+backbone, and at every lag for Stereo Anywhere, the backbone whose raw
+prediction is weakest. The $11$ cells where it degrades are all at $k\geq2$ on
+the four stronger backbones.
 
 This rules out a convenient explanation. One might attribute a rising
-temporal-error metric to a grid metric penalising legitimate scene
-motion, but $\TEPE_{\mathrm{corr}}$ \emph{is} motion compensated and
-still degrades on D2. The two ask different questions: OPW asks whether
+temporal-error metric to a grid metric penalising legitimate scene motion, but
+$\TEPE_{\mathrm{corr}}$ \emph{is} motion compensated and still degrades at the
+longer lags on D2. The two ask different questions: OPW asks whether
 consecutive predictions agree with each other, $\TEPE_{\mathrm{corr}}$
 whether the predicted temporal change matches the true one. On the split
 used to select the operating point, the module therefore becomes more
-self-consistent while tracking the true change less faithfully. We
-report this against our own interest.
+self-consistent while, beyond one frame, tracking the true change less
+faithfully. We report this against our own interest.
 
 % ============================================================
 \section{Forensics of the Support Violation}

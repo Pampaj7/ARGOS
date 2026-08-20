@@ -2,10 +2,10 @@
 \citation{allan2021scared,edwards2022servct}
 \citation{lipson2021raftstereo,li2022crestereo,bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}
 \citation{karaev2023dynamicstereo,li2023codd,jing2024bida,wang2025ppm}
-\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
-\newlabel{sec:intro}{{I}{1}{}{}{}}
 \citation{lipson2021raftstereo,li2022crestereo}
 \citation{bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\newlabel{sec:intro}{{I}{1}{}{}{}}
 \citation{li2023codd}
 \citation{karaev2023dynamicstereo}
 \citation{wang2025ppm}
@@ -14,6 +14,7 @@
 \citation{hu2025depthcrafter}
 \citation{wang2023nvds}
 \citation{poggi2022continual}
+\citation{li2023codd}
 \citation{xu2024stereodiffusion}
 \citation{aleotti2021ndr}
 \citation{lai2018blind}
@@ -27,6 +28,8 @@
 \citation{edwards2022servct}
 \citation{long2021edssr,recasens2021endodepth}
 \citation{teed2020raft,wang2024searaft}
+\citation{he2016resnet}
+\citation{li2023codd}
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
 \newlabel{sec:related}{{II}{2}{}{}{}}
 \@writefile{toc}{\contentsline {paragraph}{\numberline {II-.0.a}Deep stereo matching.}{2}{}\protected@file@percent }
@@ -38,78 +41,68 @@
 \newlabel{sec:method}{{III}{2}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {III-A}External Causal Interface}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {III-B}Causal Motion Alignment}{2}{}\protected@file@percent }
-\citation{he2016resnet}
-\citation{li2023codd}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  TETHER at three scales. \textbf  {(a)} Bounded recurrence: memory carries the \emph  {fused} disparity forward, and every $H{=}4$ frames the chain is cut and re-tied to raw geometry the frozen network produced independently (teal). The five frames are consecutive and the two disparity rows share one colour scale, differing by $0.126$\,px on average. One fitted plane is removed from all ten disparity panels: the surface is smooth at this resolution, a $7$\,px depth ramp carrying about $1$\,px of anatomy, so an absolute rendering shows a gradient and no scene. The same plane is subtracted from both rows, so the difference between them is untouched. \textbf  {(b)} One time step; dashed grey is frozen, the single orange block is the only trained component and emits one scalar per pixel, $w_t$, rather than geometry. \textbf  {(c)} The evidence space: none of the $38$ channels carries ground truth, backbone identity or a future frame, and none is produced by a learned feature extractor. }}{3}{}\protected@file@percent }
-\newlabel{fig:system}{{1}{3}{}{}{}}
-\newlabel{eq:fb}{{1}{3}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {III-C}Shared External Evidence}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {III-D}Reset-and-Fusion Decision Head}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-C}Shared External Evidence}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-D}Reset-and-Fusion Decision Head}{2}{}\protected@file@percent }
 \citation{allan2021scared}
 \citation{min2025s2m2}
 \citation{lipson2021raftstereo}
 \citation{bartolomei2025stereoanywhere}
 \citation{li2022crestereo}
 \citation{wen2026fastfoundationstereo}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  TETHER at three scales. \textbf  {(a)} Bounded recurrence: memory carries the \emph  {fused} disparity forward, and every $H{=}4$ frames the chain is cut and re-tied to raw geometry the frozen network produced independently (teal). The five frames are consecutive; the two disparity rows share one colour scale and differ by $0.126$\,px on average, with one fitted plane removed from all ten panels so the anatomy is visible under a $7$\,px depth ramp. \textbf  {(b)} One time step; dashed grey is frozen, the single orange block is the only trained component and emits one scalar per pixel, $w_t$, rather than geometry. \textbf  {(c)} The evidence space: none of the $38$ channels carries ground truth, backbone identity or a future frame.}}{3}{}\protected@file@percent }
+\newlabel{fig:system}{{1}{3}{}{}{}}
+\newlabel{eq:support}{{1}{3}{}{}{}}
+\newlabel{eq:fusion}{{2}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-E}Bounded Corrected-State Recurrence}{3}{}\protected@file@percent }
+\newlabel{sec:recurrence}{{III-E}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-F}Training Objective}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Protocol}{3}{}\protected@file@percent }
+\newlabel{sec:experimental}{{IV}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {IV-A}Training}{3}{}\protected@file@percent }
 \citation{loza2025drends}
-\newlabel{eq:support}{{3}{4}{}{}{}}
-\newlabel{eq:fusion}{{4}{4}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {III-E}Bounded Corrected-State Recurrence}{4}{}\protected@file@percent }
-\newlabel{sec:recurrence}{{III-E}{4}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {III-F}Training Objective}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Protocol}{4}{}\protected@file@percent }
-\newlabel{sec:experimental}{{IV}{4}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {IV-A}Training}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {IV-B}External Evaluation}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-B.0.a}DRENDS.}{4}{}\protected@file@percent }
 \citation{geifman2019selectivenet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {IV-C}Unified Temporal-Refinement Evaluation}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.a}Spatial geometry.}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.b}Temporal fidelity.}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.c}Intervention harm and benefit.}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.d}Frame-level tails.}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{5}{}\protected@file@percent }
-\newlabel{sec:results}{{V}{5}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-A}Does the Learned Temporal Policy Matter?}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-B}Why $H=4$, and Why Recurrence Must Be Bounded}{5}{}\protected@file@percent }
-\newlabel{sec:horizon}{{V-B}{5}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces  One frozen TETHER checkpoint, seed $0$, across five estimators and three arenas; every EPE and Bad1 cell is raw$\rightarrow $TETHER, lower is better. Two estimators were excluded from temporal-head training, so the lower-right block is the joint shift usually left unmeasured. DTCE is the reduction in grid-based temporal change error at lag $k{=}4$, in \%, higher is better, averaging per-sequence relative reductions as every per-backbone reduction in this paper does; on the development split it is backbone-dependent and we report it only where it is confirmatory (Sec.~\ref {sec:horizon}). Sec.~\ref {sec:seeds} gives the three-seed spread. }}{6}{}\protected@file@percent }
-\newlabel{tab:grid}{{I}{6}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces  Matched-policy closure on D2, all five backbones and all sequences pooled before taking each ratio; reductions in \%, higher is better, DTCE at lag $k{=}4$. Every row shares the frozen predictions, the alignment, the support contract, the $H{=}4$ state machine and the evaluation code --- only the policy changes, and the six rows above the rule load no checkpoint. The full grid of fifteen policies is in the text. Mean EPE is not the whole story: the smoothing policies buy it with bad pixels, and the harder they blend the worse that trade becomes. }}{6}{}\protected@file@percent }
-\newlabel{tab:closure}{{II}{6}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-C}Cross-Backbone Development Behaviour}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-D}Held-Out Cross-Backbone Confirmation}{6}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Per-frame Bad1, raw against refined, for \emph  {every} scored frame of each split --- five backbones, all sequences, no selection. Points below the diagonal are improved. The worsened band hugs the diagonal while the improved mass extends far from it: the frame-level count-versus-magnitude asymmetry behind $B^+/H^+$. On held-out D7, $56\%$ of the $15{,}535$ frames improve against $14\%$ worsened; on development D2 the split is $45\%$ against $18\%$, so the frame-level margin is wider on the split that took no part in any choice. }}{6}{}\protected@file@percent }
-\newlabel{fig:trace}{{2}{6}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-E}Seed Variance, and What It Reveals About Selection}{6}{}\protected@file@percent }
-\newlabel{sec:seeds}{{V-E}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {IV-B}External Evaluation}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {IV-C}Unified Temporal-Refinement Evaluation}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.a}Spatial geometry.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.b}Temporal fidelity.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {IV-C.0.c}Intervention harm and benefit.}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{4}{}\protected@file@percent }
+\newlabel{sec:results}{{V}{4}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-A}Does the Learned Temporal Policy Matter?}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-B}Why $H=4$, and Why Recurrence Must Be Bounded}{4}{}\protected@file@percent }
+\newlabel{sec:horizon}{{V-B}{4}{}{}{}}
 \citation{jing2024bida}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces  One frozen TETHER checkpoint, seed $0$, across five estimators and three arenas; every EPE and Bad1 cell is raw$\rightarrow $TETHER, lower is better. Two estimators were excluded from temporal-head training, so the lower-right block is the joint shift usually left unmeasured. DTCE is the macro reduction in temporal change error at lag $k{=}4$, higher is better; on development it is backbone-dependent (Sec.~\ref {sec:horizon}). }}{5}{}\protected@file@percent }
+\newlabel{tab:grid}{{I}{5}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces  Matched-policy closure on D2, seed $0$, all five backbones and all sequences pooled before taking each ratio; reductions in \%, higher is better, DTCE at lag $k{=}4$. Every row shares the frozen predictions, the alignment, the support contract, the $H{=}4$ state machine and the evaluation code --- only the policy changes. The first five rows load no checkpoint at all; unbounded recurrence is our own trained head with the re-anchor removed, which is why it is the one that inverts. The full grid of fifteen policies is in the supplement. }}{5}{}\protected@file@percent }
+\newlabel{tab:closure}{{II}{5}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-C}Cross-Backbone Development Behaviour}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-D}Held-Out Cross-Backbone Confirmation}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-E}Seed Variance, and What It Reveals About Selection}{5}{}\protected@file@percent }
+\newlabel{sec:seeds}{{V-E}{5}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-F}Refinement as an Intervention}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-G}Head-to-Head Against a Published Stabiliser}{5}{}\protected@file@percent }
+\newlabel{sec:bida}{{V-G}{5}{}{}{}}
 \citation{zeng2024tcstereo}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-F}Refinement as an Intervention}{7}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-G}Head-to-Head Against a Published Stabiliser}{7}{}\protected@file@percent }
-\newlabel{sec:bida}{{V-G}{7}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces  Out-of-domain common support, five DRENDS recordings, $117.4$M pixels; \emph  {neither} method has seen this domain. Every row refines the same frozen RAFT-Stereo \emph  {robust} predictions; lower is better. }}{7}{}\protected@file@percent }
-\newlabel{tab:bida}{{III}{7}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-H}External Zero-Shot Geometry on DRENDS}{7}{}\protected@file@percent }
-\newlabel{sec:drends}{{V-H}{7}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces  Zero-shot DRENDS, one SCARED-trained checkpoint, five recordings $\times $ five estimators $\times $ four metrics. Relative change in \%, negative is better; each entry is the mean over the five recordings of the per-recording relative change. Every one of the $100$ cells improves. Nothing is adapted, retrained or tuned for this domain, and two of the five estimators were never seen in temporal-head training. }}{7}{}\protected@file@percent }
-\newlabel{tab:drends}{{IV}{7}{}{}{}}
 \citation{he2016resnet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-I}Ablating Our Own Design Decisions}{8}{}\protected@file@percent }
-\newlabel{sec:ablations}{{V-I}{8}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces  Held-out relative reduction (\%), not error: higher is better. The four deviations were pre-registered against the original $142$-channel configuration; dropping its learned evidence is what \textsc  {TETHER}\ now is, so the shipped model is the top row and the configuration it was ablated from is the first row below; the indented rows are deviations from that configuration. Three-seed means where marked. }}{8}{}\protected@file@percent }
-\newlabel{tab:ablations}{{V}{8}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {V-J}The Support Contract Is Load-Bearing}{8}{}\protected@file@percent }
-\newlabel{sec:support}{{V-J}{8}{}{}{}}
-\newlabel{sec:masking}{{V-J}{8}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Analysis}{8}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {VI-.0.a}What each branch of $w_t=r_tf_t$ does.}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-H}External Zero-Shot Geometry on DRENDS}{6}{}\protected@file@percent }
+\newlabel{sec:drends}{{V-H}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-I}Ablating Our Own Design Decisions}{6}{}\protected@file@percent }
+\newlabel{sec:ablations}{{V-I}{6}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces  Held-out relative reduction (\%), not error: higher is better. The four deviations were pre-registered against the $142$-channel configuration; dropping its learned evidence is what \textsc  {TETHER}\ now is, so the shipped model is the top row and the configuration it was ablated from is the row below, with its deviations indented. Three-seed means where marked. }}{6}{}\protected@file@percent }
+\newlabel{tab:ablations}{{III}{6}{}{}{}}
 \citation{docea2026d4d}
-\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion and Limitations}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.a}What the splits support.}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.b}What the metrics cannot say.}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.c}What does not improve downstream.}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.d}Cost, and where it is.}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {V-J}The Support Contract Is Load-Bearing}{7}{}\protected@file@percent }
+\newlabel{sec:support}{{V-J}{7}{}{}{}}
+\newlabel{sec:masking}{{V-J}{7}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Analysis}{7}{}\protected@file@percent }
+\newlabel{sec:analysis}{{VI}{7}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {VI-.0.a}What each branch of $w_t=r_tf_t$ does.}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion and Limitations}{7}{}\protected@file@percent }
+\newlabel{sec:limits}{{VII}{7}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.a}What the splits support.}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.b}What the metrics cannot say.}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.c}What does not improve downstream.}{7}{}\protected@file@percent }
 \bibcite{li2023codd}{1}
 \bibcite{karaev2023dynamicstereo}{2}
 \bibcite{jing2024bida}{3}
@@ -137,6 +130,7 @@
 \bibcite{poggi2022continual}{25}
 \bibcite{poggi2020uncertainty}{26}
 \bibcite{recasens2021endodepth}{27}
-\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion}{10}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{10}{}\protected@file@percent }
-\gdef \@abspage@last{10}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {VII-.0.d}Cost, and where it is.}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{8}{}\protected@file@percent }
+\gdef \@abspage@last{8}
