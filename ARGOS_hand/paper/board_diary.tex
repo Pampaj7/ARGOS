@@ -17105,4 +17105,65 @@ file I happened to have open. The header comment that tells the reader which
 run directory belongs to which head lives in the main paper only. It should
 live wherever a number does.
 
+
+\section*{Sweeping the rest of the supplement, and a table with no source}
+
+Having found the supplement on the wrong head, I went through its remaining
+sections one at a time instead of spot-checking. Six more were the
+$142$-channel configuration's: per-recording DRENDS, the seed study,
+intervention quality per backbone, three-dimensional consistency, stage-wise
+runtime, and the augmented-training comparison.
+
+Three of those are worth recording individually.
+
+The DRENDS table was missing a row --- RAFT-Stereo on Vid14 --- while the
+sentence beneath it counted sixty cells. Fourteen rows, sixty claimed.
+
+The runtime table reported $33.601$\,ms, $124.2$\,MB and a ``$177$k-parameter
+head'', and concluded that $79\%$ of the overhead is optical flow. On the
+shipped head it is $28.903$\,ms, $95.2$\,MB, a $155$k head, and $91\%$ flow.
+Its closing sentence called removing the reverse pass ``the most promising
+efficiency ablation we have not run'' --- we ran the inference-time half of it
+hours earlier and found it costs this head nothing.
+
+And the one I did not expect. The section on frame-to-frame surface
+consistency opened by asserting that SCARED-C provides no per-frame camera
+pose, so reconstruction drift cannot be measured. That claim has been retracted
+four times, once from the very script that produced the section's numbers
+(\texttt{c8ccde0}). This was the fifth copy, and it survived because retracting
+a claim from code does not retract it from prose that quotes the code.
+
+\subsection*{A table I cannot source}
+
+The motion-compensated fidelity table was neither head. It printed D2
+$\TEPE_{\mathrm{corr}}$ for S$^2$M$^2$-S as $+24.5/+40.1/+12.9/+19.7$. The
+$142$-channel CSV of record gives $+0.5/+10.4/+3.6/+8.0$, and that CSV was
+written four hours \emph{before} the table was committed. I cannot reconstruct
+where the printed numbers came from. They are replaced by ones I can reproduce
+from the run, on the shipped head.
+
+The conclusion under it was wrong in the direction that flattered nobody. It
+said OPW improves everywhere on D2 while $\TEPE_{\mathrm{corr}}$ ``degrades
+everywhere''. On the shipped head $\TEPE_{\mathrm{corr}}$ improves in nine of
+twenty D2 cells: at lag~$1$ for every backbone, and at every lag for Stereo
+Anywhere --- the backbone whose raw prediction is weakest. The eleven
+degrading cells are all at $k\geq2$ on the four stronger backbones. So the
+module tracks the true one-frame change better everywhere, and loses only
+beyond one frame. That is both more precise and less damning than what we had
+written about ourselves, and I want it on the record that the correction went
+this way, because most of tonight's went the other.
+
+Held out, both metrics improve in all twenty cells, which is what the main
+paper claims.
+
+\subsection*{Tally}
+
+Five sweeps, and every file I opened had been left behind by the
+recanonicalisation: the supplement (four sections, then six more), the slide
+deck shown to the group, a README, and \texttt{evaluate\_temporal\_corrected.py},
+which had no \texttt{--output} flag and so could only ever overwrite the old
+head's results --- which is precisely why nobody re-ran it. The commit that
+performed the recanonicalisation listed twelve things. At least eight were
+missing from that list.
+
 \end{document}
