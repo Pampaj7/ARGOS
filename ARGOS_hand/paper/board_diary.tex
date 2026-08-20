@@ -17545,4 +17545,33 @@ selection-optimism thread: seed spread, per-pixel AUROC, the closure's
 development margins, and now the per-frame series, each losing most but not
 all of its development signal held out.
 
+
+
+\section*{The declared endpoint holds: the reverse pass is droppable at deployment}
+
+The shipped checkpoint with $C^{FB}$ pinned to $1.0$ at inference, on
+held-out D7: Bad1 reduction $5.77$ against its own unpinned $5.69$
+($+0.08$, inside even the $0.22$ seed spread, let alone the declared $0.37$
+threshold); EPE $5.43$ against $5.49$. On D2 it reproduces the known
+$3.74$ ($3.69$ unpinned). The declaration wrote the rule before the number
+existed, and the number satisfies it: \textbf{train with the cue, deploy
+without the reverse pass} --- $28.9 \to {\sim}15.8$\,ms, $45\%$ of the module,
+the checkpoint unchanged. Together with A5 (training without the cue loses
+$0.53$ points), the pair says the cue is a training-time scaffold in both
+directions now, each measured held out. The converse arm (A5's head fed the
+real cue) is minutes from landing and completes the argument that the
+inference indifference is architectural.
+
+\section*{A6: the twenty-five correlations are load-bearing}
+
+Geometry-only (13 channels: disparities, residuals, motion, RGB --- no
+quarter-resolution correlations) lands at held-out Bad1 $4.64$ against the
+shipped $5.84\pm0.22$: $-1.20$ points, over three times the threshold, and
+EPE $4.44$ against $5.61$. Removing two thirds of the evidence space costs a
+fifth of the held-out gain. The $142 \to 78 \to 38$ ladder never tested below
+$38$; now the floor is measured, and the $25$ upsampled correlations are what
+the $38$-channel head cannot do without. Both results are diary-only until
+morning authorisation; the runtime paragraph rewrite (withdrawal $\to$
+deploy-without claim) and the A6 table row are drafted and waiting.
+
 \end{document}
