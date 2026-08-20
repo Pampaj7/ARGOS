@@ -17199,4 +17199,51 @@ guarantees that every subsequent run quietly undoes the rename. The commit that
 did the recanonicalisation was careful and complete about prose. It did not
 touch a single \texttt{argparse} line.
 
+
+
+\section*{The map metric survives its own degenerate control, and the horizon sweep is monotone}
+
+The world-frame grid finished all $35$ cells this afternoon, and both halves of
+the reviewer's objection now have measured answers.
+
+The uncomfortable half first. Our contribution (iii) argues that a temporal
+metric a degenerate policy can win is not a metric, and the reviewer asked
+whether the world-frame excess-over-GT-floor number is such a metric. It is
+not. Copy-previous \emph{loses} it, badly: $-54.0\%$ on D2 (cells $-34.9$,
+$-87.5$, $-39.5$) and only $+2.8\%$ on D7 against our $+11.7\%$. Warped-previous
+at full weight also loses, $-37.6\%$ on D2 and $+7.2\%$ on D7. On the
+no-reference score the same copy-previous policy removes $97.3\%$ of the
+apparent signal; on the world-frame number it is the worst policy in the table.
+Staying still does not win agreement across views.
+
+The mechanism half. Sweeping the recurrence horizon of the shipped head:
+
+\begin{center}
+\begin{tabular}{lcc}
+horizon & D2 & D7 \\
+$H{=}1$ & $-3.6\%$ & $+8.9\%$ \\
+$H{=}2$ & $-8.6\%$ & $+10.4\%$ \\
+$H{=}4$ & $-15.5\%$ & $+11.7\%$ \\
+$H{=}6$ & $-20.2\%$ & $+12.2\%$ \\
+\end{tabular}
+\end{center}
+
+Monotone on both splits, opposite signs. On D2 the damage grows with the
+horizon --- a factor of six from one warp to six --- so it is alignment error
+\emph{accumulated by the recurrence}, not the cost of a single warp; and the
+single warp applied at full weight (warped-previous, $-37.6\%$) shows the gate
+is what keeps TETHER's $H{=}1$ cost down at $-3.6\%$. On D7 the benefit rises
+with the horizon.
+
+A correction against my own earlier reading: with the last cell filled, D7 is
+\emph{not} peaked at the shipped $H{=}4$ --- $H{=}6$ edges it, $+12.2$ against
+$+11.7$. The honest sentence is that $H{=}4$ was frozen pre-registration on the
+per-frame trade-off, and on the map metric the D7 curve is still rising at the
+frozen point while the D2 curve is still falling. Anyone wanting a mapping
+configuration would trade differently, and the paper should not pretend the
+frozen point is optimal for a criterion that did not exist when it was frozen.
+
+None of this is in the paper yet; edits now require authorisation, so this
+entry is the register.
+
 \end{document}
