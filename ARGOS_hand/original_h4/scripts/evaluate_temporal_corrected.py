@@ -50,6 +50,9 @@ def main() -> None:
     parser.add_argument("--backbones", nargs="+", default=list(BACKBONES))
     parser.add_argument("--sequences", nargs="+")
     parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    # A second head must not land on the first one's record: the default path holds the
+    # 142-channel run and overwriting it would leave two configurations behind one name.
+    parser.add_argument("--output", type=Path, default=OUT)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--flow-batch-size", type=int, default=32)
     parser.add_argument("--max-frames", type=int)
@@ -164,15 +167,16 @@ def main() -> None:
                                          "support": leaf.get("support_count")})
             print(f"  {backbone}: {len(rows)} rows", flush=True)
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    out = args.output
+    out.mkdir(parents=True, exist_ok=True)
     import csv
-    target = OUT / f"temporal_corrected_{args.split}.csv"
+    target = out / f"temporal_corrected_{args.split}.csv"
     with target.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, list(rows[0]) if rows else
                                 ["split", "sequence", "backbone", "horizon", "method", "metric", "value", "support"])
         writer.writeheader()
         writer.writerows(rows)
-    (OUT / f"run_manifest_{args.split}.json").write_text(json.dumps({
+    (out / f"run_manifest_{args.split}.json").write_text(json.dumps({
         "project": "ARGOS v2", "generated_at": datetime.now(timezone.utc).isoformat(),
         "module": args.module, "module_provenance": adapter.describe(),
         "split": args.split, "sequences": list(sequences), "backbones": list(args.backbones),

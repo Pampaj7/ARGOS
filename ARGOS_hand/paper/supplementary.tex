@@ -179,7 +179,9 @@ because it changes the conclusion.
 
 $\TEPE_{\mathrm{corr}}$ and OPW require a correspondence field, supplied
 here from the same SEA-RAFT flows used for warping. Table~\ref{sup:tepe}
-gives the relative change after refinement.
+gives the relative change after refinement, on the $142$-channel
+configuration; the family is a diagnostic the paper does not build on, and the
+shipped head is being measured on it separately.
 
 \begin{table}[htb]
 \centering
@@ -282,30 +284,31 @@ and all five recordings. Negative is better.}
 \toprule
 Backbone & Recording & EPE & Bad3 & d.MAE & d.RMSE \\
 \midrule
-RAFT-Stereo & Vid10 & -5.7\% & -11.3\% & -3.8\% & -3.4\% \\
-(seen)      & Vid11 & -3.4\% & -21.9\% & -2.5\% & -1.5\% \\
-            & Vid12 & -8.4\% & -22.7\% & -6.7\% & -6.0\% \\
-            & Vid13 & -4.3\% & -14.2\% & -3.2\% & -3.0\% \\
+RAFT-Stereo & Vid10 & -6.0\% & -11.9\% & -4.0\% & -3.5\% \\
+(seen)      & Vid11 & -3.9\% & -27.0\% & -2.8\% & -1.8\% \\
+            & Vid12 & -9.1\% & -23.3\% & -7.3\% & -6.4\% \\
+            & Vid13 & -4.5\% & -14.1\% & -3.3\% & -3.1\% \\
+            & Vid14 & -4.7\% & -27.2\% & -3.7\% & -3.0\% \\
 \midrule
-CREStereo   & Vid10 & -5.2\% &  -8.7\% & -3.4\% & -3.2\% \\
-(unseen)    & Vid11 & -3.7\% & -22.8\% & -2.7\% & -1.8\% \\
-            & Vid12 & -6.3\% & -18.5\% & -4.8\% & -4.3\% \\
-            & Vid13 & -5.2\% & -10.4\% & -3.6\% & -3.3\% \\
-            & Vid14 & -5.6\% & -26.5\% & -4.4\% & -4.1\% \\
+CREStereo   & Vid10 & -5.3\% &  -9.4\% & -3.6\% & -3.7\% \\
+(unseen)    & Vid11 & -4.2\% & -27.2\% & -3.0\% & -2.1\% \\
+            & Vid12 & -7.2\% & -20.4\% & -5.6\% & -4.9\% \\
+            & Vid13 & -5.5\% & -10.9\% & -3.8\% & -3.5\% \\
+            & Vid14 & -5.9\% & -27.5\% & -4.5\% & -4.2\% \\
 \midrule
-Fast-Found. & Vid10 & -5.0\% &  -7.3\% & -3.0\% & -2.9\% \\
-(unseen)    & Vid11 & -3.2\% & -20.4\% & -2.3\% & -1.4\% \\
-            & Vid12 & -5.3\% & -10.3\% & -4.4\% & -3.6\% \\
-            & Vid13 & -4.3\% & -10.9\% & -3.0\% & -2.9\% \\
-            & Vid14 & -4.7\% & -27.4\% & -3.8\% & -3.5\% \\
+Fast-Found. & Vid10 & -5.1\% &  -7.7\% & -3.2\% & -3.2\% \\
+(unseen)    & Vid11 & -3.6\% & -24.3\% & -2.7\% & -1.9\% \\
+            & Vid12 & -6.0\% & -11.1\% & -5.0\% & -4.0\% \\
+            & Vid13 & -4.3\% & -10.3\% & -3.1\% & -2.9\% \\
+            & Vid14 & -4.5\% & -25.6\% & -3.6\% & -2.9\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-All 60 recording--backbone--metric cells improve. The per-recording
-pattern is set by the recording and not by the estimator: on Vid10 the
-EPE change is $-5.7\%$, $-5.2\%$ and $-5.0\%$ for the seen and the two
-unseen backbones. That alignment, rather than the pooled mean, is what
+All 60 cells here improve, as do the other 40 the main paper aggregates
+over. The per-recording pattern is set by the recording and not by the
+estimator: on Vid10 the EPE change is $-6.0\%$, $-5.3\%$ and $-5.1\%$ for the
+seen and the two unseen backbones. That alignment, rather than the pooled mean, is what
 supports backbone independence.
 
 % ============================================================
@@ -349,11 +352,18 @@ is the most promising efficiency ablation we have not run.
 \label{sup:3d}
 % ============================================================
 
-SCARED-C provides no per-frame camera pose, so global reconstruction
-drift cannot be measured. We instead back-project each frame's disparity
-to a metric cloud and compare it against the previous frame's cloud
-pulled through the same SEA-RAFT correspondence: frame-to-frame surface
-stability, not reconstruction drift.
+This section is superseded and kept for the record. It was written when we
+believed SCARED-C carried no usable per-frame camera pose, so that global
+reconstruction drift could not be measured; that belief was wrong, and the
+world-frame measurement in the main paper --- which does accumulate geometry
+in one frame using the corrected poses --- is the one that answers the
+question this section could only approach. What follows instead back-projects
+each frame's disparity to a metric cloud and compares it against the previous
+frame's cloud pulled through the same SEA-RAFT correspondence: frame-to-frame
+surface stability, not reconstruction drift. The numbers are the
+$142$-channel configuration's; we have not re-run them on the shipped head,
+because the measurement they belong to has been replaced rather than
+updated.
 
 \begin{table}[htb]
 \centering
@@ -385,7 +395,8 @@ Fast-FoundationStereo & 3.7381 & 3.8742 & 5.8586 \\
 Excess over the GT floor falls on four backbones of five, for instance
 $0.0326 \rightarrow 0.0276$\,mm on RAFT-Stereo, and rises slightly on
 Fast-FoundationStereo. The effect is real but of the order of
-$0.005$\,mm, which is why it does not appear in the paper.
+$0.005$\,mm, which is why it never appeared in the paper even before the
+world-frame measurement replaced it.
 
 The normal metric carries a caveat that removes its floor entirely: GT
 normals are \emph{noisier} than every prediction ($5.86^\circ$ against
@@ -596,17 +607,19 @@ our evaluation code and differs only in the decision rule.
 Pre-registered before any seed result existed. The seed is the only field
 that varies from the locked recipe; the training script is a sibling of
 \texttt{train.py} that reuses its guards and overrides only that field.
-Sequences are the resampling unit for the paired bootstrap, seeds are
-averaged inside each resample, and four things were prohibited in advance:
+The paired bootstrap resamples backbone--sequence cells, seeds are averaged
+inside each resample, and four things were prohibited in advance:
 selecting the best seed, re-tuning any threshold after seeing seed
 results, changing the checkpoint-selection rule, and using D7 for any
 decision other than the final reported numbers.
 
 \begin{table}[!htb]
 \centering
-\caption{Relative Bad1 reduction (\%) per backbone over three seeds, with
-the paired sequence-level bootstrap interval and the fraction of
-resamples in which refinement failed to help.}
+\caption{Relative Bad1 reduction (\%) per backbone over three seeds of the
+\emph{$142$-channel} configuration, with the paired bootstrap interval and the
+fraction of resamples in which refinement failed to help. This is the study
+that found the development instability; the shipped head's own three seeds are
+below.}
 \label{tab:seeds_full}
 \setlength{\tabcolsep}{3pt}
 \scriptsize
@@ -649,6 +662,41 @@ comparisons follow the same direction. Our checkpoint-selection rule
 picks best D2 fused EPE, so seed $0$ is by construction the run that
 looked best on D2; the D2 margin therefore carries selection optimism and
 the held-out margin does not.
+
+\paragraph{The shipped head does not do this.} The same study on the
+$38$-channel head, same recipe, same seeds, same rule:
+
+\begin{table}[!htb]
+\centering
+\caption{Relative Bad1 reduction (\%) per backbone over three seeds of the
+shipped head.}
+\label{tab:seeds_a2}
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Split & Backbone & s0 & s1 & s2 & mean\,$\pm$\,std \\
+\midrule
+D2 & CREStereo      & 10.61 & 10.25 & 10.30 & $10.39\pm0.20$ \\
+D2 & Fast-Found.    &  9.95 &  9.25 &  9.53 & $9.58\pm0.35$ \\
+D2 & RAFT-Stereo    & 10.71 &  8.68 & 10.03 & $9.81\pm1.03$ \\
+D2 & S$^2$M$^2$-S   &  9.13 &  9.57 &  9.68 & $9.46\pm0.29$ \\
+D2 & StereoAnywhere & 20.51 & 20.71 & 21.69 & $20.97\pm0.63$ \\
+\midrule
+D7 & CREStereo      &  4.74 &  4.75 &  5.15 & $4.88\pm0.24$ \\
+D7 & Fast-Found.    &  4.48 &  4.44 &  4.57 & $4.50\pm0.06$ \\
+D7 & RAFT-Stereo    &  5.47 &  5.46 &  5.84 & $5.59\pm0.22$ \\
+D7 & S$^2$M$^2$-S   &  6.40 &  6.42 &  6.94 & $6.58\pm0.31$ \\
+D7 & StereoAnywhere &  7.31 &  7.53 &  7.86 & $7.56\pm0.28$ \\
+\midrule
+\multicolumn{2}{@{}l}{Pooled} & 12.84 & 12.38 & 12.98 & $12.73\pm0.32$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No monotone fall, no inversion, and the pooled D2 deviation is $0.32$ points
+against the $2.53$ above. The instability was the evidence space, not the
+selection rule --- which is unchanged between the two tables.
 
 % ============================================================
 \section{TC-Stereo as an Integrated Reference, and Why It Is Weak Evidence}
@@ -832,7 +880,7 @@ The main paper quotes the ranges; this is the table behind them. $B^+/H^+$ is th
 \centering
 \scriptsize
 \caption{
-Canonical TETHER intervention quality.
+TETHER intervention quality, seed $0$.
 All ratios exceed one; higher is better.
 ``Rec./New'' is RecoveredBad1/NewBad1.
 }
@@ -843,11 +891,11 @@ All ratios exceed one; higher is better.
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}
 Backbone & $B^+/H^+$ & Rec./New & $B^+/H^+$ & Rec./New \\
 \midrule
-S$^2$M$^2$-S          & 1.76 & 3.1$\times$  & 2.10 & 6.0$\times$ \\
-RAFT-Stereo           & 2.05 & 2.9$\times$  & 2.85 & 3.2$\times$ \\
-Stereo Anywhere       & 4.59 & 10.4$\times$ & 3.30 & 5.9$\times$ \\
-CREStereo             & 2.23 & 4.3$\times$  & 2.40 & 4.6$\times$ \\
-Fast-FoundationStereo & 2.11 & 4.0$\times$  & 2.10 & 4.8$\times$ \\
+S$^2$M$^2$-S          & 1.39 & 3.8$\times$  & 2.16 & 7.5$\times$ \\
+RAFT-Stereo           & 1.58 & 4.9$\times$  & 2.92 & 4.7$\times$ \\
+Stereo Anywhere       & 3.07 & 9.9$\times$  & 3.25 & 11.1$\times$ \\
+CREStereo             & 1.70 & 5.0$\times$  & 2.57 & 4.7$\times$ \\
+Fast-FoundationStereo & 1.57 & 5.3$\times$  & 2.26 & 7.8$\times$ \\
 \bottomrule
 \end{tabular}
 \end{table}
