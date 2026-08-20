@@ -68,11 +68,11 @@ Raw EPE is $0.276202$. Positive reduction denotes improvement.}
 \toprule
 Method & EPE & Reduction \\
 \midrule
-\steer{} $H=6$ & \textbf{0.264656} & 4.18\% \\
-\steer{} $H=8$ & 0.264912 & 4.09\% \\
-\steer{} $H=4$ & 0.265028 & 4.05\% \\
-\steer{} $H=2$ & 0.267265 & 3.24\% \\
-\steer{} $H=1$ & 0.269001 & 2.61\% \\
+\steer{} $H=6$ & \textbf{0.265893} & 3.73\% \\
+\steer{} $H=4$ & 0.265998 & 3.69\% \\
+\steer{} $H=8$ & 0.266473 & 3.52\% \\
+\steer{} $H=2$ & 0.267858 & 3.02\% \\
+\steer{} $H=1$ & 0.269331 & 2.49\% \\
 \midrule
 Fixed $w=0.5$ & 0.274562 & 0.59\% \\
 EMA2          & 0.274562 & 0.59\% \\
@@ -83,9 +83,9 @@ Fixed $w=0.1$ & 0.275684 & 0.19\% \\
 Warped raw previous    & 0.276298 & $-0.03\%$ \\
 FB confidence weight   & 0.282182 & $-2.17\%$ \\
 Warped recurrent $w=1$ & 0.286035 & $-3.56\%$ \\
-Continuous recurrence  & 0.449349 & $-62.69\%$ \\
+Continuous recurrence  & 0.329140 & $-19.17\%$ \\
 \midrule
-Oracle raw/memory & 0.242223 & 12.30\% \\
+Oracle raw/memory & 0.241023 & 12.74\% \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -116,21 +116,21 @@ lower NewBad1 are better.}
 \toprule
 $H$ & EPE & $B^+/H^+$ & NewBad1 (\%) \\
 \midrule
-1 & 0.269001 & 2.39 & 0.0361 \\
-2 & 0.267265 & 2.50 & 0.0381 \\
-4 & 0.265028 & \textbf{2.53} & 0.0467 \\
-6 & \textbf{0.264656} & 2.30 & 0.0676 \\
-8 & 0.264912 & 2.04 & 0.1282 \\
+1 & 0.269331 & 1.82 & 0.0518 \\
+2 & 0.267858 & \textbf{1.85} & 0.0543 \\
+4 & 0.265998 & \textbf{1.85} & 0.0627 \\
+6 & \textbf{0.265893} & 1.74 & 0.0790 \\
+8 & 0.266473 & 1.60 & 0.1282 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 The two columns disagree, and that disagreement is the whole reason the
 operating point is not simply the EPE minimum. EPE bottoms out at $H=6$,
-by $0.14\%$ over $H=4$. Over the same step the beneficial-to-harmful
-magnitude ratio falls from $2.53$ to $2.30$ and then to $2.04$, while
-newly introduced Bad1 pixels rise from $0.0467\%$ to $0.0676\%$ to
-$0.1282\%$ --- nearly tripling between $H=4$ and $H=8$. Letting the
+by $0.04$ points over $H=4$. Over the same step the beneficial-to-harmful
+magnitude ratio falls from $1.85$ to $1.74$ and then to $1.60$, while
+newly introduced Bad1 pixels rise from $0.0627\%$ to $0.0790\%$ to
+$0.1282\%$ --- roughly doubling between $H=4$ and $H=8$. Letting the
 corrected state live longer buys a sliver of mean accuracy and pays for
 it in intervention risk.
 
@@ -157,19 +157,18 @@ $w^{\star}=\mathrm{clip}\big((g-d^{\raw})/(\widetilde m-d^{\raw}),0,1\big)$.
 \toprule
 Backbone & raw & \steer & $\{0,1\}$ & $[0,1]$ \\
 \midrule
-S$^2$M$^2$-S          & .2949 & .2850 & .2634 & .2610 \\
-RAFT-Stereo           & .3022 & .2914 & .2687 & .2658 \\
-Stereo Anywhere       & .3189 & .2964 & .2747 & .2720 \\
-CREStereo             & .2943 & .2832 & .2610 & .2582 \\
-Fast-FoundationStereo & .3037 & .2930 & .2715 & .2688 \\
+S$^2$M$^2$-S          & .2949 & .2858 & .2624 & .2599 \\
+RAFT-Stereo           & .3022 & .2920 & .2675 & .2645 \\
+Stereo Anywhere       & .3189 & .2974 & .2736 & .2708 \\
+CREStereo             & .2943 & .2838 & .2597 & .2568 \\
+Fast-FoundationStereo & .3037 & .2939 & .2702 & .2674 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The correction is real but small. Only $6.2\%$ of D2 pixels have the
-ground truth bracketed by the two candidates ($11$--$14\%$ on D7), so the
-two ceilings nearly coincide and the recovered fraction falls from
-$37.2\%$ to $34.5\%$. We report it because the published figure is
+The correction is real but small. Only $6.4\%$ of D2 pixels have the
+ground truth bracketed by the two candidates, so the two ceilings nearly
+coincide and the recovered fraction falls from $33.8\%$ to $31.4\%$. We report it because the published figure is
 measured against a ceiling the method cannot actually be limited by, not
 because it changes the conclusion.
 
@@ -724,11 +723,11 @@ supplementary.
 \paragraph{What Makes TETHER Work, and Why So Few Parameters Suffice}
 
 The closure isolates four requirements. Geometric alignment is necessary
-but not sufficient: the aligned memory carries a $12.30\%$ oracle
+but not sufficient: the aligned memory carries a $12.74\%$ oracle
 ceiling, yet using it indiscriminately fails, since warped raw memory
 yields no meaningful gain and both direct FB-confidence weighting and
 full recurrent replacement worsen EPE. Under identical evidence and
-support the learned policy obtains almost seven times the gain of the
+support the learned policy obtains more than six times the gain of the
 best fixed blend, and the recurrent state must stay bounded because
 continuous propagation accumulates error and collapses. The mechanism is
 motion alignment plus learned graded intervention plus bounded recurrent
@@ -737,18 +736,21 @@ state, not generic smoothing.
 This also explains the parameter count. The head never solves stereo
 matching: it receives two already meaningful candidates, $d_t^{\raw}$ and
 $\widetilde m_t$, plus evidence describing their disagreement, motion
-reliability, validity, matching consistency and appearance, so its
-problem is closer to judging whether temporal evidence is useful than to
-predicting disparity from RGB. Convex fusion further restricts the action
-space to a position between two candidate geometries. A decision problem
-that constrained is a plausible reason why one small head transfers to
-architectures absent from its training.
+reliability and validity, so its problem is closer to judging whether
+temporal evidence is useful than to predicting disparity from RGB. Convex
+fusion further restricts the action space to a position between the two
+candidate geometries. We previously offered that constraint as a plausible
+reason why one small head transfers to unseen architectures. The
+pre-registration required that claim to be withdrawn rather than softened if
+the relaxed-convexity ablation matched or beat the canonical model on the
+held-out endpoint. It did, by the largest margin in the table, so the claim is
+withdrawn: we do not know why the head transfers.
 
 \paragraph{The Oracle Gap Is the Next Problem}
 
-TETHER captures $37.2\%$ of the raw-versus-memory oracle gain and
-$34.5\%$ of the continuous oracle its convex action space could reach;
-only $6.2\%$ of D2 pixels have the ground truth bracketed by the two
+TETHER captures $33.8\%$ of the raw-versus-memory oracle gain and
+$31.4\%$ of the continuous oracle its convex action space could reach;
+only $6.4\%$ of D2 pixels have the ground truth bracketed by the two
 candidates, so the ceilings nearly coincide. Useful evidence already
 exists; the open problem is discriminating helpful from harmful
 intervention.
@@ -757,22 +759,24 @@ intervention.
 
 Recovering the effective weight exactly from the convex form,
 $w_t=(d_t^{\fused}-d_t^{\raw})/(\widetilde m_t-d_t^{\raw})$, and scoring
-it as a predictor of harmful intervention gives AUROC $0.366$--$0.382$ on
-D2 but $0.496$--$0.506$ on held-out D7, i.e.\ chance; the raw--memory
+it as a predictor of harmful intervention gives AUROC $0.393$--$0.408$ on
+D2 --- below chance on the split it was selected on --- and
+$0.488$--$0.507$ on held-out D7, i.e.\ chance; the raw--memory
 disagreement and the update magnitude behave the same way. The
-reliability curve inverts between splits --- for RAFT-Stereo the harm
-rate falls with $w_t$ on D2 ($0.550\rightarrow0.324$) and rises on D7
-($0.260\rightarrow0.450$) --- so $w_t$ is not a weak risk score but a
-sign-unstable one, capturing only $3.5\%$ and $6.1\%$ of the achievable
-selective gain. It is an intervention magnitude, not an uncertainty, and
-closing the oracle gap needs evidence the head does not receive.
+reliability curve inverts between splits --- for RAFT-Stereo, across the
+populated weight bins, the harm rate \emph{falls} with $w_t$ on D2
+($0.396\rightarrow0.287$) and \emph{rises} on D7
+($0.250\rightarrow0.362$) --- so $w_t$ is not a weak risk score but a
+sign-unstable one, and a threshold tuned on development would select the
+wrong pixels held out. It is an intervention magnitude, not an uncertainty,
+and closing the oracle gap needs evidence the head does not receive.
 
 \paragraph{Reconciling this with the intervention table}
 
 Taken alone, the previous paragraph appears to contradict the
 intervention-quality table of the main paper: if $w_t$ carries no information
 about harm on D7, how does the same policy reach $B^+/H^+$ between
-$2.10$ and $3.30$ there? The two statements are about different things,
+$2.18$ and $3.64$ there? The two statements are about different things,
 and the aggregate gain factorises exactly into them. Writing
 $\delta e = e^{\fused}-e^{\raw}$ per intervened pixel,
 %
@@ -785,16 +789,16 @@ $\delta e = e^{\fused}-e^{\raw}$ per intervened pixel,
 \label{eq:factorisation}
 \end{equation}
 %
-Pooled over the five backbones this evaluates to $2.839=1.642\times1.728$
-on held-out D7 and $2.662=1.355\times1.965$ on D2. On D7, $62.2\%$ of
-interventions improve the pixel and the improvements are $1.73\times$
-larger than the regressions ($0.0594$ against $0.0344$\,px).
+Pooled over the five backbones this evaluates to $2.861=1.294\times2.212$
+on held-out D7 and $2.028=1.114\times1.820$ on D2. On D7, $56.4\%$ of
+interventions improve the pixel and the improvements are $2.2\times$ larger
+than the regressions.
 
 Neither factor requires $w_t$ to rank anything. The policy shifts the
 \emph{distribution} of $\delta e$ favourably, which is what
 that table measures; the AUROC asks the
 strictly harder question of whether the scalar the head emits identifies
-\emph{which} pixels fall in the harmful $37.8\%$, and on held-out data it
+\emph{which} pixels fall in the harmful $43.6\%$, and on held-out data it
 does not. A policy can be reliably good on average and completely
 uninformative per pixel: those are independent properties, and TETHER has
 the first without the second.
@@ -860,8 +864,9 @@ ablations. This is the same evaluation on both splits and four metrics.
 \centering
 \caption{Relative reduction (\%) against the same raw predictions. The raw
 baseline is identical to six decimals across all six runs, so the rows are
-directly comparable. Canonical is the mean of three seeds; every variant
-is a single training run.}
+directly comparable. Canonical, A2 and A3 are means of three seeds; A1 and A4
+are single runs. ``Canonical'' is the $142$-channel configuration the
+deviations were registered against; A2 is the head the paper ships.}
 \label{tab:ablations_full}
 \setlength{\tabcolsep}{3pt}
 \scriptsize
@@ -873,8 +878,8 @@ is a single training run.}
 \midrule
 Canonical & 3.55 & 8.40 & 16.71 & 12.97 & 5.06 & 5.15 & 4.29 & 5.60 \\
 A1 & 4.18 & 8.81 & 15.76 & 13.11 & 4.93 & 4.88 & 4.12 & 5.46 \\
-A2 & 3.69 & 12.84 & 19.67 & 13.61 & 5.49 & 5.69 & 4.85 & 5.92 \\
-A3 & 4.28 & 9.22 & 19.28 & 13.76 & 5.61 & 5.85 & 5.83 & 6.09 \\
+A2 & 4.13 & 12.73 & 19.64 & 13.87 & 5.61 & 5.84 & 5.18 & 6.02 \\
+A3 & 3.85 & 8.10 & 18.34 & 13.10 & 5.24 & 5.68 & 5.53 & 5.89 \\
 A4 & 5.53 & 12.44 & 19.26 & 13.58 & 0.05 & 6.02 & 5.32 & 6.32 \\
 \bottomrule
 \end{tabular}
@@ -899,18 +904,26 @@ head generalises --- which is what one would expect of evidence that ties
 the decision to the training domain.
 
 Third, D2 and D7 disagree about A1. On D2 it is close to canonical on
-Bad1 ($8.81$ against $8.40$) but clearly worse on EPE ($4.18$ against
-$3.55$); on D7 it is marginally better on all four. This is the same
+Bad1 ($8.81$ against $8.40$) but better on EPE ($4.18$ against $3.55$); on
+D7 it is $0.27$ points below on the registered endpoint, inside the
+$0.37$-point threshold and so unreadable rather than worse. This is the same
 development-versus-held-out inversion the seed study found, and it is the
 reason the pre-registration named a held-out endpoint before any variant
 was trained.
 
-\paragraph{What we are not doing.} A2 is the strongest variant and it is
-not being promoted to canonical on the strength of a held-out win, because
-choosing on the held-out split is what makes a held-out split stop being
-one. It is being given the same three-seed treatment the canonical model
-has, and the comparison that could promote it is on D2, the development
-split, which exists for exactly that purpose.
+\paragraph{What happened next.} A2 was the strongest variant and was not
+promoted on the strength of a held-out win, because choosing on the held-out
+split is what makes a held-out split stop being one. It was given the same
+three-seed treatment the canonical model
+has, and the comparison that could promote it was fixed on D2, the
+development split, before those seeds were trained. It cleared that bar by
+$4.33$ points with a comparable spread, so it was promoted, and it is the
+head the main paper proposes. A3 was then given the same three-seed treatment
+for the opposite reason --- it beat its base by more than the declared
+threshold on the registered endpoint --- and it still does
+($5.68\pm0.16$ against $5.15\pm0.34$). We decline it on the $16\times$
+context-branch compute rather than on accuracy, and say so in the main
+paper rather than presenting the rejection as an evidential one.
 
 % ============================================================
 \section{A Metric Field We Do Not Report}
