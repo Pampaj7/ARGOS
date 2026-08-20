@@ -17060,4 +17060,49 @@ the base and left the reader to infer the fourth had lost.
 Eight pages, no errors, no undefined references, no overfull boxes. The only
 thing still open is the convergence probe at $20$ of $100$ epochs.
 
+
+\section*{The supplement was never recanonicalised, and it still made the claim we withdrew}
+
+Three days ago the paper was moved onto the $38$-channel head and the commit
+said ``abstract, contribution, method, grid, closure, horizons, ablations, seed
+study, out-of-domain, runtime, drift and conclusion all regenerated''. Twelve
+things. The supplement was not one of them, and nobody --- me, three reviewers
+reading for defects, or the header comment in \texttt{ICRA.tex} that lists
+exactly which directories belong to which head --- went downstairs to look.
+
+Its closure table, its horizon sweep, its oracle section and its
+Analysis-in-full were all the $142$-channel ablation's numbers under the label
+TETHER. Continuous recurrence at $-62.69\%$ where the shipped head is
+$-19.17$. The oracle ceiling at $12.30$ where the shipped head's own memory
+gives $12.74$. AUROC $0.366$--$0.382$ where ours is $0.393$--$0.408$.
+
+The one that should not have survived: earlier tonight the main paper gained a
+sentence saying the pre-registration's falsification clause fired and that the
+claim attributing cross-backbone transfer to the convex action space
+``appears nowhere in this paper''. It appeared in the supplement, in full, as
+``a decision problem that constrained is a plausible reason why one small head
+transfers to architectures absent from its training''. I wrote the withdrawal
+and the surviving copy of the withdrawn claim on the same night, in two files,
+and did not connect them.
+
+The ablation section was stale in a different way: it still said A2 ``is being
+given'' the three-seed treatment and ``is not being promoted''. A2 was
+promoted three days ago and is the model the paper proposes. The supplement was
+describing a decision as pending that the title page had already made.
+
+Two numbers I removed rather than corrected: the share of achievable selective
+gain the fusion weight captures ($3.5\%$ and $6.1\%$). I could not reproduce
+the definition from the CSV, and carrying the ablation's figures under the
+shipped head's name is the exact defect I was there to fix. The claim they
+supported --- that $w_t$ is sign-unstable rather than merely weak --- stands on
+the reliability inversion, which I can reproduce: for RAFT-Stereo the harm rate
+falls with $w_t$ on D2 ($0.396\rightarrow0.287$) and rises on D7
+($0.250\rightarrow0.362$).
+
+The lesson is dull and worth writing anyway. A recanonicalisation is a
+find-and-replace over a \emph{set of files}, and the set was defined by which
+file I happened to have open. The header comment that tells the reader which
+run directory belongs to which head lives in the main paper only. It should
+live wherever a number does.
+
 \end{document}
