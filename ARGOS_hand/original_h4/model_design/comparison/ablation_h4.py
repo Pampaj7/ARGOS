@@ -221,3 +221,27 @@ class UnconfinedAblationH4(AblationH4):
 
 def factory_a2_unconfined(*, device: str = "cuda:0", **_: Any) -> UnconfinedAblationH4:
     return UnconfinedAblationH4(variant="A2_no_learned_evidence", device=device)
+
+
+class A5WithRealCue(AblationH4):
+    """A5's checkpoint fed the real forward-backward confidence it trained without.
+
+    The shipped head trained WITH the cue ignores it at inference (constant substitution
+    moves the D2 closure by less than the seed spread). This is the converse arm: if the
+    head trained WITHOUT the cue is equally indifferent to receiving the real one, the
+    indifference is a property of the architecture at inference rather than an accident
+    of one checkpoint, and the train-with/deploy-without claim stops being anecdotal.
+    """
+
+    def _load(self):
+        model, extractor, _ = super()._load()
+        from model_design.comparison.ablation_variants import build_cues_without_learned_evidence
+        self._build_cues = build_cues_without_learned_evidence
+        return model, extractor, self._build_cues
+
+    def describe(self):
+        return super().describe() | {"cue_override": "real C^FB fed to the A5 head at inference"}
+
+
+def factory_a5_realfb(*, device: str = "cuda:0", **_: Any) -> A5WithRealCue:
+    return A5WithRealCue(variant="A5_no_fb_cue", device=device)

@@ -1021,8 +1021,23 @@ in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
 
 \section{Material Moved from the Main Paper}
 
-The main paper is eight pages. Four objects that were in it are now here in
+The main paper is eight pages. The objects that were in it are now here in
 full, and nothing measured was deleted to make room.
+
+\paragraph{The full metric family of the unified evaluation.}
+Spatial geometry: EPE/MAE, median, RMSE, P90/P95/P99, maximum, invalid rate
+and Bad-$1/3/5$ on disparity; Bad-$2/5/10$\,mm, AbsRel, SqRel and
+$\delta_{1,2,3}$ on metric depth. Temporal fidelity beyond DTCE: given
+correspondence, motion-compensated $\mathrm{TEPE}_{\mathrm{corr}}$, with
+estimated-flow correspondences marked as proxies; we do not build on this
+family because it improves on all five D7 backbones at all four lags but its
+two members disagree on D2 beyond one frame. Intervention accounting beyond
+the masses and rates: per bad-pixel threshold, NewBad, RecoveredBad, bad-rate
+delta and identity preservation --- the fraction of pixels already within
+$\tau$ still within it afterwards, a retention rate rather than a count of
+untouched pixels, since the blend moves almost every pixel on the support.
+Per frame, the mean signed error change and its tails; where a risk score
+exists, risk--coverage analysis.
 
 \paragraph{Table: out-of-domain head-to-head with BiDAStabilizer.}
 Five DRENDS recordings, $117.4$M pixels of common support, neither method in

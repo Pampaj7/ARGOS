@@ -487,34 +487,21 @@ checkpoint: no DRENDS data enters training, selection or calibration.
 Evaluation support cannot depend on the prediction:
 $M_{\mathrm{eval}} = M_{\mathrm{GT}} \cap M_{\mathrm{protocol}}$, and invalid
 predictions on valid support are penalised rather than silently removed.
-
-\paragraph{Spatial geometry.} EPE/MAE, median, RMSE, P90/P95/P99, maximum,
-invalid rate and Bad-$1/3/5$ on disparity; Bad-$2/5/10$\,mm, AbsRel, SqRel and
-$\delta_{1,2,3}$ on metric depth.
-
-\paragraph{Temporal fidelity.} At lags $k\in\{1,2,4,8\}$, grid-based temporal
-change error $\DTCE=|\Delta\text{prediction}-\Delta\text{target}|$ on fixed
-support, and, given correspondence, motion-compensated
-$\TEPE_{\mathrm{corr}}$, estimated-flow correspondences marked as proxies.
-DTCE scores agreement with the \emph{reference} change, not stillness: a
-frozen prediction has $\Delta{=}0$ and is charged the whole of the reference
-motion, so the degenerate replay that wins the no-reference score of
-Sec.~\ref{sec:limits} does not win this one. Every DTCE figure here is at
-$k{=}4$ unless stated. We do not build on the motion-compensated family: it
-improves on all five D7 backbones at all four lags, but on D2 its two members
-disagree beyond one frame.
-
-\paragraph{Intervention harm and benefit.}
-For $\delta e=e^{\fused}-e^{\raw}$ we measure the harm and benefit masses
+Temporal fidelity is change error on fixed support,
+$\DTCE=|\Delta\text{prediction}-\Delta\text{target}|$ at lags
+$k\in\{1,2,4,8\}$ ($k{=}4$ unless stated): it scores agreement with the
+\emph{reference} change, not stillness --- a frozen prediction has
+$\Delta{=}0$ and is charged the whole of the reference motion, so the
+degenerate replay that wins the no-reference score of Sec.~\ref{sec:limits}
+does not win this one. Intervention harm and benefit come from
+$\delta e=e^{\fused}-e^{\raw}$: harm and benefit masses
 $\HPlus=\mathbb{E}[\max(\delta e,0)]$, $\BPlus=\mathbb{E}[\max(-\delta e,0)]$
-and their rates $\HUR$, $\BUR$. Per bad-pixel threshold we report NewBad,
-RecoveredBad, bad-rate delta and identity preservation --- the fraction of
-pixels already within $\tau$ still within it afterwards, a retention rate and
-not a count of untouched pixels, since the blend moves almost every pixel on
-the support. Per frame we retain the mean signed error change and its tails,
-and where a risk score exists, risk--coverage analysis
-\cite{geifman2019selectivenet}. Aggregation is named at every number: macro is
-the mean of per-cell relative reductions, pooled sums before the ratio.
+with their rates, newly broken and recovered bad pixels per threshold, and
+identity preservation. Aggregation is named at every number: macro is the
+mean of per-cell relative reductions, pooled sums before the ratio. The full
+family --- spatial and metric-depth metrics, per-frame tails, risk--coverage
+\cite{geifman2019selectivenet}, and the motion-compensated temporal proxies
+we do not build on --- is defined in the supplement.
 
 \begin{table*}[!t]
 \centering
@@ -833,51 +820,42 @@ optimum.
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
 
-BiDAStabilizer \cite{jing2024bida} is the closest published plug-in stabiliser
-we could run. We compare on DRENDS because neither method is in domain there;
-the shared input is its own RAFT-Stereo \emph{robust} prediction, so \steer\
-is driven on that exact array over all five recordings ($7476$ frames) under
-one support neither influences. Two asymmetries run in opposite directions:
-the baseline is bidirectional and consumes future frames, which our setting
-forbids, but we are trained on surgical endoscopy while it runs weights fitted
-to natural-image stereo. We therefore read the margin as an upper bound on our
-advantage, and an in-domain baseline remains the comparison we cannot run.
+BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
+stabiliser we could run. We compare on DRENDS, where neither method is in
+domain, on its own RAFT-Stereo \emph{robust} prediction over all five
+recordings under one support neither influences ($117.4$M pixels). Two
+asymmetries run in opposite directions --- the baseline is bidirectional,
+which our setting forbids; we are trained on surgical endoscopy, it is not
+--- so we read the margin as an upper bound on our advantage, and an
+in-domain baseline remains the comparison we cannot run.
 
-On $117.4$M pixels of common support, raw EPE $1.199$ becomes $1.175$ under
-the baseline and $\mathbf{1.131}$ under \steer; Bad1 $44.92\%$ becomes $44.81$
-and $\mathbf{43.39}$, RMSE $1.876$ becomes $1.776$ and $\mathbf{1.710}$. The
-regime is hard and those Bad1 rates say so --- ground-truth disparity averages
-$9.89$\,px --- so this compares two refiners of a weak prediction, not a claim
-that either recovers a good one. \steer\ is the only causal entry and carries
-$62\times$ fewer trained parameters ($155$k against $9.64$M), though at system
-level we also run frozen SEA-RAFT and make no efficiency claim. The exception
-is worth naming: on Vid13 \steer\ is $0.022$\,px behind the baseline and
-$0.013$\,px \emph{worse than the raw prediction it refines}, the one recording
-of five where the intervention is a net harm and the bidirectional method is
-not. In domain the ordering is the same and much wider --- on this
-comparison's common support, where raw D2 EPE is $0.3029$ rather than the
-$0.2691$ of Table~\ref{tab:grid}, EPE $0.3029\rightarrow0.2889$ and Bad1
-$2.09\rightarrow1.80\%$ against $0.3021$ and $1.99\%$ --- but that margin is
-measured where we are in domain and it is not.
+Raw EPE $1.199$ becomes $1.175$ under the baseline and $\mathbf{1.131}$
+under \steer; Bad1 $44.92\%$ becomes $44.81$ and $\mathbf{43.39}$, RMSE
+$1.876$ becomes $1.776$ and $\mathbf{1.710}$ --- two refiners of a weak
+prediction (mean ground-truth disparity is $9.89$\,px), not a claim that
+either recovers a good one. \steer\ is the only causal entry, at $62\times$
+fewer trained parameters. The exception is named: on Vid13 \steer\ is behind
+the baseline and $0.013$\,px \emph{worse than the raw prediction it
+refines}, the one recording of five where the intervention is a net harm. In
+domain the ordering is the same and wider (EPE $0.3029\rightarrow0.2889$,
+Bad1 $2.09\rightarrow1.80\%$ against $0.3021$ and $1.99\%$ on that
+comparison's own support), measured where we are in domain and it is not.
 
-The temporal measure reverses the ordering, and we report it for that reason.
-Change error falls $64.9\%$ for the bidirectional baseline against $42.5\%$
-for us at lag~$1$ and $37.2\%$ against $13.8\%$ at lag~$4$, in each of the
-five recordings and at every lag. A method that sees the future is markedly
-more temporally stable than one that cannot, which is what should happen, and
-it is simultaneously the less accurate of the two on every geometric metric
-here: a reader given only a consistency score would rank these two the wrong
-way round.
+The temporal measure reverses the ordering, and we report it for that
+reason: change error falls $64.9\%$ for the bidirectional baseline against
+our $42.5\%$ at lag~$1$ ($37.2$ against $13.8\%$ at lag~$4$), in every
+recording at every lag. A method that sees the future is more temporally
+stable and simultaneously less accurate on every geometric metric here: a
+reader given only a consistency score would rank these two the wrong way
+round.
 
-TC-Stereo \cite{zeng2024tcstereo} we run as its authors specify, with its
-rigid $6$-DoF pose warp on SCARED-C's corrected poses and the pose convention
-self-checked (supplement). On the same D2 common support its frame path alone
-scores EPE $0.524$ and Bad1 $9.05\%$ against the $0.303$/$2.09\%$ raw of that
-support, so it is already outside its domain before any temporal component
-runs; enabling the temporal path makes both worse ($0.622$, $10.37\%$) and
-raises change error four to six times at every lag. We read that as a
-co-designed architecture meeting a scene its rigid warp does not describe, not
-as a weak method: a TC-Stereo trained on deforming tissue is an experiment
+TC-Stereo \cite{zeng2024tcstereo}, run as its authors specify with its rigid
+pose warp on SCARED-C's corrected poses (convention self-checked,
+supplement), is outside its domain before any temporal component runs (frame
+path EPE $0.524$ against $0.303$ raw on the same support); enabling the
+temporal path makes both metrics worse and raises change error at every lag.
+We read that as a co-designed architecture meeting a scene its rigid warp
+does not describe: a TC-Stereo trained on deforming tissue is an experiment
 nobody has run, ours included.
 
 \subsection{Ablating Our Own Design Decisions}
