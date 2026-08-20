@@ -41,7 +41,11 @@ exposures.  Validation had 4,249 frames / 4,246 pairs and 1,061 clips per
 backbone (3,183 total).
 
 The cache grid was `144x180`, with no crop.  The trainable fusion model has
-177,338 parameters and 142 cues.  Its objective is Huber fused disparity plus
+177,338 parameters and 142 cues.  This section documents the ORIGINAL canonical
+run, which the paper now reports as an ablation: the shipped head is the
+38-cue, 154,874-parameter variant trained by the same recipe with
+`disable_learned_stereo_evidence`, under
+`training_runs/ablation_A2_no_learned_evidence*`.  Its objective is Huber fused disparity plus
 reset, fusion and tie regularizers (not the geometry-v1 classification/ranking
 objective).  The original timestamps imply about `3h06`; no exact duration was
 logged.  Canonical metadata is locked in `checkpoints/training_provenance.json`.

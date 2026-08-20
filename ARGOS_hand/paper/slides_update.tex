@@ -47,7 +47,7 @@ unchanged, to heterogeneous \textbf{frozen} stereo estimators?
 \begin{column}{0.43\textwidth}
 \vspace{1.5em}
 \begin{exampleblock}{The module}
-\textbf{177{,}338} parameters.
+\textbf{154{,}874} parameters.
 
 \vspace{0.4em}
 One scalar per pixel: how much to trust the past.
@@ -83,8 +83,8 @@ Memory is re-anchored to raw geometry every $H{=}4$ frames.}
 \toprule
 Backbone $\rightarrow$ & seen & \textbf{unseen} \\
 \midrule
-SCARED-C D7 & $4.53\%$ & $3.70\%$ \\
-DRENDS (\textbf{OOD}) & $5.31\%$ & $\mathbf{4.84\%}$ \\
+SCARED-C D7 & $5.80\%$ & $4.79\%$ \\
+DRENDS (\textbf{OOD}) & $5.57\%$ & $\mathbf{5.16\%}$ \\
 \bottomrule
 \end{tabular}
 
@@ -103,7 +103,7 @@ Method & Causal & EPE & Bad1 \\
 \midrule
 Raw & --- & $.3029$ & $2.09\%$ \\
 BiDAStabilizer & \textbf{no} & $.3021$ & $1.99\%$ \\
-\textbf{TETHER} & \textbf{yes} & $\mathbf{.2890}$ & $\mathbf{1.83\%}$ \\
+\textbf{TETHER} & \textbf{yes} & $\mathbf{.2889}$ & $\mathbf{1.80\%}$ \\
 \bottomrule
 \end{tabular}
 \end{block}
@@ -127,21 +127,28 @@ Below the diagonal is better.}
 \begin{frame}{Status}
 
 \begin{block}{Paper}
-Eight pages, two figures, four tables. The head-to-head comparison, the
-three-seed study and the held-out transfer matrix are in.
+Eight pages, one figure, three tables, everything else in a seven-page
+supplement. Head-to-head comparison, three-seed study and the held-out
+transfer matrix are in.
 \end{block}
 
 \vspace{0.6em}
 
-\begin{block}{Running now}
-Architecture ablations, including the one that tests whether the convex
-constraint is what makes the head transfer.
+\begin{block}{The ablations came back, and not the way we expected}
+The learned feature extractor is not what makes the module work --- removing
+it entirely is \emph{better} and eight times more stable across seeds, which
+is why the shipped head is the smaller one. Relaxing the convex constraint
+then beat the canonical model on the held-out endpoint, which under our
+pre-registration means the claim that convexity explains cross-backbone
+transfer has to be withdrawn. It is withdrawn. We do not know why the head
+transfers.
 \end{block}
 
 \vspace{0.6em}
 
-\begin{alertblock}{Next}
-Final touches, then submission.
+\begin{alertblock}{Running}
+A $100$-epoch convergence probe against the locked $12$, to answer whether the
+budget is a ceiling or a plateau. Not eligible for selection.
 \end{alertblock}
 
 \end{frame}
