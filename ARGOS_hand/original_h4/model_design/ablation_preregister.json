@@ -37,6 +37,35 @@
       "rationale": "The head predicts the reset gate at full resolution and the fusion weight at a quarter, on the reasoning that deciding HOW MUCH to intervene needs more context than deciding WHETHER. That reasoning has never been tested.",
       "why_not_delete_the_branch": "Removing it outright would cut the head from 177,338 to about 41,000 parameters and confound 'context needs low resolution' with 'the head needs capacity'. Keeping the same weights at stride one holds the parameter count exactly and moves only the receptive field, which shrinks by a factor of four in pixels.",
       "honest_note": "Full-resolution 48-channel residual blocks cost roughly 16x the compute of the canonical branch, so this variant is slower to train and would be slower at inference. If it wins, that trade has to be reported, not hidden."
+    },
+    "A5_no_fb_cue": {
+      "timestamp": "2026-08-20T09:30:00+02:00",
+      "declared_after": "A2 was promoted; these three test the shipped 38-channel head, not the 142-channel one it replaced",
+      "field": "cue construction",
+      "change": "replace the forward-backward confidence channel (index 32 of 38) with the constant 1.0 at cue-build time, so the head is TRAINED without the cue rather than deprived of it at inference",
+      "parameter_cost": 0,
+      "everything_else": "unchanged",
+      "rationale": "The reverse SEA-RAFT pass costs 13.1 of the 28.9 ms of module overhead and exists only to compute this cue. We already showed that substituting a constant at inference costs the trained head nothing measurable, but that head was trained with the cue present, so the result cannot license removing the pass. This is the experiment that can.",
+      "honest_note": "If A5 matches the shipped head within the 0.37-point threshold, the reverse pass can be dropped and the module's overhead nearly halves; that is a claim about deployment cost and must be reported as such, including if it means our published runtime figure was pessimistic.",
+      "what_would_falsify_the_inference_result": "If A5 is clearly WORSE than the shipped head, then the inference-time substitution was measuring a head that had learned to tolerate the cue, not a cue that does nothing, and the runtime paragraph must say so."
+    },
+    "A6_geometry_only": {
+      "timestamp": "2026-08-20T09:30:00+02:00",
+      "field": "cue construction",
+      "change": "drop the 25 quarter-resolution disparity correlations, leaving the 13 cache-grid channels: the two disparities, their signed and absolute residual, 6 motion components and 3 RGB",
+      "parameter_cost": -5400,
+      "everything_else": "unchanged",
+      "rationale": "The 25 correlations are two thirds of the evidence space and have never been ablated on their own. The 142 -> 78 -> 38 sequence removed learned features; nothing has tested whether the geometric correlations earn their place.",
+      "honest_note": "A6 is 149,474 parameters against 154,874, so this is an evidence ablation and not a capacity one; A7 separates those."
+    },
+    "A7_half_width": {
+      "timestamp": "2026-08-20T09:30:00+02:00",
+      "field": "head width",
+      "change": "width 48 -> 32, giving 70,994 trainable parameters against 154,874, with the evidence space unchanged",
+      "parameter_cost": -83880,
+      "everything_else": "unchanged",
+      "rationale": "The paper argues the head is small because the decision is constrained, and offers no evidence that the size it has is the size it needs. Without a capacity point, 'compact' is a description and not a finding.",
+      "honest_note": "If A7 matches within the threshold, the shipped head is over-parameterised for its job and we should say so rather than presenting 154,874 as if it were tuned."
     }
   },
   "unchanged_and_verified_at_launch": {
@@ -87,7 +116,10 @@
     "what_would_falsify_the_convexity_claim": "If A4 matches or beats the canonical model on held-out D7, the Analysis sentence attributing transfer to the convex action space must be withdrawn rather than softened.",
     "what_would_make_A1_a_positive_result": "If A1 matches the canonical model within the seed spread, the 64 appearance channels are redundant given their own correlations and should be dropped from the architecture description.",
     "seed_spread_is_the_yardstick": "The canonical three-seed pooled Bad1 spread is 0.37 percentage points; differences smaller than that are not interpreted.",
-    "what_would_make_A3_informative": "If A3 matches the canonical model within the three-seed spread, the dual-resolution design is unjustified and should be described as a compute choice rather than a necessity. If it loses, the claim that the fusion weight needs a wider receptive field than the reset gate is supported."
+    "what_would_make_A3_informative": "If A3 matches the canonical model within the three-seed spread, the dual-resolution design is unjustified and should be described as a compute choice rather than a necessity. If it loses, the claim that the fusion weight needs a wider receptive field than the reset gate is supported.",
+    "endpoint_for_A5_A6_A7": "The same one as the other four: relative Bad1 reduction on held-out D7, three-seed spread (0.37 points) as the threshold below which a difference is not interpreted. The comparator is the shipped 38-channel head at three seeds (5.84 +/- 0.22), NOT the 142-channel configuration.",
+    "seeds": "Seed 0 first. Any variant whose margin exceeds the threshold on one run gets seeds 1 and 2 before it is interpreted, which is the rule A2 and A3 were given.",
+    "what_we_will_not_do": "We will not adopt A6 or A7 on a development win, and we will not report A5 as licensing removal of the reverse pass unless it clears the threshold on held-out data."
   },
   "prohibited": [
     "selecting the best ablation and presenting it as the canonical model",

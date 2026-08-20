@@ -22,6 +22,9 @@ VARIANTS = {
     "A2_no_learned_evidence": "A2_no_learned_stereo_evidence",
     "A3_single_resolution": "A3_single_resolution",
     "A4_relaxed_convexity": "A4_relaxed_convexity",
+    "A5_no_fb_cue": "A5_no_fb_cue",
+    "A6_geometry_only": "A6_geometry_only",
+    "A7_half_width": "A7_half_width",
 }
 
 
@@ -38,7 +41,9 @@ def _train_module():
 def install(runner, variant: str) -> dict:
     """Rebind exactly one name in the runner's namespace and report what changed."""
     from model_design.comparison.ablation_variants import (
-        RelaxedConvexityHead, SingleResolutionHead, build_cues_without_appearance,
+        HalfWidthHead, RelaxedConvexityHead, SingleResolutionHead,
+        build_cues_geometry_only, build_cues_without_appearance,
+        build_cues_without_fb_confidence,
     )
     if variant == "A1_no_appearance":
         canonical = runner.build_codd_cues
@@ -59,6 +64,25 @@ def install(runner, variant: str) -> dict:
         # Nothing is patched: the runner already honours the config flag.
         return {"patched": None, "config_field": "disable_learned_stereo_evidence",
                 "value": True, "cue_channels": 38}
+    # A5 to A7 are deviations from the SHIPPED 38-channel head, not from the 142-channel
+    # configuration the first four were registered against. Their builders force the
+    # learned-evidence flag themselves so the comparison is against A2 and nothing else.
+    if variant == "A5_no_fb_cue":
+        canonical = runner.build_codd_cues
+        runner.build_codd_cues = build_cues_without_fb_confidence
+        return {"patched": "build_codd_cues", "from": canonical.__name__,
+                "to": "build_cues_without_fb_confidence", "cue_channels": 38,
+                "note": "channel 32 held at 1.0 throughout training"}
+    if variant == "A6_geometry_only":
+        canonical = runner.build_codd_cues
+        runner.build_codd_cues = build_cues_geometry_only
+        return {"patched": "build_codd_cues", "from": canonical.__name__,
+                "to": "build_cues_geometry_only", "cue_channels": 13}
+    if variant == "A7_half_width":
+        canonical = runner.CODDStyleFusionHead
+        runner.CODDStyleFusionHead = HalfWidthHead
+        return {"patched": "CODDStyleFusionHead", "from": canonical.__name__,
+                "to": "HalfWidthHead", "width": 32, "trainable_parameters": 70994}
     raise ValueError(variant)
 
 
@@ -91,8 +115,10 @@ def main() -> None:
         raise RuntimeError("unexpected: base config seed already deviates from the locked recipe")
     if settings.disable_learned_stereo_evidence:
         raise RuntimeError("unexpected: the locked recipe already disables learned stereo evidence")
-    if args.variant == "A2_no_learned_evidence":
-        settings.disable_learned_stereo_evidence = True     # the one and only deviation
+    if args.variant in ("A2_no_learned_evidence", "A5_no_fb_cue", "A6_geometry_only",
+                        "A7_half_width"):
+        # A5-A7 deviate from the shipped 38-channel head, so they inherit its one flag.
+        settings.disable_learned_stereo_evidence = True
 
     record = {
         "canonical_checkpoint_sha256": value["canonical_checkpoint"]["sha256"],

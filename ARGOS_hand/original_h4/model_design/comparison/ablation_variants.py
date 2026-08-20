@@ -66,6 +66,52 @@ def build_cues_without_learned_evidence(extractor, **kwargs: Any) -> CODDCues:
     return cues
 
 
+# The 38-channel layout, from build_codd_cues: 25 upsampled quarter-resolution disparity
+# correlations, then raw, aligned memory, signed residual, absolute residual, six motion
+# channels and three RGB. The fourth motion channel is the forward-backward confidence.
+GEOMETRY_START = 25
+FB_CONFIDENCE_INDEX = 32
+
+
+def build_cues_without_fb_confidence(extractor, **kwargs: Any) -> CODDCues:
+    """A5: the 38-channel cues with C^FB replaced by a constant, at training time.
+
+    Substituting the cue at inference on a head trained with it present tells you what a
+    trained head tolerates, not what the cue contributes. This trains without it, which is
+    the experiment that can license dropping the reverse SEA-RAFT pass.
+    """
+    kwargs["include_learned_stereo_evidence"] = False
+    cues = _canonical_build_codd_cues(None, **kwargs)
+    if cues.channels != 38:
+        raise RuntimeError(f"A5 expects the 38-channel layout, got {cues.channels}")
+    values = cues.values.clone()
+    values[:, FB_CONFIDENCE_INDEX] = 1.0
+    return CODDCues(values=values, support=cues.support, channels=values.shape[1])
+
+
+def build_cues_geometry_only(extractor, **kwargs: Any) -> CODDCues:
+    """A6: the 13 cache-grid channels, dropping the 25 quarter-resolution correlations."""
+    kwargs["include_learned_stereo_evidence"] = False
+    cues = _canonical_build_codd_cues(None, **kwargs)
+    if cues.channels != 38:
+        raise RuntimeError(f"A6 expects the 38-channel layout, got {cues.channels}")
+    values = cues.values[:, GEOMETRY_START:]
+    if values.shape[1] != 13:
+        raise RuntimeError(f"A6 produced {values.shape[1]} channels, expected 13")
+    return CODDCues(values=values, support=cues.support, channels=values.shape[1])
+
+
+class HalfWidthHead(CODDStyleFusionHead):
+    """A7: the same head at width 32 instead of 48 -- 70,994 parameters against 154,874.
+
+    Evidence space and objective unchanged, so this separates 'the decision is constrained'
+    from 'the head happens to be this size'.
+    """
+
+    def __init__(self, cue_channels: int, width: int = 32) -> None:
+        super().__init__(cue_channels, width=32)
+
+
 class RelaxedConvexityHead(CODDStyleFusionHead):
     """A4: the canonical head plus a zero-initialised additive escape from the interval.
 
