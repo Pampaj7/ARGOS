@@ -17279,4 +17279,35 @@ trains, naming the favourable prior it starts from: A3 beat its own base by
 Training is submitted, gated on the A6 job ending. Nothing here touches the
 paper; the twin rows land in Table~III when the checkpoints exist.
 
+
+
+\section*{The granularity reversal does not exist: the worst frame is a tail, not a trend}
+
+Fig.~2's caption currently reads the worst frame (mean weight $0.79$, $12.9\%$
+improved) against the median frame ($0.46$, $82.8\%$) as a per-frame reversal
+of the per-pixel weight--harm relation, ``which we report and do not
+explain''. Measured over the full sequence instead of two frames, there is
+nothing to explain: across $1{,}861$ frames with defined weight (of $2{,}114$
+driven), per-frame mean weight correlates \emph{negatively} with per-frame
+harm --- Pearson $-0.60$, Spearman $-0.68$ --- so a frame the head commits to
+is a frame it is helping, exactly the benign direction the per-pixel AUROC
+gives on development ($0.59$--$0.61$). The worst frame is a rare tail where
+low support ($2.2\%$), high weight and harm coincide; it is included in the
+figure by rank, and it is real, but it is not the rule. Support fraction
+itself carries no signal at all (Spearman $-0.002$).
+
+Two footnotes to the measurement. The caption's own numbers cross-check to
+the third digit (median $0.459/82.8\%$, worst $0.791/12.9\%$), so figure and
+series describe the same frames. And the harm scored on evaluation support
+equals the harm scored on all GT-valid pixels to machine precision here,
+because RAFT-Stereo leaves no GT-valid pixel invalid on this sequence.
+
+Consequence for the paper, pending authorisation: the caption's ``granularity
+reversal'' sentence should become the opposite statement --- the failure mode
+is a rare high-weight, low-support frame against a background where weight
+ranks frames correctly on development --- and the open caveat is that this
+series is development-only, where the weight signal is known to exist; on
+held-out data the per-pixel signal is chance, and the per-frame series there
+has not been run.
+
 \end{document}
