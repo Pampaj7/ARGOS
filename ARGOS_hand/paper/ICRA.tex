@@ -497,16 +497,18 @@ Training uses D1, D3 and D6 with D2 for development and D7 held out, over
 8{,}616 frames giving 8{,}606 causal pairs per backbone from three seen
 backbones, in non-overlapping $H=4$ clips, batch size 4, 12 epochs of AdamW at
 $2\times10^{-4}$ with weight decay $10^{-4}$ and gradient clipping 1.0,
-selecting on development fused EPE. Selection fires at epoch $8$, $11$ and
-$11$ across the three seeds --- and that epoch is where the model converges.
-A probe retrained the shipped model under the locked recipe with the epoch
-budget alone raised, not eligible for selection, and ran it to $47$ epochs.
-Its own minimum falls at epoch~$13$, inside the same window, and no later
-epoch improves on it: over epochs $13$--$47$ the curve oscillates with a
-standard deviation of $0.0029$\,px within a band of $0.013$ and shows no
-trend. Four times the budget therefore changes only noise, which is what
-licenses the twelve-epoch schedule rather than a longer one. One ablation (A4)
-diverges after epoch $10$, which best-validation selection catches.
+selecting on development fused EPE. The budget is not a truncation: across
+three independently seeded runs the selected minimum falls at epoch $8$, $11$
+and $11$, every one of them inside the schedule, so the model has converged
+before the schedule ends and repeating it three times says the same thing.
+A probe confirms that nothing waits outside it. Retrained under the locked
+recipe with the epoch budget alone raised and not eligible for selection, run
+to $47$ epochs, it oscillates from epoch $13$ onward with a standard deviation
+of $0.0029$\,px inside a band of $0.013$ and shows no trend; its own best
+epoch sits $0.005$\,px from that plateau, which is the width of the band, and
+no later epoch improves on it. Four times the budget changes only noise. One
+ablation (A4) diverges after epoch $10$, which best-validation selection
+catches.
 
 
 \subsection{External Evaluation}
