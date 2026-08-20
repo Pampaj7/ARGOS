@@ -32,3 +32,20 @@ class AblationHorizon(AblationH4):
         return super().describe() | {"module": "ablation_horizon", "horizon": self.horizon,
                                      "reset_protocol": f"frozen {self.variant} head; "
                                                        f"inference horizon={self.horizon}"}
+
+
+def _shipped_at(horizon: int):
+    """The shipped head driven at one horizon, addressable as `module:factory_a2_hN`.
+
+    The world-frame measurement takes a `--module` and passes only `device`, so a sweep
+    over the recurrence horizon needs one entry point per horizon. Nothing about the head
+    changes: same checkpoint, same evidence, only the re-anchor schedule.
+    """
+    def _factory(*, device: str = "cuda:0", **_: Any) -> AblationHorizon:
+        return AblationHorizon(horizon=horizon, variant="A2_no_learned_evidence", device=device)
+    _factory.__name__ = f"factory_a2_h{horizon}"
+    return _factory
+
+
+for _h in (1, 2, 4, 6, 8):
+    globals()[f"factory_a2_h{_h}"] = _shipped_at(_h)
