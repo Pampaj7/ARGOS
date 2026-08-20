@@ -153,30 +153,34 @@ for Frozen Surgical Stereo}
 
 Modern stereo estimators are applied independently to each frame and can
 fluctuate under specularities, weak texture, tissue deformation, tool
-occlusions and camera motion. We ask whether temporal information can improve
-frozen stereo predictions without modifying the estimator, accessing its
-internals, or using future frames.
+occlusions and camera motion. Video stereo methods fix this by building
+temporal reasoning into the estimator, so a new backbone means a new temporal
+model. We ask the opposite question: can one causal temporal module be trained
+once and attached, unchanged, to frozen and heterogeneous stereo estimators?
 
-We present \steer, a causal plug-and-play temporal refiner. At each frame,
-preceding disparity is motion-aligned to the current view using frozen
-SEA-RAFT, and a shared 38-channel external evidence representation of
-disparity, motion and image geometry feeds a 154,874-parameter
-reset-and-fusion head predicting a bounded interpolation between the current
-estimate and that aligned memory. No learned appearance features and no
-frozen backbone enter that evidence; corrected recurrence is bounded and
-periodically re-anchored to independently predicted raw geometry.
+We present \steer, a causal plug-and-play refiner that answers it. One frozen
+$154{,}874$-parameter checkpoint, trained on three estimators and one
+dataset, improves \emph{every} estimator we evaluate on \emph{every} arena we
+evaluate: five architectures --- two of them excluded from its training ---
+across development, held-out and out-of-domain splits, fifteen
+backbone--arena cells without an exception. Zero-shot on DRENDS, a dataset no
+part of the module has seen, disparity EPE, Bad3 and metric depth improve in
+all $25$ recording--backbone cells, by $-5.40$, $-19.51$, $-4.02$ and
+$-3.47\%$, with nothing adapted, retrained or tuned for the domain. The two
+unseen estimators are not distinguishable from the three seen ones, which is
+the claim.
 
-A controlled development closure shows the learned policy is not explained by
-temporal smoothing: on SCARED-C D2, $H=4$ reduces mean EPE by $3.69\%$ against
-$0.59\%$ for the best matched fixed/EMA blend and $0.87\%$ for the best tuned
-unlearned residual rule, and those blends buy mean error with bad pixels while
-the learned gate does not. One frozen checkpoint improves all five evaluated
-estimators on held-out SCARED-C D7, including two excluded from temporal-head
-training (mean backbone EPE $0.4921\rightarrow0.4645$ over three seeds,
-$5.61\pm0.42\%$), and every one of $25$ recording--backbone cells zero-shot on
-DRENDS. We additionally introduce a refinement-centric evaluation protocol
-measuring introduced error alongside recovered error under fixed,
-prediction-independent support, and apply it to our own claims.
+The module reads only what a black box emits: preceding disparity
+motion-aligned with frozen SEA-RAFT, and a shared 38-channel evidence space of
+disparity, motion and image geometry --- no learned appearance features, no
+frozen backbone, no future frame --- feeding a reset-and-fusion head that
+predicts a bounded interpolation between the current estimate and that aligned
+memory. Under a matched state machine the gain is not temporal smoothing:
+$3.69\%$ mean EPE against $0.59\%$ for the best fixed or EMA blend, which buys
+its mean error with bad pixels while the learned gate does not. We additionally
+introduce a refinement-centric protocol scoring introduced error alongside
+recovered error under fixed, prediction-independent support, and apply it to
+our own claims.
 
 \end{abstract}
 
@@ -188,10 +192,10 @@ prediction-independent support, and apply it to our own claims.
 \section{Introduction}
 \label{sec:intro}
 
-Metric three-dimensional perception underpins camera navigation,
-tool--tissue distance estimation, augmented reality and deformation analysis
-in robot-assisted surgery, and stereo endoscopy is attractive because depth
-comes from images the platform already provides. It is also hard: endoscopic
+Metric three-dimensional perception underpins camera navigation, tool--tissue
+distance estimation and deformation analysis in robot-assisted surgery, and
+stereo endoscopy is attractive because depth comes from images the platform
+already provides. It is also hard: endoscopic
 scenes carry weak texture, non-Lambertian tissue, specularities, blood, smoke,
 deformable anatomy, rapid viewpoint change and tool occlusion
 \cite{allan2021scared,edwards2022servct}. Modern estimators
@@ -221,34 +225,36 @@ exploits. The core problem is therefore not obtaining temporal evidence but
 deciding how much of it to use --- and Sec.~\ref{sec:analysis} shows the head
 decides \emph{how much} well and \emph{where} no better than chance, which is
 what leaves the oracle gap open. A second question is how such an intervention
-should be evaluated: smoothness is not correctness, and lower mean EPE does
-not reveal whether refinement introduces new bad pixels or rare catastrophic
-frames, so we evaluate relative to the frozen upstream prediction and separate
-geometry, temporal fidelity, benefit, harm and tail behaviour.
+should be evaluated: smoothness is not correctness, and lower mean EPE hides
+whether refinement introduces new bad pixels or rare catastrophic frames, so
+we evaluate relative to the frozen prediction and separate geometry, temporal
+fidelity, benefit, harm and tail behaviour.
 
 Our contributions are three.
 
-\emph{(i)} We formulate surgical temporal stereo refinement as a \emph{causal
+\emph{(i)} \textbf{One module, every backbone, every domain.} We measure a
+single frozen checkpoint across the full backbone $\times$ domain matrix ---
+five estimators, two excluded from its training, over development, held-out
+and out-of-domain splits, including the joint unseen-backbone, unseen-domain
+cell usually left unmeasured --- and it improves all fifteen cells, with the
+unseen estimators indistinguishable from the seen ones.
+
+\emph{(ii)} \textbf{A black-box interface that makes that possible.} We
+formulate surgical temporal stereo refinement as a \emph{causal
 plug-and-play adaptation problem} over frozen, heterogeneous estimators,
-needing neither future frames nor backbone internals, and instantiate it
-as \steer: a 154,874-parameter reset-and-fusion head over causal
-SEA-RAFT alignment, a shared 38-channel external evidence space of
-disparity, motion and image geometry, support-confined convex fusion and
-bounded corrected-state recurrence.
+needing neither future frames nor backbone internals, and instantiate it as
+\steer: a $154{,}874$-parameter reset-and-fusion head over causal SEA-RAFT
+alignment, a shared 38-channel external evidence space, support-confined
+convex fusion and bounded corrected-state recurrence. Under a matched state
+machine the gain is not temporal smoothing.
 
-\emph{(ii)} We measure one frozen checkpoint across the full backbone
-$\times$ domain matrix --- five estimators, two excluded from temporal-head
-training, over development, held-out and out-of-domain splits --- including
-the joint unseen-backbone, unseen-domain cell usually left unmeasured, and it
-improves all fifteen.
-
-\emph{(iii)} We introduce a refinement-centric protocol under fixed,
-prediction-independent support that scores introduced error alongside
-recovered error, and show it changes conclusions: every matched blend that
-recovers a meaningful share of the gain buys it by \emph{raising} the
-bad-pixel rate, which mean error does not reveal. Applied to our own claims it
-is equally unkind --- degenerate history-replay wins the no-reference metric,
-and the head's own weight inverts its relation to harm across splits.
+\emph{(iii)} \textbf{A protocol that scores the intervention, not the
+prediction.} We measure introduced error alongside recovered error under
+fixed, prediction-independent support, and it changes conclusions: every
+matched blend recovering a meaningful share of the gain buys it by
+\emph{raising} the bad-pixel rate. Applied to our own claims it is equally
+unkind --- degenerate history-replay wins the no-reference metric, and the
+head's own weight inverts its relation to harm across splits.
 
 
 % ============================================================
@@ -599,6 +605,88 @@ Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2658}$ & $1.60\righta
 \section{Results}
 \label{sec:results}
 
+The claim is one module across backbones and domains, so the results are
+ordered that way: the transfer matrix, the seed evidence that it is stable,
+why it works, and what it costs.
+
+\subsection{Cross-Backbone Development Behaviour}
+
+$H=4$ improves all five estimators in mean D2 EPE
+(Table~\ref{tab:grid}), from $1.41\%$ to $8.19\%$ averaging per-sequence
+reductions --- $1.70\%$ to $8.04\%$ from the pooled cells the table prints ---
+and all six unseen-backbone sequence groups improve; on D7 the mean excluding
+Stereo Anywhere is $5.15\%$. One D2 cell worsens, S$^2$M$^2$-S on
+keyframe~$2$, by $0.28\%$.
+
+
+\subsection{Held-Out Cross-Backbone Confirmation}
+
+We next evaluate the already frozen $H=4$ policy on held-out D7. All five
+backbones improve, including both unseen during temporal-head training:
+mean EPE decreases $0.4921 \rightarrow 0.4651$, or $5.49\%$ pooling before
+the ratio and $5.40\%$ averaging per-cell reductions.
+
+The improvement is not restricted to the mean: Bad1, RMSE and P99 decrease
+for every backbone on both splits, so the EPE gain is not bought by a worse
+bad-pixel rate or a broader tail. New bad pixels do appear and are measured
+below. InvalidRate stays zero in all ten SCARED-C backbone--split
+evaluations, a property of SCARED-C and not of the module
+(Sec.~\ref{sec:masking}). The joint unseen-backbone, unseen-domain cell is
+the lower-right block of Table~\ref{tab:grid}.
+
+
+\subsection{External Zero-Shot Geometry on DRENDS}
+\label{sec:drends}
+
+
+We evaluate the frozen checkpoint on five DRENDS recordings with all five
+estimators, two excluded from temporal-head training, $7476$ frames each,
+nothing adapted or tuned for the domain. Disparity EPE, Bad3, metric depth MAE
+and RMSE improve in \emph{every} one of the $25$ recording--backbone cells, by
+$-5.40$, $-19.51$, $-4.02$ and $-3.47\%$ on average; the two unseen estimators
+are not distinguishable from the three seen ones, which is the claim. Residual
+variance is set more by the recording than the estimator but not uniformly:
+the EPE change spans $0.87$ points across backbones on Vid10 against $3.29$ on
+Vid13.
+
+Averaged over backbones the mean EPE reduction is $3.96\%$ seen against
+$2.67\%$ unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on
+DRENDS: every combination positive. We read no ordering into it --- on D2 the
+seen advantage is carried entirely by Stereo Anywhere and the ordering
+reverses without it --- and withdraw the claim we drew about which axis costs
+more.
+This establishes zero-shot geometric transfer under a ToF-derived reference;
+it does not establish universal robustness, and DRENDS remains a
+non-independent reference.
+
+\subsection{Seed Variance, and What It Reveals About Selection}
+\label{sec:seeds}
+
+We pre-registered a seed study before any result existed: only the seed
+varies, resampling is at sequence granularity rather than pixel, and selecting
+the best seed is prohibited.
+
+Pooled over five backbones the relative Bad1 reduction is
+$12.73\pm0.32\%$ on D2 and $5.84\pm0.22\%$ on held-out D7; EPE gives
+$4.13\pm0.38\%$ and $5.61\pm0.42\%$, where $\pm$ is the standard deviation
+over the three seeds throughout this paper and \emph{range} always means
+min--max. A paired bootstrap over the $15$ and $20$ backbone--sequence cells
+gives $[8.96,16.60]$ and $[4.00,8.71]$ for Bad1 and $[2.55,5.67]$ and
+$[4.03,7.28]$ for EPE, positive in every resample. We report those intervals
+as descriptive only: the cells share three and four underlying sequences, so
+they are not independent draws and the interval is narrower than the evidence
+warrants. The distribution-free statement the splits can carry is that the
+effect is positive in $3/3$ and $4/4$ sequences, a sign test at $p=0.125$ and
+$p=0.0625$.
+
+The spread is the strongest argument for the shipped configuration, and not
+what we found first. The $142$-channel ablation is stable held out
+($5.15\pm0.34$ Bad1) and unstable on development, its seeds falling
+monotonically over a $5.03$-point range. We read that as selection optimism,
+since checkpoints are selected on D2. Removing the learned evidence removes
+the instability instead --- $0.32$ points of D2 seed deviation against $2.53$,
+with no change to the selection rule --- so the instability was the evidence
+space and not the protocol.
 
 \subsection{Does the Learned Temporal Policy Matter?}
 
@@ -682,64 +770,9 @@ cannot carry an operating point, so the horizon rests on breakage; on both
 confirmation splits DTCE is positive for every backbone
 (Table~\ref{tab:grid}).
 
-\subsection{Cross-Backbone Development Behaviour}
-
-$H=4$ improves all five estimators in mean D2 EPE
-(Table~\ref{tab:grid}), from $1.41\%$ to $8.19\%$ averaging per-sequence
-reductions --- $1.70\%$ to $8.04\%$ from the pooled cells the table prints ---
-and all six unseen-backbone sequence groups improve; on D7 the mean excluding
-Stereo Anywhere is $5.15\%$. One D2 cell worsens, S$^2$M$^2$-S on
-keyframe~$2$, by $0.28\%$.
-
-
-\subsection{Held-Out Cross-Backbone Confirmation}
-
-We next evaluate the already frozen $H=4$ policy on held-out D7. All five
-backbones improve, including both unseen during temporal-head training:
-mean EPE decreases $0.4921 \rightarrow 0.4651$, or $5.49\%$ pooling before
-the ratio and $5.40\%$ averaging per-cell reductions.
-
-The improvement is not restricted to the mean: Bad1, RMSE and P99 decrease
-for every backbone on both splits, so the EPE gain is not bought by a worse
-bad-pixel rate or a broader tail. New bad pixels do appear and are measured
-below. InvalidRate stays zero in all ten SCARED-C backbone--split
-evaluations, a property of SCARED-C and not of the module
-(Sec.~\ref{sec:masking}). The joint unseen-backbone, unseen-domain cell is
-the lower-right block of Table~\ref{tab:grid}.
-
-
-\subsection{Seed Variance, and What It Reveals About Selection}
-\label{sec:seeds}
-
-We pre-registered a seed study before any result existed: only the seed
-varies, resampling is at sequence granularity rather than pixel, and selecting
-the best seed is prohibited.
-
-Pooled over five backbones the relative Bad1 reduction is
-$12.73\pm0.32\%$ on D2 and $5.84\pm0.22\%$ on held-out D7; EPE gives
-$4.13\pm0.38\%$ and $5.61\pm0.42\%$, where $\pm$ is the standard deviation
-over the three seeds throughout this paper and \emph{range} always means
-min--max. A paired bootstrap over the $15$ and $20$ backbone--sequence cells
-gives $[8.96,16.60]$ and $[4.00,8.71]$ for Bad1 and $[2.55,5.67]$ and
-$[4.03,7.28]$ for EPE, positive in every resample. We report those intervals
-as descriptive only: the cells share three and four underlying sequences, so
-they are not independent draws and the interval is narrower than the evidence
-warrants. The distribution-free statement the splits can carry is that the
-effect is positive in $3/3$ and $4/4$ sequences, a sign test at $p=0.125$ and
-$p=0.0625$.
-
-The spread is the strongest argument for the shipped configuration, and not
-what we found first. The $142$-channel ablation is stable held out
-($5.15\pm0.34$ Bad1) and unstable on development, its seeds falling
-monotonically over a $5.03$-point range. We read that as selection optimism,
-since checkpoints are selected on D2. Removing the learned evidence removes
-the instability instead --- $0.32$ points of D2 seed deviation against $2.53$,
-with no change to the selection rule --- so the instability was the evidence
-space and not the protocol.
-
 \subsection{Refinement as an Intervention}
 
-Across both splits and all five backbones TETHER recovers
+Across both splits and all five backbones \steer\ recovers
 $3.8$--$11.1\times$ as many Bad1 pixels as it introduces, $B^+/H^+$ between
 $1.39$ and $3.25$, identity preservation above $99.85\%$. Per frame, $56\%$ of
 the $15{,}535$ held-out frames improve against $14\%$ worsened ($45\%$ against
@@ -748,20 +781,41 @@ improved mass extends far from it: the count-versus-magnitude asymmetry behind
 $B^+/H^+$.
 
 
+\subsection{What a Map Fuses, Not What a Frame Scores}
+
+Everything above scores a frame. What a robot consumes is a map, so we measure
+that too, and it is the one place the module's benefit is conditional.
+SCARED-C's corrected poses let geometry be accumulated in one world frame and
+the disagreement between views of a point measured --- what a map fuses rather
+than what a frame scores. On held-out D7 refinement reduces that disagreement
+by $11.7\%$ of the excess over the ground-truth floor, for both heads; on
+development D2 it \emph{increases} it by $15.5\%$. The
+reversal is not an artefact of one estimator: over the full $5\times7$ grid of
+backbones and sequences the sign never changes, all $15$ D2 cells negative
+($-32.1$ to $-5.4\%$) and all $20$ D7 cells positive ($+7.2$ to $+17.8\%$).
+The splits differ in how much there is to remove --- raw excess is
+$0.518$--$1.113$\,mm on D7 against $0.171$--$0.290$ on D2 --- suggesting
+alignment recovers geometry a map can fuse where the raw prediction is poor
+and costs more than it gains where it is not. That does not settle the
+mechanism: the ranges stay disjoint, so no backbone makes D2 as hard as D7,
+and within D2 the ordering does not hold. Mapping benefit is conditional, not
+general, and we do not claim raw difficulty as its cause.
+
+
+
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
 
 BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
 stabiliser we could run. We compare on DRENDS because neither method is in
 domain there; the shared input is its own RAFT-Stereo \emph{robust}
-prediction, so TETHER is driven on that exact array over all five recordings
+prediction, so \steer\ is driven on that exact array over all five recordings
 ($7476$ frames) under one support neither influences. Two asymmetries run in
-opposite directions and both belong here: the baseline is bidirectional and
-consumes future frames, which our setting forbids, but we are trained on
-surgical endoscopy while it runs weights fitted to natural-image stereo, so
-only one of us has seen this kind of scene. The same holds of TC-Stereo below.
-We therefore read the margin as an upper bound on our advantage, and an
-in-domain baseline remains the comparison we cannot run.
+opposite directions: the baseline is bidirectional and consumes future frames,
+which our setting forbids, but we are trained on surgical endoscopy while it
+runs weights fitted to natural-image stereo. We therefore read the margin as
+an upper bound on our advantage, and an in-domain baseline remains the
+comparison we cannot run.
 
 On $117.4$M pixels of common support, raw EPE $1.199$ becomes $1.175$ under
 the baseline and $\mathbf{1.131}$ under \steer; Bad1 $44.92\%$ becomes
@@ -803,30 +857,6 @@ as a co-designed architecture meeting a scene its rigid warp does not
 describe, not as a weak method: a TC-Stereo trained on deforming tissue is an
 experiment nobody has run, ours included. Full protocol, self-check and
 per-sequence table in the supplement.
-
-\subsection{External Zero-Shot Geometry on DRENDS}
-\label{sec:drends}
-
-
-We evaluate the frozen checkpoint on five DRENDS recordings with all five
-estimators, two excluded from temporal-head training, $7476$ frames each,
-nothing adapted or tuned for the domain. Disparity EPE, Bad3, metric depth MAE
-and RMSE improve in \emph{every} one of the $25$ recording--backbone cells, by
-$-5.40$, $-19.51$, $-4.02$ and $-3.47\%$ on average; the two unseen estimators
-are not distinguishable from the three seen ones, which is the claim. Residual
-variance is set more by the recording than the estimator but not uniformly:
-the EPE change spans $0.87$ points across backbones on Vid10 against $3.29$ on
-Vid13.
-
-Averaged over backbones the mean EPE reduction is $3.96\%$ seen against
-$2.67\%$ unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on
-DRENDS: every combination positive. We read no ordering into it --- on D2 the
-seen advantage is carried entirely by Stereo Anywhere, and without it the seen
-mean falls to $1.85\%$ and the ordering reverses. Five backbones cannot
-support a claim about which axis costs more, and we withdraw the one we drew.
-This establishes zero-shot geometric transfer under a ToF-derived reference;
-it does not establish universal robustness, and DRENDS remains a
-non-independent reference.
 
 \subsection{Ablating Our Own Design Decisions}
 \label{sec:ablations}
@@ -982,25 +1012,6 @@ score by $53.9\%$, copy-previous by $97.3\%$, and warped-previous scores
 exactly zero by construction. Pull-warp support detects out-of-frame sampling
 but not internal disocclusion.
 
-\paragraph{What does not improve downstream.}
-SCARED-C's corrected poses let geometry be accumulated in one world frame and
-the disagreement between views of a point measured --- what a map fuses rather
-than what a frame scores. On held-out D7 refinement reduces that disagreement
-by $11.7\%$ of the excess over the ground-truth floor, for both heads; on
-development D2 it \emph{increases} it by $15.5\%$. The
-reversal is not an artefact of one estimator: over the full $5\times7$ grid of
-backbones and sequences the sign never changes, all $15$ D2 cells negative
-($-32.1$ to $-5.4\%$) and all $20$ D7 cells positive ($+7.2$ to $+17.8\%$).
-The splits differ in how much there is to remove --- raw excess over the same
-grid is $0.518$--$1.113$\,mm on D7 against $0.171$--$0.290$ on D2 --- which
-suggests alignment recovers geometry a map can fuse where the raw prediction
-is poor and costs more than it gains where it is not. That does not settle the
-mechanism: the two ranges stay disjoint, so no backbone makes D2 as hard as
-D7, and within D2 the ordering does not hold either --- one estimator loses
-$32.1\%$ at $0.269$\,mm of excess and $16.5\%$ at $0.290$. We report the
-condition as robust across estimators and do not claim raw difficulty as its
-cause. Mapping benefit is conditional, not general.
-
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and two
 SEA-RAFT passes: $28.90$\,ms overhead at $95.2$\,MB peak VRAM on an H100. The
@@ -1018,8 +1029,9 @@ closure from $3.69\%$ to $3.74$--$3.79\%$, well inside the seed spread, so
 this head appears not to use the cue. We report it rather than ship it: it is
 development-only, on a head trained with the cue present, and a head trained
 without it is an experiment we have not run. Details in the supplement.
-We evaluate perception geometry, not downstream control, and demonstrate
-neither clinical safety nor patient benefit.
+We evaluate perception geometry and what a map accumulates from it, not
+downstream control, and demonstrate neither clinical safety nor patient
+benefit.
 
 
 \section{Conclusion}
