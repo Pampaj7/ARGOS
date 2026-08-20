@@ -96,12 +96,14 @@ class AblationH4(MaskedCanonicalH4):
             CODDStyleFusionHead, FrozenResNet18Layer1, build_codd_cues,
         )
         from model_design.comparison.ablation_variants import (
-            RelaxedConvexityHead, SingleResolutionHead,
+            HalfWidthHead, RelaxedConvexityHead, SingleResolutionHead,
             build_cues_without_appearance, build_cues_without_learned_evidence,
+            build_cues_without_fb_confidence, build_cues_geometry_only,
         )
 
         head_class = {"A4_relaxed_convexity": RelaxedConvexityHead,
-                      "A3_single_resolution": SingleResolutionHead}.get(
+                      "A3_single_resolution": SingleResolutionHead,
+                      "A7_half_width": HalfWidthHead}.get(
                           self.variant, CODDStyleFusionHead)
         state = torch.load(self.checkpoint, map_location="cpu", weights_only=False)
         self._model = head_class(state["cue_channels"]).to(self.device).eval().requires_grad_(False)
@@ -115,6 +117,8 @@ class AblationH4(MaskedCanonicalH4):
                            if needs_extractor else None)
         self._build_cues = {"A1_no_appearance": build_cues_without_appearance,
                             "A2_no_learned_evidence": build_cues_without_learned_evidence,
+                            "A5_no_fb_cue": build_cues_without_fb_confidence,
+                            "A6_geometry_only": build_cues_geometry_only,
                             }.get(self.variant, build_codd_cues)
         expected = self.declared.get("cue_channels")
         if expected is not None and state["cue_channels"] != expected:
