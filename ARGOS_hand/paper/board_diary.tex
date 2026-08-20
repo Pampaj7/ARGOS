@@ -17310,4 +17310,37 @@ series is development-only, where the weight signal is known to exist; on
 held-out data the per-pixel signal is chance, and the per-frame series there
 has not been run.
 
+
+
+\section*{A5 says the reverse pass is load-bearing after all, and the support contract goes categorical on the shipped head}
+
+Two blockers close on measurement today, one against our hopes and one beyond
+them.
+
+\textbf{A5 (T2.5).} The head retrained with the forward--backward confidence
+channel pinned to $1.0$ scores $5.31\%$ held-out Bad1 (macro) against the
+shipped head's three-seed $5.84 \pm 0.22$ --- worse by $0.53$ points, beyond
+the $0.37$ threshold, and D2 Bad1 drops from $12.7$ to $10.7$. So the
+$13.1$\,ms reverse SEA-RAFT pass cannot be dropped for free, and the
+limitation paragraph's inference-time substitution ($3.69 \to 3.74$--$3.79$,
+inside seed spread) now has its counterpart: the trained head barely
+\emph{reads} the cue at inference, but training \emph{with} it is worth half a
+Bad1 point held out. The cue is a training-time scaffold. The efficiency claim
+dies; what replaces it is more interesting, and the paragraph should say both
+halves. Single seed, in the conservative direction (it argues for keeping the
+pass we already run).
+
+\textbf{Support contract (T2.4).} The unmasked twin of the shipped head,
+evaluated on all $25$ DRENDS recording--backbone cells against the confined
+head on the same $25$: unconfined, depth RMSE regresses in \emph{every} cell,
+mean $+221.9\%$ (range $+29.5$ to $+594.5$); confined, it improves in every
+cell, mean $-3.5\%$ ($-6.7$ to $-1.8$). The old $142$-channel version of this
+result was unpaired ($14$ against $15$ cells) and gentler ($+110.4\%$); the
+shipped-head version is paired, worse unmasked, and needs no transfer
+argument. The paper's numbers should move to these.
+
+Also today: A4 seeds 1 and 2 finished training (their evaluation is queued),
+and the DRENDS matched-policy closure resumed after its job was killed
+mid-flight --- one of five policies had completed.
+
 \end{document}
