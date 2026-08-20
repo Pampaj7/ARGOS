@@ -1,0 +1,9 @@
+{
+  "declared_at": "2026-08-21T01:05:00+02:00",
+  "declared_before_seeing_results": true,
+  "what": "the shipped seed-0 checkpoint evaluated with C^FB pinned to 1.0 at inference, on scared-d2 and held-out scared-d7, through run_definitive_evaluation",
+  "why": "the paper currently withdraws the 45%-runtime claim because the D2-only substitution is development evidence; if the same substitution holds held out, the claim becomes train-with-the-cue, deploy-without: 28.9 -> ~16 ms on the unchanged checkpoint",
+  "endpoint": "held-out D7 Bad1 and EPE macro reductions of the pinned variant against the SAME checkpoint unpinned (seed 0: Bad1 5.69, EPE 5.49)",
+  "threshold": "the 0.37-point rule for Bad1; a difference inside it is read as 'the pass is droppable at deployment', beyond it the current withdrawal stands",
+  "not_a_decision_about": "training or promotion; A5 already showed the cue is load-bearing in training and that stands either way"
+}
