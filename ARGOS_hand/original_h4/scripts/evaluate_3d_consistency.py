@@ -166,13 +166,16 @@ def main() -> None:
     parser.add_argument("--split", choices=("d2", "d7"), default="d2")
     parser.add_argument("--backbones", nargs="+", default=list(BACKBONES))
     parser.add_argument("--sequences", nargs="+")
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--flow-batch-size", type=int, default=32)
     parser.add_argument("--max-frames", type=int)
     parser.add_argument("--window", type=int, default=8, help="sliding-window length in frames")
     parser.add_argument("--self-check", action="store_true")
     args = parser.parse_args()
+    # The 142-channel results already live at the bare path. A different head must not
+    # land on them: this is how a stale table survived a recanonicalisation once.
+    out = OUT if "canonical_h4" in args.module else OUT / "a2"
     if args.self_check:
         self_check()
         return
@@ -304,16 +307,16 @@ def main() -> None:
                                          "support": int(np.mean(win_support))})
             print(f"  {backbone}: {len(rows)} rows", flush=True)
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     import csv
-    target = OUT / f"three_d_consistency_{args.split}.csv"
+    target = out / f"three_d_consistency_{args.split}.csv"
     with target.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, list(rows[0]) if rows else
                                 ["split", "sequence", "backbone", "method", "metric", "stat",
                                  "aggregation", "value", "support"])
         writer.writeheader()
         writer.writerows(rows)
-    (OUT / f"run_manifest_{args.split}.json").write_text(json.dumps({
+    (out / f"run_manifest_{args.split}.json").write_text(json.dumps({
         "project": "ARGOS v2", "generated_at": datetime.now(timezone.utc).isoformat(),
         "module": args.module, "module_provenance": adapter.describe(),
         "split": args.split, "sequences": list(sequences), "backbones": list(args.backbones),

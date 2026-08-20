@@ -32,10 +32,13 @@ OUT = ROOT.parent / "results" / "qualitative_panels"
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--sequence", default="dataset_2_keyframe_4")
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--max-frames", type=int, help="limit the driven prefix, for smoke runs")
     args = parser.parse_args()
+    # The 142-channel results already live at the bare path. A different head must not
+    # land on them: this is how a stale table survived a recanonicalisation once.
+    out = OUT if "canonical_h4" in args.module else OUT / "a2"
 
     import torch
     for path in (str(ROOT), str(ROOT / "scripts"), str(ARGOS / "ARGOS_FREEZED/src"),
@@ -95,11 +98,11 @@ def main() -> None:
     chosen = {"best": ranked[0], "median": ranked[len(ranked) // 2],
               "upper_quartile": ranked[int(0.75 * len(ranked))], "worst": ranked[-1]}
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     panels = {}
     for label, i in chosen.items():
         np.savez_compressed(
-            OUT / f"{args.sequence}_{label}.npz",
+            out / f"{args.sequence}_{label}.npz",
             rgb_left=rgb_left[i], raw=raw[i], aligned_memory=memory[i], fused=fused[i],
             gt=gt[i], support=support[i],
             error_raw=np.where(support[i], np.abs(raw[i] - gt[i]), np.nan),
@@ -113,7 +116,7 @@ def main() -> None:
                          "epe_raw_px": float(np.abs(raw[i][support[i]] - gt[i][support[i]]).mean()),
                          "epe_fused_px": float(np.abs(fused[i][support[i]] - gt[i][support[i]]).mean())}
 
-    (OUT / "run_manifest.json").write_text(json.dumps({
+    (out / "run_manifest.json").write_text(json.dumps({
         "project": "ARGOS v2", "generated_at": datetime.now(timezone.utc).isoformat(),
         "purpose": "dense panels for the qualitative figure",
         "input_boundary": str(BIDA / args.sequence), "sequence": args.sequence, "frames_driven": T,

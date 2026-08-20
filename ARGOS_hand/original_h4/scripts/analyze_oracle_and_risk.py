@@ -231,7 +231,9 @@ def run(args: argparse.Namespace) -> None:
 
     # One directory per head, so a rerun cannot overwrite the other head's numbers and a
     # reader of the results tree can tell which model produced them.
-    OUT = OUT_ROOT if args.module.endswith("canonical_h4:factory") else OUT_ROOT / "a2"
+    # endswith() sent the masked 142-channel spelling to the a2 directory, which is the
+    # one place a wrong head could still overwrite the right one. Match the family.
+    OUT = OUT_ROOT if "canonical_h4" in args.module else OUT_ROOT / "a2"
     OUT.mkdir(parents=True, exist_ok=True)
     fields = list(dict.fromkeys(key for row in rows for key in row))
     with (OUT / "oracle_risk_metrics.csv").open("w", newline="") as handle:
@@ -304,7 +306,7 @@ def main() -> None:
     parser.add_argument("--backbones", nargs="+",
                         default=["S2M2-S", "RAFT-Stereo", "StereoAnywhere", "CREStereo", "Fast-FoundationStereo"])
     parser.add_argument("--sequences", nargs="+")
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--flow-batch-size", type=int, default=32)
     parser.add_argument("--max-frames", type=int)

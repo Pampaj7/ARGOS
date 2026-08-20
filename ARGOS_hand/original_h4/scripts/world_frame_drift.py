@@ -356,7 +356,7 @@ def main() -> None:
     parser.add_argument("--backbone", default="RAFT-Stereo")
     parser.add_argument("--frames", type=int, default=40)
     parser.add_argument("--min-views", type=int, default=3)
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--self-check", action="store_true")

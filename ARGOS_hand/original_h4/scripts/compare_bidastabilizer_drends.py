@@ -77,7 +77,7 @@ def ground_truth(recording: str, frames: int) -> tuple[np.ndarray, np.ndarray]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--recordings", nargs="+", default=list(RECORDINGS))
     parser.add_argument("--max-frames", type=int, help="smoke cap; a capped run is not a result")

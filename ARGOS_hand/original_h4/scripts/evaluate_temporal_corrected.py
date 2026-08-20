@@ -49,7 +49,7 @@ def main() -> None:
     parser.add_argument("--split", choices=("d2", "d7"), default="d2")
     parser.add_argument("--backbones", nargs="+", default=list(BACKBONES))
     parser.add_argument("--sequences", nargs="+")
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     # A second head must not land on the first one's record: the default path holds the
     # 142-channel run and overwriting it would leave two configurations behind one name.
     parser.add_argument("--output", type=Path, default=OUT)

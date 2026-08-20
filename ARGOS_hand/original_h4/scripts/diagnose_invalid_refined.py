@@ -32,10 +32,13 @@ def main() -> None:
     parser.add_argument("--recording", default="Vid10_Liver_Med")
     parser.add_argument("--backbone", default="RAFT-Stereo")
     parser.add_argument("--max-frames", type=int, help="default is the whole recording")
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--tag", default="", help="suffix for the output file names")
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
+    # The 142-channel results already live at the bare path. A different head must not
+    # land on them: this is how a stale table survived a recanonicalisation once.
+    out = OUT if "canonical_h4" in args.module else OUT / "a2"
 
     import torch
     for path in (str(ROOT), str(ROOT / "scripts"), str(ROOT.parents[1] / "ARGOS_FREEZED/src")):
@@ -85,7 +88,7 @@ def main() -> None:
                 "state_age": int(result["state_age"]), "reset": bool(result["reset"]),
             })
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     memory_values = [item["aligned_memory"] for item in offenders]
     summary = {
         "project": "ARGOS v2",
@@ -108,8 +111,8 @@ def main() -> None:
         "invalid_penalty_mm": 10000.0,
         "training_performed": False,
     }
-    (OUT / f"{args.recording}_{args.backbone}{args.tag}_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
-    (OUT / f"{args.recording}_{args.backbone}{args.tag}_pixels.json").write_text(json.dumps(offenders[:500], indent=2) + "\n")
+    (out / f"{args.recording}_{args.backbone}{args.tag}_summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    (out / f"{args.recording}_{args.backbone}{args.tag}_pixels.json").write_text(json.dumps(offenders[:500], indent=2) + "\n")
     print(json.dumps(summary, indent=2))
 
 

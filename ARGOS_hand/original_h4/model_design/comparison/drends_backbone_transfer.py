@@ -140,7 +140,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--backbone", required=True, choices=ALL_BACKBONES)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--recordings", nargs="+")
     parser.add_argument("--max-frames", type=int)

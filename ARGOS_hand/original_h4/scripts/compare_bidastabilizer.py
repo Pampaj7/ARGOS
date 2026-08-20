@@ -59,7 +59,7 @@ def metrics(prediction: np.ndarray, gt: np.ndarray, mask: np.ndarray) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4_masked:factory")
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2")
     parser.add_argument("--output", type=Path, default=OUT_DEFAULT,
                         help="one directory per head; the default holds the 142-channel run")
     parser.add_argument("--device", default="cuda:0")

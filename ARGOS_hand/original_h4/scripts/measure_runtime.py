@@ -82,7 +82,7 @@ def main() -> None:
     # deployed system rather than only narrowing the first convolution, so it is the only
     # one whose latency can differ from canonical. That was unmeasurable while this script
     # named its module in an import statement.
-    parser.add_argument("--module", default="model_design.comparison.canonical_h4:factory",
+    parser.add_argument("--module", default="model_design.comparison.ablation_h4:factory_a2",
                         help="module:factory to measure, as accepted by the evaluation runners")
     parser.add_argument("--output", type=Path, default=None,
                         help="defaults to results/runtime/runtime.json for the canonical module "
