@@ -610,8 +610,10 @@ Matched-policy closure on D2, seed $0$, all five backbones and all sequences
 pooled before taking each ratio; reductions in \%, higher is better, DTCE at
 lag $k{=}4$. Every row shares the frozen predictions, the alignment, the
 support contract, the $H{=}4$ state machine and the evaluation code --- only
-the policy changes, and the six rows above ours load no checkpoint. The full
-grid of fifteen policies is in the supplement.
+the policy changes. The first five rows load no checkpoint at all; unbounded
+recurrence is our own trained head with the re-anchor removed, which is why it
+is the one that inverts. The full grid of fifteen policies is in the
+supplement.
 }
 \label{tab:closure}
 \setlength{\tabcolsep}{2.5pt}
@@ -633,12 +635,11 @@ Raw-vs-memory oracle (ceiling)    & $12.74$ & $21.87$ & $10.01$ & $0.000$ \\
 \end{tabular}
 \end{table}
 
-We isolate the learned decision policy on D2, seed $0$. All variants share
-the frozen predictions, the alignment, the support contract and the
-evaluation code; only the policy changes, and all run unconfined so the
-comparison shares one implementation (confinement moves D2 EPE by
-$1.2\times10^{-5}$\,px). Figures here are pooled over the fifteen
-backbone--sequence cells, whose raw EPE is $0.276202$.
+We isolate the learned decision policy on D2, seed $0$. All variants share the
+frozen predictions, the alignment, the support contract and the evaluation
+code, and all run unconfined so the comparison shares one implementation
+(confinement moves D2 EPE by $1.2\times10^{-5}$\,px). Figures are pooled over
+the fifteen backbone--sequence cells, whose raw EPE is $0.276202$.
 
 The fifteen policies (Table~\ref{tab:closure}, full grid in the supplement)
 are the horizon sweep and continuous recurrence for the learned head, fixed
@@ -711,8 +712,8 @@ the lower-right block of Table~\ref{tab:grid}.
 \label{sec:seeds}
 
 We pre-registered a seed study before any result existed: only the seed
-varies, sequences are the resampling unit, and selecting the best seed is
-prohibited.
+varies, resampling is at sequence granularity rather than pixel, and selecting
+the best seed is prohibited.
 
 Pooled over five backbones the relative Bad1 reduction is
 $12.73\pm0.32\%$ on D2 and $5.84\pm0.22\%$ on held-out D7; EPE gives
@@ -765,7 +766,7 @@ in-domain baseline remains the comparison we cannot run.
 On $117.4$M pixels of common support, raw EPE $1.199$ becomes $1.175$ under
 the baseline and $\mathbf{1.131}$ under \steer; Bad1 $44.92\%$ becomes
 $44.81$ and $\mathbf{43.39}$, and RMSE $1.876$ becomes $1.776$ and
-$\mathbf{1.710}$. The regime is hard and the Bad1 column says so ---
+$\mathbf{1.710}$. The regime is hard and those Bad1 rates say so ---
 ground-truth disparity averages $9.89$\,px, so a raw EPE of $1.199$ is a third
 of the scene's spread --- so this compares two refiners of a weak prediction,
 not a claim that either recovers a good one. \steer\ is the only causal entry
@@ -869,8 +870,10 @@ why the shipped model is the smaller one. We began where the video-stereo
 literature does, with a frozen ResNet-18 \cite{he2016resnet} supplying
 appearance correlations and cost curves, $104$ channels on top of the $38$
 geometric ones --- the configuration the four deviations were pre-registered
-against. Three of them sit above it on the held-out endpoint, so none of the
-decisions they undo is load-bearing. Removing the learned evidence entirely
+against. Three of them sit above it on the held-out endpoint and the fourth,
+dropping the appearance channels, is $0.27$ points below --- inside the
+$0.37$-point threshold, so unreadable rather than worse. None of the four
+decisions is load-bearing. Removing the learned evidence entirely
 was then given the same three-seed treatment, under the promotion rule that
 decides on D2 with D7 reported afterwards, and it stays ahead on both
 endpoints with seed deviation eight times tighter ($0.32$ against $2.53$
@@ -903,21 +906,19 @@ withdrawn, and appears nowhere in this paper.
 \label{sec:masking}
 
 Confining the output to \eqref{eq:support}, not merely computing it, is a
-single line with checkpoint, head, policy and reset schedule identical
-(measured on the $142$-channel configuration, which shares the warp and the
-mask). On DRENDS the difference is categorical: unmasked, depth RMSE
-\emph{regresses} in every cell evaluated, by $+110.4\%$; confined, it improves
-in every cell, by $-3.2\%$. The two arms cover $14$ and $15$ cells, so the
-comparison is directional and unpaired. The cause is that zero-padded
-out-of-bounds memory enters the blend as $\widetilde m_t=0$ and bounded
-recurrence carries the collapse to the next re-anchor; the offenders are rare
-and bursty ($300$ of $38.8$M pixels on one recording, aligned memory exactly
-$0.0$ for every one) and, since invalid predictions on valid support are
-penalised rather than discarded, they are the entire source of a depth tail we
-had attributed to the external domain. On SCARED-C the same ablation is nearly
-inert. The contract costs a little in-domain gain, buys well-posed behaviour
-out of it, and is almost invisible to anyone validating in domain only.
-Forensics in the supplement.
+single line, measured on the $142$-channel configuration, which shares the
+warp and the mask. On DRENDS the difference is categorical: unmasked, depth
+RMSE \emph{regresses} in every cell evaluated, by $+110.4\%$; confined, it
+improves in every cell, by $-3.2\%$ (the two arms cover $14$ and $15$ cells,
+so the comparison is directional and unpaired). Zero-padded out-of-bounds
+memory enters the blend as $\widetilde m_t=0$ and bounded recurrence carries
+the collapse to the next re-anchor; the offenders are rare and bursty ($300$
+of $38.8$M pixels on one recording, aligned memory exactly $0.0$ for every
+one) and, since invalid predictions on valid support are penalised rather than
+discarded, they are the entire source of a depth tail we had attributed to the
+external domain. On SCARED-C the same ablation is nearly inert: the contract
+costs a little in-domain gain, buys well-posed behaviour out of it, and is
+almost invisible to anyone validating in domain only.
 
 \section{Analysis}
 \label{sec:analysis}
@@ -942,22 +943,20 @@ not occasional large error, so the constraint buys mean accuracy rather than
 safety from large corrections.
 
 Two limits are worth stating. Against the raw-versus-memory oracle of
-Table~\ref{tab:closure}, \steer\ recovers $29.0\%$ of the available gain on
-D2 pooled and $25.2\%$ averaging per-cell recovery, so the open problem is
-deciding \emph{where} to intervene. That ceiling is measured on \steer's own
-aligned memory: under $H{=}4$ the memory is the previous fused output on three
-frames of four, so the oracle belongs to whichever head produced it and cannot
-be carried across configurations. And the effective weight $w_t$,
-recovered from the convex form, is an intervention magnitude rather than an
-uncertainty: it ranks harmful intervention at AUROC $0.393$--$0.408$ on D2 and
+Table~\ref{tab:closure} --- measured on \steer's own aligned memory, since
+under $H{=}4$ that memory is the previous fused output on three frames of four
+and the ceiling therefore belongs to whichever head produced it --- \steer\
+recovers $29.0\%$ of the available gain on D2 pooled and $25.2\%$ per cell, so
+the open problem is deciding \emph{where} to intervene. And the effective
+weight $w_t$, recovered from the convex form, is an intervention magnitude
+rather than an uncertainty: it ranks harmful intervention at AUROC $0.393$--$0.408$ on D2 and
 $0.488$--$0.507$ on held-out D7, below chance on the split it was tuned on and
 at chance on the split it was not. The $142$-channel configuration is the same
 shape ($0.366$--$0.381$ and $0.496$--$0.506$), so this belongs to the
-formulation and not to the evidence space. It does not contradict the
-intervention ratios, which factorise into a count and a magnitude term needing
-no per-pixel ranking. A policy can be good on average and uninformative per
-pixel, which is what makes the oracle gap a ranking problem rather than a
-capacity one.
+formulation and not to the evidence space. It does not contradict the intervention ratios, which factorise into a count
+and a magnitude term needing no per-pixel ranking: a policy can be good on
+average and uninformative per pixel, which is what makes the oracle gap a
+ranking problem rather than a capacity one.
 
 
 % ============================================================
@@ -987,20 +986,20 @@ but not internal disocclusion.
 SCARED-C's corrected poses let geometry be accumulated in one world frame and
 the disagreement between views of a point measured --- what a map fuses rather
 than what a frame scores. On held-out D7 refinement reduces that disagreement
-in $4/4$ sequences and for both heads, by $11.7\%$ of the excess over a
-ground-truth floor of $0.06$--$0.21$\,mm ($9.9\%$ for the $142$-channel
-ablation); on development D2 it \emph{increases} it by $15.5\%$ ($7.1\%$). The
-splits differ in how much there is to remove --- raw excess $0.55$--$1.11$\,mm
-on D7 against $0.18$--$0.22$ on D2 --- which suggests alignment recovers
-geometry a map can fuse where the raw prediction is poor and costs more than
-it gains where it is not. The reversal is not an artefact of one estimator: over the full
-$5\times7$ grid of backbones and sequences the sign never changes, all $15$
-D2 cells negative ($-32.1$ to $-5.4\%$) and all $20$ D7 cells positive
-($+7.2$ to $+17.8\%$). It does not settle the mechanism --- the two
-raw-excess ranges stay disjoint, so no backbone makes D2 as hard as D7, and
-within D2 the ordering does not hold either. We report the condition as
-robust across estimators and do not claim raw difficulty as its cause.
-Mapping benefit is conditional, not general.
+by $11.7\%$ of the excess over the ground-truth floor, for both heads; on
+development D2 it \emph{increases} it by $15.5\%$. The
+reversal is not an artefact of one estimator: over the full $5\times7$ grid of
+backbones and sequences the sign never changes, all $15$ D2 cells negative
+($-32.1$ to $-5.4\%$) and all $20$ D7 cells positive ($+7.2$ to $+17.8\%$).
+The splits differ in how much there is to remove --- raw excess over the same
+grid is $0.518$--$1.113$\,mm on D7 against $0.171$--$0.290$ on D2 --- which
+suggests alignment recovers geometry a map can fuse where the raw prediction
+is poor and costs more than it gains where it is not. That does not settle the
+mechanism: the two ranges stay disjoint, so no backbone makes D2 as hard as
+D7, and within D2 the ordering does not hold either --- one estimator loses
+$32.1\%$ at $0.269$\,mm of excess and $16.5\%$ at $0.290$. We report the
+condition as robust across estimators and do not claim raw difficulty as its
+cause. Mapping benefit is conditional, not general.
 
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and two
@@ -1155,17 +1154,12 @@ in \emph{Proc. International Conference on Machine Learning (ICML)},
 2019.
 
 \bibitem{allan2021scared}
-M.~Allan \emph{et al.},
-``Stereo correspondence and reconstruction of endoscopic data
-challenge,''
-2021, arXiv:2101.01133.
+M.~Allan \emph{et al.}, ``Stereo correspondence and reconstruction of
+endoscopic data challenge,'' 2021, arXiv:2101.01133.
 
 \bibitem{edwards2022servct}
-P.~J. Edwards \emph{et al.},
-``SERV-CT: A disparity dataset from cone-beam CT for validation of
-endoscopic 3D reconstruction,''
-\emph{Medical Image Analysis},
-vol.~76, p.~102302, 2022.
+P.~J. Edwards \emph{et al.}, ``SERV-CT: A disparity dataset from cone-beam CT
+for endoscopic 3D reconstruction,'' \emph{Med. Image Anal.}, vol.~76, 2022.
 
 \bibitem{long2021edssr}
 Y.~Long \emph{et al.},
@@ -1210,9 +1204,8 @@ M.~Poggi \emph{et al.},
 in \emph{Proc. CVPR}, 2020.
 
 \bibitem{recasens2021endodepth}
-D.~Recasens \emph{et al.}, ``Endo-Depth-and-Motion: Reconstruction and
-tracking in endoscopic videos,'' \emph{IEEE Robot. Autom. Lett.}, vol.~6,
-no.~4, 2021.
+D.~Recasens \emph{et al.}, ``Endo-Depth-and-Motion,'' \emph{IEEE Robot.
+Autom. Lett.}, vol.~6, no.~4, 2021.
 
 \end{thebibliography}
 
