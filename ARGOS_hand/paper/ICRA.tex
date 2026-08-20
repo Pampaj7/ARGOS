@@ -503,12 +503,14 @@ mean epoch-to-epoch movement in validation EPE ($0.0025$--$0.0046$) is
 comparable to everything still gained after it, so the epoch of the minimum is
 uninformative.
 A probe settles it: the shipped model retrained under the locked recipe with
-the epoch budget alone raised, not eligible for selection, stopped by the
-cluster at $47$ epochs. Its best validation EPE is $0.2915$ at epoch~$13$
-against $0.2949$--$0.2967$ for the three shipped runs, so twelve epochs is
-short by $0.0034$\,px --- the size of the movement above --- and the next $34$
-epochs never beat it, the window minima rising to $0.2965$ and $0.2981$. The
-budget is a plateau, not a ceiling. One ablation (A4) diverges after epoch
+the epoch budget alone raised, not eligible for selection, run to $47$ epochs.
+The plateau is reached at the budget. Its minimum falls at epoch~$13$
+($0.2915$ against $0.2965$ over the first twelve), one epoch past the locked
+schedule, and \emph{no} later epoch improves on it: over epochs $13$--$47$ the
+curve oscillates with standard deviation $0.0029$\,px in a band of $0.013$ and
+shows no trend, so the $0.005$ the extra epoch buys is the width of the band
+itself. Four times the budget does not move the operating point, and the epoch
+at which the minimum lands carries no information. One ablation (A4) diverges after epoch
 $10$, which best-validation selection catches.
 
 
