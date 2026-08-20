@@ -17024,4 +17024,40 @@ D2 mapping degradation, the no-reference gameability, the epoch-selection noise,
 the per-backbone negative DTCE on D2, A3 winning the registered endpoint, and an
 oracle gap that tonight got larger rather than smaller.
 
+
+\section*{Reading the eight pages back, and what thirty edits broke}
+
+Cutting a paper by a third is thirty edits, and thirty edits break things
+quietly. So I read the result end to end against the sources again. Four
+defects, one of which had been there far longer than tonight.
+
+The closure table's caption said ``the six rows above ours load no
+checkpoint''. Five do. The sixth is \emph{unbounded corrected recurrence},
+which is our own trained head with the re-anchor removed --- and that is
+exactly why it is the row that inverts, so the caption was not merely wrong
+but wrong in the direction that made our own worst row look like somebody
+else's baseline. That error predates the cutting entirely; it has been in the
+table since the table was written, and neither I nor three reviewers reading
+for defects caught it. What caught it was reading the caption next to the rows
+it describes, which is a thing I had not done.
+
+The seed section declared sequences the resampling unit and then, two
+sentences later, correctly said the bootstrap draws backbone--sequence cells.
+Both sentences were mine, one of them written tonight to fix a reviewer's
+objection about exactly this.
+
+The drift paragraph quoted RAFT-Stereo-only excess ranges and then reasoned
+about the full grid's disjointness --- two different supports for one argument,
+created by updating half a paragraph when the twelve new cells landed.
+
+And ``the Bad1 column says so'' outlived the table whose column it was.
+
+One more, from the statistics reviewer and correct: A1 sits $0.27$ points
+below its base, inside the $0.37$-point threshold we declared. Under our own
+rule that is unreadable, not worse. The paper said three deviations sit above
+the base and left the reader to infer the fourth had lost.
+
+Eight pages, no errors, no undefined references, no overfull boxes. The only
+thing still open is the convergence probe at $20$ of $100$ epochs.
+
 \end{document}
