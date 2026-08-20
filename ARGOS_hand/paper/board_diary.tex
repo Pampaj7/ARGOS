@@ -17343,4 +17343,23 @@ Also today: A4 seeds 1 and 2 finished training (their evaluation is queued),
 and the DRENDS matched-policy closure resumed after its job was killed
 mid-flight --- one of five policies had completed.
 
+
+
+\section*{The full-resolution context branch costs 22 milliseconds, not 3 percent}
+
+T2.2 asked whether declining A3 on ``$16\times$ the context-branch compute''
+survives being stated in absolute milliseconds, since the head is only
+$1.00$\,ms and a reader could conclude we refused a better configuration to
+save ${\sim}3\%$ of the module. Measured on the same H100 and cache grid as
+every other runtime number: A3's module overhead is $51.08$\,ms against the
+shipped head's $28.90$ and the $142$-channel base's ${\sim}33.5$. Stage-wise,
+moving the context branch to full resolution takes evidence construction from
+$5.13$ to $19.92$\,ms, alignment from $1.05$ to $3.62$, and the head from
+$1.00$ to $1.31$. So the decline is defended by $+22$\,ms --- $77\%$ of the
+entire shipped module --- not by $3\%$, and the sentence can stay with the
+absolute number in it. Caveat for the twins: this measures A3 on its
+$142$-channel base; A3b at $38$ channels will be cheaper in the evidence term,
+and its cost argument should be restated from its own measurement when it
+lands.
+
 \end{document}

@@ -1,0 +1,207 @@
+{
+  "project": "ARGOS v2",
+  "generated_at": "2026-08-20T16:42:31.174994+00:00",
+  "device_name": "NVIDIA H100 PCIe",
+  "torch": "2.5.1+cu121",
+  "cache_grid": [
+    144,
+    180
+  ],
+  "module": "model_design.comparison.ablation_h4:factory_a3",
+  "cue_channels": 142,
+  "frozen_extractor_in_runtime": true,
+  "module_provenance": {
+    "module": "ablation_h4",
+    "variant_of": "canonical_h4_masked",
+    "variant": "A3_single_resolution",
+    "seed": null,
+    "declared_change": "drop the average pooling and make the strided convolution stride one, so the 48-channel context branch and the fusion gate run at full resolution instead of a quarter",
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A3_single_resolution/checkpoints/best_validation.pt",
+    "checkpoint_sha256": "aa6a71dc5e6e6fb534cf83102a45e34db0178dbd4b9e99bcf711f74bcdfbfbff",
+    "training_provenance": {
+      "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+      "declared": {
+        "change": "drop the average pooling and make the strided convolution stride one, so the 48-channel context branch and the fusion gate run at full resolution instead of a quarter",
+        "declared_after": "A4 was already evaluated; A3 tests an independent design decision and its endpoint is unchanged",
+        "everything_else": "unchanged, including the loss and the channel counts",
+        "field": "resolution of the context branch",
+        "honest_note": "Full-resolution 48-channel residual blocks cost roughly 16x the compute of the canonical branch, so this variant is slower to train and would be slower at inference. If it wins, that trade has to be reported, not hidden.",
+        "parameter_cost": 0,
+        "rationale": "The head predicts the reset gate at full resolution and the fusion weight at a quarter, on the reasoning that deciding HOW MUCH to intervene needs more context than deciding WHETHER. That reasoning has never been tested.",
+        "timestamp": "2026-08-16T18:10:00+02:00",
+        "why_not_delete_the_branch": "Removing it outright would cut the head from 177,338 to about 41,000 parameters and confound 'context needs low resolution' with 'the head needs capacity'. Keeping the same weights at stride one holds the parameter count exactly and moves only the receptive field, which shrinks by a factor of four in pixels."
+      },
+      "locked_training": {
+        "alpha_reg": 0.2,
+        "backbones": [
+          "S2M2-S",
+          "RAFT-Stereo",
+          "StereoAnywhere"
+        ],
+        "batch_size": 4,
+        "clip_length": 4,
+        "coverage_threshold": 0.5,
+        "epochs": 12,
+        "gradient_clip_norm": 1.0,
+        "learned_stereo_evidence": true,
+        "learning_rate": 0.0002,
+        "memory_state": "recurrent",
+        "mixed_precision_cuda": true,
+        "optimizer": "AdamW",
+        "scheduler": null,
+        "seed": 0,
+        "tau_fusion_native_px": 1.0,
+        "tau_reset_native_px": 5.0,
+        "train_dataset_ids": [
+          1,
+          3,
+          6
+        ],
+        "validation_dataset_ids": [
+          2
+        ],
+        "weight_decay": 0.0001
+      },
+      "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/ablation_A3_single_resolution",
+      "patch": {
+        "extra_parameters": 0,
+        "from": "CODDStyleFusionHead",
+        "patched": "CODDStyleFusionHead",
+        "to": "SingleResolutionHead"
+      },
+      "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+      "variant": "A3_single_resolution"
+    },
+    "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json"
+  },
+  "stages_ms": {
+    "sea_raft_forward": {
+      "mean_ms": 12.918939700126648,
+      "median_ms": 13.145503997802734,
+      "p95_ms": 15.227775573730469,
+      "iterations": 200
+    },
+    "sea_raft_reverse": {
+      "mean_ms": 12.800285754203797,
+      "median_ms": 13.085760116577148,
+      "p95_ms": 14.755071640014648,
+      "iterations": 200
+    },
+    "bida_alignment": {
+      "mean_ms": 3.748954393863678,
+      "median_ms": 3.619296073913574,
+      "p95_ms": 7.738111972808838,
+      "iterations": 200
+    },
+    "evidence_142ch": {
+      "mean_ms": 21.29002144098282,
+      "median_ms": 19.92171287536621,
+      "p95_ms": 41.10163116455078,
+      "iterations": 200
+    },
+    "fusion_head": {
+      "mean_ms": 1.3082528018951416,
+      "median_ms": 1.3078880310058594,
+      "p95_ms": 1.3178880214691162,
+      "iterations": 200
+    }
+  },
+  "temporal_overhead_median_ms": 51.08016109466553,
+  "peak_vram_mb": 137.61279296875,
+  "frozen_stereo_latency": {
+    "S2M2-S": {
+      "median_ms": 73.45988415181637,
+      "mean_ms": 76.69895159626977,
+      "p95_ms": 88.86534525081514,
+      "inference_resolution": [
+        410,
+        512
+      ],
+      "note": "resized to width=512, aspect-preserved",
+      "source": "cache metadata (frozen stereo pass), not re-measured here"
+    },
+    "RAFT-Stereo": {
+      "median_ms": 325.87857032194734,
+      "mean_ms": 325.9767306259034,
+      "p95_ms": 326.87098840251565,
+      "inference_resolution": [
+        1024,
+        1280
+      ],
+      "note": "native resolution, padded internally to a multiple of 32",
+      "source": "cache metadata (frozen stereo pass), not re-measured here"
+    },
+    "StereoAnywhere": {
+      "median_ms": 691.1765821278095,
+      "mean_ms": 690.7107115056932,
+      "p95_ms": 692.5419653765857,
+      "inference_resolution": [
+        1024,
+        1280
+      ],
+      "note": "native resolution, padded internally to a multiple of 32",
+      "source": "cache metadata (frozen stereo pass), not re-measured here"
+    },
+    "CREStereo": {
+      "median_ms": 175.2792103216052,
+      "mean_ms": 175.75412388937863,
+      "p95_ms": 175.9533477947116,
+      "inference_resolution": [
+        1024,
+        1280
+      ],
+      "note": "native resolution, padded internally to a multiple of 32",
+      "source": "cache metadata (frozen stereo pass), not re-measured here"
+    },
+    "Fast-FoundationStereo": {
+      "median_ms": 57.48638091608882,
+      "mean_ms": 48.437809201529014,
+      "p95_ms": 62.58673081174493,
+      "inference_resolution": [
+        320,
+        736
+      ],
+      "note": "fixed ONNX input resolution",
+      "source": "cache metadata (frozen stereo pass), not re-measured here"
+    }
+  },
+  "end_to_end": {
+    "S2M2-S": {
+      "stereo_median_ms": 73.45988415181637,
+      "temporal_overhead_ms": 51.08016109466553,
+      "total_ms": 124.5400452464819,
+      "fps": 8.029545822155937,
+      "overhead_fraction": 0.4101504941127238
+    },
+    "RAFT-Stereo": {
+      "stereo_median_ms": 325.87857032194734,
+      "temporal_overhead_ms": 51.08016109466553,
+      "total_ms": 376.95873141661286,
+      "fps": 2.6528102857360403,
+      "overhead_fraction": 0.13550597674898263
+    },
+    "StereoAnywhere": {
+      "stereo_median_ms": 691.1765821278095,
+      "temporal_overhead_ms": 51.08016109466553,
+      "total_ms": 742.256743222475,
+      "fps": 1.347242728518092,
+      "overhead_fraction": 0.06881737560632087
+    },
+    "CREStereo": {
+      "stereo_median_ms": 175.2792103216052,
+      "temporal_overhead_ms": 51.08016109466553,
+      "total_ms": 226.35937141627073,
+      "fps": 4.417753918219796,
+      "overhead_fraction": 0.225659581819257
+    },
+    "Fast-FoundationStereo": {
+      "stereo_median_ms": 57.48638091608882,
+      "temporal_overhead_ms": 51.08016109466553,
+      "total_ms": 108.56654201075435,
+      "fps": 9.210940879934652,
+      "overhead_fraction": 0.4704963439805023
+    }
+  },
+  "caveat": "frozen stereo latency comes from the cache metadata and was measured on the caching hardware at each backbone's own inference resolution; the temporal stages are measured here at the 144x180 cache grid",
+  "realtime_claim": null
+}
