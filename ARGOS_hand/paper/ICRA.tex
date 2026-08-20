@@ -872,7 +872,10 @@ Held-out relative reduction (\%), not error: higher is better. The four
 deviations were pre-registered against the $142$-channel configuration;
 dropping its learned evidence is what \steer\ now is, so the shipped model is
 the top row and the configuration it was ablated from is the row below, with
-its deviations indented. Three-seed means where marked.
+its deviations indented. Rows marked ``3 seeds'' are means over three
+independently seeded trainings and carry the standard deviation on both
+columns; rows marked $\dagger$ are single runs. A difference smaller than the
+$0.37$-point three-seed spread is not interpreted either way.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{2.5pt}
@@ -882,10 +885,10 @@ Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\
 \midrule
 \steer\ (3 seeds)              & $38$ ch  & $\mathbf{5.61\pm0.42}$ & $\mathbf{5.84\pm0.22}$ \\
 \midrule
-$+$ learned evidence (3 seeds) & $142$ ch & $5.06$ & $5.15\pm0.34$ \\
-\quad no appearance           & $78$ ch  & $4.93$ & $4.88$ \\
+$+$ learned evidence (3 seeds) & $142$ ch & $5.06\pm0.44$ & $5.15\pm0.34$ \\
+\quad no appearance$^{\dagger}$ & $78$ ch  & $4.93$ & $4.88$ \\
 \quad full-res context (3 seeds) & $142$ ch & $5.24\pm0.52$ & $5.68\pm0.16$ \\
-\quad unconstrained output    & $142$ ch & $0.05$ & $6.02$ \\
+\quad unconstrained output$^{\dagger}$ & $142$ ch & $0.05$ & $6.02$ \\
 \bottomrule
 \end{tabular}
 \end{table}
