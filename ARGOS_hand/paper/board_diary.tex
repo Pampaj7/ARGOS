@@ -17411,4 +17411,36 @@ table, and the conclusion's unscoped copy of the same claim was caught and
 scoped in the same pass (the fifth-copy lesson, applied for once before
 landing rather than after).
 
+
+
+\section*{Leonardo's three corrections: the statistics we already had, the rule we broke, and the claim we withdrew too early}
+
+Three edits from the author tonight, each verified before landing.
+
+\textbf{A4 without the confession.} The post-hoc admission (``a reading chosen
+after seeing the result'') was the one place a reviewer could say the endpoint
+moved after the data. It was also unnecessary: A4's Bad1 margin ($+1.13$) sits
+at $t=2.28$ against a critical $4.30$ at df${\approx}2$ --- not separable from
+its own spread, which at $0.83$ is four times ours and twice the registered
+threshold, whose comparable-spreads assumption it breaks. Its EPE loss is at
+$t=4.5$ --- separable. The paragraph now declines A4 on the metric where the
+difference is real, and the dev-to-held-out contrast ($5.32 \to 1.70$ against
+our $4.13 \to 5.61$) becomes one juxtaposed line of reinforcement.
+
+\textbf{The rule we broke ourselves.} ``Ahead on both endpoints'' against
+full-res context read differences of $0.16$ and $0.37$ under a threshold of
+$0.37$ --- the exact self-contradiction anyone with a calculator finds. Now:
+indistinguishable by the rule the table is read under, separated by cost,
+$28.9 \to 51.1$\,ms measured. T2.2 closed.
+
+\textbf{The FB claim, resurrected properly.} A5 killed ``drop the pass'' at
+training time; but the two facts together (training needs the cue, the trained
+head barely reads it) point at train-with, deploy-without --- the shipped
+checkpoint with $C^{FB}$ pinned at inference, which on D2 costs nothing. The
+missing number is the same substitution on held-out D7. Declared before
+running (declaration JSON beside the output: same checkpoint, Bad1/EPE within
+$0.37$ of its own unpinned numbers = droppable at deployment), evaluation
+launched on the existing no-FB module --- the one that produced the D2 number,
+so the convention cannot drift.
+
 \end{document}

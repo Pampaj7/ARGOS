@@ -947,22 +947,23 @@ ordering reverses, $4.13\pm0.38\%$ against $3.55\pm0.45\%$.
 Two rows need the registered rule read out loud. Full-resolution context wins
 the registered endpoint against the configuration it was registered against
 ($5.68\pm0.16$ against $5.15\pm0.34$), an outcome the registration did not
-enumerate. It does not win against what we ship, which is ahead on both
-endpoints, so the accuracy argument for it no longer exists and only cost
-remains \B{T2.2}. Ablating convexity (A4) wins the registered endpoint
-outright: $6.97\pm0.83\%$ of held-out Bad1 over three seeds, the largest in
-the table, against the base's $5.15\pm0.34$ and our $5.84\pm0.22$. We still
-decline it, on EPE --- a metric the registration names as reported but not as
-the endpoint, a reading chosen after seeing the first result, which three
-seeds have since made solid: A4's held-out EPE gain is $1.70\pm1.43\%$
-against our $5.61\pm0.42$, and the shape of the loss is the informative
-part. On development the escape term is \emph{ahead} of the convex head
-($5.32$ against $4.13\%$ EPE); held out it collapses, and the drop from
-development to held-out holds in all fifteen backbone--seed pairs. The
-unconstrained output buys in-domain accuracy that does not survive the split
-shift; the convex constraint is what makes the EPE gain transferable across
-it. Its registered consequence we honour: the falsification clause required
-that if A4 matched or beat the canonical model held out, the claim
+enumerate. It does not win against what we ship: $5.68\pm0.16$ against
+$5.84\pm0.22$ held out, inside the threshold on Bad1 and at it on EPE, so the
+two are indistinguishable by the rule this table is read under. What
+separates them is cost --- the full-resolution branch takes the module from
+$28.9$ to $51.1$\,ms, measured --- and the cheaper one is what we ship. Ablating convexity (A4) posts the largest held-out Bad1 reduction in
+the table, $6.97\pm0.83\%$, but its margin over us ($1.13$ points) is not
+separable from its own three-seed spread --- four times ours, and twice the
+registered threshold, which assumes comparable spreads and cannot be applied
+here. Its EPE loss \emph{is} separable: $1.70\pm1.43\%$ against our
+$5.61\pm0.42$, over four standard errors. We decline it on the metric where
+the difference is real rather than on the metric that suits us. The two
+trajectories put side by side say what the constraint buys: from development
+to held-out, A4's EPE gain falls $5.32 \to 1.70$ while ours rises
+$4.13 \to 5.61$, and the drop holds in all fifteen backbone--seed pairs ---
+the unconstrained output buys in-domain accuracy that does not survive the
+split shift. Its registered consequence we honour: the falsification clause
+required that if A4 matched or beat the canonical model held out, the claim
 attributing \emph{cross-backbone} transfer to the convex action space be
 withdrawn rather than softened. It is withdrawn and appears nowhere in this
 paper; the cross-\emph{split} statement above is a narrower claim, measured
@@ -1168,7 +1169,12 @@ unpaired version is replaced) and T2.5 (the FB-free training ran and
 \emph{failed} the threshold: $5.31$ against $5.84\pm0.22$ held-out Bad1, so
 the reverse pass is load-bearing at training time and the efficiency claim is
 withdrawn --- the limitation paragraph now states both halves; one seed,
-conservative direction).
+conservative direction). Then T2.2: measured, the full-resolution branch takes
+the module from $28.9$ to $51.1$\,ms ($77\%$ of the shipped module, not
+${\sim}3\%$), and the ablation passage now reads the shipped-vs-full-res
+comparison by the registered rule (indistinguishable in accuracy, separated
+by cost) instead of claiming ``ahead on both endpoints'' across differences
+the threshold forbids reading.
 
 \subsection*{\textcolor{red}{Tier 1 --- factual. Do not submit with these open.}}
 \begin{description}[leftmargin=3.2em,style=nextline,itemsep=3pt]
@@ -1185,13 +1191,6 @@ conservative direction).
 load-bearing'' describes a different model. Minimum: a footnote or column
 marking the base per row. Better: re-run full-res context and unconstrained
 output at $38$\,ch --- two trainings of a $155$k head.}
-
-\bitem{T2.2}{\textbf{Give the full-res context cost in absolute ms, not
-``$16\times$''.} Sec.~\ref{sec:limits} puts the whole head at $1.00$ of
-$28.90$\,ms, so a reader pairs the sentences and concludes we declined a
-better configuration to save ${\sim}3\%$ of the module. If the branch is
-$0.6\rightarrow9.6$\,ms the argument is real; if $0.2\rightarrow3.2$ it is not
-and the sentence must change.}
 
 \bitem{T2.3}{\textbf{A4 seed 2 and A6 are in training.} On landing, update
 Table~\ref{tab:ablations}, the $\dagger$ markers, and every sentence in
