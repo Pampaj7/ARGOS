@@ -467,31 +467,31 @@ group.}
 \toprule
 Sequence & Method & EPE & Bad1 & Bad3 \\
 \midrule
-keyframe\_2 & BiDAStabilizer & $-1.45$ & $-4.01$ & $\mathbf{-5.31}$ \\
-(1033 fr.)  & TETHER         & $\mathbf{-2.64}$ & $\mathbf{-17.67}$ & $-4.18$ \\
+keyframe\_2 & BiDAStabilizer & $\mathbf{-1.45}$ & $-4.01$ & $\mathbf{-5.31}$ \\
+(1033 fr.)  & TETHER         & $-0.76$ & $\mathbf{-15.65}$ & $-4.00$ \\
 \midrule
-keyframe\_3 & BiDAStabilizer & $\mathbf{-2.32}$ & $\mathbf{-2.99}$ & $\mathbf{-27.99}$ \\
-(1102 fr.)  & TETHER         & $+0.27$ & $-2.34$ & $-10.97$ \\
+keyframe\_3 & BiDAStabilizer & $\mathbf{-2.32}$ & $-2.99$ & $\mathbf{-27.99}$ \\
+(1102 fr.)  & TETHER         & $-0.38$ & $\mathbf{-4.81}$ & $-16.22$ \\
 \midrule
 keyframe\_4 & BiDAStabilizer & $+0.63$ & $-5.81$ & $-6.82$ \\
-(2114 fr.)  & TETHER         & $\mathbf{-6.53}$ & $\mathbf{-17.17}$ & $\mathbf{-16.52}$ \\
+(2114 fr.)  & TETHER         & $\mathbf{-6.58}$ & $\mathbf{-17.76}$ & $\mathbf{-17.56}$ \\
 \midrule
 Pooled      & BiDAStabilizer & $-0.25$ & $-4.83$ & $-8.32$ \\
-(18.0M px)  & TETHER         & $\mathbf{-4.58}$ & $\mathbf{-12.53}$ & $\mathbf{-15.52}$ \\
+(18.0M px)  & TETHER         & $\mathbf{-4.60}$ & $\mathbf{-13.58}$ & $\mathbf{-16.81}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The pooled row favours TETHER on every metric, but two of the nine
-per-sequence cells do not, and one sequence favours BiDAStabilizer
-outright. On \texttt{keyframe\_3} our EPE is $0.27\%$ \emph{worse} than
-raw while the bidirectional method improves it by $2.32\%$. We report
-this rather than pooling it away: with three sequences, a single
-sequence-level disagreement is well within what the split can produce,
-and a method that sees the future should be expected to win somewhere.
-The claim the comparison supports is the pooled one, and it is that a
-strictly causal module beats a bidirectional one on the same input,
-not that it does so everywhere.
+The pooled row favours TETHER on every metric, but \emph{four} of the nine
+per-sequence cells do not, and the bidirectional method takes both EPE cells
+on the two shorter sequences. On \texttt{keyframe\_3} it improves EPE by
+$2.32\%$ against our $0.38\%$, six times as much. The whole of our pooled EPE
+margin comes from \texttt{keyframe\_4}, which is also the longest sequence and
+carries half the pixels. We report this rather than pooling it away: with
+three sequences that is well within what the split can produce, and a method
+that sees the future should be expected to win somewhere. The claim the
+comparison supports is the pooled one --- that a strictly causal module beats
+a bidirectional one on the same input --- and not that it does so everywhere.
 
 % ============================================================
 \section{Acquisition Audit of the Comparison Set}
@@ -677,7 +677,7 @@ Method & EPE & Bad1 (\%) & Bad3 (\%) & RMSE \\
 \midrule
 Raw RAFT-Stereo robust & 0.3029 & 2.087 & 0.186 & 0.4484 \\
 BiDAStabilizer         & 0.3021 & 1.987 & 0.171 & 0.4403 \\
-TETHER                 & \textbf{0.2890} & \textbf{1.826} & \textbf{0.157} & \textbf{0.4256} \\
+TETHER                 & \textbf{0.2889} & \textbf{1.804} & \textbf{0.155} & \textbf{0.4234} \\
 \midrule
 TC-Stereo (SceneFlow)  & 0.5242 & 9.051 & 1.680 & 1.4059 \\
 \bottomrule
