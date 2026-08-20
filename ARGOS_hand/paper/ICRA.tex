@@ -237,10 +237,13 @@ machine the gain is not temporal smoothing.
 
 \emph{(iii)} \textbf{A protocol that scores the intervention, not the
 prediction.} We measure introduced error alongside recovered error under
-fixed, prediction-independent support, and it changes conclusions: every
-spatially uniform blend recovering a meaningful share of the gain buys it by
-\emph{raising} the bad-pixel rate, and the one unlearned rule that does not is
-the one that varies in space. Applied to our own claims it is equally unkind:
+fixed, prediction-independent support, and it changes conclusions: on
+development, every spatially uniform blend recovering a meaningful share of
+the gain buys it by \emph{raising} the bad-pixel rate, while the one unlearned
+rule that varies in space does not. That trade is a property of the split as
+much as of the policy: out of domain, where the raw prediction is weak, none
+of the uniform blends pays in bad pixels either. Applied to our own claims
+the protocol is equally unkind:
 degenerate history-replay wins the no-reference metric, the head's weight
 inverts its relation to harm across splits, and what a map fuses improves on
 one split while degrading on the other, for a reason we can name.
@@ -705,6 +708,18 @@ unlearned policy comes, and where the distance shows: $0.87\%$ against
 $3.69\%$ of EPE, breaking more pixels doing less. What the learned head adds
 is not varying in space; it is knowing where.
 
+The closure is development work, and a reviewer is right to ask whether the
+margin survives the split. We repeat it out of domain, on the arena the freeze
+permits: on DRENDS with RAFT-Stereo, the best unlearned policy recovers
+$0.63\%$ of EPE against our $5.80\%$, a ratio of $9\times$ against $6\times$
+on D2. The denominator barely moves between the two arenas --- uniform
+smoothing recovers the same small amount wherever it is run --- so the
+widening is entirely ours, and it tracks how much raw error there is to
+recover ($0.276$\,px of raw EPE on D2 against $1.286$ out of domain), the
+same quantity Sec.~\ref{sec:mapping} finds decides the accumulated benefit.
+Where the raw prediction is this weak the uniform blends no longer pay in bad
+pixels, so that trade is stated on D2 alone.
+
 \subsection{Why $H=4$, and Why Recurrence Must Be Bounded}
 \label{sec:horizon}
 
@@ -1099,8 +1114,8 @@ patient benefit.
 \steer\ attaches one causal temporal module, trained once, to frozen and
 heterogeneous stereo estimators without touching their internals or using
 future frames. Its gain is not temporal averaging: matched fixed and EMA
-blends under an identical state machine recover a sixth of it and buy that
-with bad pixels, a trade the learned gate does not make. One frozen $H=4$
+blends under an identical state machine recover a sixth of it on development
+--- paying in bad pixels there --- and an eleventh out of domain. One frozen $H=4$
 checkpoint improves all five estimators on held-out D7 and all $25$
 recording--backbone cells zero-shot on DRENDS.
 
