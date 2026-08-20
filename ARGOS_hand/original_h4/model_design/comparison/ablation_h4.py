@@ -13,8 +13,9 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
+from model_design.comparison.canonical_h4 import CanonicalH4
 from model_design.comparison.canonical_h4_masked import MaskedCanonicalH4
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,6 +26,9 @@ VARIANTS = {
     "A2_no_learned_evidence": "A2_no_learned_stereo_evidence",
     "A3_single_resolution": "A3_single_resolution",
     "A4_relaxed_convexity": "A4_relaxed_convexity",
+    "A5_no_fb_cue": "A5_no_fb_cue",
+    "A6_geometry_only": "A6_geometry_only",
+    "A7_half_width": "A7_half_width",
 }
 
 
@@ -149,3 +153,39 @@ def factory_a3_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
 
 def factory_a4(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A4_relaxed_convexity", device=device)
+
+
+def factory_a5(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A5_no_fb_cue", device=device)
+
+
+def factory_a6(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A6_geometry_only", device=device)
+
+
+def factory_a7(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A7_half_width", device=device)
+
+
+class UnconfinedAblationH4(AblationH4):
+    """The shipped head with the support contract removed from its OUTPUT only.
+
+    `AblationH4` inherits `MaskedCanonicalH4.step`, which applies
+    `fused = where(support, fused, raw)`. This skips that one line by calling the
+    unmasked parent directly, so the support is still computed and reported and only the
+    confinement is gone. That is the same single-line ablation the paper reports on the
+    142-channel configuration, now runnable on the head the paper proposes and on exactly
+    the same cells, which is what makes the two arms paired.
+    """
+
+    def describe(self) -> dict[str, Any]:
+        return super().describe() | {"variant_change": "support computed but NOT applied to the output",
+                                     "masked_to_support": False}
+
+    def step(self, frame: Mapping[str, Any]) -> dict[str, Any]:
+        # Deliberately bypasses MaskedCanonicalH4.step in the MRO.
+        return CanonicalH4.step(self, frame)
+
+
+def factory_a2_unconfined(*, device: str = "cuda:0", **_: Any) -> UnconfinedAblationH4:
+    return UnconfinedAblationH4(variant="A2_no_learned_evidence", device=device)
