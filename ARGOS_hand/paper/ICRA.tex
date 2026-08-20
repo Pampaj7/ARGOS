@@ -948,11 +948,11 @@ in this paper. \B{T2.3}
 \label{sec:masking}
 
 Confining the output to \eqref{eq:support}, not merely computing it, is a
-single line, measured on the $142$-channel configuration, which shares the
-warp and the mask \B{T2.4}. On DRENDS the difference is categorical:
-unmasked, depth RMSE \emph{regresses} in every cell evaluated, by $+110.4\%$;
-confined, it improves in every cell, by $-3.2\%$ (the arms cover $14$ and $15$
-cells, so the comparison is directional and unpaired). Zero-padded
+single line. On DRENDS the difference is categorical: unmasked, the shipped
+head \emph{regresses} depth RMSE in every one of the $25$
+recording--backbone cells, by $+221.9\%$ on average (range $+29.5$ to
+$+594.5$); confined, it improves in every one of the same $25$ cells, by
+$-3.5\%$ ($-6.7$ to $-1.8$). Zero-padded
 out-of-bounds memory enters the blend as $\widetilde m_t=0$ and bounded
 recurrence carries the collapse to the next re-anchor; the offenders are rare
 and bursty ($300$ of $38.8$M pixels on one recording, aligned memory exactly
@@ -1072,12 +1072,15 @@ locates it: the two SEA-RAFT passes are $26.2$ of the $28.9$\,ms, against
 $0.67$ for the evidence tensor and $1.00$ for the head; the tensor is that
 cheap because \steer\ builds no learned features, where the $142$-channel
 ablation spends $5.13$\,ms there. The reverse pass exists only to compute
-$C^{FB}_t$, so dropping it would free $45\%$ of the module; substituting a
-constant at inference moves the D2 closure from $3.69\%$ to $3.74$--$3.79\%$,
-well inside the seed spread, so this head appears not to use the cue. We
-report it rather than ship it: it is development-only, on a head trained with
-the cue present, and a head trained without it is an experiment we have not
-run \B{T2.5}. We evaluate perception geometry and what a map accumulates from
+$C^{FB}_t$, so dropping it would free $45\%$ of the module --- and it cannot
+be dropped for free, for a reason worth stating. Substituting a constant at
+inference moves the D2 closure from $3.69\%$ to $3.74$--$3.79\%$, inside the
+seed spread, so the trained head barely reads the cue; yet a head
+\emph{trained} with the channel pinned loses $0.53$ points of held-out Bad1
+($5.31$ against $5.84\pm0.22$, one seed, beyond the pre-registered $0.37$
+threshold). The cue is a training-time scaffold the inference-time
+substitution cannot see, and the pass stays. We evaluate perception geometry
+and what a map accumulates from
 it, not downstream control, and demonstrate neither clinical safety nor
 patient benefit.
 
@@ -1133,7 +1136,14 @@ text) and T1.3 (``acts on'' defined as support fraction; the full per-frame
 series over $1{,}861$ frames shows weight correlates \emph{negatively} with
 harm, Spearman $-0.68$ --- the worst frame is a tail, not a reversal, and the
 caption now says so). Development-only caveat on the latter: the series on a
-held-out sequence has not been run.
+held-out sequence has not been run. Then T2.4 (support contract re-measured on
+the shipped head, paired over the same $25$ DRENDS cells: unmasked $+221.9\%$
+depth RMSE in $25/25$, confined $-3.5\%$ in $25/25$; the $142$-channel
+unpaired version is replaced) and T2.5 (the FB-free training ran and
+\emph{failed} the threshold: $5.31$ against $5.84\pm0.22$ held-out Bad1, so
+the reverse pass is load-bearing at training time and the efficiency claim is
+withdrawn --- the limitation paragraph now states both halves; one seed,
+conservative direction).
 
 \subsection*{\textcolor{red}{Tier 1 --- factual. Do not submit with these open.}}
 \begin{description}[leftmargin=3.2em,style=nextline,itemsep=3pt]
@@ -1161,21 +1171,6 @@ and the sentence must change.}
 \bitem{T2.3}{\textbf{A4 seed 2 and A6 are in training.} On landing, update
 Table~\ref{tab:ablations}, the $\dagger$ markers, and every sentence in
 Sec.~\ref{sec:ablations} conditioned on ``single run''.}
-
-\bitem{T2.4}{\textbf{The support-contract result is measured on the 142-ch
-configuration} ($38$\,ch re-run $3/5$ complete). Finish it and move the
-numbers, or make the transfer argument explicitly in the first sentence rather
-than implying it from ``shares the warp and the mask''. Related: if $300$ of
-$38.8$M pixels move depth RMSE by $110\%$, every metric-depth RMSE here is
-tail-dominated --- pair at least one with a robust statistic already in the
-framework.}
-
-\bitem{T2.5}{\textbf{Run the FB-free training.} One run, $12$ epochs, $155$k
-parameters, converged by epoch $8$--$11$ on this recipe. If it holds:
-``$45\%$ of the module removed, $28.9\rightarrow{\sim}16$\,ms, accuracy
-unchanged'' --- an efficiency result in the currency this venue reads. If it
-fails, that is informative too. A measured $45\%$ saving left in a footnote is
-the weakest available option.}
 
 \end{description}
 
