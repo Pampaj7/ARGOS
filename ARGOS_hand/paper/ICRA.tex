@@ -704,7 +704,9 @@ recurrence is our own trained head with the re-anchor removed, which is why it
 is the one that inverts. The tuned residual rule is the only unlearned policy
 that varies its weight in space, and the only one that does not pay for its
 mean gain in bad pixels. The full grid of fifteen policies and the
-seventeen-point sweep behind that row are in the supplement.
+seventeen-point sweep behind that row are in the supplement. \steer's row is
+seed $0$, which is the weakest of its three seeds on this quantity
+($3.69$ against $4.13\pm0.38$), so every margin in this table understates it.
 }
 \label{tab:closure}
 \setlength{\tabcolsep}{2.5pt}
@@ -924,8 +926,11 @@ $4.83\pm0.15\%$, ranges disjoint at a permutation $p=0.10$. The learned
 evidence is not what makes the module work; it is what makes its training
 unstable, at $157{,}504$ frozen parameters, three forward passes per frame and
 $13.8\%$ of the runtime. Its apparent advantage on the development closure
-($4.05\%$ against $3.69\%$) is a seed-0 artefact: over three seeds \steer\
-leads there too, $4.13\%$ against $3.55\%$.
+($4.05\%$ against $3.69\%$) is a seed-0 artefact, and a sharp one: seed $0$ is
+the \emph{best} of three for that configuration and the \emph{worst} of three
+for ours, so the pairing everyone would report is the worst available to us.
+Over three seeds the ordering reverses, $4.13\pm0.38\%$ for \steer\ against
+$3.55\pm0.45\%$.
 
 Two rows need the registered rule read out loud, because it does not favour
 us. Running the context branch at full resolution reduces held-out Bad1 by
