@@ -970,6 +970,26 @@ RMSE and worst case: the failure is broad degradation of pixels already close,
 not occasional large error, so the constraint buys mean accuracy rather than
 safety from large corrections.
 
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{intervention_map.pdf}
+\caption{
+Where the module intervenes, and whether it helped there. Grey and off-white
+are off support, where \eqref{eq:fusion} makes the module the exact identity:
+$w_t$ is undefined and $\delta e$ is exactly zero, so those pixels are not
+drawn at the centre of the diverging scale. \textbf{Top:} the median frame of
+a D2 sequence. The module acts on $19.2\%$ of pixels at a mean weight of
+$0.46$ and improves $82.8\%$ of what it touches. \textbf{Bottom:} the worst
+frame of the same sequence, included by rank rather than by choice. It acts on
+$2.2\%$ of pixels --- nine times fewer --- at a mean weight of $0.79$, and
+improves $12.9\%$ of them. Note the $\delta e$ scales differ by $40\times$
+between rows ($\pm0.03$ against $\pm1.11$\,px); the failure is few pixels,
+high weight, wrong, which is the AUROC result of this section drawn rather
+than tabulated.
+}
+\label{fig:intervention}
+\end{figure}
+
 Two limits are worth stating. Against the raw-versus-memory oracle of
 Table~\ref{tab:closure} --- measured on \steer's own aligned memory, since
 under $H{=}4$ that memory is the previous fused output on three frames of four
@@ -977,7 +997,8 @@ and the ceiling therefore belongs to whichever head produced it --- \steer\
 recovers $29.0\%$ of the available gain on D2 pooled and $25.2\%$ per cell, so
 the open problem is deciding \emph{where} to intervene. And the effective
 weight $w_t$, recovered from the convex form, is an intervention magnitude
-rather than an uncertainty: it ranks harmful intervention at AUROC $0.393$--$0.408$ on D2 and
+rather than an uncertainty --- visibly so in Fig.~\ref{fig:intervention}, where
+the frame it damages most is the one it acts on least and most confidently: it ranks harmful intervention at AUROC $0.393$--$0.408$ on D2 and
 $0.488$--$0.507$ on held-out D7, below chance on the split it was tuned on and
 at chance on the split it was not. The $142$-channel configuration is the same
 shape ($0.366$--$0.381$ and $0.496$--$0.506$), so this belongs to the
