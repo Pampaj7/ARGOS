@@ -1024,6 +1024,31 @@ in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
 The main paper is eight pages. The objects that were in it are now here in
 full, and nothing measured was deleted to make room.
 
+\paragraph{The development block and DTCE columns of the main grid.}
+Table~I of the main paper shows the two confirmation arenas; the development
+block and the change-error columns it dropped for space are here, same
+protocol, same seed-$0$ checkpoint, cells pooled per backbone.
+
+\begin{table}[htb]
+\centering
+\small
+\caption{D2 development cells and DTCE (macro reduction in change error at
+$k{=}4$, higher is better) for the five backbones of main-paper Table~I.}
+\begin{tabular}{ll|cc|cc}
+\toprule
+& & \multicolumn{2}{c|}{D2 development} & \multicolumn{2}{c}{DTCE} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Backbone & Status & EPE & Bad1 (\%) & D7 & DRENDS \\
+\midrule
+S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2658}$ & $1.39\rightarrow\mathbf{1.27}$ & $6.5$ & $11.3$ \\
+RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2623}$ & $1.60\rightarrow\mathbf{1.43}$ & $7.3$ & $8.5$ \\
+Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2779}$ & $2.18\rightarrow\mathbf{1.74}$ & $7.9$ & $13.9$ \\
+CREStereo & unseen & $.2668\rightarrow\mathbf{.2583}$ & $1.57\rightarrow\mathbf{1.40}$ & $6.4$ & $11.8$ \\
+Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2658}$ & $1.60\rightarrow\mathbf{1.44}$ & $4.3$ & $9.6$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \paragraph{The forward--backward cue in training.}
 The main paper's runtime paragraph states that training without the
 $C^{FB}$ cue costs accuracy and cites this supplement. The number: a head

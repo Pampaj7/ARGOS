@@ -494,52 +494,45 @@ predictions on valid support are penalised rather than silently removed.
 Temporal fidelity is change error $\DTCE$ on that support at lags
 $k\in\{1,2,4,8\}$ ($k{=}4$ unless stated), scored against the \emph{reference}
 change rather than stillness, so the degenerate replay of
-Sec.~\ref{sec:limits} does not win it. Intervention harm and benefit come from
-$\delta e=e^{\fused}-e^{\raw}$: the masses $\HPlus=\mathbb{E}[\max(\delta
-e,0)]$ and $\BPlus=\mathbb{E}[\max(-\delta e,0)]$, their rates, newly broken
-and recovered bad pixels per threshold, and identity preservation.
-Aggregation is named at every number: macro is the mean of per-cell relative
-reductions, pooled sums before the ratio. The rest of the family --- spatial
-and metric-depth metrics, per-frame tails, risk--coverage
-\cite{geifman2019selectivenet} --- is in the supplement.
+Sec.~\ref{sec:limits} does not win it. Prose reductions are macro --- the
+mean of per-cell relative reductions --- unless stated; pooled sums before
+the ratio, and each table declares its own aggregation. Harm/benefit masses
+and rates, bad-pixel bookkeeping, and the rest of the family are defined in
+the supplement.
 
-\begin{table*}[!t]
+\begin{table}[!t]
 \centering
 \caption{
-One frozen \steer\ checkpoint, seed $0$, across five estimators and three
-arenas; every EPE and Bad1 cell is raw$\rightarrow$\steer, lower is better,
-and the lower-right block is the joint unseen-backbone, unseen-domain shift
-usually left unmeasured. DTCE is the macro reduction in change error at
-$k{=}4$, higher is better; on development it is backbone-dependent
-(Sec.~\ref{sec:horizon}). Cells are pooled per backbone; per-cell prose
-figures and DRENDS Bad3 reconstruct from the supplement's per-sequence
-tables.
+One frozen \steer\ checkpoint, seed $0$, on the two arenas it never
+developed on; every cell is raw$\rightarrow$\steer, lower is better, and the
+lower-right block is the joint unseen-backbone, unseen-domain shift usually
+left unmeasured. Development cells, DTCE columns and per-sequence detail are
+in the supplement; the all-fifteen-cells claim of contribution (i) counts
+the development block reported in Sec.~\ref{sec:development}. Cells are
+pooled per backbone.
 }
 \label{tab:grid}
 \scriptsize
 \setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{ll|cc|ccc|ccc}
+\begin{tabular}{ll|cc|cc}
 \toprule
 & &
-\multicolumn{2}{c|}{D2 development}
+\multicolumn{2}{c|}{D7 held out}
 &
-\multicolumn{3}{c|}{D7 held out}
-&
-\multicolumn{3}{c}{DRENDS, out of domain}
+\multicolumn{2}{c}{DRENDS, out of domain}
 \\
 \cmidrule(lr){3-4}
-\cmidrule(lr){5-7}
-\cmidrule(lr){8-10}
-Backbone & Status & EPE & Bad1 (\%) & EPE & Bad1 (\%) & DTCE & EPE & Bad1 (\%) & DTCE \\
+\cmidrule(lr){5-6}
+Backbone & Status & EPE & Bad1 (\%) & EPE & Bad1 (\%) \\
 \midrule
-S$^2$M$^2$-S & seen & $.2704\rightarrow\mathbf{.2658}$ & $1.39\rightarrow\mathbf{1.27}$ & $.5176\rightarrow\mathbf{.4992}$ & $6.44\rightarrow\mathbf{6.03}$ & $6.5$ & $1.3477\rightarrow\mathbf{1.2812}$ & $62.55\rightarrow\mathbf{58.98}$ & $11.3$ \\
-RAFT-Stereo & seen & $.2691\rightarrow\mathbf{.2623}$ & $1.60\rightarrow\mathbf{1.43}$ & $.4671\rightarrow\mathbf{.4296}$ & $6.09\rightarrow\mathbf{5.75}$ & $7.3$ & $1.3125\rightarrow\mathbf{1.2371}$ & $58.83\rightarrow\mathbf{55.19}$ & $8.5$ \\
-Stereo Anywhere & seen & $.3022\rightarrow\mathbf{.2779}$ & $2.18\rightarrow\mathbf{1.74}$ & $.4774\rightarrow\mathbf{.4408}$ & $6.23\rightarrow\mathbf{5.77}$ & $7.9$ & $1.3685\rightarrow\mathbf{1.2834}$ & $62.73\rightarrow\mathbf{57.99}$ & $13.9$ \\
-CREStereo & unseen & $.2668\rightarrow\mathbf{.2583}$ & $1.57\rightarrow\mathbf{1.40}$ & $.5165\rightarrow\mathbf{.4912}$ & $6.35\rightarrow\mathbf{6.05}$ & $6.4$ & $1.3027\rightarrow\mathbf{1.2296}$ & $55.17\rightarrow\mathbf{52.21}$ & $11.8$ \\
-Fast-FoundationStereo & unseen & $.2725\rightarrow\mathbf{.2658}$ & $1.60\rightarrow\mathbf{1.44}$ & $.4819\rightarrow\mathbf{.4645}$ & $5.92\rightarrow\mathbf{5.65}$ & $4.3$ & $1.2838\rightarrow\mathbf{1.2228}$ & $54.88\rightarrow\mathbf{52.06}$ & $9.6$ \\
+S$^2$M$^2$-S & seen & $.5176\rightarrow\mathbf{.4992}$ & $6.44\rightarrow\mathbf{6.03}$ & $1.3477\rightarrow\mathbf{1.2812}$ & $62.55\rightarrow\mathbf{58.98}$ \\
+RAFT-Stereo & seen & $.4671\rightarrow\mathbf{.4296}$ & $6.09\rightarrow\mathbf{5.75}$ & $1.3125\rightarrow\mathbf{1.2371}$ & $58.83\rightarrow\mathbf{55.19}$ \\
+Stereo Anywhere & seen & $.4774\rightarrow\mathbf{.4408}$ & $6.23\rightarrow\mathbf{5.77}$ & $1.3685\rightarrow\mathbf{1.2834}$ & $62.73\rightarrow\mathbf{57.99}$ \\
+CREStereo & unseen & $.5165\rightarrow\mathbf{.4912}$ & $6.35\rightarrow\mathbf{6.05}$ & $1.3027\rightarrow\mathbf{1.2296}$ & $55.17\rightarrow\mathbf{52.21}$ \\
+Fast-FoundationStereo & unseen & $.4819\rightarrow\mathbf{.4645}$ & $5.92\rightarrow\mathbf{5.65}$ & $1.2838\rightarrow\mathbf{1.2228}$ & $54.88\rightarrow\mathbf{52.06}$ \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 \section{Results}
 \label{sec:results}
@@ -549,10 +542,10 @@ ordered that way: the transfer matrix, the seed evidence that it is stable,
 why it works, what it does to a map, and what it costs.
 
 \subsection{Cross-Backbone Development Behaviour}
+\label{sec:development}
 
-$H=4$ improves all five estimators in mean D2 EPE (Table~\ref{tab:grid}), from
-$1.41\%$ to $8.19\%$ averaging per-sequence reductions --- $1.70\%$ to
-$8.04\%$ from the pooled cells the table prints --- and all six
+$H=4$ improves all five estimators in mean D2 EPE, from $1.41\%$ to $8.19\%$
+per estimator (per-cell tables in the supplement), and all six
 unseen-backbone sequence groups improve; on D7 the mean excluding Stereo
 Anywhere is $5.15\%$. One D2 cell worsens, S$^2$M$^2$-S on keyframe~$2$, by
 $0.28\%$: the first of three sequence-level exceptions in this paper, the
@@ -564,8 +557,7 @@ others being Vid13 (Sec.~\ref{sec:bida}) and the development map
 
 We next evaluate the already frozen $H=4$ policy on held-out D7. All five
 backbones improve, including both unseen during temporal-head training:
-mean EPE decreases $0.4921 \rightarrow 0.4651$, or $5.49\%$ pooling before
-the ratio and $5.40\%$ averaging per-cell reductions.
+mean EPE decreases $0.4921 \rightarrow 0.4651$, a $5.40\%$ reduction.
 
 The improvement is not restricted to the mean: Bad1, RMSE and P99 decrease
 for every backbone on both splits, so the EPE gain is not bought by a worse
@@ -600,11 +592,9 @@ non-independent reference.
 \subsection{Seed Variance, and What It Reveals About Selection}
 \label{sec:seeds}
 
-We pre-registered a seed study before any result existed: only the seed
-varies, resampling is at sequence granularity rather than pixel, and selecting
-the best seed is prohibited.
-
-Pooled over five backbones the relative Bad1 reduction is $12.73\pm0.32\%$ on
+Under a seed study pre-registered before any result existed (only the seed
+varies; selecting the best seed is prohibited),
+pooled over five backbones the relative Bad1 reduction is $12.73\pm0.32\%$ on
 D2 and $5.84\pm0.22\%$ on held-out D7; EPE gives $4.13\pm0.38\%$ and
 $5.61\pm0.42\%$, where $\pm$ is the standard deviation over three seeds
 throughout this paper. A paired sequence-level bootstrap is positive in every
@@ -719,7 +709,7 @@ backbone and is \emph{negative} for three: $+14.0\%$ for Stereo Anywhere and
 $+0.8\%$ for CREStereo against $-0.3$, $-2.0$ and $-2.3\%$. A criterion whose
 sign one of five backbones decides cannot carry an operating point, so the
 horizon rests on breakage; on both confirmation splits DTCE is positive for
-every backbone (Table~\ref{tab:grid}). Sec.~\ref{sec:mapping} sweeps the same
+every backbone (supplement). Sec.~\ref{sec:mapping} sweeps the same
 horizon against accumulated geometry and finds the same risk structure from an
 independent measurement.
 
@@ -797,16 +787,14 @@ exchange rate rather than a peak. Held-out benefit saturates while development
 cost keeps growing --- successive steps buy $+1.5$, $+1.3$ and $+0.5$ points
 on D7 for $-5.0$, $-6.9$ and $-4.7$ on D2 --- so the price of lifetime rises
 from $3.3$ to $9.4$ points of development error per point of held-out gain,
-making $H{=}6$ the best cell of the D7 column and the worst purchase on the
-sweep. We name it because the D7 column read alone would suggest a longer
-horizon. $H{=}4$ was frozen on the per-frame trade before D7 opened and before
-this measurement existed, and the map is the fourth criterion to place it
-there: against $H{=}6$, frame EPE is unreadable at $0.21$ points of spread,
-newly broken pixels rise, change error changes sign, and the map costs $4.7$
-to gain $0.5$. A consumer that only accumulates may still prefer shorter ---
-$H{=}1$ returns $76\%$ of the held-out benefit at under a quarter of the
-development cost, for $1.24$ points of frame EPE --- which makes the horizon
-a dial rather than an optimum.
+making $H{=}6$, which the D7 column read alone would recommend, the worst
+purchase on the sweep. $H{=}4$ was frozen on the per-frame trade before this
+measurement existed and the map is the fourth criterion to place it there
+(frame EPE unreadable at $0.21$ of spread, breakage rising, change error
+changing sign, $4.7$ paid per $0.5$ gained). A consumer that only accumulates
+may still prefer shorter --- $H{=}1$ returns $76\%$ of the held-out benefit at
+under a quarter of the development cost, for $1.24$ points of frame EPE ---
+which makes the horizon a dial rather than an optimum.
 
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
@@ -851,12 +839,9 @@ Four design choices were ablated under a pre-registration naming held-out Bad1
 as the endpoint and a three-seed spread of $0.37$ points as the threshold
 below which a difference is not read --- the standard deviation over the base
 configuration's three seeds of its pooled Bad1 reduction across all $35$
-backbone--sequence cells, computed before the registration was written; A4
-remains a single run. A
-separate later registration governs \emph{promotion} of a variant to the
-shipped model and decides that on development only, which is how the
-$38$-channel head was promoted; the two rules are distinct and we apply each
-where it belongs.
+backbone--sequence cells, computed before the registration was written.
+Promotion to the shipped model is governed by a separate registration that
+decides on development only.
 
 \begin{table}[!ht]
 \centering
