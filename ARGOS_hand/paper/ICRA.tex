@@ -163,8 +163,9 @@ motion-aligned with frozen SEA-RAFT, and a shared 38-channel evidence space of
 disparity, motion and image geometry --- no learned appearance features, no
 frozen backbone, no future frame --- feeding a reset-and-fusion head that
 predicts a bounded interpolation between the current estimate and that aligned
-memory --- a cue the head needs in training but not at inference, so the
-module deploys at $16$ of its $29$\,ms on the unchanged checkpoint. Under a
+memory. One of its inputs, a forward--backward flow-consistency cue, is
+needed in training but not at inference, so the module deploys at
+${\sim}16$ of its ${\sim}29$\,ms on the unchanged checkpoint. Under a
 matched state machine the gain is not temporal smoothing:
 $3.69\%$ mean EPE against $0.59\%$ for the best fixed or EMA blend, which buys
 its mean error with bad pixels while the learned gate does not. Accumulated
