@@ -297,13 +297,12 @@ new metric but a common protocol under fixed, prediction-independent support.
 
 \paragraph{Surgical stereo geometry.}
 SCARED \cite{allan2021scared} and DRENDS \cite{loza2025drends} supply the
-endoscopic stereo and time-of-flight geometry we evaluate on; D4D
-\cite{docea2026d4d} enters only as the substrate for a no-reference control;
-SERV-CT \cite{edwards2022servct} not at all, its pairs being non-consecutive.
-Downstream reconstruction and tracking pipelines consume exactly the per-frame
-geometry we refine \cite{long2021edssr,recasens2021endodepth}, which is why we
-treat refinement as an intervention on that geometry and, in
-Sec.~\ref{sec:mapping}, measure it after accumulation rather than only before.
+geometry we evaluate on; D4D \cite{docea2026d4d} is only the substrate of
+Sec.~\ref{sec:limits}'s no-reference control, and SERV-CT
+\cite{edwards2022servct}, whose pairs are non-consecutive, is not used.
+Downstream reconstruction consumes exactly the per-frame geometry we refine
+\cite{long2021edssr,recasens2021endodepth}, which is why
+Sec.~\ref{sec:mapping} measures after accumulation as well.
 
 \section{Method}
 \label{sec:method}
@@ -359,11 +358,8 @@ All estimators are mapped into one 38-channel tensor on the cache grid,
 built from raw disparity, aligned memory, the two images, the previous left
 image, the flow, $C_t^{FB}$, the warp support and the sampled historical
 validity. Twenty-five channels are disparity-geometry correlations formed at
-quarter resolution --- 16 self-correlations of the two candidates and 9
-raw-to-aligned cross-correlations over a dilated $3\times3$ neighbourhood ---
-and 13 are formed on the grid directly: the two disparities, their signed and
-absolute residual, 6 motion components and 3 RGB. Normalisation is fixed
-before training. Nothing in this space is learned, no network evaluates it,
+quarter resolution and 13 are formed on the grid directly
+(Fig.~\ref{fig:system}, right); normalisation is fixed before training. Nothing in this space is learned, no network evaluates it,
 and no ground truth, backbone identity or future frame enters it. An earlier
 configuration added 104 quarter-resolution channels derived from a frozen
 ResNet-18 \cite{he2016resnet} --- $64$ compressed feature maps and $40$
@@ -760,13 +756,10 @@ refinement reduces it by $11.7\%$, and the sign is not carried by one
 estimator: across five backbones and four sequences all $20$ cells improve, by
 $+7.2$ to $+17.8\%$.
 
-Our protocol requires any new measure to face the controls that defeat the
-no-reference score. Copy-previous, which removes $97.3\%$ of that score, is
-here the \emph{worst} policy in Table~\ref{tab:mapsweep}: it degrades the map
-by $54.0\%$ on D2 and returns $2.8\%$ on D7 against our $11.7\%$. Disagreement
-between views is not reducible by repetition, because a replayed frame is
-wrong from the new viewpoint, so the measure survives the control our own
-contribution~(iii) demands of temporal metrics.
+Copy-previous, which removes $97.3\%$ of the no-reference score, is the
+\emph{worst} row of Table~\ref{tab:mapsweep}: a replayed frame is wrong from
+the new viewpoint, so the measure survives the control contribution~(iii)
+demands of temporal metrics.
 
 The horizon sweep names the condition, on RAFT-Stereo across the complete
 grid; the five-backbone confirmation exists at the shipped horizon only
@@ -799,38 +792,19 @@ which makes the horizon a dial rather than an optimum.
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
 
-BiDAStabilizer \cite{jing2024bida} is the closest published plug-in
-stabiliser we could run. We compare on DRENDS, where neither method is in
-domain, on its own RAFT-Stereo \emph{robust} prediction over all five
-recordings under one support neither influences ($117.4$M pixels). Two
-asymmetries run in opposite directions --- the baseline is bidirectional,
-which our setting forbids; we are trained on surgical endoscopy, it is not
---- so we read the margin as an upper bound on our advantage.
-
-Raw EPE $1.199$ becomes $1.175$ under the baseline and $\mathbf{1.131}$
-under \steer; Bad1 $44.92\%$ becomes $44.81$ and $\mathbf{43.39}$, RMSE
-$1.876$ becomes $1.776$ and $\mathbf{1.710}$ --- two refiners of a weak
-prediction (mean ground-truth disparity is $9.89$\,px), not a claim that
-either recovers a good one. \steer\ is the only causal entry, at $62\times$
-fewer trained parameters. The exception is named: on Vid13 \steer\ is behind
-the baseline and $0.013$\,px \emph{worse than the raw prediction it refines},
-the one recording of five where the intervention is a net harm.
-
-The temporal measure reverses the ordering, and we report it for that
-reason: change error falls $64.9\%$ for the bidirectional baseline against
-our $42.5\%$ at lag~$1$ ($37.2$ against $13.8\%$ at lag~$4$), in every
-recording at every lag. A method that sees the future is more temporally
-stable and simultaneously less accurate on every geometric metric here: a
-reader given only a consistency score would rank these two the wrong way
-round.
-
-TC-Stereo \cite{zeng2024tcstereo}, run as its authors specify with its rigid
-pose warp on SCARED-C's corrected poses, is outside its domain before any
-temporal component runs (frame path EPE $0.524$ against $0.303$ raw on the
-same support), and enabling the temporal path makes both metrics worse ---
-a co-designed architecture meeting a scene its rigid warp does not describe
-rather than a weak method. Protocol, self-check and per-sequence numbers are
-in the supplement.
+Against BiDAStabilizer \cite{jing2024bida} on $117.4$M pixels of common
+DRENDS support, neither method in domain, \steer\ leads on every geometric
+metric (EPE $1.199\to\mathbf{1.131}$ against $1.175$; Bad1
+$44.92\to\mathbf{43.39}$ against $44.81$) while being the only causal entry
+and $62\times$ smaller in trained parameters --- with one exception named,
+Vid13, where our intervention is a net harm and the baseline's is not. The
+temporal measure reverses the ordering: the bidirectional baseline is
+markedly more stable at every lag and simultaneously less accurate on every
+geometric metric, which is this paper's own warning turned on its own
+comparison. TC-Stereo \cite{zeng2024tcstereo}, run as its authors specify, is
+outside its domain before its temporal path runs ($0.524$ against $0.303$
+raw), and enabling that path makes both metrics worse. Protocols, asymmetries
+and per-recording numbers are in the supplement.
 
 \subsection{Ablating Our Own Design Decisions}
 \label{sec:ablations}
@@ -991,31 +965,21 @@ under $H{=}4$ that memory is the previous fused output on three frames of four
 per cell, so the open problem is deciding \emph{where} to intervene.
 
 And the effective weight $w_t$ is an intervention magnitude rather than an
-uncertainty. Per pixel it ranks harmful intervention at AUROC $0.393$--$0.408$
-on D2 and $0.488$--$0.507$ on held-out D7. The development figure is not
-chance-level but \emph{inverted} --- read in the benign direction it is
-$0.592$--$0.607$, so a larger weight marks a pixel more likely to have been
-helped --- while on held-out data the same reading gives $0.493$--$0.512$ and
-orders nothing. The signal exists only on the split the checkpoint was
-selected on, which is the selection optimism of Sec.~\ref{sec:seeds} appearing
-a second time, and does not survive to data the head was not tuned against.
-The $142$-channel configuration has the same shape, so this belongs to the
-formulation and not the evidence space. It does not contradict the
-intervention ratios, which factorise into a count and a magnitude term needing
-no per-pixel ranking: a policy can be good on average and uninformative per
-pixel, which makes the oracle gap a ranking problem rather than a capacity
-one.
+uncertainty: read in the benign direction it ranks helped pixels at AUROC
+$0.59$--$0.61$ on the split the checkpoint was selected on and at chance
+($0.49$--$0.51$) held out --- selection optimism (Sec.~\ref{sec:seeds})
+appearing a second time, with the same shape in the $142$-channel
+configuration, so the limit belongs to the formulation. It does not
+contradict the intervention ratios, which need no per-pixel ranking: a
+policy can be good on average and uninformative per pixel.
 
 \section{Discussion and Limitations}
 \label{sec:limits}
 
 \paragraph{What the splits support.}
-The closure is development work on D2: it supports mechanism analysis and the
-pre-frozen $H=4$ operating point, not confirmation. One external domain does
-not establish universal robustness, DRENDS supplies a temporally filtered ToF
-reference rather than independent stereo ground truth, and per-backbone D7
-margins come from one seed --- the three-seed study bounds only the pooled
-effect.
+One external domain does not establish universal robustness, and DRENDS
+supplies a temporally filtered ToF reference rather than independent stereo
+ground truth; the remaining scope caveats are stated where each result is.
 
 \paragraph{What the metrics cannot say.}
 No-reference temporal consistency is gameable, shown on D4D
