@@ -97,3 +97,13 @@ HEADS = {"tether": NoFBCueTether, "learned_evidence": NoFBCue}
 def factory(*, value: float = 1.0, horizon: int = 4, device: str = "cuda:0",
             head: str = "tether", **_: Any) -> _ConstantFBCue:
     return HEADS[head](value=value, horizon=horizon, device=device)
+
+
+def factory_seed1(*, value: float = 1.0, horizon: int = 4, device: str = "cuda:0",
+                  **_: Any) -> _ConstantFBCue:
+    return NoFBCueTether(value=value, horizon=horizon, device=device, seed=1)
+
+
+def factory_seed2(*, value: float = 1.0, horizon: int = 4, device: str = "cuda:0",
+                  **_: Any) -> _ConstantFBCue:
+    return NoFBCueTether(value=value, horizon=horizon, device=device, seed=2)

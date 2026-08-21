@@ -245,3 +245,19 @@ class A5WithRealCue(AblationH4):
 
 def factory_a5_realfb(*, device: str = "cuda:0", **_: Any) -> A5WithRealCue:
     return A5WithRealCue(variant="A5_no_fb_cue", device=device)
+
+
+def factory_a3b_seed1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A3b_single_resolution_38ch", seed=1, device=device)
+
+
+def factory_a3b_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A3b_single_resolution_38ch", seed=2, device=device)
+
+
+def factory_a6_seed1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A6_geometry_only", seed=1, device=device)
+
+
+def factory_a6_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A6_geometry_only", seed=2, device=device)
