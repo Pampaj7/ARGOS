@@ -17611,4 +17611,34 @@ passage's ``the registered configuration stands'' upgrades from a tie-break
 to a measured preference, and the quarter-resolution context is load-bearing
 on the head we ship. A4b lands within the hour.
 
+
+
+\section*{The night closes: the quiet pair confirms the bound, and A4b overfits development harder than its parent}
+
+\textbf{Quiet paired runtime.} On the empty node, back to back: shipped
+$29.72$\,ms (evidence $0.71$, head $1.05$), A3 $35.65$\,ms (evidence $5.36$,
+head $1.35$). The full-resolution context branch costs exactly the
+$+0.30$\,ms the bound predicted; the rest of the gap is the $142$-channel
+evidence term, and the contaminated $51.1$ is now formally replaced. The
+$16\times$ ratio in III-D describes a $+0.3$\,ms branch, which is why it
+stays a ratio and not a justification.
+
+\textbf{A4b.} The unconstrained-output twin on the shipped base, one seed, no
+training divergence (validation minimum at epoch $7$, best-validation
+selection): D2 Bad1 reduction $27.5$ against the shipped $12.8$ and D2 EPE
+$11.3$ against $3.7$ --- enormous in-domain --- collapsing to $7.3$ and
+$4.4$ held out. The same shape as its $142$-channel parent
+($5.32 \to 1.70$) but steeper from higher: the escape term's development
+gain is $2.5\times$ its held-out gain where ours \emph{rises} across the
+split. Second independent instance of the cross-split argument for
+convexity, on the base we ship. Both twins ran clean; T2.1's measured
+answers are now complete --- full-res loses $0.76$ points held out, and the
+escape hatch overfits development on either base.
+
+Everything queued last night has landed and every result is in this diary.
+The paper touches wait for morning authorisation: the runtime paragraph
+(deploy-without, both arms), the ablation prose sentence for the twins, the
+A6 row, the D7 caption clause, the V-G tie half-line, and the raw-EPE
+reconciliation clause.
+
 \end{document}
