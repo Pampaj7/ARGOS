@@ -316,11 +316,13 @@ Sec.~\ref{sec:mapping}, measure it after accumulation rather than only before.
 \section{Method}
 \label{sec:method}
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
 \centering
 % Re-authored two-panel asset (2026-08-21) replacing the trim/clip crop of the
 % original three-panel figure; the frame-strip panel's content lives in III-E.
-\includegraphics[width=\columnwidth]{figure_assets/temporal_taxonomy_two_panel.pdf}
+% The asset is a 513x108pt banner: at column width it renders at 49% and its
+% labels fall below 4pt, so it spans both columns at natural size instead.
+\includegraphics[width=\textwidth]{figure_assets/temporal_taxonomy_two_panel.pdf}
 \caption{
 One time step, and the evidence it reads. \textbf{Left:} dashed grey is
 frozen; the single orange block is the only trained component and emits one
@@ -329,7 +331,7 @@ channels --- $25$ quarter-resolution disparity correlations, upsampled, and
 $13$ native --- none carrying ground truth, backbone identity or a future
 frame.}
 \label{fig:system}
-\end{figure}
+\end{figure*}
 
 \subsection{External Causal Interface}
 
