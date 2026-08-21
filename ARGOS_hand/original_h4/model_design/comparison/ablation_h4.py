@@ -261,3 +261,11 @@ def factory_a6_seed1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
 
 def factory_a6_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
     return AblationH4(variant="A6_geometry_only", seed=2, device=device)
+
+
+def factory_a1_seed1(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A1_no_appearance", seed=1, device=device)
+
+
+def factory_a1_seed2(*, device: str = "cuda:0", **_: Any) -> AblationH4:
+    return AblationH4(variant="A1_no_appearance", seed=2, device=device)

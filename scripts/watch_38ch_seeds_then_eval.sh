@@ -3,7 +3,7 @@ set -u
 R=/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs
 while true; do
     ok=1
-    for V in A3b_single_resolution_38ch A6_geometry_only; do
+    for V in A3b_single_resolution_38ch A6_geometry_only A1_no_appearance; do
         for S in 1 2; do
             N=$(( $(wc -l < "$R/ablation_${V}_seed_${S}/training_history.csv" 2>/dev/null || echo 1) - 1 ))
             [ "$N" -ge 12 ] || ok=0
@@ -26,7 +26,7 @@ export CUDA_VISIBLE_DEVICES=$(nvidia-smi --query-gpu=index,uuid,memory.free --fo
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 cd /dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4 || exit 1
 PY=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
-for F in a3b_seed1 a3b_seed2 a6_seed1 a6_seed2; do
+for F in a3b_seed1 a3b_seed2 a6_seed1 a6_seed2 a1_seed1 a1_seed2; do
     DEST=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/ablation_eval/$F
     [ -d "$DEST/runs/scared-d7" ] && { echo "=== $F already done"; continue; }
     echo "=== $F"
