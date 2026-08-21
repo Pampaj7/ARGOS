@@ -318,15 +318,16 @@ Sec.~\ref{sec:mapping}, measure it after accumulation rather than only before.
 
 \begin{figure}[!t]
 \centering
-% Panel (a) of the original asset (bounded recurrence as a frame strip) is cropped
-% out: its content is three lines of Sec. III-E and the strip bought no information
-% for a third of a page. The asset is untouched; the crop is the reversible cut.
-\includegraphics[width=\columnwidth, trim=0 0 0 149, clip]{figure_assets/Temporal_consistency_taxonomy.pdf}
+% Re-authored two-panel asset (2026-08-21) replacing the trim/clip crop of the
+% original three-panel figure; the frame-strip panel's content lives in III-E.
+\includegraphics[width=\columnwidth]{figure_assets/temporal_taxonomy_two_panel.pdf}
 \caption{
-\textbf{(b)} One time step; dashed grey is frozen, the single orange block is
-the only trained component and emits one scalar per pixel, $w_t$, rather than
-geometry. \textbf{(c)} The evidence space: none of the $38$ channels carries
-ground truth, backbone identity or a future frame.}
+One time step, and the evidence it reads. \textbf{Left:} dashed grey is
+frozen; the single orange block is the only trained component and emits one
+scalar per pixel, $w_t$, rather than geometry. \textbf{Right:} the $38$
+channels --- $25$ quarter-resolution disparity correlations, upsampled, and
+$13$ native --- none carrying ground truth, backbone identity or a future
+frame.}
 \label{fig:system}
 \end{figure}
 
