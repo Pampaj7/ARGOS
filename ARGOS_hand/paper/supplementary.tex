@@ -1024,6 +1024,28 @@ in \emph{Proc. European Conf. Computer Vision (ECCV)}, 2024.
 The main paper is eight pages. The objects that were in it are now here in
 full, and nothing measured was deleted to make room.
 
+\paragraph{The forward--backward cue in training.}
+The main paper's runtime paragraph states that training without the
+$C^{FB}$ cue costs accuracy and cites this supplement. The number: a head
+trained with the channel pinned to $1.0$ (A5, one seed, the locked recipe
+otherwise unchanged) reaches $5.31\%$ held-out Bad1 reduction against the
+shipped three-seed $5.84\pm0.22$ --- $0.53$ points, beyond the
+pre-registered $0.37$ threshold --- and $5.05$ against $5.61\pm0.42$ EPE.
+Combined with the two inference-side arms in the main text (pinning costs
+the shipped checkpoint $+0.08$; the A5 head fed the real cue moves $-0.02$),
+the cue is load-bearing in training and unread at inference on either
+checkpoint.
+
+\paragraph{The unconstrained-output twin on the shipped base.}
+The main paper's ablation section states that A4's $38$-channel twin repeats
+the development-overfit pattern and cites this supplement. The numbers (one
+seed, no training divergence, best-validation at epoch $7$): development EPE
+reduction $11.25\%$ against the shipped $3.69$, collapsing to $4.41$ held out
+against our $5.61\pm0.42$; development Bad1 $27.49$ against $12.84$,
+falling to $7.32$ held out --- above the shipped $5.84\pm0.22$ on the
+registered endpoint, as its $142$-channel parent also is, and declined for
+the same reason: the EPE difference is the separable one.
+
 \paragraph{The full metric family of the unified evaluation.}
 Spatial geometry: EPE/MAE, median, RMSE, P90/P95/P99, maximum, invalid rate
 and Bad-$1/3/5$ on disparity; Bad-$2/5/10$\,mm, AbsRel, SqRel and
