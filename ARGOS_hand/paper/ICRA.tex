@@ -368,8 +368,14 @@ absolute residual, 6 motion components and 3 RGB. Normalisation is fixed
 before training. Nothing in this space is learned, no network evaluates it,
 and no ground truth, backbone identity or future frame enters it. An earlier
 configuration added 104 quarter-resolution channels derived from a frozen
-ResNet-18 \cite{he2016resnet} for $142$ in total \B{T3.1};
-Sec.~\ref{sec:ablations} reports it as an ablation, because it costs
+ResNet-18 \cite{he2016resnet} --- $64$ compressed feature maps and $40$
+confidence curves, supports and appearance correlations formed from them ---
+for $142$ in total. The channel ladder of Table~\ref{tab:ablations} reads off
+this decomposition: dropping only the $64$ feature maps gives $78$, dropping
+all $104$ is \steer's $38$, and dropping its $25$ disparity correlations
+leaves the $13$ direct channels.
+Sec.~\ref{sec:ablations} reports the $142$-channel configuration as an
+ablation, because it costs
 $157{,}504$ frozen parameters and three forward passes per frame and does not
 survive a three-seed comparison. Exact channel construction and constants are
 in the supplement.
@@ -1097,7 +1103,8 @@ under a pre-declared threshold --- separate what the cue is for. Training
 without it costs $0.53$ points of held-out Bad1 ($5.31$ against
 $5.84\pm0.22$), so it is load-bearing in training. Pinning it to a constant
 at inference costs the shipped checkpoint $+0.08$ held out ($5.77$ against
-$5.69$, inside even the seed spread) --- and the head trained \emph{without}
+that same seed's $5.69$; the three-seed mean is $5.84\pm0.22$ --- the
+comparison is within one checkpoint, which is the deployment question) --- and the head trained \emph{without}
 the cue is equally indifferent to receiving the real one ($-0.02$), so the
 inference indifference is architectural, not an accident of one checkpoint.
 The cue is a training-time scaffold: \textbf{train with it, deploy without
@@ -1113,7 +1120,7 @@ patient benefit.
 heterogeneous stereo estimators without touching their internals or using
 future frames. Its gain is not temporal averaging: matched fixed and EMA
 blends under an identical state machine recover a sixth of it on development
---- paying in bad pixels there --- and an eleventh out of domain. One frozen $H=4$
+--- paying in bad pixels there --- and a ninth out of domain. One frozen $H=4$
 checkpoint improves all five estimators on held-out D7 and all $25$
 recording--backbone cells zero-shot on DRENDS.
 
@@ -1184,7 +1191,7 @@ the deviations --- is now the section's finding), T2.3 (A4 at three seeds,
 A5 and A6 in the table, no stale single-run sentence remains), T2.5's
 completion (deploy-without stated with all three arms, each declared
 single-seed), and T3.3 (the missing third are exact Bad1 ties, said in
-V-G).
+V-G). T3.1 closes with the decomposition read from the builder: the $104$ learned channels are $64$ compressed feature maps plus $40$ confidence curves, supports and appearance correlations formed from them, and the $142/78/38/13$ ladder now reconstructs in one clause of III-C. One checkpoint-baseline clarification in the runtime paragraph ($5.69$ is the same seed's own unpinned number, $5.84\pm0.22$ the three-seed mean) and the conclusion's out-of-domain fraction corrected to a ninth.
 
 \subsection*{\textcolor{red}{Tier 1 --- factual. Do not submit with these open.}}
 \begin{description}[leftmargin=3.2em,style=nextline,itemsep=3pt]
@@ -1200,14 +1207,6 @@ V-G).
 
 \subsection*{\textcolor{red}{Tier 3 --- cheap. Ship without if time runs out.}}
 \begin{description}[leftmargin=3.2em,style=nextline,itemsep=3pt]
-
-\bitem{T3.1}{\textbf{The 104 ResNet channels need one clause of
-decomposition} (Sec.~\ref{sec:method}). As written $142-104=38$ implies ``no
-appearance'' should \emph{be} \steer, yet that row is $78$\,ch. Say how the
-$104$ split (raw feature channels vs.\ correlations formed from them) so the
-$142/78/38$ ladder is legible. Note also that the ladder is non-monotone
-($5.06$, $4.93$, $5.61$) with the middle rung inside the read threshold ---
-better said than found.}
 
 \bitem{T3.2}{\textbf{Prose numbers on D7 and DRENDS do not reconstruct from
 Table~\ref{tab:grid}} (they use per-cell aggregation, the table pools per
