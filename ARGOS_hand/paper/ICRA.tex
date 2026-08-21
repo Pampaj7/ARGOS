@@ -701,7 +701,10 @@ $0.63\%$ of EPE against our $5.80\%$, a ratio of $9\times$ against $6\times$
 on D2. The denominator barely moves between the two arenas --- uniform
 smoothing recovers the same small amount wherever it is run --- so the
 widening is entirely ours, and it tracks how much raw error there is to
-recover ($0.276$\,px of raw EPE on D2 against $1.286$ out of domain), the
+recover ($0.276$\,px of raw EPE on D2 against $1.286$ out of domain, both on
+the closure's own support --- Table~\ref{tab:grid}'s protocol support and the
+BiDA common support of Sec.~\ref{sec:bida} give $1.31$ and $1.20$ for the
+same array), the
 same quantity Sec.~\ref{sec:mapping} finds decides the accumulated benefit.
 Where the raw prediction is this weak the uniform blends no longer pay in bad
 pixels, so that trade is stated on D2 alone.
@@ -733,9 +736,10 @@ Across both splits and all five backbones \steer\ recovers $3.8$--$11.1\times$
 as many Bad1 pixels as it introduces, $B^+/H^+$ between $1.39$ and $3.25$,
 identity preservation above $99.85\%$. Per frame, $56\%$ of the $15{,}535$
 held-out frames improve against $14\%$ worsened ($45\%$ against $18\%$ on
-development) \B{T3.3}, the worsened band hugging the diagonal while the
-improved mass extends far from it: the count-versus-magnitude asymmetry behind
-$B^+/H^+$.
+development; the remaining third are exact Bad1 ties --- cleaner frames whose
+sub-threshold corrections flip no pixel across the threshold), the worsened
+band hugging the diagonal while the improved mass extends far from it: the
+count-versus-magnitude asymmetry behind $B^+/H^+$.
 
 \begin{table}[!ht]
 \centering
@@ -877,12 +881,13 @@ where it belongs.
 \scriptsize
 \caption{
 Held-out relative reduction (\%), not error: higher is better, macro over
-backbone--sequence cells. The four deviations were pre-registered against the
-$142$-channel configuration and \emph{the fourth of them is the top row},
-because dropping the learned evidence is what \steer\ now is --- so the
-shipped model heads the table and the configuration it was ablated from sits
-below with the remaining three indented. ``3 seeds'' rows are means over three
-seeded trainings; $\dagger$ rows are single runs. \B{T2.1}
+backbone--sequence cells. Each indented deviation is measured against the
+un-indented base directly above it; every row's pre-registration names its
+base. Dropping the learned evidence from the $142$-channel base is what
+\steer\ now is, so the shipped model heads the table and the configuration it
+was ablated from sits below. The full-resolution and unconstrained-output
+deviations of the shipped base are reported in the text. ``3 seeds'' rows are
+means over three seeded trainings; $\dagger$ rows are single runs.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{2.5pt}
@@ -891,6 +896,8 @@ seeded trainings; $\dagger$ rows are single runs. \B{T2.1}
 Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\
 \midrule
 \steer\ (3 seeds)              & $38$ ch  & $\mathbf{5.61\pm0.42}$ & $\mathbf{5.84\pm0.22}$ \\
+\quad no FB cue in training$^{\dagger}$ & $38$ ch & $5.05$ & $5.31$ \\
+\quad geometry only$^{\dagger}$ & $13$ ch  & $4.44$ & $4.64$ \\
 \midrule
 $+$ learned evidence (3 seeds) & $142$ ch & $5.06\pm0.44$ & $5.15\pm0.34$ \\
 \quad no appearance$^{\dagger}$ & $78$ ch  & $4.93$ & $4.88$ \\
@@ -906,7 +913,13 @@ literature does, with a frozen ResNet-18 \cite{he2016resnet} supplying
 appearance correlations and cost curves on top of the geometric channels ---
 the configuration the four deviations were pre-registered against. Three sit
 above it on the held-out endpoint and the fourth, dropping appearance, sits
-inside the threshold: none of the four decisions is load-bearing. Removing the
+inside the threshold: against the $142$-channel base, none of the four
+registered decisions is load-bearing. Against the head we ship, two of the
+same decisions \emph{are}: the quarter-resolution context loses $0.76$ points
+when moved to full resolution ($5.08$ against $5.84\pm0.22$, one seed), and
+dropping the $25$ correlations loses $1.20$ ($4.64$, one seed). The learned
+evidence was absorbing the difference --- with it present the architecture is
+insensitive to these choices, and removing it is what makes them matter. Removing the
 learned evidence entirely was then given the same three-seed treatment, under
 the promotion rule that decides on D2 with D7 reported afterwards, and it
 stays ahead on both endpoints with seed deviation eight times tighter ($0.32$
@@ -924,10 +937,8 @@ ordering reverses, $4.13\pm0.38\%$ against $3.55\pm0.45\%$.
 Two rows need the registered rule read out loud. Full-resolution context wins
 the registered endpoint against the configuration it was registered against
 ($5.68\pm0.16$ against $5.15\pm0.34$), an outcome the registration did not
-enumerate. It does not win against what we ship: $5.68\pm0.16$ against
-$5.84\pm0.22$ held out, inside the threshold on Bad1 and at it on EPE, so the
-two are indistinguishable by the rule this table is read under. The deviation
-buys nothing the rule can read, so the registered configuration stands.
+enumerate. On the base we ship, the same deviation loses $0.76$ points; the
+registered configuration is also the better one.
 
 Ablating convexity (A4) posts the largest held-out Bad1 reduction in
 the table, $6.97\pm0.83\%$, but its margin over us ($1.13$ points) is not
@@ -940,12 +951,16 @@ trajectories put side by side say what the constraint buys: from development
 to held-out, A4's EPE gain falls $5.32 \to 1.70\pm1.43$ while ours rises
 $4.13 \to 5.61\pm0.42$, and the drop holds in all fifteen backbone--seed pairs ---
 the unconstrained output buys in-domain accuracy that does not survive the
-split shift. Its registered consequence we honour: the falsification clause
-required that if A4 matched or beat the canonical model held out, the claim
-attributing \emph{cross-backbone} transfer to the convex action space be
-withdrawn rather than softened. It is withdrawn and appears nowhere in this
-paper; the cross-\emph{split} statement above is a narrower claim, measured
-on A4's own three seeds. \B{T2.3}
+split shift. The shipped-base twin repeats the pattern in one seed: it wins
+the registered endpoint there too ($7.32$ against $5.84\pm0.22$ Bad1), loses
+EPE ($4.41$ against $5.61\pm0.42$), and its development EPE margin ($11.25$
+against our $3.69$) does not survive the split --- the escape hatch overfits
+development on either base. Its registered consequence we honour: the
+falsification clause required that if A4 matched or beat the canonical model
+held out, the claim attributing \emph{cross-backbone} transfer to the convex
+action space be withdrawn rather than softened. It is withdrawn and appears
+nowhere in this paper; the cross-\emph{split} statement above is a narrower
+claim, measured on A4's own three seeds and repeated by its twin.
 
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
@@ -1006,7 +1021,8 @@ $\pm1.11$\,px). ``Acts on'' is the fraction of the frame's pixels on support.
 The failure mode is few pixels, high weight, wrong --- and it is a tail, not
 a trend: across the sequence's $1{,}861$ frames with defined weight, per-frame
 mean weight correlates \emph{negatively} with per-frame harm (Spearman
-$-0.68$), the benign direction the per-pixel ranking gives on development.
+$-0.68$), the benign direction the per-pixel ranking gives on development;
+on a held-out sequence the correlation weakens to $-0.26$ with the same sign.
 }
 \label{fig:intervention}
 \end{figure}
@@ -1076,14 +1092,17 @@ locates it: the two SEA-RAFT passes are $26.2$ of the $28.9$\,ms, against
 $0.67$ for the evidence tensor and $1.00$ for the head; the tensor is that
 cheap because \steer\ builds no learned features, where the $142$-channel
 ablation spends $5.13$\,ms there. The reverse pass exists only to compute
-$C^{FB}_t$, so dropping it would free $45\%$ of the module --- and it cannot
-be dropped for free, for a reason worth stating. Substituting a constant at
-inference moves the D2 closure from $3.69\%$ to $3.74$--$3.79\%$, inside the
-seed spread, so the trained head barely reads the cue; yet a head
-\emph{trained} with the channel pinned loses $0.53$ points of held-out Bad1
-($5.31$ against $5.84\pm0.22$, one seed, beyond the pre-registered $0.37$
-threshold). The cue is a training-time scaffold the inference-time
-substitution cannot see, and the pass stays. We evaluate perception geometry
+$C^{FB}_t$, and three measurements --- each a single seed, the held-out ones
+under a pre-declared threshold --- separate what the cue is for. Training
+without it costs $0.53$ points of held-out Bad1 ($5.31$ against
+$5.84\pm0.22$), so it is load-bearing in training. Pinning it to a constant
+at inference costs the shipped checkpoint $+0.08$ held out ($5.77$ against
+$5.69$, inside even the seed spread) --- and the head trained \emph{without}
+the cue is equally indifferent to receiving the real one ($-0.02$), so the
+inference indifference is architectural, not an accident of one checkpoint.
+The cue is a training-time scaffold: \textbf{train with it, deploy without
+the reverse pass}, taking the module from $28.9$ to ${\sim}15.8$\,ms on the
+unchanged checkpoint. We evaluate perception geometry
 and what a map accumulates from
 it, not downstream control, and demonstrate neither clinical safety nor
 patient benefit.
@@ -1155,7 +1174,17 @@ inflated $4\times$ while the only stage the variant changes moved $1.01 \to
 now reads the comparison by the registered rule (indistinguishable in
 accuracy; the deviation buys nothing and spends $16\times$ the branch's
 compute) and no longer claims ``ahead on both endpoints'' across differences
-the threshold forbids reading. A paired quiet re-measurement is queued.
+the threshold forbids reading. The paired quiet re-measurement landed and
+confirmed the bound exactly: shipped $29.72$\,ms against $35.65$ for the
+full-resolution configuration, head $1.05$ against $1.35$ --- the branch is
+$+0.30$\,ms. This pass also closes T2.1 (the twins are measured: full-res
+loses $0.76$ on the shipped base, the escape hatch wins the endpoint and
+loses EPE there too, and the two-base contrast --- learned evidence absorbing
+the deviations --- is now the section's finding), T2.3 (A4 at three seeds,
+A5 and A6 in the table, no stale single-run sentence remains), T2.5's
+completion (deploy-without stated with all three arms, each declared
+single-seed), and T3.3 (the missing third are exact Bad1 ties, said in
+V-G).
 
 \subsection*{\textcolor{red}{Tier 1 --- factual. Do not submit with these open.}}
 \begin{description}[leftmargin=3.2em,style=nextline,itemsep=3pt]
@@ -1166,17 +1195,7 @@ the threshold forbids reading. A paired quiet re-measurement is queued.
 
 \subsection*{\textcolor{red}{Tier 2 --- a reviewer will hit these.}}
 \begin{description}[leftmargin=3.2em,style=nextline,itemsep=3pt]
-
-\bitem{T2.1}{\textbf{Three of four ablation rows were measured against the
-142-ch base we no longer ship}, so ``none of the four decisions is
-load-bearing'' describes a different model. Minimum: a footnote or column
-marking the base per row. Better: re-run full-res context and unconstrained
-output at $38$\,ch --- two trainings of a $155$k head.}
-
-\bitem{T2.3}{\textbf{A4 seed 2 and A6 are in training.} On landing, update
-Table~\ref{tab:ablations}, the $\dagger$ markers, and every sentence in
-Sec.~\ref{sec:ablations} conditioned on ``single run''.}
-
+\bitem{--}{\emph{(No open Tier-2 items.)}}
 \end{description}
 
 \subsection*{\textcolor{red}{Tier 3 --- cheap. Ship without if time runs out.}}
@@ -1197,11 +1216,6 @@ fails on D7 concludes something is wrong. The caption now says so; a
 per-sequence table in the supplement, pointed to here, would close it
 properly. Also: the DRENDS macro EPE ($-5.40$) is numerically identical to the
 D7 macro ($-5.40$) --- coincidence, but print one more digit on one of them.}
-
-\bitem{T3.3}{\textbf{$56+14=70$ and $45+18=63$}: a third of frames are in
-neither bucket, while Sec.~\ref{sec:experimental} says the blend moves almost
-every pixel on the support. Half a line on what the remainder is (no valid GT?
-mean change rounding to zero?).}
 
 \end{description}
 
