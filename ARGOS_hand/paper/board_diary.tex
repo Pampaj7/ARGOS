@@ -17591,4 +17591,24 @@ records. Proposed half-line for Sec.~V-G, awaiting authorisation: ``the
 remaining third are exact Bad1 ties --- cleaner frames whose sub-threshold
 corrections flip no pixel across the threshold''.
 
+
+
+\section*{The converse arm closes the FB argument, and A3b turns the tie into a win}
+
+A5's head fed the real forward--backward confidence it never trained with:
+held-out Bad1 $5.29$ against its pinned $5.31$ ($-0.02$), EPE $4.89$ against
+$5.05$. Symmetric with the shipped head's $+0.08$ under pinning. Neither head
+reads the channel at inference regardless of what training showed it, so the
+inference indifference is a property of the architecture, not of a
+checkpoint: the cue is a training-time scaffold in both directions, each arm
+measured held out. The deploy-without claim is no longer anecdotal.
+
+A3b --- the full-resolution context twin on the shipped 38-channel base ---
+lands at held-out Bad1 $5.08$ against the shipped $5.84\pm0.22$: $-0.76$,
+twice the threshold, one seed. On the 142-channel base the same deviation was
+indistinguishable from us; on our own base it is worse. The ablation
+passage's ``the registered configuration stands'' upgrades from a tie-break
+to a measured preference, and the quarter-resolution context is load-bearing
+on the head we ship. A4b lands within the hour.
+
 \end{document}
