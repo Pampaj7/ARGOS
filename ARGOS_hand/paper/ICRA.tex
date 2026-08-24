@@ -163,8 +163,8 @@ disparity, motion and image geometry --- no learned appearance features, no
 frozen backbone, no future frame --- feeding a reset-and-fusion head that
 predicts a bounded interpolation between the current estimate and that aligned
 memory. One of its inputs, a forward--backward flow-consistency cue, is
-needed in training but not at inference, so the module deploys at
-${\sim}16$ of its ${\sim}29$\,ms on the unchanged checkpoint. Under a
+not read at inference, so the module deploys at ${\sim}16$ of its
+${\sim}29$\,ms on the unchanged checkpoint. Under a
 matched state machine the gain is not temporal smoothing:
 $3.69\%$ mean EPE against $0.59\%$ for the best fixed or EMA blend, which buys
 its mean error with bad pixels while the learned gate does not. Accumulated
@@ -502,30 +502,31 @@ the supplement.
 One frozen \steer\ checkpoint, seed $0$, on the two arenas it never
 developed on; every cell is raw$\rightarrow$\steer, lower is better, and the
 lower-right block is the joint unseen-backbone, unseen-domain shift usually
-left unmeasured. Development cells, DTCE columns and per-sequence detail are
+left unmeasured ($^{*}$ marks the two estimators excluded from
+temporal-head training). Development cells, DTCE columns and per-sequence detail are
 in the supplement; the all-fifteen-cells claim of contribution (i) counts
 the development block reported in Sec.~\ref{sec:development}. Cells are
 pooled per backbone.
 }
 \label{tab:grid}
 \scriptsize
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{ll|cc|cc}
+\setlength{\tabcolsep}{1pt}
+\begin{tabular}{@{}l|cc|cc@{}}
 \toprule
-& &
+&
 \multicolumn{2}{c|}{D7 held out}
 &
-\multicolumn{2}{c}{DRENDS, out of domain}
+\multicolumn{2}{c@{}}{DRENDS, out of domain}
 \\
-\cmidrule(lr){3-4}
-\cmidrule(lr){5-6}
-Backbone & Status & EPE & Bad1 (\%) & EPE & Bad1 (\%) \\
+\cmidrule(lr){2-3}
+\cmidrule(l){4-5}
+Backbone & EPE & Bad1 (\%) & EPE & Bad1 (\%) \\
 \midrule
-S$^2$M$^2$-S & seen & $.5176\rightarrow\mathbf{.4992}$ & $6.44\rightarrow\mathbf{6.03}$ & $1.3477\rightarrow\mathbf{1.2812}$ & $62.55\rightarrow\mathbf{58.98}$ \\
-RAFT-Stereo & seen & $.4671\rightarrow\mathbf{.4296}$ & $6.09\rightarrow\mathbf{5.75}$ & $1.3125\rightarrow\mathbf{1.2371}$ & $58.83\rightarrow\mathbf{55.19}$ \\
-Stereo Anywhere & seen & $.4774\rightarrow\mathbf{.4408}$ & $6.23\rightarrow\mathbf{5.77}$ & $1.3685\rightarrow\mathbf{1.2834}$ & $62.73\rightarrow\mathbf{57.99}$ \\
-CREStereo & unseen & $.5165\rightarrow\mathbf{.4912}$ & $6.35\rightarrow\mathbf{6.05}$ & $1.3027\rightarrow\mathbf{1.2296}$ & $55.17\rightarrow\mathbf{52.21}$ \\
-Fast-FoundationStereo & unseen & $.4819\rightarrow\mathbf{.4645}$ & $5.92\rightarrow\mathbf{5.65}$ & $1.2838\rightarrow\mathbf{1.2228}$ & $54.88\rightarrow\mathbf{52.06}$ \\
+S$^2$M$^2$-S & $.518\!\to\!\mathbf{.499}$ & $6.44\!\to\!\mathbf{6.03}$ & $1.348\!\to\!\mathbf{1.281}$ & $62.6\!\to\!\mathbf{59.0}$ \\
+RAFT-Stereo & $.467\!\to\!\mathbf{.430}$ & $6.09\!\to\!\mathbf{5.75}$ & $1.313\!\to\!\mathbf{1.237}$ & $58.8\!\to\!\mathbf{55.2}$ \\
+Stereo Anywhere & $.477\!\to\!\mathbf{.441}$ & $6.23\!\to\!\mathbf{5.77}$ & $1.369\!\to\!\mathbf{1.283}$ & $62.7\!\to\!\mathbf{58.0}$ \\
+CREStereo$^{*}$ & $.517\!\to\!\mathbf{.491}$ & $6.35\!\to\!\mathbf{6.05}$ & $1.303\!\to\!\mathbf{1.230}$ & $55.2\!\to\!\mathbf{52.2}$ \\
+Fast-FoundationStereo$^{*}$ & $.482\!\to\!\mathbf{.465}$ & $5.92\!\to\!\mathbf{5.65}$ & $1.284\!\to\!\mathbf{1.223}$ & $54.9\!\to\!\mathbf{52.1}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -846,16 +847,15 @@ $+$ learned evidence (3 seeds) & $142$ ch & $5.06\pm0.44$ & $5.15\pm0.34$ \\
 \end{tabular}
 \end{table}
 
-The result (Table~\ref{tab:ablations}) is not the one we expected, and it is
-why the shipped model is the smaller one. We began where the video-stereo
+The result (Table~\ref{tab:ablations}) is not the one we expected. We began where the video-stereo
 literature does, with a frozen ResNet-18 \cite{he2016resnet} supplying
 appearance correlations and cost curves on top of the geometric channels ---
 the configuration the four deviations were pre-registered against. The
 registered threshold assumes spreads comparable to the base's $0.37$, and
 every deviation of the shipped head exceeds it ($0.42$--$0.68$), so we read
 rather than apply the rule: no single registered decision is load-bearing on
-\emph{either} base. Three $142$-channel deviations sit above their base, the
-fourth inside the threshold; the shipped head's three --- no FB cue
+\emph{either} base. Three $142$-channel deviations sit above their base (the shipped
+head among them) and the fourth, dropping appearance, sits inside; the shipped head's three --- no FB cue
 ($5.42\pm0.42$), geometry only ($5.36\pm0.68$), full-resolution context
 ($5.57\pm0.68$) --- are unseparable from $5.84\pm0.22$, with seed
 $0$ again at the low end, as it is for the shipped model on the closure and
@@ -864,7 +864,7 @@ EPE the direction is consistent for every deviation and A6 comes closest to
 separating ($4.61\pm0.21$ against $5.61\pm0.42$, under four standard
 errors): the evidence space shows on the mean where it does not show on the
 registered endpoint.
-Removing it entirely, under the promotion rule that decides on D2 with D7
+Removing the learned evidence entirely, under the promotion rule that decides on D2 with D7
 reported afterwards, stays ahead on both endpoints with seed deviation eight
 times tighter ($0.32$ against $2.53$ points of D2 Bad1), and out of domain the
 ordering holds ($5.20\pm0.13\%$ against $4.83\pm0.15\%$ DRENDS EPE, three
