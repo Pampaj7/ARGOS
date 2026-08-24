@@ -826,7 +826,8 @@ backbone--sequence cells. Each indented deviation is measured against the
 un-indented base above it, as its pre-registration names. Dropping the
 learned evidence from the $142$-channel base is what \steer\ now is, so the
 shipped model heads the table; its own full-resolution and
-unconstrained-output deviations are in the text. $\dagger$ marks single runs.
+unconstrained-output deviations are in the text. Every row is a three-seed
+mean $\pm$ sd.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{2.5pt}
@@ -835,10 +836,10 @@ unconstrained-output deviations are in the text. $\dagger$ marks single runs.
 Configuration & Evidence & D7 EPE red. & D7 Bad1 red. \\
 \midrule
 \steer\ (3 seeds)              & $38$ ch  & $\mathbf{5.61\pm0.42}$ & $\mathbf{5.84\pm0.22}$ \\
-\quad geometry only$^{\dagger}$ & $13$ ch  & $4.44$ & $4.64$ \\
+\quad geometry only (3 seeds) & $13$ ch  & $4.61\pm0.21$ & $5.36\pm0.68$ \\
 \midrule
 $+$ learned evidence (3 seeds) & $142$ ch & $5.06\pm0.44$ & $5.15\pm0.34$ \\
-\quad no appearance$^{\dagger}$ & $78$ ch  & $4.93$ & $4.88$ \\
+\quad no appearance (3 seeds) & $78$ ch  & $5.10\pm0.80$ & $4.89\pm0.31$ \\
 \quad full-res context (3 seeds) & $142$ ch & $5.24\pm0.52$ & $5.68\pm0.16$ \\
 \quad unconstrained output (3 seeds) & $142$ ch & $1.70\pm1.43$ & $6.97\pm0.83$ \\
 \bottomrule
@@ -849,15 +850,20 @@ The result (Table~\ref{tab:ablations}) is not the one we expected, and it is
 why the shipped model is the smaller one. We began where the video-stereo
 literature does, with a frozen ResNet-18 \cite{he2016resnet} supplying
 appearance correlations and cost curves on top of the geometric channels ---
-the configuration the four deviations were pre-registered against. Three sit
-above it on the held-out endpoint and the fourth, dropping appearance, sits
-inside the threshold: against the $142$-channel base, none of the four
-registered decisions is load-bearing. Against the head we ship, two of the
-same decisions \emph{are}: the quarter-resolution context loses $0.76$ points
-when moved to full resolution ($5.08$ against $5.84\pm0.22$, one seed), and
-dropping the $25$ correlations loses $1.20$ ($4.64$, one seed). The learned
-evidence was absorbing the difference --- with it present the architecture is
-insensitive to these choices, and removing it is what makes them matter.
+the configuration the four deviations were pre-registered against. The
+registered threshold assumes spreads comparable to the base's $0.37$, and
+every deviation of the shipped head exceeds it ($0.42$--$0.68$), so we read
+rather than apply the rule: no single registered decision is load-bearing on
+\emph{either} base. Three $142$-channel deviations sit above their base, the
+fourth inside the threshold; the shipped head's three --- no FB cue
+($5.42\pm0.42$), geometry only ($5.36\pm0.68$), full-resolution context
+($5.57\pm0.68$) --- are unseparable from $5.84\pm0.22$, with seed
+$0$ again at the low end, as it is for the shipped model on the closure and
+at the high end for the base --- the pattern Sec.~\ref{sec:seeds} names. On
+EPE the direction is consistent for every deviation and A6 comes closest to
+separating ($4.61\pm0.21$ against $5.61\pm0.42$, under four standard
+errors): the evidence space shows on the mean where it does not show on the
+registered endpoint.
 Removing it entirely, under the promotion rule that decides on D2 with D7
 reported afterwards, stays ahead on both endpoints with seed deviation eight
 times tighter ($0.32$ against $2.53$ points of D2 Bad1), and out of domain the
@@ -874,14 +880,13 @@ worst available to us, and over three seeds the ordering reverses
 Two rows need the registered rule read out loud. Full-resolution context wins
 the registered endpoint against the configuration it was registered against
 ($5.68\pm0.16$ against $5.15\pm0.34$), an outcome the registration did not
-enumerate. On the base we ship, the same deviation loses $0.76$ points; the
-registered configuration is also the better one.
+enumerate. On the base we ship the same deviation is unseparable
+($5.57\pm0.68$), so the registered configuration stands.
 
 Ablating convexity (A4) posts the largest held-out Bad1 reduction in
 the table, $6.97\pm0.83\%$, but its margin over us ($1.13$ points) is not
-separable from its own three-seed spread --- four times ours, and twice the
-registered threshold, which assumes comparable spreads and cannot be applied
-here. Its EPE loss \emph{is} separable: $1.70\pm1.43\%$ against our
+separable from its own three-seed spread, four times ours. Its EPE loss
+\emph{is} separable: $1.70\pm1.43\%$ against our
 $5.61\pm0.42$, over four standard errors. We decline it on the metric where
 the difference is real rather than on the metric that suits us. The two
 trajectories put side by side say what the constraint buys: from development
@@ -1010,16 +1015,15 @@ locates it: the two SEA-RAFT passes are $26.2$ of the $28.9$\,ms, against
 $0.67$ for the evidence tensor and $1.00$ for the head; the tensor is that
 cheap because \steer\ builds no learned features, where the $142$-channel
 ablation spends $5.13$\,ms there. The reverse pass exists only to compute
-$C^{FB}_t$, and the trained head barely reads it: pinning the cue to a
-constant at inference costs the shipped checkpoint $+0.08$ points of held-out
-Bad1 ($5.77$ against that same seed's $5.69$, inside the seed spread), and a
-head trained \emph{without} the cue is equally indifferent to receiving the
-real one ($-0.02$), so the indifference is architectural rather than an
-accident of one checkpoint. Training without it does cost accuracy
-(supplement), so the cue is a training-time scaffold: \textbf{train with it,
-deploy without the reverse pass}, taking the module from $28.9$ to
-${\sim}15.8$\,ms on the unchanged checkpoint. Both held-out arms are single
-seeds under a pre-declared threshold. We evaluate perception geometry and
+$C^{FB}_t$, and the trained head barely reads it: pinned to a constant at
+inference, the within-checkpoint held-out delta over all three shipped seeds
+is $+0.02\pm0.06$ Bad1 and $-0.09\pm0.06$ EPE, and a head trained
+\emph{without} the cue is equally indifferent to receiving the real one
+($-0.02$; one checkpoint), so the indifference is architectural. Training
+without it trends lower without separating at three seeds ($5.42\pm0.42$
+against $5.84\pm0.22$; supplement): \textbf{train with it, deploy without
+the reverse pass}, taking the module from $28.9$ to ${\sim}15.8$\,ms on the
+unchanged checkpoint. We evaluate perception geometry and
 what a map accumulates from it, not downstream control, and demonstrate
 neither clinical safety nor patient benefit.
 
@@ -1052,7 +1056,7 @@ What remains open is \emph{where} to intervene.
 
 \begin{thebibliography}{99}
 \scriptsize
-\setlength{\itemsep}{-1pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
+\setlength{\itemsep}{-2pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.}, ``Temporally consistent online depth estimation in

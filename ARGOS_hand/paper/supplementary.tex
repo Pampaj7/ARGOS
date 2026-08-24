@@ -1054,12 +1054,14 @@ The main paper's runtime paragraph states that training without the
 $C^{FB}$ cue costs accuracy and cites this supplement. The number: a head
 trained with the channel pinned to $1.0$ (A5, one seed, the locked recipe
 otherwise unchanged) reaches $5.31\%$ held-out Bad1 reduction against the
-shipped three-seed $5.84\pm0.22$ --- $0.53$ points, beyond the
-pre-registered $0.37$ threshold --- and $5.05$ against $5.61\pm0.42$ EPE.
+shipped three-seed $5.84\pm0.22$. Seeds 1 and 2 soften the single-run
+reading: over three seeds the variant sits at $5.42\pm0.42$ Bad1 and
+$5.09\pm0.29$ EPE --- direction consistent, not separable, with a spread
+exceeding the registered $0.37$ threshold.
 Combined with the two inference-side arms in the main text (pinning costs
 the shipped checkpoint $+0.08$; the A5 head fed the real cue moves $-0.02$),
-the cue is load-bearing in training and unread at inference on either
-checkpoint.
+the cue trends useful in training without separating, and is unread at
+inference on every checkpoint tested.
 
 \paragraph{The unconstrained-output twin on the shipped base.}
 The main paper's ablation section states that A4's $38$-channel twin repeats
