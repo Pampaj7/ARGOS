@@ -15,7 +15,11 @@
   ],
   "deviations_from_locked_recipe": {
     "backbones": {
-      "locked": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+      "locked": [
+        "S2M2-S",
+        "RAFT-Stereo",
+        "StereoAnywhere"
+      ],
       "used": "exactly one, the arm's own",
       "applies_to": "training clips and validation clips alike; the specialist selects its checkpoint on its own backbone's D2 validation, as a practitioner training for that backbone would"
     },
@@ -34,9 +38,21 @@
   ],
   "endpoint": {
     "primary": "held-out D7 relative EPE and Bad1 reduction on the arm's own backbone cells, specialist against the shipped generalist checkpoint on those same cells",
-    "protocol": "the definitive evaluation used for Table I, restricted to one backbone; no new support, no new aggregation"
+    "protocol": "the definitive evaluation used for Table I, restricted to one backbone; no new support, no new aggregation",
+    "arenas_reported": [
+      "scared-d2 (where the specialist selected)",
+      "scared-d7 (registered endpoint)",
+      "DRENDS (added 2026-08-27, see addendum)"
+    ]
   },
   "declared_asymmetry": "Every deviation above favours the specialist: matched gradient budget, three times as many selection points, and validation on its own backbone rather than a mean over three. The generalist gets none of that. This is deliberate -- a shared module that survives an advantaged specialist is the only version of the comparison worth reporting -- and it means a specialist win of ordinary size is not evidence against the shared module, while a specialist loss is.",
   "reading_rule": "The three-seed spread of the shipped head's D7 Bad1 reduction is 0.22 points and its registered threshold is 0.37. These arms are single-seed, so a difference below 0.37 points is not read at all, and a difference above it is read as a bound pending seeds, not as a measurement.",
-  "registered_before": "any specialist training was launched"
+  "registered_before": "any specialist training was launched",
+  "addendum_2026_08_27": {
+    "added": "DRENDS, out of domain, on the arm's own backbone, reported alongside D2 and D7",
+    "reason": "D7 is held-out sequences of the dataset the specialist trained on, which is the arena where a single-backbone module is strongest. Reporting the control only there would measure it where it is most favoured and skip the arena sharing exists to win -- arena selection, in a paper that spends a section naming selection optimism.",
+    "status": "reported, not promoted: the registered primary endpoint remains held-out D7 Bad1. DRENDS is an additional arena and is read as such.",
+    "declared_before": "any specialist evaluation had written a result to disk; the D2/D7 evaluation was running and results/specialist_eval was empty when this was written",
+    "expected_direction": "if the shared module's advantage is real it should be largest here, since a specialist trained on one backbone has the least diversity to generalise from. A specialist winning out of domain would be the strongest evidence against contribution (i) this control can produce."
+  }
 }
