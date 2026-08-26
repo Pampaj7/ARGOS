@@ -24,7 +24,7 @@ LANE=${1:?usage: [PIN_GPU=n] run_specialists.sh <a|b>}
 PY=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
 ROOT=/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4
 SELF=$(readlink -f "$0")
-PIN=${PIN_GPU:-}
+PIN=${PIN_GPU:-0}
 case "$LANE" in
     a) ARMS="RAFT-Stereo StereoAnywhere S2M2-S" ;;
     b) ARMS="Fast-FoundationStereo CREStereo" ;;
@@ -54,5 +54,8 @@ if [ "${2:-}" = "--node" ]; then
     exit 0
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
+# One GPU, not two: p1i caps a user at 4 physical GPUs, and a lane that reserves two
+# while pinning one spends a slot that another job could be running in. Observed on
+# 2026-08-26, when the reservation was what kept the DRENDS seed fills pending.
 exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=12GB]" \
-     -gpu "num=2:mode=shared" -J "argos_spec_$LANE" "$SELF $LANE --node"
+     -gpu "num=1:mode=shared" -J "argos_spec_$LANE" "$SELF $LANE --node"
