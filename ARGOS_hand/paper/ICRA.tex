@@ -179,12 +179,10 @@ claims.
 \section{Introduction}
 \label{sec:intro}
 
-Metric three-dimensional perception underpins camera navigation, tool--tissue
-distance estimation and deformation analysis in robot-assisted surgery, and
-stereo endoscopy is attractive because depth comes from images the platform
-already provides. It is also hard: endoscopic
-scenes carry weak texture, non-Lambertian tissue, specularities, blood, smoke,
-deformable anatomy, rapid viewpoint change and tool occlusion
+Stereo endoscopy is attractive for surgical three-dimensional perception
+because depth comes from images the platform already provides, and hard
+because endoscopic scenes carry weak texture, non-Lambertian tissue,
+specularities, smoke, deformable anatomy and tool occlusion
 \cite{allan2021scared,edwards2022servct}. Modern estimators
 \cite{lipson2021raftstereo,li2022crestereo,bartolomei2025stereoanywhere,min2025s2m2,wen2026fastfoundationstereo}
 give increasingly strong frame-wise disparity, but nothing in a frame-wise
@@ -204,15 +202,12 @@ motion-aligned history should influence the current estimate, and constrain
 the correction to a convex interpolation between the two --- and redesign
 everything around it for a black-box interface.
 
-Two questions follow. Does the learned head add anything simple temporal
-averaging would not? Matched blends recover only a small fraction of its gain
-while an oracle shows the aligned memory carries far more than the policy
-exploits, so the core problem is not obtaining temporal evidence but deciding
-how much of it to use. And how should such an intervention be evaluated?
-Smoothness is not correctness, and lower mean EPE hides whether refinement
-introduces new bad pixels or rare catastrophic frames, so we score relative to
-the frozen prediction --- and, because what a robot consumes is a map, carry
-the same intervention into an accumulated reconstruction and measure it there.
+Two questions follow, and the contributions below answer them: whether a
+learned head adds anything simple averaging would not, and how an intervention
+should be scored when smoothness is not correctness. An oracle on our own
+aligned memory settles the framing --- the policy collects $29\%$ of what that
+memory already carries --- so the problem is not obtaining temporal evidence
+but deciding how much of it to use.
 
 Our contributions are three.
 
@@ -240,11 +235,8 @@ development, every spatially uniform blend recovering a meaningful share of
 the gain buys it by \emph{raising} the bad-pixel rate, while the one unlearned
 rule that varies in space does not. That trade is a property of the split as
 much as of the policy: out of domain, where the raw prediction is weak, none
-of the uniform blends pays in bad pixels either. Applied to our own claims
-the protocol is equally unkind:
-degenerate history-replay wins the no-reference metric, the head's weight
-inverts its relation to harm across splits, and what a map fuses improves on
-one split while degrading on the other, for a reason we can name.
+of the uniform blends pays in bad pixels either. Applied to our own claims the
+protocol is equally unkind, and Sec.~\ref{sec:limits} lists what it costs us.
 
 \section{Related Work}
 \label{sec:related}
@@ -290,10 +282,10 @@ supplies, so we run it as its authors intended (Sec.~\ref{sec:bida}).
 \paragraph{Evaluating temporal refinement.}
 Stereo benchmarks report frame-wise geometry and video methods add consistency
 measures, but neither characterises an intervention: a prediction can grow
-smoother without growing more correct, and a lower mean error can hide newly
-created failures. Recovered and introduced error must both be measured, which
-connects to selective prediction \cite{geifman2019selectivenet}. Our contribution is not a
-new metric but a common protocol under fixed, prediction-independent support.
+smoother without growing more correct. Recovered and introduced error must
+both be measured, which connects to selective prediction
+\cite{geifman2019selectivenet}; our contribution is not a new metric but a
+common protocol under fixed, prediction-independent support.
 
 \paragraph{Surgical stereo geometry.}
 SCARED \cite{allan2021scared} and DRENDS \cite{loza2025drends} supply the
@@ -318,9 +310,15 @@ Sec.~\ref{sec:mapping} measures after accumulation as well.
 One time step, and the evidence it reads. \textbf{Left:} dashed grey is
 frozen; the single orange block is the only trained component and emits one
 scalar per pixel, $w_t$, rather than geometry. \textbf{Right:} the $38$
-channels --- $25$ quarter-resolution disparity correlations, upsampled, and
-$13$ native --- none carrying ground truth, backbone identity or a future
-frame.}
+channels, none carrying ground truth, backbone identity or a future frame.
+The $25$ quarter-resolution ones are bounded local disparity correlations
+$1-|d(x')-d(x)|/4$, difference clamped at $4$, over a $3\times3$ window at
+dilation $2$, bilinearly upsampled: raw and aligned memory each against
+themselves without the centre tap ($8{+}8$), raw against aligned memory with
+it ($9$). The $13$ grid channels: raw and aligned disparity ($[0,64]/64$),
+signed and absolute residual ($\pm16/16$), flow $u,v$ and magnitude
+($\pm32/32$), $C_t^{FB}$, warp support, sampled historical validity, RGB on
+$[-1,1]$. Normalisation is fixed before training.}
 \label{fig:system}
 \end{figure*}
 
@@ -354,14 +352,11 @@ happens when that value reaches the output.
 
 \subsection{Shared External Evidence}
 
-All estimators are mapped into one 38-channel tensor on the cache grid,
-built from raw disparity, aligned memory, the two images, the previous left
-image, the flow, $C_t^{FB}$, the warp support and the sampled historical
-validity. Twenty-five channels are disparity-geometry correlations formed at
-quarter resolution and 13 are formed on the grid directly
-(Fig.~\ref{fig:system}, right); normalisation is fixed before training
-(disparities clamped to $[0,64]/64$, residual $\pm16/16$, flow $\pm32/32$,
-RGB to $[-1,1]$). Nothing in this space is learned, no network evaluates it,
+All estimators are mapped into one 38-channel tensor on the cache grid: $25$
+quarter-resolution disparity correlations, upsampled, and $13$ formed on the
+grid from raw disparity, aligned memory, their residual, the flow, $C_t^{FB}$,
+the warp support, the sampled historical validity and the current image, each
+channel specified with its normalisation in Fig.~\ref{fig:system}. Nothing in this space is learned, no network evaluates it,
 and no ground truth, backbone identity or future frame enters it. An earlier
 configuration added 104 quarter-resolution channels derived from a frozen
 ResNet-18 \cite{he2016resnet} --- $64$ compressed feature maps and $40$
@@ -371,10 +366,8 @@ this decomposition: dropping only the $64$ feature maps gives $78$, dropping
 all $104$ is \steer's $38$, and dropping its $25$ disparity correlations
 leaves the $13$ direct channels.
 Sec.~\ref{sec:ablations} reports the $142$-channel configuration as an
-ablation, because it costs
-$157{,}504$ frozen parameters and three forward passes per frame and does not
-survive a three-seed comparison. The full channel specification is in the
-extended version.
+ablation, because it costs $157{,}504$ frozen parameters and three forward
+passes per frame and does not survive a three-seed comparison.
 
 \subsection{Reset-and-Fusion Decision Head}
 
@@ -383,14 +376,17 @@ the correction be convex in the two candidates, are CODD's
 \cite{li2023codd}; the architecture, the motion pathway, the evidence space,
 the supervision and the training are not.
 
-A cache-grid pathway and a quarter-resolution context pathway
-(Fig.~\ref{fig:system}) feed a
-full-resolution reset branch predicting $r_t=\sigma(z_t^r)$ and a coarse
-fusion branch predicting $f_t=\uparrow_4[\sigma(z_t^f)]$, giving the effective
-temporal weight $w_t=r_tf_t$ from $154{,}874$ trainable parameters. Running
-the context branch coarsely is a compute choice on that branch, $16\times$
-cheaper than full resolution, which Sec.~\ref{sec:ablations} reports as an
-ablation. Both branches run at width $48$.
+Writing $\mathrm{C}k$ for a $k\times k$ convolution and GN($g$) for GroupNorm
+over $g$ groups, the head is $\mathrm{C}3(38{\to}24)$--GN($8$)--SiLU and one
+residual block on the grid, then average-pool $2$, $\mathrm{C}3$ stride $2$ $(24{\to}48)$--GN--SiLU
+and three residual blocks at quarter resolution, a residual block being two
+bias-free $\mathrm{C}3$ with GN($8$) and one interior SiLU added to its input.
+Reset reads the fine map concatenated with the upsampled coarse one,
+$r_t=\sigma(\mathrm{C}3(\cdot))$ at grid resolution; fusion reads the coarse
+map, $f_t=\uparrow_4\sigma(\mathrm{C}1(\cdot))$. Their product $w_t=r_tf_t$
+weights the blend, at $154{,}874$ trainable parameters. Running the context
+branch coarsely is a compute choice, $16\times$ cheaper than full resolution,
+which Sec.~\ref{sec:ablations} reports as an ablation.
 
 Temporal evidence is only defined where the aligned memory is usable, so
 the per-pixel \emph{support} is the conjunction of current raw validity,
@@ -418,8 +414,9 @@ d_t^{\raw}, & S_t=0.
 Because $w_t\in[0,1]$ the fused disparity lies between the two candidates on
 the support, and off it the module is the exact identity on raw geometry.
 Applying \eqref{eq:support} to the output and not only computing it is
-load-bearing (Sec.~\ref{sec:masking}). Reset output bias is initialized to
-$-2$ and fusion to zero, so initial intervention is conservative.
+load-bearing (Sec.~\ref{sec:masking}). Both output convolutions start at zero
+weight with reset bias $-2$ and fusion bias $0$, so initial intervention is
+conservative.
 
 \subsection{Bounded Corrected-State Recurrence}
 \label{sec:recurrence}
@@ -506,14 +503,12 @@ before the ratio; each table declares its own aggregation.
 \begin{table}[!t]
 \centering
 \caption{
-One frozen \steer\ checkpoint, seed $0$, on the two arenas it never
-developed on; every cell is raw$\rightarrow$\steer, lower is better, and the
-lower-right block is the joint unseen-backbone, unseen-domain shift usually
-left unmeasured ($^{*}$ marks the two estimators excluded from
-temporal-head training). Development cells (Sec.~\ref{sec:development}), DTCE columns
-(Sec.~\ref{sec:horizon}) and per-sequence detail (extended version) complete
-the fifteen-cell count of contribution (i). Cells are
-pooled per backbone.
+One frozen \steer\ checkpoint, seed $0$, on the two arenas it never developed
+on; every cell is raw$\rightarrow$\steer\ pooled per backbone, lower is
+better, and the lower-right block is the joint unseen-backbone, unseen-domain
+shift usually left unmeasured ($^{*}$ marks the two estimators excluded from
+temporal-head training). Development cells (Sec.~\ref{sec:development}) and
+DTCE (Sec.~\ref{sec:horizon}) complete contribution~(i)'s fifteen.
 }
 \label{tab:grid}
 \scriptsize
@@ -940,18 +935,15 @@ large corrections.
 \includegraphics[width=\columnwidth]{intervention_map.pdf}
 \caption{
 Where the module intervenes, and whether it helped there. Grey and off-white
-are off support, where \eqref{eq:fusion} makes the module the exact identity
-and $\delta e$ is zero by construction, so those pixels are not drawn at the
-centre of the diverging scale. \textbf{Top:} the median frame of a D2
-sequence --- acts on $19.2\%$ of pixels at mean weight $0.46$, improves
-$82.8\%$ of them. \textbf{Bottom:} the worst frame of the same sequence, by
-rank rather than choice --- $2.2\%$ at $0.79$, improves $12.9\%$ (the
-$\delta e$ scales differ $40\times$ between rows). ``Acts on'' is the
-fraction of the frame's pixels on support.
-Few pixels, high weight, wrong is a tail and not a trend: over the sequence's
-$1{,}861$ frames with defined weight, per-frame mean weight correlates
-\emph{negatively} with harm (Spearman $-0.68$; $-0.26$, same sign, on a
-held-out sequence).
+are off support, where \eqref{eq:fusion} makes the module the exact identity,
+so those pixels are not drawn at the centre of the diverging scale.
+\textbf{Top:} the median frame of a D2 sequence, acting on $19.2\%$ of pixels
+(the fraction on support) at mean weight $0.46$ and improving $82.8\%$ of
+them. \textbf{Bottom:} the worst frame of the same sequence by rank, $2.2\%$
+at $0.79$, improving $12.9\%$; the $\delta e$ scales differ $40\times$
+between rows. Few pixels, high weight, wrong is a tail and not a trend: over
+the sequence's $1{,}861$ frames per-frame mean weight correlates
+\emph{negatively} with harm (Spearman $-0.68$; $-0.26$ held out).
 }
 \label{fig:intervention}
 \end{figure}
@@ -1038,7 +1030,7 @@ to the evidence space, not the protocol; a module that declares a support
 must apply it to what it emits; and what a map fuses improves held out while
 degrading on development, with no per-cell term we could isolate --- the
 horizon an exchange rate, not an optimum.
-What remains open is \emph{where} to intervene. An extended version (per-sequence tables, full policy grid, protocols, channel specification) accompanies the code, checkpoint and curation release.
+What remains open is \emph{where} to intervene. An extended version (per-sequence tables, full policy grid, protocols) accompanies the code, checkpoint and curation release.
 
 % ============================================================
 % BLOCKER APPENDIX -- ZERO PAGES IN THE SUBMISSION BUILD
