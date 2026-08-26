@@ -16,9 +16,9 @@
       "arena": "D2",
       "backbone": "Fast-FoundationStereo",
       "units": 3,
-      "seed0": 2.463174355043919,
-      "seed1": 3.197699416655439,
-      "seed2": 3.0545032795485323,
+      "seed0": 2.46317435504392,
+      "seed1": 3.1976994166554396,
+      "seed2": 3.0545032795485128,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -27,9 +27,9 @@
       "arena": "D2",
       "backbone": "RAFT-Stereo",
       "units": 3,
-      "seed0": 2.534932519763059,
-      "seed1": 3.091799259559099,
-      "seed2": 3.0393057809084785,
+      "seed0": 2.534932519763018,
+      "seed1": 3.091799259559079,
+      "seed2": 3.0393057809084794,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -49,9 +49,9 @@
       "arena": "D2",
       "backbone": "StereoAnywhere",
       "units": 3,
-      "seed0": 8.031568176216348,
-      "seed1": 8.741249016169437,
-      "seed2": 8.673665928583596,
+      "seed0": 8.031568176216384,
+      "seed1": 8.741249016169455,
+      "seed2": 8.67366592858363,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -71,9 +71,9 @@
       "arena": "D7",
       "backbone": "Fast-FoundationStereo",
       "units": 4,
-      "seed0": 3.608867865920917,
-      "seed1": 3.467483420618997,
-      "seed2": 4.094372244683067,
+      "seed0": 3.6088678659208946,
+      "seed1": 3.467483420618975,
+      "seed2": 4.094372244683033,
       "improves_every_seed": true,
       "seed0_rank_of_3": 2
     },
@@ -84,7 +84,7 @@
       "units": 4,
       "seed0": 8.034261766493579,
       "seed1": 7.941752058834495,
-      "seed2": 8.755746971945584,
+      "seed2": 8.755746971945596,
       "improves_every_seed": true,
       "seed0_rank_of_3": 2
     },
@@ -93,7 +93,7 @@
       "arena": "D7",
       "backbone": "S2M2-S",
       "units": 4,
-      "seed0": 3.5571061476610097,
+      "seed0": 3.557106147660999,
       "seed1": 3.438146025438256,
       "seed2": 4.125174029133457,
       "improves_every_seed": true,
@@ -137,9 +137,20 @@
       "arena": "DRENDS",
       "backbone": "RAFT-Stereo",
       "units": 5,
-      "seed0": 5.740962290188059,
-      "seed1": 5.626964816595395,
-      "seed2": 5.4532358845106925,
+      "seed0": 5.740962290188075,
+      "seed1": 5.626964816595411,
+      "seed2": 5.4532358845107085,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "units": 5,
+      "seed0": 4.9355764646184,
+      "seed1": 4.934316587842968,
+      "seed2": 4.857487377484002,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
     },
@@ -171,8 +182,8 @@
       "backbone": "RAFT-Stereo",
       "units": 3,
       "seed0": 10.709041627573257,
-      "seed1": 8.6788047309377,
-      "seed2": 10.031374853011066,
+      "seed1": 8.67880473093772,
+      "seed2": 10.031374853011087,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
     },
@@ -182,7 +193,7 @@
       "backbone": "S2M2-S",
       "units": 3,
       "seed0": 9.134924563389264,
-      "seed1": 9.565315578271981,
+      "seed1": 9.565315578271994,
       "seed2": 9.681015969872353,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
@@ -193,7 +204,7 @@
       "backbone": "StereoAnywhere",
       "units": 3,
       "seed0": 20.511008973868005,
-      "seed1": 20.710403951522835,
+      "seed1": 20.710403951522853,
       "seed2": 21.69167986234662,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
@@ -203,9 +214,9 @@
       "arena": "D7",
       "backbone": "CREStereo",
       "units": 4,
-      "seed0": 4.743155703099949,
+      "seed0": 4.743155703099959,
       "seed1": 4.746554861703251,
-      "seed2": 5.151924720691514,
+      "seed2": 5.151924720691524,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -214,9 +225,9 @@
       "arena": "D7",
       "backbone": "Fast-FoundationStereo",
       "units": 4,
-      "seed0": 4.476424274300944,
-      "seed1": 4.442677657290676,
-      "seed2": 4.566843440086791,
+      "seed0": 4.476424274300932,
+      "seed1": 4.442677657290664,
+      "seed2": 4.566843440086792,
       "improves_every_seed": true,
       "seed0_rank_of_3": 2
     },
@@ -225,9 +236,9 @@
       "arena": "D7",
       "backbone": "RAFT-Stereo",
       "units": 4,
-      "seed0": 5.470997831064663,
-      "seed1": 5.4579146017326075,
-      "seed2": 5.842586220941963,
+      "seed0": 5.4709978310646745,
+      "seed1": 5.457914601732607,
+      "seed2": 5.842586220941974,
       "improves_every_seed": true,
       "seed0_rank_of_3": 2
     },
@@ -236,7 +247,7 @@
       "arena": "D7",
       "backbone": "S2M2-S",
       "units": 4,
-      "seed0": 6.399765906619898,
+      "seed0": 6.399765906619908,
       "seed1": 6.416499163607214,
       "seed2": 6.938123122205301,
       "improves_every_seed": true,
@@ -269,8 +280,8 @@
       "arena": "DRENDS",
       "backbone": "Fast-FoundationStereo",
       "units": 5,
-      "seed0": 5.135856102774559,
-      "seed1": 5.030842028528588,
+      "seed0": 5.135856102774578,
+      "seed1": 5.030842028528608,
       "seed2": 4.7573933176116014,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
@@ -285,6 +296,17 @@
       "seed2": 5.661324706517604,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "units": 5,
+      "seed0": 5.721176998124181,
+      "seed1": 5.541718841295608,
+      "seed2": 5.338536058791766,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
     }
   ],
   "arena_rank": [
@@ -293,6 +315,7 @@
       "arena": "D2",
       "backbones": 5,
       "backbones_seed0_only": [],
+      "backbones_incomplete": [],
       "seed0": 3.694318072905935,
       "seed1": 4.396120866592545,
       "seed2": 4.305847128088283,
@@ -304,6 +327,7 @@
       "arena": "D7",
       "backbones": 5,
       "backbones_seed0_only": [],
+      "backbones_incomplete": [],
       "seed0": 5.492361549728234,
       "seed1": 5.268143323543451,
       "seed2": 6.081667512467231,
@@ -313,14 +337,21 @@
     {
       "metric": "EPE",
       "arena": "DRENDS",
-      "backbones": 3,
-      "backbones_seed0_only": [
-        "S2M2-S",
-        "StereoAnywhere"
+      "backbones": 4,
+      "backbones_seed0_only": [],
+      "backbones_incomplete": [
+        {
+          "backbone": "StereoAnywhere",
+          "units_per_seed": [
+            5,
+            1,
+            1
+          ]
+        }
       ],
-      "seed0": 5.368503844517574,
-      "seed1": 5.268732398151317,
-      "seed2": 5.143272853473709,
+      "seed0": 5.2572951322860275,
+      "seed1": 5.1828289572018535,
+      "seed2": 5.069861384863933,
       "seed0_rank_of_3": 3,
       "seed0_understates": false
     },
@@ -329,6 +360,7 @@
       "arena": "D2",
       "backbones": 5,
       "backbones_seed0_only": [],
+      "backbones_incomplete": [],
       "seed0": 12.843612338916229,
       "seed1": 12.37565390489874,
       "seed2": 12.976280581157521,
@@ -340,6 +372,7 @@
       "arena": "D7",
       "backbones": 5,
       "backbones_seed0_only": [],
+      "backbones_incomplete": [],
       "seed0": 5.693184122781616,
       "seed1": 5.732957618281111,
       "seed2": 6.090091408342268,
@@ -349,14 +382,21 @@
     {
       "metric": "Bad1",
       "arena": "DRENDS",
-      "backbones": 3,
-      "backbones_seed0_only": [
-        "S2M2-S",
-        "StereoAnywhere"
+      "backbones": 4,
+      "backbones_seed0_only": [],
+      "backbones_incomplete": [
+        {
+          "backbone": "StereoAnywhere",
+          "units_per_seed": [
+            5,
+            1,
+            1
+          ]
+        }
       ],
-      "seed0": 5.574190881716906,
-      "seed1": 5.446123320882523,
-      "seed2": 5.13997625791137,
+      "seed0": 5.613920524660709,
+      "seed1": 5.471962332008622,
+      "seed2": 5.193646021911852,
       "seed0_rank_of_3": 3,
       "seed0_understates": false
     }
@@ -863,6 +903,56 @@
       "improves_every_seed": true
     },
     {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 5.343253132897917,
+      "seed1": 5.4176470287147565,
+      "seed2": 5.4717583986760845,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid11_Liver_High",
+      "seed0": 4.62082362944963,
+      "seed1": 4.285806667744349,
+      "seed2": 4.509262688430089,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 6.214951090170783,
+      "seed1": 6.126167169861999,
+      "seed2": 6.0372525415191856,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 3.5396102774259086,
+      "seed1": 3.944423971959658,
+      "seed2": 3.5347743056395706,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 4.576350745026719,
+      "seed1": 4.510818117325102,
+      "seed2": 4.2489920001409605,
+      "improves_every_seed": true
+    },
+    {
       "metric": "Bad1",
       "arena": "D2",
       "backbone": "CREStereo",
@@ -1360,6 +1450,56 @@
       "seed0": 4.996727214990253,
       "seed1": 4.824297399988736,
       "seed2": 4.062963324086806,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 2.8465653328374474,
+      "seed1": 2.677942765108808,
+      "seed2": 2.6345887631722498,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid11_Liver_High",
+      "seed0": 4.810381576153912,
+      "seed1": 4.562768220216105,
+      "seed2": 4.499368608011298,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 8.909325691313423,
+      "seed1": 8.669435965411779,
+      "seed2": 8.58269779482919,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 7.887245946182186,
+      "seed1": 7.949382914824397,
+      "seed2": 7.341980006893535,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "S2M2-S",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 4.53852804720413,
+      "seed1": 4.241658433296173,
+      "seed2": 3.9767252630556884,
       "improves_every_seed": true
     }
   ]

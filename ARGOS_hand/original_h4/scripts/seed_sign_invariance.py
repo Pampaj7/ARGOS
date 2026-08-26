@@ -76,8 +76,19 @@ def main() -> None:
             common = sorted(set.intersection(*(set(c) for c in per_seed.values())))
             missing = sorted(set(per_seed[0]) - set(common))
 
+            partial = []
             for backbone in common:
-                units = set.intersection(*(set(per_seed[s][backbone]) for s in per_seed))
+                # A run still in flight has written some of its recordings and not the
+                # rest. Intersecting the units would pool that backbone over whatever
+                # happens to be on disk and report it as a finished cell -- a wrong number
+                # that looks like a right one. A cell counts only when every seed covers
+                # the same units.
+                unit_sets = [set(per_seed[s][backbone]) for s in sorted(per_seed)]
+                if len({frozenset(u) for u in unit_sets}) != 1:
+                    partial.append({"backbone": backbone,
+                                    "units_per_seed": [len(u) for u in unit_sets]})
+                    continue
+                units = unit_sets[0]
                 values = {s: reduction({u: per_seed[s][backbone][u] for u in units})
                           for s in sorted(per_seed)}
                 record["cells"].append({
@@ -98,14 +109,16 @@ def main() -> None:
                     })
 
             # Arena pooled over its backbones, which is what a caption would claim.
+            complete = [b for b in common if b not in {e["backbone"] for e in partial}]
             pooled = {}
             for s in sorted(per_seed):
-                merged = {f"{b}/{u}": v for b in common
+                merged = {f"{b}/{u}": v for b in complete
                           for u, v in per_seed[s][b].items()}
                 pooled[s] = reduction(merged)
             record["arena_rank"].append({
-                "metric": metric, "arena": arena, "backbones": len(common),
+                "metric": metric, "arena": arena, "backbones": len(complete),
                 "backbones_seed0_only": missing,
+                "backbones_incomplete": partial,
                 **{f"seed{s}": pooled[s] for s in pooled},
                 "seed0_rank_of_3": sorted(pooled.values()).index(pooled[0]) + 1,
                 "seed0_understates": pooled[0] == min(pooled.values()),
@@ -118,6 +131,9 @@ def main() -> None:
     for r in record["arena_rank"]:
         rank = {1: "LOWEST", 2: "middle", 3: "HIGHEST"}[r["seed0_rank_of_3"]]
         note = f"  [{len(r['backbones_seed0_only'])} backbone(s) seed-0 only]" if r["backbones_seed0_only"] else ""
+        if r["backbones_incomplete"]:
+            note += "  [excluded, still running: " + ", ".join(
+                f"{e['backbone']} {e['units_per_seed']}" for e in r["backbones_incomplete"]) + "]"
         print(f"  {r['metric']:<5} {r['arena']:<7} {r['backbones']}bb  "
               f"{r['seed0']:6.2f} {r['seed1']:6.2f} {r['seed2']:6.2f}   seed0 {rank}{note}")
 
