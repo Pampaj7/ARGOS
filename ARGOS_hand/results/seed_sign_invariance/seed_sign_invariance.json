@@ -16,9 +16,9 @@
       "arena": "D2",
       "backbone": "Fast-FoundationStereo",
       "units": 3,
-      "seed0": 2.46317435504392,
-      "seed1": 3.1976994166554396,
-      "seed2": 3.0545032795485128,
+      "seed0": 2.463174355043919,
+      "seed1": 3.197699416655439,
+      "seed2": 3.0545032795485323,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -27,9 +27,9 @@
       "arena": "D2",
       "backbone": "RAFT-Stereo",
       "units": 3,
-      "seed0": 2.534932519763018,
-      "seed1": 3.091799259559079,
-      "seed2": 3.0393057809084794,
+      "seed0": 2.534932519763059,
+      "seed1": 3.091799259559099,
+      "seed2": 3.0393057809084785,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -49,9 +49,9 @@
       "arena": "D2",
       "backbone": "StereoAnywhere",
       "units": 3,
-      "seed0": 8.031568176216384,
-      "seed1": 8.741249016169455,
-      "seed2": 8.67366592858363,
+      "seed0": 8.031568176216348,
+      "seed1": 8.741249016169437,
+      "seed2": 8.673665928583596,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
     },
@@ -71,9 +71,9 @@
       "arena": "D7",
       "backbone": "Fast-FoundationStereo",
       "units": 4,
-      "seed0": 3.6088678659208946,
-      "seed1": 3.467483420618975,
-      "seed2": 4.094372244683033,
+      "seed0": 3.608867865920917,
+      "seed1": 3.467483420618997,
+      "seed2": 4.094372244683055,
       "improves_every_seed": true,
       "seed0_rank_of_3": 2
     },
@@ -105,7 +105,7 @@
       "backbone": "StereoAnywhere",
       "units": 4,
       "seed0": 7.650931827048183,
-      "seed1": 7.21942413676253,
+      "seed1": 7.21942413676252,
       "seed2": 8.149615063596425,
       "improves_every_seed": true,
       "seed0_rank_of_3": 2
@@ -115,8 +115,8 @@
       "arena": "DRENDS",
       "backbone": "CREStereo",
       "units": 5,
-      "seed0": 5.606112753139903,
-      "seed1": 5.5013043362107314,
+      "seed0": 5.606112753139921,
+      "seed1": 5.501304336210748,
       "seed2": 5.389935527034889,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
@@ -126,8 +126,8 @@
       "arena": "DRENDS",
       "backbone": "Fast-FoundationStereo",
       "units": 5,
-      "seed0": 4.7466011461647195,
-      "seed1": 4.666485269146729,
+      "seed0": 4.746601146164736,
+      "seed1": 4.6664852691467456,
       "seed2": 4.576077147439821,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
@@ -137,9 +137,9 @@
       "arena": "DRENDS",
       "backbone": "RAFT-Stereo",
       "units": 5,
-      "seed0": 5.740962290188075,
-      "seed1": 5.626964816595411,
-      "seed2": 5.4532358845107085,
+      "seed0": 5.740962290188059,
+      "seed1": 5.626964816595412,
+      "seed2": 5.4532358845106925,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
     },
@@ -149,8 +149,19 @@
       "backbone": "S2M2-S",
       "units": 5,
       "seed0": 4.9355764646184,
-      "seed1": 4.934316587842968,
+      "seed1": 4.934316587842951,
       "seed2": 4.857487377484002,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "units": 5,
+      "seed0": 6.224096898117627,
+      "seed1": 6.132121925954685,
+      "seed2": 6.0660600636558,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
     },
@@ -182,8 +193,8 @@
       "backbone": "RAFT-Stereo",
       "units": 3,
       "seed0": 10.709041627573257,
-      "seed1": 8.67880473093772,
-      "seed2": 10.031374853011087,
+      "seed1": 8.6788047309377,
+      "seed2": 10.031374853011066,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
     },
@@ -193,7 +204,7 @@
       "backbone": "S2M2-S",
       "units": 3,
       "seed0": 9.134924563389264,
-      "seed1": 9.565315578271994,
+      "seed1": 9.565315578271981,
       "seed2": 9.681015969872353,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
@@ -204,7 +215,7 @@
       "backbone": "StereoAnywhere",
       "units": 3,
       "seed0": 20.511008973868005,
-      "seed1": 20.710403951522853,
+      "seed1": 20.710403951522835,
       "seed2": 21.69167986234662,
       "improves_every_seed": true,
       "seed0_rank_of_3": 1
@@ -247,7 +258,7 @@
       "arena": "D7",
       "backbone": "S2M2-S",
       "units": 4,
-      "seed0": 6.399765906619908,
+      "seed0": 6.399765906619898,
       "seed1": 6.416499163607214,
       "seed2": 6.938123122205301,
       "improves_every_seed": true,
@@ -258,7 +269,7 @@
       "arena": "D7",
       "backbone": "StereoAnywhere",
       "units": 4,
-      "seed0": 7.305424950900028,
+      "seed0": 7.30542495090004,
       "seed1": 7.527680134452668,
       "seed2": 7.8599962718788055,
       "improves_every_seed": true,
@@ -280,8 +291,8 @@
       "arena": "DRENDS",
       "backbone": "Fast-FoundationStereo",
       "units": 5,
-      "seed0": 5.135856102774578,
-      "seed1": 5.030842028528608,
+      "seed0": 5.135856102774557,
+      "seed1": 5.030842028528588,
       "seed2": 4.7573933176116014,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
@@ -291,7 +302,7 @@
       "arena": "DRENDS",
       "backbone": "RAFT-Stereo",
       "units": 5,
-      "seed0": 6.174543537270116,
+      "seed0": 6.174543537270098,
       "seed1": 6.03398492408019,
       "seed2": 5.661324706517604,
       "improves_every_seed": true,
@@ -305,6 +316,17 @@
       "seed0": 5.721176998124181,
       "seed1": 5.541718841295608,
       "seed2": 5.338536058791766,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "units": 5,
+      "seed0": 7.550843177891791,
+      "seed1": 7.446260854107506,
+      "seed2": 7.281157290801521,
       "improves_every_seed": true,
       "seed0_rank_of_3": 3
     }
@@ -337,21 +359,12 @@
     {
       "metric": "EPE",
       "arena": "DRENDS",
-      "backbones": 4,
+      "backbones": 5,
       "backbones_seed0_only": [],
-      "backbones_incomplete": [
-        {
-          "backbone": "StereoAnywhere",
-          "units_per_seed": [
-            5,
-            1,
-            1
-          ]
-        }
-      ],
-      "seed0": 5.2572951322860275,
-      "seed1": 5.1828289572018535,
-      "seed2": 5.069861384863933,
+      "backbones_incomplete": [],
+      "seed0": 5.4573047190174115,
+      "seed1": 5.379216366781277,
+      "seed2": 5.275952533113482,
       "seed0_rank_of_3": 3,
       "seed0_understates": false
     },
@@ -382,21 +395,12 @@
     {
       "metric": "Bad1",
       "arena": "DRENDS",
-      "backbones": 4,
+      "backbones": 5,
       "backbones_seed0_only": [],
-      "backbones_incomplete": [
-        {
-          "backbone": "StereoAnywhere",
-          "units_per_seed": [
-            5,
-            1,
-            1
-          ]
-        }
-      ],
-      "seed0": 5.613920524660709,
-      "seed1": 5.471962332008622,
-      "seed2": 5.193646021911852,
+      "backbones_incomplete": [],
+      "seed0": 6.026961972219271,
+      "seed1": 5.8929740429450215,
+      "seed2": 5.638799931870592,
       "seed0_rank_of_3": 3,
       "seed0_understates": false
     }
@@ -953,6 +957,56 @@
       "improves_every_seed": true
     },
     {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 5.619026980417687,
+      "seed1": 5.746551222651789,
+      "seed2": 5.796532997378601,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid11_Liver_High",
+      "seed0": 4.2472683330823235,
+      "seed1": 3.830378387747826,
+      "seed2": 4.104659845719587,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 9.210066292547976,
+      "seed1": 9.113096140407963,
+      "seed2": 9.153585101553341,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 6.828514579984524,
+      "seed1": 6.891991656202741,
+      "seed2": 6.538759584601816,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 5.146017045757396,
+      "seed1": 4.910179849839284,
+      "seed2": 4.458886295432876,
+      "improves_every_seed": true
+    },
+    {
       "metric": "Bad1",
       "arena": "D2",
       "backbone": "CREStereo",
@@ -1500,6 +1554,56 @@
       "seed0": 4.53852804720413,
       "seed1": 4.241658433296173,
       "seed2": 3.9767252630556884,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 3.8401081414812066,
+      "seed1": 3.78010211159966,
+      "seed2": 3.838238818143221,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid11_Liver_High",
+      "seed0": 4.063227000101393,
+      "seed1": 3.5649129370525894,
+      "seed2": 3.751882472053842,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 12.65944314107719,
+      "seed1": 12.96155515673192,
+      "seed2": 13.050753136530846,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 10.509552134153369,
+      "seed1": 10.509384613982597,
+      "seed2": 9.819750976575586,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "StereoAnywhere",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 6.889501516983368,
+      "seed1": 6.563023928725945,
+      "seed2": 5.971248899407549,
       "improves_every_seed": true
     }
   ]
