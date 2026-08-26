@@ -17826,4 +17826,36 @@ recurrence, the support contract) and states the withdrawal itself on page 1
 rather than letting the enumeration quietly reinstate it. Eight pages, no
 overfull, no undefined references.
 
+
+
+\section*{The specialist control is launched, and its handicap is ours to declare}
+
+Reviewer 2's single most important missing ablation is the one contribution
+(i) invites: if one checkpoint serves every backbone, what does a checkpoint
+trained \emph{for} a backbone do on that backbone? Five arms are training,
+one per cached SCARED-C estimator --- the three seen and, deliberately, the
+two the paper calls unseen, because those are the cells where the specialist
+prices the word.
+
+The design decision worth recording is the handicap, and it runs the other
+way from the one a reader expects. Twelve epochs over three backbones is
+thirty-six backbone-epochs of gradient steps; twelve epochs over one backbone
+would be a third of that, and a specialist beaten under a third of the budget
+would have proved nothing. So the specialists get $36$ epochs, three times
+the selection points, and checkpoint selection on their own backbone's
+validation rather than a mean over three. The generalist gets none of it.
+This is written into the declaration before any arm launched, together with
+its consequence: a specialist win of ordinary size is not evidence against
+the shared module, while a specialist loss is. Single seed, so the $0.37$
+threshold reads as a bound and not a measurement.
+
+Mechanically the control is a one-name patch --- \texttt{SEEN\_BACKBONES}
+rebound in the runner's namespace, the same technique the ablations use so
+that nothing on disk changes and the canonical hash guard keeps meaning what
+it says. The name is read twice by the runner, once for the datasets and once
+for \texttt{split\_audit.json}, which is why the test asserts both: a patch
+reaching only the first would train on one backbone and record three, the
+provenance lie the shared \texttt{SHIPPED\_BASE\_VARIANTS} tuple was
+introduced to prevent.
+
 \end{document}
