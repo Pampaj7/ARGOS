@@ -17894,4 +17894,41 @@ worse by $0.28\%$ --- is itself a seed-$0$ artefact: the same cell improves by
 $1.39$ and $1.25$ at seeds $1$ and $2$. We have been quoting a seed as a
 property of a sequence.
 
+
+
+\section*{The map condition does not hold between backbones, and the pose floor does not order the cells}
+
+Two questions closed on data already on disk. The first is the loop's own
+fourth item: does ``it helps where the raw prediction is poor'' survive being
+asked of backbones rather than of splits? It does not. Across all $35$
+world-frame cells the rank correlation between raw excess and the reduction is
+$+0.72$, but D2's excess spans $0.171$--$0.290$\,mm and D7's $0.518$--$1.113$,
+two clouds that never touch, so that figure measures the separation between
+the splits and not a relation inside either. Within D2 the correlation is
+$-0.47$; within D7 it is $+0.11$; per sequence, across the five backbones, it
+scatters from $-0.30$ to $+0.60$ with no stable sign. Sec.~V-K already declines
+to claim the mechanism and already says the ordering fails inside D2. It does
+not say the same of D7, and now that is measured.
+
+The second is the objection a reviewer raised about pose noise, and half of it
+needed no compute at all. The ground-truth cloud is one keyframe's structured
+light moved by these very poses, so its world-frame spread \emph{is} the pose
+residual plus resampling --- and it is identical across all five backbones
+within a sequence, which is what a pose-side quantity should look like.
+Against it the refinement effect is $0.53$ of the floor on D2 and $0.89$ on
+D7: the reviewer is right that this is not comfortably above the noise, and we
+had never said so.
+
+But the floor does not explain the finding. As a predictor of the reduction
+over $35$ cells it ranks at $+0.08$ against raw excess's $+0.72$: if the map
+result were a pose artefact, the floor would be the variable that orders the
+cells, and it is not. The sharper version is a pair. D2 keyframe~$4$ has the
+lowest floor of all seven sequences, $0.0387$\,mm, and sits at $-6.8$ to
+$-16.1\%$; D7 keyframe~$3$, at $0.0584$\,mm, sits at $+10.9$ to $+17.8$. The
+sign does not follow the floor. The perturbation sweep is queued to settle it
+properly --- independent per-frame rigid jitter, the same perturbed poses on
+ground truth, raw and refined, since the metric is an excess over the floor
+and drawing separate noise per cloud would model a situation that never
+occurs.
+
 \end{document}
