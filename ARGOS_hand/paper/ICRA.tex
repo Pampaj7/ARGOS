@@ -169,8 +169,8 @@ matched state machine the gain is not temporal smoothing:
 $3.69\%$ mean EPE against $0.59\%$ for the best fixed or EMA blend, which buys
 its mean error with bad pixels while the learned gate does not. Accumulated
 into a map the refined geometry reduces world-frame disagreement in all $20$
-held-out cells and increases it on development; we name the term consistent
-with which, and its limits. We additionally introduce a refinement-centric protocol
+held-out cells and increases it on development, a reversal that follows the
+split rather than any per-cell term we could isolate. We additionally introduce a refinement-centric protocol
 scoring introduced error alongside recovered error, and apply it to our own
 claims.
 
@@ -552,8 +552,9 @@ $H=4$ improves all five estimators in mean D2 EPE --- $1.41$, $2.28$,
 $8.19$, $3.10$ and $2.24\%$ for S$^2$M$^2$-S, RAFT-Stereo, Stereo Anywhere,
 CREStereo and Fast-FoundationStereo --- and all six
 unseen-backbone sequence groups improve; on D7 the mean excluding Stereo
-Anywhere is $5.15\%$. One D2 cell worsens, S$^2$M$^2$-S on keyframe~$2$, by
-$0.28\%$: the first of three sequence-level exceptions in this paper, the
+Anywhere is $5.15\%$. One D2 cell worsens at this seed, S$^2$M$^2$-S on
+keyframe~$2$, by $0.28\%$, though the same cell improves by $1.39$ and
+$1.25\%$ at the other two: the first of three sequence-level exceptions, the
 others being Vid13 (Sec.~\ref{sec:bida}) and the development map
 (Sec.~\ref{sec:mapping}).
 
@@ -568,10 +569,10 @@ cell the reduction is $5.40\%$.
 The improvement is not restricted to the mean: Bad1, RMSE and P99 decrease
 for every backbone on both splits, so the EPE gain is not bought by a worse
 bad-pixel rate or a broader tail, though new bad pixels do appear and are
-measured below. In absolute terms, held-out depth MAE is $2.79 \to 2.71$\,mm
-(RMSE $5.33 \to 5.23$; Bad-2mm $32.5 \to 31.8\%$). InvalidRate stays zero in all ten SCARED-C backbone--split
-evaluations --- a property of SCARED-C, not of the module
-(Sec.~\ref{sec:masking}).
+measured below. In absolute terms held-out depth MAE is $2.79 \to 2.71$\,mm (RMSE $5.33 \to
+5.23$; Bad-2mm $32.5 \to 31.8\%$), and InvalidRate stays zero in all ten
+SCARED-C backbone--split evaluations --- a property of SCARED-C, not of the
+module (Sec.~\ref{sec:masking}).
 
 \subsection{External Zero-Shot Geometry on DRENDS}
 \label{sec:drends}
@@ -588,10 +589,12 @@ failed geometry improved, not good geometry polished.
 
 Averaged over backbones the mean EPE reduction is $3.96\%$ seen against
 $2.67\%$ unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on
-DRENDS: every combination positive. We can separate neither group from the other and report margins rather than a test: with $3$ and $2$ backbones at one seed, absence of a detectable gap is not evidence of no gap. We read no ordering into the numbers
-either: on D2 the seen advantage is carried entirely by Stereo Anywhere and
-reverses without it, so we withdraw the claim we drew about which axis costs
-more. This establishes zero-shot geometric transfer under a ToF-derived
+DRENDS: every combination positive. We separate neither group from the other
+and report margins rather than a test --- with $3$ and $2$ backbones at one
+seed, absence of a detectable gap is not evidence of no gap --- and read no
+ordering into them: on D2 the seen advantage is carried entirely by Stereo
+Anywhere and reverses without it, so the claim we drew about which axis costs
+more is withdrawn. This establishes zero-shot geometric transfer under a ToF-derived
 reference; it does not establish universal robustness, and DRENDS remains a
 non-independent reference.
 
@@ -607,14 +610,17 @@ throughout this paper. The distribution-free statement the splits can
 carry is that the effect is positive in $3/3$ and $4/4$ sequences, a sign test
 at $p=0.125$ and $p=0.0625$. No split here reaches $p<0.05$ and none can at
 these sequence counts: we claim consistency of direction, never significance.
+That direction is seed-invariant: every cell measured at three seeds improves
+at all three, on EPE and Bad1 (thirteen of fifteen; DRENDS carries three seeds
+on three backbones). Where seed $0$ falls is a property of the arena, not of
+the seed --- lowest of three on D2 EPE and D7 Bad1, highest on both DRENDS.
 
-The spread is the strongest argument for the shipped configuration. The $142$-channel ablation is stable held out
-($5.15\pm0.34$ Bad1) and unstable on development, its seeds falling
-monotonically over a $5.03$-point range. We read that as selection optimism,
-since checkpoints are selected on D2. Removing the learned evidence removes
-the instability instead --- $0.32$ points of D2 seed deviation against $2.53$,
-with no change to the selection rule --- so the instability was the evidence
-space and not the protocol.
+The spread is the strongest argument for the shipped configuration. The
+$142$-channel ablation is stable held out ($5.15\pm0.34$ Bad1) and unstable on
+development, its seeds falling monotonically over $5.03$ points --- selection
+optimism, since checkpoints are selected on D2. Removing the learned evidence
+removes it, $0.32$ points of D2 seed deviation against $2.53$ under the same
+selection rule: the instability was the evidence space, not the protocol.
 
 \subsection{Does the Learned Temporal Policy Matter?}
 \label{sec:closure}
@@ -686,8 +692,8 @@ $9\times$ against $6\times$ on D2. The denominator barely moves between arenas:
 uniform smoothing recovers the same small amount wherever it runs, so the
 widening is entirely ours, and it tracks how much raw error there is to
 recover ($0.276$\,px on D2 against $1.286$ out of domain, both on the
-closure's own support), the same quantity Sec.~\ref{sec:mapping} finds decides
-the accumulated benefit. Where the raw prediction is this weak the uniform blends no longer pay in
+closure's own support), the same split-level contrast the accumulated result
+follows (Sec.~\ref{sec:limits}). Where the raw prediction is this weak the uniform blends no longer pay in
 bad pixels (Bad1 $+0.42$, $+0.53$, $+0.45\%$ for fixed, EMA3 and
 FB-confidence), so that trade is stated on D2 alone.
 
@@ -709,9 +715,9 @@ backbone and is \emph{negative} for three: $+14.0\%$ for Stereo Anywhere and
 $+0.8\%$ for CREStereo against $-0.3$, $-2.0$ and $-2.3\%$. A criterion whose
 sign one of five backbones decides cannot carry an operating point, so the
 horizon rests on breakage; on both confirmation splits DTCE is positive for
-every backbone ($4.3$--$7.9\%$ on D7, $8.5$--$13.9$ on DRENDS). Sec.~\ref{sec:mapping} sweeps the same
-horizon against accumulated geometry and finds the same risk structure from an
-independent measurement.
+every backbone ($4.3$--$7.9\%$ on D7, $8.5$--$13.9$ on DRENDS).
+Sec.~\ref{sec:mapping} sweeps the same horizon against accumulated geometry
+and finds the same risk structure independently.
 
 \subsection{Refinement as an Intervention}
 
@@ -740,7 +746,7 @@ Copy-previous, which removes $97.3\%$ of the no-reference score, is the
 the new viewpoint, so the measure survives the control contribution~(iii)
 demands of temporal metrics.
 
-The horizon sweep names the condition, on RAFT-Stereo across the complete
+The horizon sweep separates the splits, on RAFT-Stereo across the complete
 grid (per-cell means over $3$ D2 and $4$ D7 cells, shared poses, accumulation
 and support): $H{=}1/2/4/6$ give $-3.6/-8.6/-15.5/-20.2\%$ on development
 against $+8.9/+10.4/+11.7/+12.2$ held out, while copy-previous posts
@@ -750,13 +756,13 @@ the mechanism is established on one estimator and its sign confirmed on
 five. On D2 the cost grows monotonically
 with state lifetime and decelerates --- $3.6\%$ at $H{=}1$, one warp and no
 accumulation, to $20.2\%$ at $H{=}6$ --- so a map pays not for the warp but
-for carrying it. The ungated warp at full weight costs $37.6\%$ where the
-gated head at $H{=}1$ costs $3.6\%$, and on D7 already returns $7.2$ of our
-$11.7$: on a map most of the gain is alignment and most of the gate's value is
-damage avoided, the same division Sec.~\ref{sec:analysis} finds per pixel.
-Since alignment residual is a property of the motion while raw excess differs
-twofold between the splits ($0.171$--$0.290$\,mm against $0.518$--$1.113$),
-whether that residual is bought back is decided by the split.
+for carrying it. The ungated warp costs $37.6\%$ where the gated head at $H{=}1$ costs $3.6$,
+and on D7 already returns $7.2$ of our $11.7$: on a map most of the gain is
+alignment and most of the gate's value is damage avoided, the division
+Sec.~\ref{sec:analysis} also finds per pixel.
+The two splits' excess ranges do not overlap ($0.171$--$0.290$\,mm against
+$0.518$--$1.113$), and the sign follows that division rather than any per-cell
+quantity (Sec.~\ref{sec:limits}).
 
 Both splits are monotone in $H$ and neither turns, so the horizon is set by an
 exchange rate rather than a peak. Held-out benefit saturates while development
@@ -978,19 +984,19 @@ No-reference temporal consistency is gameable, shown on D4D
 \cite{docea2026d4d}, its only role here: the module reduces that score by
 $53.9\%$, copy-previous by $97.3\%$, warped-previous by construction to zero.
 The accumulated-geometry measure of Sec.~\ref{sec:mapping} survives the same
-controls, which is why the robotics claim rests on it. Pull-warp support
+controls, which is why the robotics claim is measured by it. Pull-warp support
 detects out-of-frame sampling but not internal disocclusion.
 
 \paragraph{Where the intervention costs a map.}
 On development D2 the mapping measurement runs the other way: refinement
 \emph{increases} world-frame disagreement by $15.5\%$ at the shipped horizon,
-uniformly, all $15$ cells negative. The account in Sec.~\ref{sec:mapping} is
-consistent with every cell we have but is not proven: the two splits' excess
-ranges never overlap, so no backbone makes D2 as hard as D7, and within D2 the
-per-backbone ordering does not follow excess either. What the grid does
-establish is that the reversal is a property of the split and of the horizon,
-not of one estimator: a module refining a prediction already close to its
-reference can cost a map more than it returns.
+uniformly, all $15$ cells negative. We withdraw the per-cell account for it.
+Raw excess orders the $35$ cells at $\rho{=}{+}0.72$ only because the two
+splits' ranges never overlap; inside them it orders nothing ($-0.47$ on D2,
+$+0.11$ on D7). The sign follows the split and the horizon, not a quantity we
+have isolated --- and not pose quality either: the ground-truth cloud is the
+keyframe geometry carried by these same poses, so its spread measures their
+residual, and it ranks the cells at $+0.08$.
 
 \paragraph{Cost, and where it is.}
 The head is compact but the deployed system also runs frozen stereo and two
@@ -1030,8 +1036,8 @@ history while the accumulated-geometry measure is not; the fusion weight
 ranks harm only on the split it was selected on; selection optimism belongs
 to the evidence space, not the protocol; a module that declares a support
 must apply it to what it emits; and what a map fuses improves held out while
-degrading on development, the candidate term being accumulated alignment
-residual --- the horizon an exchange rate, not an optimum.
+degrading on development, with no per-cell term we could isolate --- the
+horizon an exchange rate, not an optimum.
 What remains open is \emph{where} to intervene. An extended version (per-sequence tables, full policy grid, protocols, channel specification) accompanies the code, checkpoint and curation release.
 
 % ============================================================
@@ -1042,7 +1048,8 @@ What remains open is \emph{where} to intervene. An extended version (per-sequenc
 
 \begin{thebibliography}{99}
 \scriptsize
-\setlength{\itemsep}{-3pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
+\setlength{\itemsep}{-4.5pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
+\setlength{\labelsep}{2pt}\setlength{\leftmargin}{12pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.}, ``Temporally consistent online depth estimation in
