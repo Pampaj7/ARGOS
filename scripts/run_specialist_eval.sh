@@ -11,6 +11,11 @@
 # Only arms whose training has finished are evaluated: a 36-epoch arm read at epoch 20
 # would score a checkpoint the declaration does not describe. Re-runnable -- finished
 # arms are skipped by the presence of their definitive_table.csv.
+#
+# --scared-backbones is not optional here. Its default is all five, so omitting it scores
+# each specialist on every backbone -- thirty-five cells per arm instead of seven, and an
+# off-diagonal experiment nobody declared, chosen by a forgotten flag rather than on
+# purpose. The declared endpoint is the diagonal: each arm on the backbone it trained for.
 set -u
 PY=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
 ROOT=/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4
@@ -41,6 +46,7 @@ if [ "${1:-}" = "--node" ]; then
         echo "=== $B (${FACTORY[$B]})"
         "$PY" model_design/comparison/run_definitive_evaluation.py --datasets scared-d2 scared-d7 \
             --module "model_design.comparison.specialist_h4:${FACTORY[$B]}" --device cuda:0 \
+            --scared-backbones "$B" \
             --output "$OUT/$B" || echo "FAILED $B"
     done
     echo "SPECIALIST EVAL DONE"
