@@ -673,14 +673,12 @@ informative failure --- one of \steer's own cues, yet used directly as the
 weight it worsens EPE by $2.17\%$ and Bad1 by $32.35\%$. The uniform smoothing
 policies buy mean error with bad pixels, the more so the harder they blend:
 $w{=}0.3$ costs $0.18\%$ more bad pixels for $0.49\%$ of EPE, the best fixed
-blend $2.64\%$ for $0.59\%$, EMA3 $8.88\%$ for $0.30\%$. The tuned residual
-rule limits that statement and we report it as such: it recovers roughly a
-quarter of our gain and does \emph{not} pay in bad pixels. So the trade is not
-a property of blending but of blending \emph{uniformly} --- the moment a rule
-varies in space it stops buying mean error with tails. That is the closest an
-unlearned policy comes, and where the distance shows: $0.87\%$ against
-$3.69\%$ of EPE, breaking more pixels doing less. What the learned head adds
-is not varying in space; it is knowing where.
+blend $2.64\%$ for $0.59\%$, EMA3 $8.88\%$ for $0.30\%$. The tuned residual rule limits that statement: a quarter of our gain, Bad1 improved. The trade belongs to blending \emph{uniformly}: the moment a rule varies in space it stops buying mean error with tails, and the closest unlearned approach reaches $0.87\%$ against our $3.69$. What the learned head adds
+is not varying in space; it is knowing where. \steer\ is the only row of
+Table~\ref{tab:closure} simultaneously first on mean EPE and lowest on
+NewBad1: every unlearned policy pays for its share of the mean in newly
+broken pixels --- $3.4\times$ ours for the best fixed blend, $+40\%$ even
+for the residual rule at a quarter of the gain.
 
 The closure is development work, and a reviewer is right to ask whether the
 margin survives the split. We repeat it out of domain, on the arena the freeze
@@ -1050,7 +1048,7 @@ release.
 
 \begin{thebibliography}{99}
 \scriptsize
-\setlength{\itemsep}{-2pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
+\setlength{\itemsep}{-3pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.}, ``Temporally consistent online depth estimation in
