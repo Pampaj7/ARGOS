@@ -262,8 +262,18 @@ made consistent by diffusion \cite{hu2025depthcrafter} or stabiliser networks
 of our constraint.
 
 \paragraph{What can actually be compared.}
-We are aware of no published method that is simultaneously causal, black-box
-and estimator-agnostic. CODD \cite{li2023codd}, whose two-gate decision we
+The nearest line is task-agnostic video temporal consistency
+\cite{lai2018blind,wang2023nvds}, which shares two of our constraints --- the
+producing network is a black box and its architecture is not assumed --- and,
+in \cite{lai2018blind}, our recurrence on the previous output. It differs in
+the action space and in the objective: it regresses a stabilised frame where
+we emit one scalar per pixel confined to the interval between the raw estimate
+and aligned memory, and it optimises consistency, which
+Sec.~\ref{sec:limits} shows a degenerate replay wins outright. That
+recurrence also carries no re-anchor, and removing ours costs $19.17\%$ of EPE
+(Table~\ref{tab:closure}). We could locate no causal, black-box,
+estimator-agnostic method for stereo disparity.
+CODD \cite{li2023codd}, whose two-gate decision we
 build on, is causal but not black-box: its fusion network consumes matching
 features from its own stereo network, which a cached third-party backbone
 does not expose. The $142$-channel configuration of
@@ -1103,6 +1113,10 @@ matching,'' in \emph{Proc. CVPR}, 2026.
 \bibitem{wang2023nvds}
 Y.~Wang \emph{et al.}, ``NVDS+: Towards efficient and versatile neural
 stabilizer for video depth estimation,'' 2023, arXiv:2307.08695.
+
+\bibitem{lai2018blind}
+W.-S. Lai \emph{et al.}, ``Learning blind video temporal consistency,'' in
+\emph{Proc. ECCV}, 2018.
 
 \bibitem{geifman2019selectivenet}
 Y.~Geifman and R.~El-Yaniv, ``SelectiveNet: A deep neural network with an
