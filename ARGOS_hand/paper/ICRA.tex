@@ -227,10 +227,11 @@ unseen estimators we cannot separate from the seen ones.
 formulate surgical temporal stereo refinement as a \emph{causal
 plug-and-play adaptation problem} over frozen, heterogeneous estimators,
 needing neither future frames nor backbone internals, and instantiate it as
-\steer: a $154{,}874$-parameter reset-and-fusion head over causal SEA-RAFT
-alignment, a shared 38-channel external evidence space, support-confined
-convex fusion and bounded corrected-state recurrence. Under a matched state
-machine the gain is not temporal smoothing.
+\steer\ (Sec.~\ref{sec:method}). Under a matched state machine the gain is not
+temporal smoothing --- and which of its parts carry that gain is measured, not
+asserted: bounded recurrence and the support contract are load-bearing, while
+the convex constraint lost, to its own falsification clause, the
+cross-backbone claim we first made for it.
 
 \emph{(iii)} \textbf{A protocol that scores the intervention, not the
 prediction.} We measure introduced error alongside recovered error under
