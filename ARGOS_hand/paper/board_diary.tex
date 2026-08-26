@@ -18019,4 +18019,34 @@ the only surviving negation is bounded to what was checked: no causal,
 black-box, estimator-agnostic method \emph{for stereo disparity} that we could
 locate.
 
+
+
+\section*{The map reversal survives the poses being wrong}
+
+The sweep ran. Seven RAFT-Stereo cells, five paired magnitudes, five draws
+each, the same perturbed poses on ground truth, raw and refined. The zero-noise
+column of every run reproduces the published number to $10^{-9}$\,mm, which is
+the check that mattered: the refactor that made the sweep nearly free is
+exactly the kind that changes a number in silence.
+
+At $\sigma_t=0.1$\,mm and $\sigma_r=0.057^\circ$ --- enough to double or
+triple the observed floor of $0.039$--$0.214$\,mm --- all seven cells keep
+their sign and the reduction moves by at most $3.4$ points. Signs still hold at
+$0.5$\,mm. And the noise does not manufacture the split: it widens it, D2
+going more negative and D7 more positive. An artefact would blur the
+difference; an amplified real effect exaggerates it.
+
+The failure mode at $1.0$\,mm is worth recording because it is not the one we
+were looking for. The sign does not flip --- the denominator dies. The
+perturbed reference cloud reaches $1.03$\,mm on D2 keyframe~$2$ while raw
+reaches $1.04$, so the excess the reduction is a ratio \emph{of} has collapsed
+from $0.224$ to $0.017$\,mm, and one draw returns $+92\%$: noise over noise.
+That is a bound on what the test can say, not on what the result is, and it
+goes in the reporting rather than being quietly dropped.
+
+Together with the floor's own ranking --- $+0.08$ against raw excess's $+0.72$
+over the $35$ cells --- the pose objection is now answered twice, from
+independent directions: the floor does not order the cells, and moving the
+poses does not reorder them either.
+
 \end{document}
