@@ -465,11 +465,7 @@ Training uses D1, D3 and D6 with D2 for development and D7 held out, over
 8{,}616 frames giving 8{,}606 causal pairs per backbone from three seen
 backbones, in non-overlapping $H=4$ clips, batch size 4, 12 epochs of AdamW at
 $2\times10^{-4}$ with weight decay $10^{-4}$ and gradient clipping 1.0,
-selecting on development fused EPE. The budget is not a truncation: selection
-lands at epoch $8$, $11$ and $11$ across three seeds, all inside the schedule,
-and a locked-recipe run to $47$ epochs oscillates without trend from epoch
-$13$ with no later epoch improving on it. One ablation (A4) diverges after
-epoch $10$, which best-validation selection catches.
+selecting on development fused EPE. The budget is not a truncation: selection lands at epochs $8/11/11$ across seeds, a $47$-epoch locked-recipe probe oscillates without trend from epoch $13$, and A4's divergence after epoch $10$ is caught by best-validation selection.
 
 \subsection{External Evaluation}
 
@@ -483,10 +479,14 @@ checkpoint: no DRENDS data enters training, selection or calibration.
 
 \subsection{Unified Temporal-Refinement Evaluation}
 
-All temporal processing and evaluation run on a fixed $144\times180$
-cache grid (SCARED-C is natively $1280\times1024$; median ground-truth
-disparity on the grid is $8.0$\,px), so disparities here are grid-scale
-pixels. Evaluation support cannot depend on the prediction:
+Backbones infer at native resolution ($1280\times1024$ on SCARED-C); their
+outputs are resampled to a fixed $144\times180$ cache grid, where all
+temporal processing and evaluation run (median ground-truth disparity on the
+grid: $8.0$\,px). Disparities here are grid-scale pixels and convert to
+native units by $W_{\mathrm{native}}/180=7.11$: D2 raw EPE $0.276$ is
+$1.96$\,px native, refined $1.89$. The conversion rescales the field we
+measure and does not recover sub-grid error, so it lower-bounds a
+native-resolution evaluation. Evaluation support cannot depend on the prediction:
 $M_{\mathrm{eval}} = M_{\mathrm{GT}} \cap M_{\mathrm{protocol}}$, and invalid
 predictions on valid support are penalised rather than silently removed.
 Temporal fidelity is change error
@@ -587,10 +587,7 @@ failed geometry improved, not good geometry polished.
 
 Averaged over backbones the mean EPE reduction is $3.96\%$ seen against
 $2.67\%$ unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on
-DRENDS: every combination positive. We can separate neither group from the
-other and report the margins rather than a test --- with three seen and two
-unseen backbones and per-backbone margins from a single seed, absence of a
-detectable gap is not evidence of no gap. We read no ordering into the numbers
+DRENDS: every combination positive. We can separate neither group from the other and report margins rather than a test: with $3$ and $2$ backbones at one seed, absence of a detectable gap is not evidence of no gap. We read no ordering into the numbers
 either: on D2 the seen advantage is carried entirely by Stereo Anywhere and
 reverses without it, so we withdraw the claim we drew about which axis costs
 more. This establishes zero-shot geometric transfer under a ToF-derived
@@ -610,8 +607,7 @@ carry is that the effect is positive in $3/3$ and $4/4$ sequences, a sign test
 at $p=0.125$ and $p=0.0625$. No split here reaches $p<0.05$ and none can at
 these sequence counts: we claim consistency of direction, never significance.
 
-The spread is the strongest argument for the shipped configuration, and not
-what we found first. The $142$-channel ablation is stable held out
+The spread is the strongest argument for the shipped configuration. The $142$-channel ablation is stable held out
 ($5.15\pm0.34$ Bad1) and unstable on development, its seeds falling
 monotonically over a $5.03$-point range. We read that as selection optimism,
 since checkpoints are selected on D2. Removing the learned evidence removes
@@ -1035,10 +1031,7 @@ to the evidence space, not the protocol; a module that declares a support
 must apply it to what it emits; and what a map fuses improves held out while
 degrading on development, the candidate term being accumulated alignment
 residual --- the horizon an exchange rate, not an optimum.
-What remains open is \emph{where} to intervene. An extended version with
-per-sequence tables, the full policy grid, protocols and the complete channel
-specification accompanies the code, checkpoint and SCARED-C curation
-release.
+What remains open is \emph{where} to intervene. An extended version (per-sequence tables, full policy grid, protocols, channel specification) accompanies the code, checkpoint and curation release.
 
 % ============================================================
 % BLOCKER APPENDIX -- ZERO PAGES IN THE SUBMISSION BUILD
