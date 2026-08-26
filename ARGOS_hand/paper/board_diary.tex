@@ -17966,4 +17966,57 @@ alongside: the sign is what contribution~(i) claims and it is seed-invariant,
 and keyframe~$2$'s exception keeps its place while gaining the two seeds where
 it reverses.
 
+
+
+\section*{Three reviewer objections, and the one where the proposed fix was backwards}
+
+The architecture objection was the only one of the four with no rhetorical exit.
+Without a supplement, ``the full channel specification is in the extended
+version'' points at a document the reviewer does not hold, so the paper was
+literally unreproducible from itself. The specification is now in: the $25$
+quarter-resolution correlations with their window, dilation and bound, the $13$
+grid channels with every normalisation constant, and the head in layer form.
+Both readings were checked against invariants rather than trusted --- the
+channels sum to $25{+}13=38$ and the layer shapes to $154{,}874$ parameters,
+the two figures the paper already publishes, and a misread architecture breaks
+both.
+
+Leonardo then asked whether Fig.~1's channel panel was worth its space. It was
+not, and the reason is that our own edit had made it redundant: one
+five-segment bar, $16/9/4/6/3$, showing six numbers that III-C now states
+exactly and with their normalisation, while costing a full-width banner across
+both columns. His re-authored single panel is $252\times90.96$\,pt, exactly
+one column, so it renders at natural size where a trim of the old asset would
+have given $89\%$. The paper went from zero page slack to twelve or fifteen
+lines, and the first thing bought back was not prose but two accuracy losses
+from the earlier compression: Fig.~2's correlation is again over the frames
+\emph{with defined weight} rather than all of them, and Related Work again says
+that a lower mean error can hide newly created failures.
+
+The third objection is the one worth recording properly. ``No published method
+is simultaneously causal, black-box and estimator-agnostic'' is a universal
+claim over a literature, falsified by one counterexample, and the adjacent line
+it ignored was task-agnostic video temporal consistency. Leonardo proposed
+naming that line and separating it on causality: it optimises over a clip
+rather than deciding causally per frame.
+
+That differentiator is backwards. Lai et al. is a recurrent network whose
+output frame is fed back as input at the next step --- causal at frame level,
+on our own recurrence structure. Writing the opposite would have been falsified
+by opening the cited paper, which is a worse failure than the negation it
+replaced. Two smaller things came with it: the citation had been dropped from
+our bibliography in an earlier page recovery, so it would have rendered as a
+missing reference, and the ``weights no longer retrievable'' line he
+remembered as being about Lai is about Neural Disparity Refinement.
+
+What replaces it is better than either version. That line regresses a
+stabilised frame where we emit one scalar per pixel confined to an interval,
+and it optimises consistency --- the objective Sec.~VII shows a degenerate
+replay wins outright. Its recurrence carries no re-anchor, and Table~II already
+measures what removing ours costs here, $19.17\%$ of EPE. The comparison is now
+made with two of our own numbers instead of with a claim about what exists, and
+the only surviving negation is bounded to what was checked: no causal,
+black-box, estimator-agnostic method \emph{for stereo disparity} that we could
+locate.
+
 \end{document}
