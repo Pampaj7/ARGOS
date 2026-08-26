@@ -1,0 +1,42 @@
+{
+  "declared": "2026-08-26",
+  "question": "Contribution (i) claims one frozen checkpoint serves every backbone. The control that claim needs is the specialist: a module of the same architecture trained on one backbone only, evaluated on that backbone. If the shared module is not measurably worse, generality is free; if it is worse, we owe the reader the size of the toll.",
+  "base": {
+    "model": "the shipped 38-channel head (A2_no_learned_evidence)",
+    "disable_learned_stereo_evidence": true,
+    "reason": "the control must be against the model we ship, not the 142-channel configuration the ablations were first registered against"
+  },
+  "arms": [
+    "specialist_S2M2-S",
+    "specialist_RAFT-Stereo",
+    "specialist_StereoAnywhere",
+    "specialist_CREStereo",
+    "specialist_Fast-FoundationStereo"
+  ],
+  "deviations_from_locked_recipe": {
+    "backbones": {
+      "locked": ["S2M2-S", "RAFT-Stereo", "StereoAnywhere"],
+      "used": "exactly one, the arm's own",
+      "applies_to": "training clips and validation clips alike; the specialist selects its checkpoint on its own backbone's D2 validation, as a practitioner training for that backbone would"
+    },
+    "epochs": {
+      "locked": 12,
+      "used": 36,
+      "reason": "matched optimisation budget. Twelve epochs over three backbones is thirty-six backbone-epochs of gradient steps; twelve epochs over one backbone would be a third of the budget, and a specialist that lost under that handicap would prove nothing."
+    }
+  },
+  "everything_else_unchanged": [
+    "seed 0",
+    "train dataset ids 1/3/6, validation 2, test 7",
+    "clip length 4, batch size 4, AdamW, lr 2e-4, weight decay 1e-4, grad clip 1.0",
+    "coverage threshold 0.5, tau_reset 5.0 px native, tau_fusion 1.0 px native, alpha_reg 0.2",
+    "recurrent memory state, best-validation-EPE checkpoint selection"
+  ],
+  "endpoint": {
+    "primary": "held-out D7 relative EPE and Bad1 reduction on the arm's own backbone cells, specialist against the shipped generalist checkpoint on those same cells",
+    "protocol": "the definitive evaluation used for Table I, restricted to one backbone; no new support, no new aggregation"
+  },
+  "declared_asymmetry": "Every deviation above favours the specialist: matched gradient budget, three times as many selection points, and validation on its own backbone rather than a mean over three. The generalist gets none of that. This is deliberate -- a shared module that survives an advantaged specialist is the only version of the comparison worth reporting -- and it means a specialist win of ordinary size is not evidence against the shared module, while a specialist loss is.",
+  "reading_rule": "The three-seed spread of the shipped head's D7 Bad1 reduction is 0.22 points and its registered threshold is 0.37. These arms are single-seed, so a difference below 0.37 points is not read at all, and a difference above it is read as a bound pending seeds, not as a measurement.",
+  "registered_before": "any specialist training was launched"
+}
