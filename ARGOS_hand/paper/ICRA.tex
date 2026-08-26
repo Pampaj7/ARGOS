@@ -282,7 +282,8 @@ supplies, so we run it as its authors intended (Sec.~\ref{sec:bida}).
 \paragraph{Evaluating temporal refinement.}
 Stereo benchmarks report frame-wise geometry and video methods add consistency
 measures, but neither characterises an intervention: a prediction can grow
-smoother without growing more correct. Recovered and introduced error must
+smoother without growing more correct, and a lower mean error can hide newly
+created failures. Recovered and introduced error must
 both be measured, which connects to selective prediction
 \cite{geifman2019selectivenet}; our contribution is not a new metric but a
 common protocol under fixed, prediction-independent support.
@@ -299,28 +300,23 @@ Sec.~\ref{sec:mapping} measures after accumulation as well.
 \section{Method}
 \label{sec:method}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
-% Re-authored two-panel asset (2026-08-21) replacing the trim/clip crop of the
-% original three-panel figure; the frame-strip panel's content lives in III-E.
-% The asset is a 513x108pt banner: at column width it renders at 49% and its
-% labels fall below 4pt, so it spans both columns at natural size instead.
-\includegraphics[width=\textwidth]{figure_assets/temporal_taxonomy_two_panel.pdf}
+% Single-panel asset authored at 252x90.96pt, which is exactly \columnwidth, so
+% this renders at natural size. It replaces the 513pt two-panel banner: the
+% right panel there was one five-segment bar (16/9/4/6/3) that III-C now states
+% exactly and with its normalisation constants, and the banner cost both
+% columns to show it. Source: figure_assets/Temporal consistency taxonomyaaa.pdf,
+% copied to a space-free name because \includegraphics does not take spaces;
+% re-exports should land on the copy.
+\includegraphics[width=\columnwidth]{figure_assets/temporal_taxonomy_single_panel.pdf}
 \caption{
-One time step, and the evidence it reads. \textbf{Left:} dashed grey is
-frozen; the single orange block is the only trained component and emits one
-scalar per pixel, $w_t$, rather than geometry. \textbf{Right:} the $38$
-channels, none carrying ground truth, backbone identity or a future frame.
-The $25$ quarter-resolution ones are bounded local disparity correlations
-$1-|d(x')-d(x)|/4$, difference clamped at $4$, over a $3\times3$ window at
-dilation $2$, bilinearly upsampled: raw and aligned memory each against
-themselves without the centre tap ($8{+}8$), raw against aligned memory with
-it ($9$). The $13$ grid channels: raw and aligned disparity ($[0,64]/64$),
-signed and absolute residual ($\pm16/16$), flow $u,v$ and magnitude
-($\pm32/32$), $C_t^{FB}$, warp support, sampled historical validity, RGB on
-$[-1,1]$. Normalisation is fixed before training.}
+One time step. Dashed grey is frozen; the single orange block is the only
+trained component, and it emits one scalar per pixel, $w_t$, rather than
+geometry. Nothing crossing into it carries ground truth, backbone identity or
+a future frame.}
 \label{fig:system}
-\end{figure*}
+\end{figure}
 
 \subsection{External Causal Interface}
 
@@ -352,11 +348,15 @@ happens when that value reaches the output.
 
 \subsection{Shared External Evidence}
 
-All estimators are mapped into one 38-channel tensor on the cache grid: $25$
-quarter-resolution disparity correlations, upsampled, and $13$ formed on the
-grid from raw disparity, aligned memory, their residual, the flow, $C_t^{FB}$,
-the warp support, the sampled historical validity and the current image, each
-channel specified with its normalisation in Fig.~\ref{fig:system}. Nothing in this space is learned, no network evaluates it,
+All estimators are mapped into one 38-channel tensor on the cache grid. The
+$25$ quarter-resolution channels are bounded local disparity correlations
+$1-|d(x')-d(x)|/4$, difference clamped at $4$, over a $3\times3$ window at
+dilation $2$, bilinearly upsampled: raw and aligned memory each against
+themselves without the centre tap ($8{+}8$), and raw against aligned memory
+with it ($9$). The $13$ grid channels are raw and aligned disparity
+($[0,64]/64$), their signed and absolute residual ($\pm16/16$), flow $u,v$ and
+magnitude ($\pm32/32$), $C_t^{FB}$, warp support, sampled historical validity,
+and RGB on $[-1,1]$. Normalisation is fixed before training. Nothing in this space is learned, no network evaluates it,
 and no ground truth, backbone identity or future frame enters it. An earlier
 configuration added 104 quarter-resolution channels derived from a frozen
 ResNet-18 \cite{he2016resnet} --- $64$ compressed feature maps and $40$
@@ -941,9 +941,10 @@ so those pixels are not drawn at the centre of the diverging scale.
 (the fraction on support) at mean weight $0.46$ and improving $82.8\%$ of
 them. \textbf{Bottom:} the worst frame of the same sequence by rank, $2.2\%$
 at $0.79$, improving $12.9\%$; the $\delta e$ scales differ $40\times$
-between rows. Few pixels, high weight, wrong is a tail and not a trend: over
-the sequence's $1{,}861$ frames per-frame mean weight correlates
-\emph{negatively} with harm (Spearman $-0.68$; $-0.26$ held out).
+between rows. Few pixels, high weight, wrong is a tail and not a trend:
+per-frame mean weight correlates
+\emph{negatively} with harm over the $1{,}861$ frames with defined weight
+(Spearman $-0.68$; $-0.26$ held out).
 }
 \label{fig:intervention}
 \end{figure}
