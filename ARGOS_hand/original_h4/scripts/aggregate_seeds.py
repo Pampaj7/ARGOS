@@ -87,7 +87,11 @@ def main() -> None:
                         help="SEED=PATH, e.g. 0=/.../paper_d2_strict_all_anchors 1=/.../seed_1")
     parser.add_argument("--resamples", type=int, default=10000)
     parser.add_argument("--bootstrap-seed", type=int, default=0)
+    parser.add_argument("--out", type=Path, default=OUT,
+                        help="output directory (default: %(default)s); give a new one rather "
+                             "than overwriting a finished seed study of a different model")
     args = parser.parse_args()
+    out = args.out
 
     prohibitions = json.loads(PREREGISTER.read_text())["prohibited"]
     runs = {}
@@ -142,12 +146,12 @@ def main() -> None:
             if metric == PRIMARY:
                 summary[f"{dataset}/{backbone}"] = row
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    with (OUT / "seed_variance.csv").open("w", newline="") as handle:
+    out.mkdir(parents=True, exist_ok=True)
+    with (out / "seed_variance.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    (OUT / "run_manifest.json").write_text(json.dumps({
+    (out / "run_manifest.json").write_text(json.dumps({
         "project": "ARGOS v2", "generated_at": datetime.now(timezone.utc).isoformat(),
         "purpose": "seed variance and paired sequence-level bootstrap for the canonical H=4 point",
         "preregistration": str(PREREGISTER), "prohibitions_honoured": prohibitions,

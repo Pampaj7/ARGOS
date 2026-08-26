@@ -1,0 +1,1366 @@
+{
+  "cells": [
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "units": 3,
+      "seed0": 3.2067711079234065,
+      "seed1": 4.0292315112004005,
+      "seed2": 3.822301494324271,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "units": 3,
+      "seed0": 2.463174355043919,
+      "seed1": 3.197699416655439,
+      "seed2": 3.0545032795485323,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "units": 3,
+      "seed0": 2.534932519763059,
+      "seed1": 3.091799259559099,
+      "seed2": 3.0393057809084785,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "units": 3,
+      "seed0": 1.723025260726987,
+      "seed1": 2.4082420473274064,
+      "seed2": 2.423439063552414,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "units": 3,
+      "seed0": 8.031568176216348,
+      "seed1": 8.741249016169437,
+      "seed2": 8.673665928583596,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "units": 4,
+      "seed0": 4.895392245661815,
+      "seed1": 4.560870406071259,
+      "seed2": 5.567057403369007,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "units": 4,
+      "seed0": 3.608867865920917,
+      "seed1": 3.467483420618997,
+      "seed2": 4.094372244683067,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "units": 4,
+      "seed0": 8.034261766493579,
+      "seed1": 7.941752058834495,
+      "seed2": 8.755746971945584,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "units": 4,
+      "seed0": 3.5571061476610097,
+      "seed1": 3.438146025438256,
+      "seed2": 4.125174029133457,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "units": 4,
+      "seed0": 7.650931827048183,
+      "seed1": 7.21942413676253,
+      "seed2": 8.149615063596425,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "units": 5,
+      "seed0": 5.606112753139903,
+      "seed1": 5.5013043362107314,
+      "seed2": 5.389935527034889,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "units": 5,
+      "seed0": 4.7466011461647195,
+      "seed1": 4.666485269146729,
+      "seed2": 4.576077147439821,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "units": 5,
+      "seed0": 5.740962290188059,
+      "seed1": 5.626964816595395,
+      "seed2": 5.4532358845106925,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "units": 3,
+      "seed0": 10.612042026021415,
+      "seed1": 10.248590861034632,
+      "seed2": 10.304807525075272,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "units": 3,
+      "seed0": 9.9459057514863,
+      "seed1": 9.248062256195785,
+      "seed2": 9.532814059154031,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "units": 3,
+      "seed0": 10.709041627573257,
+      "seed1": 8.6788047309377,
+      "seed2": 10.031374853011066,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "units": 3,
+      "seed0": 9.134924563389264,
+      "seed1": 9.565315578271981,
+      "seed2": 9.681015969872353,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "units": 3,
+      "seed0": 20.511008973868005,
+      "seed1": 20.710403951522835,
+      "seed2": 21.69167986234662,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "units": 4,
+      "seed0": 4.743155703099949,
+      "seed1": 4.746554861703251,
+      "seed2": 5.151924720691514,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "units": 4,
+      "seed0": 4.476424274300944,
+      "seed1": 4.442677657290676,
+      "seed2": 4.566843440086791,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "units": 4,
+      "seed0": 5.470997831064663,
+      "seed1": 5.4579146017326075,
+      "seed2": 5.842586220941963,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 2
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "units": 4,
+      "seed0": 6.399765906619898,
+      "seed1": 6.416499163607214,
+      "seed2": 6.938123122205301,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "units": 4,
+      "seed0": 7.305424950900028,
+      "seed1": 7.527680134452668,
+      "seed2": 7.8599962718788055,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 1
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "units": 5,
+      "seed0": 5.370056344000112,
+      "seed1": 5.232377715011255,
+      "seed2": 4.96462604108073,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "units": 5,
+      "seed0": 5.135856102774559,
+      "seed1": 5.030842028528588,
+      "seed2": 4.7573933176116014,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "units": 5,
+      "seed0": 6.174543537270116,
+      "seed1": 6.03398492408019,
+      "seed2": 5.661324706517604,
+      "improves_every_seed": true,
+      "seed0_rank_of_3": 3
+    }
+  ],
+  "arena_rank": [
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbones": 5,
+      "backbones_seed0_only": [],
+      "seed0": 3.694318072905935,
+      "seed1": 4.396120866592545,
+      "seed2": 4.305847128088283,
+      "seed0_rank_of_3": 1,
+      "seed0_understates": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbones": 5,
+      "backbones_seed0_only": [],
+      "seed0": 5.492361549728234,
+      "seed1": 5.268143323543451,
+      "seed2": 6.081667512467231,
+      "seed0_rank_of_3": 2,
+      "seed0_understates": false
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbones": 3,
+      "backbones_seed0_only": [
+        "S2M2-S",
+        "StereoAnywhere"
+      ],
+      "seed0": 5.368503844517574,
+      "seed1": 5.268732398151317,
+      "seed2": 5.143272853473709,
+      "seed0_rank_of_3": 3,
+      "seed0_understates": false
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbones": 5,
+      "backbones_seed0_only": [],
+      "seed0": 12.843612338916229,
+      "seed1": 12.37565390489874,
+      "seed2": 12.976280581157521,
+      "seed0_rank_of_3": 2,
+      "seed0_understates": false
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbones": 5,
+      "backbones_seed0_only": [],
+      "seed0": 5.693184122781616,
+      "seed1": 5.732957618281111,
+      "seed2": 6.090091408342268,
+      "seed0_rank_of_3": 1,
+      "seed0_understates": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbones": 3,
+      "backbones_seed0_only": [
+        "S2M2-S",
+        "StereoAnywhere"
+      ],
+      "seed0": 5.574190881716906,
+      "seed1": 5.446123320882523,
+      "seed2": 5.13997625791137,
+      "seed0_rank_of_3": 3,
+      "seed0_understates": false
+    }
+  ],
+  "unit_level": [
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 4.119547293665176,
+      "seed1": 6.1300587643188535,
+      "seed2": 5.7059149906440805,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 0.7790734480309804,
+      "seed1": 0.35600837620843034,
+      "seed2": 0.126515580038058,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 4.4070854105568396,
+      "seed1": 5.342838401612195,
+      "seed2": 5.304643976142382,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 1.6282953127901365,
+      "seed1": 3.317219963677759,
+      "seed2": 2.8765263544657853,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 0.9723207698655764,
+      "seed1": 0.4799188449121938,
+      "seed2": 0.5060398655279763,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 4.1331621996508785,
+      "seed1": 5.147287986162573,
+      "seed2": 5.076076201244939,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 1.5334611969421432,
+      "seed1": 3.3943789242702618,
+      "seed2": 3.0282783368013484,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 0.9865606692717022,
+      "seed1": -0.14914401398725305,
+      "seed2": 0.12868134166560335,
+      "improves_every_seed": false
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 4.314793618784936,
+      "seed1": 5.262542808369926,
+      "seed2": 5.172077436713487,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": -0.2755313801360463,
+      "seed1": 1.3911098784559532,
+      "seed2": 1.2537828557790598,
+      "improves_every_seed": false
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 0.041174119138774036,
+      "seed1": -0.4402027723851011,
+      "seed2": -0.35923386748604536,
+      "improves_every_seed": false
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 4.4752712076676815,
+      "seed1": 5.321321621296326,
+      "seed2": 5.399214047643346,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 9.079737566279883,
+      "seed1": 10.55493666835729,
+      "seed2": 10.458799468792716,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 10.505543452972478,
+      "seed1": 10.15932799173946,
+      "seed2": 10.064486801174734,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 4.987794586902034,
+      "seed1": 6.010108818696536,
+      "seed2": 5.989892641233443,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 1.912571805360007,
+      "seed1": 1.6323080127503247,
+      "seed2": 2.2865305963623475,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 8.23624947440385,
+      "seed1": 3.7183087372958616,
+      "seed2": 8.280940510308499,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 4.984898382784915,
+      "seed1": 5.06300146707175,
+      "seed2": 5.490902772398321,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 4.048379283131745,
+      "seed1": 4.364011154252672,
+      "seed2": 5.809850934119749,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 2.003855243770973,
+      "seed1": 1.7085423278952538,
+      "seed2": 2.13832164394726,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 10.511636660833142,
+      "seed1": 6.910590325570758,
+      "seed2": 10.617554673114103,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 2.6784521408082616,
+      "seed1": 3.0478450511670356,
+      "seed2": 2.9866623411954336,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 3.942058534243036,
+      "seed1": 3.9118873971251826,
+      "seed2": 5.418440383242467,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 2.433460305230483,
+      "seed1": 1.783134150647286,
+      "seed2": 2.5047462598520696,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 11.398133402919157,
+      "seed1": 7.671764329869078,
+      "seed2": 11.711512956414648,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 9.338912634451122,
+      "seed1": 9.84686537866724,
+      "seed2": 9.95988555086372,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 4.158990071707453,
+      "seed1": 4.223098298638486,
+      "seed2": 5.696493385161836,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 1.1392683980962113,
+      "seed1": 1.2894003288979665,
+      "seed2": 1.8331750796331603,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 6.955223294889277,
+      "seed1": 3.0069485772301303,
+      "seed2": 7.244279570465329,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 2.424898319988812,
+      "seed1": 2.7836504447863564,
+      "seed2": 2.487228301854993,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 6.2702741204466745,
+      "seed1": 6.631626816591913,
+      "seed2": 8.518943137968648,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 3.042209232981594,
+      "seed1": 2.414090799319838,
+      "seed2": 2.741935783492613,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 9.745733319144277,
+      "seed1": 6.046979056338032,
+      "seed2": 10.442588960112124,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 9.01055675522087,
+      "seed1": 9.141675560538813,
+      "seed2": 9.310166578747697,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 3.739987994594657,
+      "seed1": 3.650554057050488,
+      "seed2": 5.155003979007998,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 5.333092894937017,
+      "seed1": 5.416725077616674,
+      "seed2": 5.402142816900072,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid11_Liver_High",
+      "seed0": 4.157894207831343,
+      "seed1": 3.870202592050347,
+      "seed2": 4.07156245465818,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 7.210062107389965,
+      "seed1": 6.981865003818367,
+      "seed2": 7.011326080413157,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 5.540420528205683,
+      "seed1": 5.677212616076109,
+      "seed2": 5.3445595485926995,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 5.87837896372054,
+      "seed1": 5.575943302218432,
+      "seed2": 5.043004648632555,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 5.097656045490414,
+      "seed1": 5.1114700933838,
+      "seed2": 5.205942820213946,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid11_Liver_High",
+      "seed0": 3.5882509613986517,
+      "seed1": 3.3579497323692697,
+      "seed2": 3.5373930906549784,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 6.02735542167853,
+      "seed1": 5.805459043654426,
+      "seed2": 5.746263858327286,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 4.318812406030499,
+      "seed1": 4.429705725027369,
+      "seed2": 4.034419285940104,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 4.49149099875376,
+      "seed1": 4.391318428822683,
+      "seed2": 3.972099817429791,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 5.966816923374186,
+      "seed1": 6.014400517099152,
+      "seed2": 5.935512005021908,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid11_Liver_High",
+      "seed0": 3.907866325702961,
+      "seed1": 3.642239984951523,
+      "seed2": 3.7878927680235757,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 9.10307075224929,
+      "seed1": 8.915577497838163,
+      "seed2": 8.648304924402971,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 4.4543099040683325,
+      "seed1": 4.464625753972452,
+      "seed2": 4.136310338735515,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "EPE",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 4.694856656310256,
+      "seed1": 4.460765170115415,
+      "seed2": 4.056747253728658,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 15.167248276449067,
+      "seed1": 16.363094731466518,
+      "seed2": 14.018214316112019,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 6.023514094648174,
+      "seed1": 4.743258438048633,
+      "seed2": 4.050855147653517,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "CREStereo",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 14.458912629308307,
+      "seed1": 14.17470989277448,
+      "seed2": 18.19763505534474,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 12.847662730555287,
+      "seed1": 13.83331706841027,
+      "seed2": 11.369181223772802,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 6.1762424131793825,
+      "seed1": 4.120841509606163,
+      "seed2": 3.7174280107698556,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 14.625772991688729,
+      "seed1": 15.062242794580436,
+      "seed2": 19.030816968772235,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 12.514016595649249,
+      "seed1": 13.810271361291772,
+      "seed2": 11.639381027136126,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 7.701948383738079,
+      "seed1": 3.189140725172818,
+      "seed2": 4.556190770002028,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 14.354420218179722,
+      "seed1": 13.649134878653653,
+      "seed2": 18.20840321678923,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 11.318815757279186,
+      "seed1": 12.81135307071202,
+      "seed2": 10.697333007095668,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 3.7728527078302774,
+      "seed1": 2.904737265723805,
+      "seed2": 2.050994595837644,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "S2M2-S",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 12.961823972523488,
+      "seed1": 13.937995164816426,
+      "seed2": 16.62048680676926,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_2_keyframe_2",
+      "seed0": 21.835978987857736,
+      "seed1": 21.993857105950575,
+      "seed2": 21.517352240434025,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_2_keyframe_3",
+      "seed0": 20.320054797464262,
+      "seed1": 20.786101858815943,
+      "seed2": 21.08963683249167,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D2",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_2_keyframe_4",
+      "seed0": 19.159763880243773,
+      "seed1": 18.771931024576432,
+      "seed2": 23.384200770193637,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 10.065037239064305,
+      "seed1": 7.63400818210426,
+      "seed2": 1.6757578936326398,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 5.1944012441679615,
+      "seed1": 2.8615863141524125,
+      "seed2": 6.34525660964231,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 2.8547583169120174,
+      "seed1": 3.014953054364199,
+      "seed2": 3.164483598006262,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "CREStereo",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 8.17466382660444,
+      "seed1": 8.701891026162174,
+      "seed2": 10.349018715142835,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 9.795025520537951,
+      "seed1": 7.2213670366469485,
+      "seed2": 1.83909908450133,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 10.246797875663855,
+      "seed1": 11.152764761012193,
+      "seed2": 11.152764761012193,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 1.4509333407740113,
+      "seed1": 1.5701533880054415,
+      "seed2": 1.6756758127890174,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 9.264473476829227,
+      "seed1": 9.185668584962325,
+      "seed2": 10.438879351840415,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 9.558977035490612,
+      "seed1": 7.259916492693108,
+      "seed2": 1.5240083507306863,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 9.543817527010798,
+      "seed1": 9.603841536614647,
+      "seed2": 11.194477791116446,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 3.737033054970519,
+      "seed1": 3.7753263521706892,
+      "seed2": 3.8870151356711755,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "RAFT-Stereo",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 7.907182227458245,
+      "seed1": 8.20970252871629,
+      "seed2": 10.197753187192326,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 9.8407571120934,
+      "seed1": 7.522951377082624,
+      "seed2": 1.3459140881786305,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 11.43220069863448,
+      "seed1": 11.43220069863448,
+      "seed2": 12.257859637980303,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 1.4629641711793617,
+      "seed1": 1.127210129834934,
+      "seed2": 1.2978474602640913,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "S2M2-S",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 13.908460993967102,
+      "seed1": 14.878010767002841,
+      "seed2": 16.91419516978486,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_1",
+      "seed0": 9.271471797656913,
+      "seed1": 5.738743631520411,
+      "seed2": 0.20430858354668271,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_2",
+      "seed0": 17.532467532467543,
+      "seed1": 19.138755980861244,
+      "seed2": 21.18933697881066,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_3",
+      "seed0": 5.570219999458792,
+      "seed1": 5.899862484963121,
+      "seed2": 6.037869525536207,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "D7",
+      "backbone": "StereoAnywhere",
+      "unit": "dataset_7_keyframe_4",
+      "seed0": 7.359649083463782,
+      "seed1": 7.589287716575692,
+      "seed2": 9.002552038715645,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 3.3208399265970705,
+      "seed1": 3.340025960521528,
+      "seed2": 3.1755269252357072,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid11_Liver_High",
+      "seed0": 3.020143136459776,
+      "seed1": 2.5498730762335007,
+      "seed2": 2.8334701704141017,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 9.118033341963002,
+      "seed1": 9.073102700751761,
+      "seed2": 8.730601663166103,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 6.713741656178801,
+      "seed1": 6.729220452890418,
+      "seed2": 6.18048113082238,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "CREStereo",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 5.369347682609507,
+      "seed1": 5.157890117779992,
+      "seed2": 4.469299290187426,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 2.8233217209262222,
+      "seed1": 2.8138371914834477,
+      "seed2": 2.7115258171434125,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid11_Liver_High",
+      "seed0": 3.1251690074031027,
+      "seed1": 2.802142472840762,
+      "seed2": 3.0123206408761387,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 9.708442749569418,
+      "seed1": 9.60050656479215,
+      "seed2": 9.33221728324634,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 6.336747162348011,
+      "seed1": 6.428548715841303,
+      "seed2": 5.687466654756646,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "Fast-FoundationStereo",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 4.407822070753489,
+      "seed1": 4.2370761654245745,
+      "seed2": 3.61610449469495,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid10_Liver_Med",
+      "seed0": 3.761085631552069,
+      "seed1": 3.6737706890139084,
+      "seed2": 3.502428121655026,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid11_Liver_High",
+      "seed0": 3.520570405034618,
+      "seed1": 3.225396495578958,
+      "seed2": 3.3614824213001375,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid12_Pancreas_Ext",
+      "seed0": 10.823132484348468,
+      "seed1": 10.84922284013148,
+      "seed2": 10.054077105555569,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid13_Pancreas_Med",
+      "seed0": 7.878403148409765,
+      "seed1": 7.67320417610401,
+      "seed2": 7.383256623116285,
+      "improves_every_seed": true
+    },
+    {
+      "metric": "Bad1",
+      "arena": "DRENDS",
+      "backbone": "RAFT-Stereo",
+      "unit": "Vid14_Pancreas_High",
+      "seed0": 4.996727214990253,
+      "seed1": 4.824297399988736,
+      "seed2": 4.062963324086806,
+      "improves_every_seed": true
+    }
+  ]
+}

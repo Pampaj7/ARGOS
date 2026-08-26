@@ -6,10 +6,18 @@
 # re-canonicalising the paper, not a nice-to-have: a promoted method whose out-of-domain
 # column is missing the two backbones the canonical column has would be exactly the
 # unmatched comparison this project has already got wrong twice.
+#
+# SEED extends the same fill to seeds 1 and 2 (SEED=1 ./run_a2_drends_fill.sh). Those two
+# seeds cover three backbones out of five, which is why the seed-invariance check of
+# Table I can confirm eight of its ten cells and not ten. The factory names follow
+# ablation_h4: factory_a2, factory_a2_seed1, factory_a2_seed2.
 set -u
+SEED=${SEED:-0}
 PY=/dtu/p1/leopam/ARGOS/.miniconda/envs/argos/bin/python
 ROOT=/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4
-OUT=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/drends_a2/seed0
+OUT=/dtu/p1/leopam/ARGOS/ARGOS_hand/results/drends_a2/seed$SEED
+FACTORY=factory_a2
+[ "$SEED" != "0" ] && FACTORY=factory_a2_seed$SEED
 RECS="Vid10_Liver_Med Vid11_Liver_High Vid12_Pancreas_Ext Vid13_Pancreas_Med Vid14_Pancreas_High"
 SELF=$(readlink -f "$0")
 if [ "${1:-}" = "--node" ]; then
@@ -28,7 +36,7 @@ if [ "${1:-}" = "--node" ]; then
         [ -d "$OUT/$B" ] && mv "$OUT/$B" "$OUT/$B.incomplete-$(date +%s)"
         echo "=== $B"
         "$PY" -m model_design.comparison.drends_backbone_transfer --device cuda:0 \
-            --backbone "$B" --module "model_design.comparison.ablation_h4:factory_a2" \
+            --backbone "$B" --module "model_design.comparison.ablation_h4:$FACTORY" \
             --recordings $RECS --output "$OUT/$B" || echo "FAILED $B"
     done
     echo "A2 DRENDS FILL DONE"
@@ -36,5 +44,5 @@ if [ "${1:-}" = "--node" ]; then
 fi
 export ESUB_BYPASS=1 ESUB_QUIET=1
 exec bsub -I -q p1i -app h100app -n 4 -R "span[hosts=1] rusage[mem=10GB]" \
-     -gpu "num=1:mode=shared" -env "all, BACKBONES=${BACKBONES:-S2M2-S StereoAnywhere}" \
-     -J argos_a2fill "$SELF --node $*"
+     -gpu "num=1:mode=shared" -env "all, BACKBONES=${BACKBONES:-S2M2-S StereoAnywhere}, SEED=$SEED" \
+     -J "argos_a2fill$SEED" "$SELF --node $*"
