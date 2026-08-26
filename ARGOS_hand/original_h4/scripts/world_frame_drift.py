@@ -114,6 +114,35 @@ def to_world(xyz: np.ndarray, pose: np.ndarray, r1: np.ndarray) -> np.ndarray:
     return (world[:3] / world[3:4]).reshape(xyz.shape)
 
 
+def perturb_poses(poses: dict[str, np.ndarray], sigma_mm: float, sigma_deg: float,
+                  rng: np.random.Generator) -> dict[str, np.ndarray]:
+    """Independent small rigid error on each frame's pose, expressed in its own camera frame.
+
+    Independent rather than smoothly drifting, because a multi-view spread metric is most
+    sensitive to uncorrelated jitter: a slow common drift moves every view of a point the
+    same way and largely cancels in the spread, so drifting noise would flatter the result.
+    This is the pessimistic model.
+
+    The same perturbed set is then used for ground truth, raw and refined alike. That is the
+    physical situation -- one wrong pose, three clouds transformed by it -- and it is also
+    what makes the test meaningful: the reported quantity is an excess over the ground-truth
+    floor, so pose error enters both terms and the question is what survives the difference.
+    Drawing independent noise per cloud would measure something that never happens.
+    """
+    out = {}
+    for key, pose in poses.items():
+        axis = rng.normal(size=3)
+        axis /= np.linalg.norm(axis)
+        angle = rng.normal(0.0, np.deg2rad(sigma_deg))
+        cross = np.array([[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]])
+        rotation = np.eye(3) + np.sin(angle) * cross + (1 - np.cos(angle)) * (cross @ cross)
+        delta = np.eye(4)
+        delta[:3, :3] = rotation
+        delta[:3, 3] = rng.normal(0.0, sigma_mm, 3)
+        out[key] = pose @ delta
+    return out
+
+
 def backproject(disp: np.ndarray, fx: float, baseline_mm: float, cx: float, cy: float) -> np.ndarray:
     h, w = disp.shape
     z = fx * baseline_mm / np.maximum(disp, MIN_DISP_PX)
@@ -237,7 +266,9 @@ def self_check(sequence: str, frames: int) -> None:
 
 
 def score(sequence: str, backbone: str, frames: int, min_views: int,
-          module: str, device_name: str, output: Path | None) -> None:
+          module: str, device_name: str, output: Path | None,
+          noise_levels: list[tuple[float, float]] | None = None,
+          noise_repeats: int = 5, noise_seed: int = 0) -> None:
     """Ground truth, raw and refined in the shared world frame, all on the module's grid.
 
     Everything is computed at 144x180 because that is where the module operates and where
@@ -313,16 +344,32 @@ def score(sequence: str, backbone: str, frames: int, min_views: int,
               "metric": "per-keyframe-pixel standard deviation of world-frame Z, mm",
               "results": {}}
     print(f"{sequence} / {backbone} / {module}: {count} frames, >= {min_views} views")
-    for name, source in (("gt", gt_grid), ("raw", raw), ("refined", refined)):
-        clouds = [to_world(backproject(np.asarray(source[t], np.float64), fx_grid,
-                                       info.baseline_mm, cx, cy), poses[ids[t]], r1)
-                  for t in range(count)]
-        spread, pixels = accumulate_spread(clouds, list(support), intrinsics, keyframe_shape, min_views)
-        record["results"][name] = {"pixels": pixels, "median_mm": float(np.median(spread)),
-                                   "mean_mm": float(spread.mean()),
-                                   "p95_mm": float(np.percentile(spread, 95))}
-        print(f"  {name:8s} n={pixels:8,}  median {np.median(spread):8.4f} mm  "
-              f"mean {spread.mean():8.4f}  p95 {np.percentile(spread, 95):8.4f}")
+    # Camera-frame geometry does not depend on the pose, so it is built once and re-used by
+    # every perturbation draw below; only the world transform and the accumulation repeat.
+    camera_frame = {name: [backproject(np.asarray(source[t], np.float64), fx_grid,
+                                       info.baseline_mm, cx, cy) for t in range(count)]
+                    for name, source in (("gt", gt_grid), ("raw", raw), ("refined", refined))}
+
+    def spreads(pose_set: dict[str, np.ndarray]) -> dict[str, dict]:
+        out = {}
+        for name, xyzs in camera_frame.items():
+            clouds = [to_world(xyzs[t], pose_set[ids[t]], r1) for t in range(count)]
+            spread, pixels = accumulate_spread(clouds, list(support), intrinsics,
+                                               keyframe_shape, min_views)
+            out[name] = {"pixels": pixels, "median_mm": float(np.median(spread)),
+                         "mean_mm": float(spread.mean()),
+                         "p95_mm": float(np.percentile(spread, 95))}
+        return out
+
+    def excess_reduction(values: dict[str, dict]) -> float:
+        floor = values["gt"]["median_mm"]
+        raw_excess = values["raw"]["median_mm"] - floor
+        return 100.0 * (raw_excess - (values["refined"]["median_mm"] - floor)) / raw_excess
+
+    record["results"] = spreads(poses)
+    for name, value in record["results"].items():
+        print(f"  {name:8s} n={value['pixels']:8,}  median {value['median_mm']:8.4f} mm  "
+              f"mean {value['mean_mm']:8.4f}  p95 {value['p95_mm']:8.4f}")
     # Per-frame accuracy on the same support, as a coherence check on the whole result.
     # If refinement were worse frame-by-frame as well, the refined branch would be broken
     # rather than the finding interesting, and the multi-view number would mean nothing.
@@ -345,6 +392,48 @@ def score(sequence: str, backbone: str, frames: int, min_views: int,
     record["excess_reduction_pct"] = 100.0 * (excess_raw - excess_ref) / excess_raw
     print(f"  excess over the ground-truth floor: raw {excess_raw:.4f} -> refined "
           f"{excess_ref:.4f} mm ({record['excess_reduction_pct']:+.1f}%)")
+
+    if noise_levels:
+        # Does the sign of this number survive pose error, and at what magnitude does the
+        # measurement stop meaning anything? The ground-truth spread already answers half of
+        # it empirically -- that cloud is one keyframe's structured light moved by these very
+        # poses, so its floor IS the pose residual plus resampling -- and the sweep answers
+        # the rest by moving the poses on purpose.
+        baseline_sign = np.sign(record["excess_reduction_pct"])
+        sweep = []
+        for sigma_mm, sigma_deg in noise_levels:
+            draws = []
+            for repeat in range(noise_repeats):
+                rng = np.random.default_rng((noise_seed, repeat, int(sigma_mm * 1e6), int(sigma_deg * 1e6)))
+                values = spreads(perturb_poses(poses, sigma_mm, sigma_deg, rng))
+                draws.append({"gt_median_mm": values["gt"]["median_mm"],
+                              "raw_median_mm": values["raw"]["median_mm"],
+                              "refined_median_mm": values["refined"]["median_mm"],
+                              "excess_reduction_pct": excess_reduction(values)})
+            reductions = [d["excess_reduction_pct"] for d in draws]
+            floors = [d["gt_median_mm"] for d in draws]
+            entry = {"sigma_translation_mm": sigma_mm, "sigma_rotation_deg": sigma_deg,
+                     "repeats": noise_repeats,
+                     "excess_reduction_mean_pct": float(np.mean(reductions)),
+                     "excess_reduction_sd_pct": float(np.std(reductions, ddof=1)) if len(reductions) > 1 else 0.0,
+                     "excess_reduction_min_pct": float(np.min(reductions)),
+                     "excess_reduction_max_pct": float(np.max(reductions)),
+                     "gt_floor_mean_mm": float(np.mean(floors)),
+                     "sign_preserved_in_all_repeats": bool(all(np.sign(r) == baseline_sign for r in reductions)),
+                     "draws": draws}
+            sweep.append(entry)
+            print(f"  pose noise sigma_t={sigma_mm:.3f}mm sigma_r={sigma_deg:.4f}deg: "
+                  f"reduction {entry['excess_reduction_mean_pct']:+.1f}% "
+                  f"+-{entry['excess_reduction_sd_pct']:.1f} "
+                  f"[{entry['excess_reduction_min_pct']:+.1f},{entry['excess_reduction_max_pct']:+.1f}] "
+                  f"gt floor {entry['gt_floor_mean_mm']:.4f}mm  "
+                  f"sign {'HOLDS' if entry['sign_preserved_in_all_repeats'] else 'FLIPS'}")
+        record["pose_noise_sweep"] = sweep
+        record["pose_noise_seed"] = noise_seed
+        surviving = [e for e in sweep if e["sign_preserved_in_all_repeats"]]
+        record["largest_sigma_translation_mm_preserving_sign"] = (
+            max(e["sigma_translation_mm"] for e in surviving) if surviving else None)
+
     if output:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(record, indent=2) + "\n")
@@ -360,12 +449,23 @@ def main() -> None:
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--self-check", action="store_true")
+    parser.add_argument("--pose-noise", action="store_true",
+                        help="sweep pose perturbation and report whether the sign of the "
+                             "excess reduction survives it")
+    parser.add_argument("--noise-repeats", type=int, default=5)
+    parser.add_argument("--noise-seed", type=int, default=0)
     args = parser.parse_args()
     if args.self_check:
         self_check(args.sequence, min(args.frames, 8))
         return
+    # Paired ladder: at the ~100 mm working distance of these sequences a rotation of
+    # 0.01 deg displaces a point by ~0.017 mm, so each rung's rotation contributes error of
+    # the same order as its translation rather than one term dominating the other.
+    levels = [(0.01, 0.006), (0.05, 0.029), (0.10, 0.057), (0.50, 0.286), (1.00, 0.573)]
     score(args.sequence, args.backbone, args.frames, args.min_views, args.module,
-          args.device, args.output)
+          args.device, args.output,
+          noise_levels=levels if args.pose_noise else None,
+          noise_repeats=args.noise_repeats, noise_seed=args.noise_seed)
 
 
 if __name__ == "__main__":
