@@ -17858,4 +17858,40 @@ reaching only the first would train on one backbone and record three, the
 provenance lie the shared \texttt{SHIPPED\_BASE\_VARIANTS} tuple was
 introduced to prevent.
 
+
+
+\section*{The seed's rank is a property of the arena, and the sentence we nearly wrote was false}
+
+A reviewer objected that Table~I rests on seed $0$ while the paper itself
+demonstrates seed $0$ is an outlier. The obvious repair was a caption clause
+saying seed $0$ understates. Leonardo stopped it on the ground that nobody had
+checked, and that Sec.~V-J already shows the seed's rank moving with the
+configuration --- low tail for the shipped head, high tail for the
+$142$-channel base --- so a rank measured on D2 is not evidence about D7 or
+DRENDS.
+
+It moves with the arena as well. Pooled over backbones, seed $0$ is the lowest
+of three on D2 EPE ($3.69$ against $4.40$ and $4.31$) and on D7 Bad1, middling
+on D7 EPE and D2 Bad1, and \emph{the highest of the three} on both DRENDS
+metrics ($5.37$ against $5.27$, $5.14$; $5.57$ against $5.45$, $5.14$). DRENDS
+is half of Table~I. The clause would have been a falsehood in the caption of
+the main table, defended by nothing but its own plausibility.
+
+The defence that does not depend on the rank survives: every one of the $13$
+cells measured at three seeds improves at all three, on EPE and on Bad1.
+Thirteen rather than fifteen because DRENDS carries three seeds on three
+backbones; the two missing evaluations are running, which will take Table~I's
+own confirmation from eight of ten cells to ten. The sign of each cell, not
+the size of seed $0$, is what contribution~(i) actually claims, and it is
+seed-invariant on everything measured.
+
+Two things fell out of the same recomputation. The seed study sitting in
+\texttt{results/seed\_variance} is the $142$-channel base, not the head we
+ship; recomputed on A2 it reproduces all four of Sec.~V-D's published figures
+to the decimal, which is the check that the new script is reading what the
+paper reads. And Sec.~V-A's named exception --- S$^2$M$^2$-S on keyframe~$2$,
+worse by $0.28\%$ --- is itself a seed-$0$ artefact: the same cell improves by
+$1.39$ and $1.25$ at seeds $1$ and $2$. We have been quoting a seed as a
+property of a sequence.
+
 \end{document}
