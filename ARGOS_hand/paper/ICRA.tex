@@ -257,8 +257,8 @@ co-designed with the estimator, so a new backbone means a new temporal model.
 Match Stereo Videos exposes BiDAStabilizer as a plug-in on a frozen estimator
 \cite{jing2024bida}, but propagates bidirectionally. Monocular video depth is
 made consistent by diffusion \cite{hu2025depthcrafter} or stabiliser networks
-\cite{wang2023nvds} --- a different output space, none causal at clip level
---- while online weight adaptation \cite{poggi2022continual} is the opposite
+\cite{wang2023nvds} --- a different output space --- while online weight
+adaptation \cite{poggi2022continual} is the opposite
 of our constraint.
 
 \paragraph{What can actually be compared.}
@@ -389,9 +389,9 @@ the supervision and the training are not.
 Writing $\mathrm{C}k$ for a $k\times k$ convolution and GN($g$) for GroupNorm
 over $g$ groups, the head is $\mathrm{C}3(38{\to}24)$--GN($8$)--SiLU and one
 residual block on the grid, then average-pool $2$, $\mathrm{C}3$ stride $2$ $(24{\to}48)$--GN--SiLU
-and three residual blocks at quarter resolution, a residual block being two
-bias-free $\mathrm{C}3$ each followed by GN($8$), one SiLU between them, added
-to its input.
+and three residual blocks at quarter resolution, a residual block being two $\mathrm{C}3$ with
+GN($8$) after each and one interior SiLU, added to its input. All convolutions
+are bias-free except the two output convolutions.
 Reset reads the fine map concatenated with the upsampled coarse one,
 $r_t=\sigma(\mathrm{C}3(\cdot))$ at grid resolution; fusion reads the coarse
 map, $f_t=\uparrow_4\sigma(\mathrm{C}1(\cdot))$. Their product $w_t=r_tf_t$
@@ -595,8 +595,8 @@ failed geometry improved, not good geometry polished.
 
 Macro over cells, the mean EPE reduction is $3.96\%$ seen against $2.67\%$
 unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on DRENDS: every
-combination positive. (Table~\ref{tab:grid} pools per backbone instead, so its
-cells do not reproduce these means.) We separate neither group from the other
+combination positive. (Table~\ref{tab:grid} pools per backbone and does not
+reproduce these means.) We separate neither group from the other
 and report margins rather than a test --- with $3$ and $2$ backbones at one
 seed, absence of a detectable gap is not evidence of no gap --- and read no
 ordering into them: on D2 the seen advantage is carried entirely by Stereo
@@ -903,19 +903,17 @@ module trained for one estimator is not better than one trained for all.
 \label{sec:masking}
 
 Confining the output to \eqref{eq:support}, not merely computing it, is a
-single line. On DRENDS the difference is categorical: unmasked, the shipped
-head \emph{regresses} depth RMSE in every one of the $25$
-recording--backbone cells, by $+221.9\%$ on average (range $+29.5$ to
-$+594.5$); confined, it improves in every one of the same $25$ cells, by
-$-3.5\%$ ($-6.7$ to $-1.8$). Zero-padded
-out-of-bounds memory enters the blend as $\widetilde m_t=0$ and bounded
-recurrence carries the collapse to the next re-anchor; the offenders are rare
-and bursty ($300$ of $38.8$M pixels on one recording, aligned memory exactly
-$0.0$ for every one) and, since invalid predictions on valid support are
-penalised rather than discarded, they are the entire source of a depth tail we
-had attributed to the external domain. On SCARED-C the same ablation is nearly
-inert: the contract costs a little in-domain gain, buys well-posed behaviour
-out of it, and is almost invisible to anyone validating in domain only.
+single line. On DRENDS the difference is categorical: unmasked, the shipped head
+\emph{regresses} depth RMSE in all $25$ recording--backbone cells, by
+$+221.9\%$ on average ($+29.5$ to $+594.5$); confined, it improves in all $25$,
+by $-3.5\%$ ($-6.7$ to $-1.8$). Zero-padded out-of-bounds memory enters the
+blend as $\widetilde m_t=0$ and bounded recurrence carries the collapse to the
+next re-anchor; the offenders are rare and bursty ($300$ of $38.8$M pixels on
+one recording) and, since invalid predictions on valid support are penalised
+rather than discarded, they are the entire source of a depth tail we had
+attributed to the external domain. On SCARED-C the ablation is nearly inert:
+the contract costs a little in-domain gain, buys well-posed behaviour out of
+it, and is almost invisible to anyone validating in domain only.
 
 \section{Analysis}
 \label{sec:analysis}
@@ -958,10 +956,9 @@ per-frame mean weight correlates
 \end{figure}
 
 Two limits are worth stating. Against the raw-versus-memory oracle of
-Table~\ref{tab:closure} --- measured on \steer's own aligned memory, since
-under $H{=}4$ that memory is the previous fused output on three frames of four
---- \steer\ recovers $29.0\%$ of the available gain on D2 pooled and $25.2\%$
-per cell, so the open problem is deciding \emph{where} to intervene.
+Table~\ref{tab:closure}, measured on \steer's own aligned memory, \steer\
+recovers $29.0\%$ of the available gain on D2 pooled and $25.2\%$ per cell, so
+the open problem is deciding \emph{where} to intervene.
 
 And the effective weight $w_t$ is an intervention magnitude rather than an
 uncertainty: read in the benign direction it ranks helped pixels at AUROC
