@@ -18086,4 +18086,36 @@ say the specialists had finished improving. That last one is the reviewer's
 obvious question about any arm that lost, and it belongs in the comparison
 rather than in a rebuttal.
 
+
+
+\section*{The same numbers, read on their own scale}
+
+Re-reading the specialist grid in daylight changed what it says, and the change
+is a correction to last night's entry rather than an addition to it.
+
+Last night the control was read in relative reductions, which is the paper's
+convention: two arms to the generalist, two to the specialist, one tie, and the
+conclusion that sharing sometimes costs. In absolute terms those same five gaps
+are $0.003$, $0.026$, $0.032$, $0.040$ and $0.042$ percentage points of
+bad-pixel rate, against a raw rate near $6\%$. A two-to-two split among
+differences of four parts in ten thousand, running in both directions, is
+backbone idiosyncrasy. It is not a price.
+
+The mistake has a shape worth naming, because it is the same one the paper
+warns about elsewhere: a ratio with a small denominator turns a tenth of a
+point into a headline. On D2, where raw Bad1 is $1.4$--$2.2\%$, it does worse.
+The ``collapse'' recorded last night --- $9.95\to3.33$ for
+Fast-FoundationStereo --- is $1.445\%\to1.551\%$ of pixels. The sentence drawn
+from it, that single-backbone training produces a worse model rather than one
+that generalises worse, does not survive its own magnitudes and is withdrawn.
+
+What does survive is cleaner than what we thought we had. On bad pixels the two
+are the same model to within the measurement. On mean EPE the generalist is
+ahead on four backbones of five, RAFT-Stereo by $0.013$\,px, and behind on one
+by $0.002$. An advantaged specialist --- matched budget, three times the
+selection points, its own validation --- is not better than one shared
+checkpoint. That is what went into V-J, with one seed and the epoch-$34$--$35$
+selection stated in the same sentence, because both are the first thing a
+reviewer will ask about any arm that lost.
+
 \end{document}
