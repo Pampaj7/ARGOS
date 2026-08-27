@@ -1,0 +1,164 @@
+{
+  "comparison_driver": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+    "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+  },
+  "consumed_input_hashes": {
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_2.json": "78f73ee5c90126b379d4a84d3fc62295518d4b57951ef0947cd3a1b016a3fcd0",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_3.json": "8b8a938ad9d8acda551d54c65f5c161a174329699956e15617eb3ab2d8a8eefd",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_4.json": "fb4da3116d22fb135997a0ace89ce23e51d3d2e24387ce4fa9e315122ee8b776",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/run_manifest.json": "ca82353c76f56aa1e3d3f471a5c75881f707cc8ac91f4019d8017c63e3a61bea",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_1.json": "a10facd08ae3b823e1c873567f1311253acb341e2e5aac8fb389dbf7f0c81580",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_2.json": "4368154e707aa6ab762cfcd846a37f9780354d4b899450873d15f298b1251ddd",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_3.json": "a65cef29c1593c39433437ecf45eb5c2efec6791d25ae6c12d6c986bba8eb8f9",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_4.json": "6b8c953199f204d2e18564a3794228034b1317115bdedd50dc3dc72797ca7ec9",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/run_manifest.json": "17f706fc43aeca585a7c0810c85f581c0091dc21b58f85f448703fd8d6731ba8"
+  },
+  "consumed_input_hashes_note": "wrapper post-read integrity snapshot; source manifests do not predeclare every report/diagnostic/applicability artifact",
+  "datasets": [
+    "scared-d2",
+    "scared-d7"
+  ],
+  "dense_predictions_written": false,
+  "evaluator": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+    "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+  },
+  "mode": "compile",
+  "module_provenance": {
+    "arm": "specialist_Fast-FoundationStereo",
+    "backbone": "Fast-FoundationStereo",
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_Fast-FoundationStereo/checkpoints/best_validation.pt",
+    "checkpoint_sha256": "f0732b07afb408cf1088d7918a8ca9b2ad496bc92b07ee19901263f4d734de41",
+    "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+    "declared_change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+    "module": "specialist_h4",
+    "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+    "seed": null,
+    "training_provenance": {
+      "arm": "specialist_Fast-FoundationStereo",
+      "backbone": "Fast-FoundationStereo",
+      "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+      "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+      "deviation": {
+        "backbones": {
+          "from": [
+            "S2M2-S",
+            "RAFT-Stereo",
+            "StereoAnywhere"
+          ],
+          "patched": "SEEN_BACKBONES",
+          "to": [
+            "Fast-FoundationStereo"
+          ]
+        },
+        "epochs": {
+          "locked": 12,
+          "used": 36
+        },
+        "learned_stereo_evidence": false
+      },
+      "locked_training": {
+        "alpha_reg": 0.2,
+        "backbones": [
+          "S2M2-S",
+          "RAFT-Stereo",
+          "StereoAnywhere"
+        ],
+        "batch_size": 4,
+        "clip_length": 4,
+        "coverage_threshold": 0.5,
+        "epochs": 12,
+        "gradient_clip_norm": 1.0,
+        "learned_stereo_evidence": true,
+        "learning_rate": 0.0002,
+        "memory_state": "recurrent",
+        "mixed_precision_cuda": true,
+        "optimizer": "AdamW",
+        "scheduler": null,
+        "seed": 0,
+        "tau_fusion_native_px": 1.0,
+        "tau_reset_native_px": 5.0,
+        "train_dataset_ids": [
+          1,
+          3,
+          6
+        ],
+        "validation_dataset_ids": [
+          2
+        ],
+        "weight_decay": 0.0001
+      },
+      "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_Fast-FoundationStereo"
+    },
+    "variant": "A2_no_learned_evidence",
+    "variant_of": "ablation_h4:A2_no_learned_evidence"
+  },
+  "output_hashes": {
+    "applicability.csv": "c917737afc9c69eb178c1d7bd9a8caca5e1beb128ff74d0e3c513af50629902d",
+    "definitive_table.csv": "c2cbbc134bf58f0eb2cdaffddbcb0406db632a29e149b4ac414c41d370190831",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_2.json": "78f73ee5c90126b379d4a84d3fc62295518d4b57951ef0947cd3a1b016a3fcd0",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_3.json": "8b8a938ad9d8acda551d54c65f5c161a174329699956e15617eb3ab2d8a8eefd",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_4.json": "fb4da3116d22fb135997a0ace89ce23e51d3d2e24387ce4fa9e315122ee8b776",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/run_manifest.json": "ca82353c76f56aa1e3d3f471a5c75881f707cc8ac91f4019d8017c63e3a61bea",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/summary.csv": "25e8b0339b69be7ada56ab468e028eb4b94136b9329fc5ba60cb5c97c3ad867b",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/summary.json": "0eafd5974f5ca206e5ef352deb9183babb5795c7300394151af4edf82d8ebb60",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_1.json": "a10facd08ae3b823e1c873567f1311253acb341e2e5aac8fb389dbf7f0c81580",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_2.json": "4368154e707aa6ab762cfcd846a37f9780354d4b899450873d15f298b1251ddd",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_3.json": "a65cef29c1593c39433437ecf45eb5c2efec6791d25ae6c12d6c986bba8eb8f9",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_4.json": "6b8c953199f204d2e18564a3794228034b1317115bdedd50dc3dc72797ca7ec9",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/run_manifest.json": "17f706fc43aeca585a7c0810c85f581c0091dc21b58f85f448703fd8d6731ba8",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/summary.csv": "4386b4f082854a1812d0a1e6a94bb275c9a7ce7b6c9bbc6aa2185369a380b86d",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/summary.json": "935a390be4434355aafca8e072c6708d810e42fbc77377ce1860eb18269bf038",
+    "scared_aggregate_metrics.csv": "55e2374839a9804dca58d707102a238a8704f78f2f1aee77b081695b35cdd0ce",
+    "scared_per_frame_metrics.csv": "49f36404662cb52b6be276baab7bd2d15ea6d5601713dd3516c247e891bd961e",
+    "scared_per_sequence_metrics.csv": "90d61d6a135233704287044e2da5e5c73dd76c11a6bcb12fe60f8539b08c298f",
+    "tables/scared_c.csv": "c2cbbc134bf58f0eb2cdaffddbcb0406db632a29e149b4ac414c41d370190831"
+  },
+  "outputs": [
+    "applicability.csv",
+    "definitive_table.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/applicability.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_2.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_3.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_2_keyframe_4.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/run_manifest.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/summary.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation/summary.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/applicability.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_1.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_2.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_3.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/reports/Fast-FoundationStereo/dataset_7_keyframe_4.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/run_manifest.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/summary.csv",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation/summary.json",
+    "scared_aggregate_metrics.csv",
+    "scared_per_frame_metrics.csv",
+    "scared_per_sequence_metrics.csv",
+    "tables/scared_c.csv"
+  ],
+  "project": "ARGOS v2",
+  "source_root": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs",
+  "source_runs": {
+    "scared-d2": {
+      "manifest_sha256": "ca82353c76f56aa1e3d3f471a5c75881f707cc8ac91f4019d8017c63e3a61bea",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_fastfoundation"
+    },
+    "scared-d7": {
+      "manifest_sha256": "17f706fc43aeca585a7c0810c85f581c0091dc21b58f85f448703fd8d6731ba8",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/Fast-FoundationStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_fastfoundation"
+    }
+  },
+  "status": "COMPLETE",
+  "unified_metrics": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+    "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+  },
+  "wrapper": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+    "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+  }
+}
