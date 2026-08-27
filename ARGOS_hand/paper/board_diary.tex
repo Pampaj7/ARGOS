@@ -18049,4 +18049,41 @@ over the $35$ cells --- the pose objection is now answered twice, from
 independent directions: the floor does not order the cells, and moving the
 poses does not reorder them either.
 
+
+
+\section*{The control we asked for answers 2--2, and that is the answer}
+
+Five specialists, one per backbone, each the shipped head trained on that
+backbone alone. On D7 Bad1 --- the endpoint registered before any arm
+trained --- the generalist wins Fast-FoundationStereo by $0.71$ and RAFT-Stereo
+by $0.60$, the specialist wins CREStereo by $0.42$ and S$^2$M$^2$-S by $0.63$,
+and StereoAnywhere at $+0.05$ is inside the spread. Two to two with a tie. On
+the endpoint we chose in advance, the shared module does not beat modules
+trained per backbone.
+
+Held-out EPE runs the other way: the generalist ahead on three arms, behind on
+none, RAFT-Stereo by $2.73$ points. The disagreement between the two metrics is
+the finding rather than noise around it. The shared module wins mean error; the
+specialists, where they win at all, win bad pixels.
+
+The declaration written before any of this says a specialist win of ordinary
+size is not evidence against the shared module, because every deviation
+favoured the specialist: matched gradient budget, three times the selection
+points, validation on its own backbone instead of a mean over three. That rule
+applies here and it is exactly why the asymmetry was declared in advance. It is
+not a licence to soften the number. Two arms beat us on the registered endpoint
+and the paper will say so; the rule explains why that does not overturn
+contribution~(i) --- which claims one module improves every cell, not that it
+beats a per-backbone module --- and not why the result should be reported
+smaller than it is.
+
+Two things we do not understand and are not going to invent an account for
+tonight. Three of five specialists collapse on D2 Bad1 --- $10.61\to4.78$,
+$9.95\to3.33$, $10.71\to7.54$ --- on the very split they selected their own
+checkpoints on, and two of those three then tie or win D7 Bad1. And every arm
+selected at epoch $34$--$35$ of $36$, at the edge of the budget, so we cannot
+say the specialists had finished improving. That last one is the reviewer's
+obvious question about any arm that lost, and it belongs in the comparison
+rather than in a rebuttal.
+
 \end{document}
