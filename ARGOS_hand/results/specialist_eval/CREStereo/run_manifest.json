@@ -1,0 +1,164 @@
+{
+  "comparison_driver": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+    "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+  },
+  "consumed_input_hashes": {
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_2.json": "23c941f5df0d463289b6e347ec195561a5f6be9cac10adaafeace79579309c0e",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_3.json": "ff3556644eab66e4c99ff3c996ebc7a1221df5aad4a1cb46c6675738cc6f8138",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_4.json": "6095f4622d27b38be6af5d09ae926eafe763a3624cf13b08dc4153612ec860a4",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/run_manifest.json": "97486d692f0a62c397d3d17eef0eed0e83bcf3e9219ecdcb99d6f85d7a7c3b9f",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_1.json": "c6aa22a5d9e392bf9988e8a9310a415c045584360a6a07478718610eb20653b3",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_2.json": "145d6a86165d1bc39c873aa2382f22ff9103575a68e72ef4494ae61a5049d04d",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_3.json": "50fd707dff647deb09f8a028c641b131aeecae18e67b8320699a8b332ea6f701",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_4.json": "d45e7be2c93a433be228b06265c813f459d4b1ba649502334847aa5aee27f1c6",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/run_manifest.json": "f99cb994dad079bbf260dce68b7d6bd59a167410f1675ebdf79c36536cb21ec7"
+  },
+  "consumed_input_hashes_note": "wrapper post-read integrity snapshot; source manifests do not predeclare every report/diagnostic/applicability artifact",
+  "datasets": [
+    "scared-d2",
+    "scared-d7"
+  ],
+  "dense_predictions_written": false,
+  "evaluator": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+    "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+  },
+  "mode": "compile",
+  "module_provenance": {
+    "arm": "specialist_CREStereo",
+    "backbone": "CREStereo",
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_CREStereo/checkpoints/best_validation.pt",
+    "checkpoint_sha256": "07f18fb09a6fa307e9bc6fc1897cfa20450faa2757dbc524aa98fd9180074fb6",
+    "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+    "declared_change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+    "module": "specialist_h4",
+    "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+    "seed": null,
+    "training_provenance": {
+      "arm": "specialist_CREStereo",
+      "backbone": "CREStereo",
+      "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+      "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+      "deviation": {
+        "backbones": {
+          "from": [
+            "S2M2-S",
+            "RAFT-Stereo",
+            "StereoAnywhere"
+          ],
+          "patched": "SEEN_BACKBONES",
+          "to": [
+            "CREStereo"
+          ]
+        },
+        "epochs": {
+          "locked": 12,
+          "used": 36
+        },
+        "learned_stereo_evidence": false
+      },
+      "locked_training": {
+        "alpha_reg": 0.2,
+        "backbones": [
+          "S2M2-S",
+          "RAFT-Stereo",
+          "StereoAnywhere"
+        ],
+        "batch_size": 4,
+        "clip_length": 4,
+        "coverage_threshold": 0.5,
+        "epochs": 12,
+        "gradient_clip_norm": 1.0,
+        "learned_stereo_evidence": true,
+        "learning_rate": 0.0002,
+        "memory_state": "recurrent",
+        "mixed_precision_cuda": true,
+        "optimizer": "AdamW",
+        "scheduler": null,
+        "seed": 0,
+        "tau_fusion_native_px": 1.0,
+        "tau_reset_native_px": 5.0,
+        "train_dataset_ids": [
+          1,
+          3,
+          6
+        ],
+        "validation_dataset_ids": [
+          2
+        ],
+        "weight_decay": 0.0001
+      },
+      "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_CREStereo"
+    },
+    "variant": "A2_no_learned_evidence",
+    "variant_of": "ablation_h4:A2_no_learned_evidence"
+  },
+  "output_hashes": {
+    "applicability.csv": "256220ecb6a5cff3e5af058b7aaea9beb7e72218f9e74289fee95fdb5f9fab90",
+    "definitive_table.csv": "4daa2bf3e31377144ad92ae6d66dfd0e800f7303167e4722f83e1aeb50054c9e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_2.json": "23c941f5df0d463289b6e347ec195561a5f6be9cac10adaafeace79579309c0e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_3.json": "ff3556644eab66e4c99ff3c996ebc7a1221df5aad4a1cb46c6675738cc6f8138",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_4.json": "6095f4622d27b38be6af5d09ae926eafe763a3624cf13b08dc4153612ec860a4",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/run_manifest.json": "97486d692f0a62c397d3d17eef0eed0e83bcf3e9219ecdcb99d6f85d7a7c3b9f",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/summary.csv": "6c7dd40973a8255687f2c01280507ccb13d05f653665e16fae8b1f1ab6604fa1",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/summary.json": "05a6d26dced1464d2fec00b3a7a84a3d1cd9bba80b93fa8ab402e4cb6bc33902",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_1.json": "c6aa22a5d9e392bf9988e8a9310a415c045584360a6a07478718610eb20653b3",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_2.json": "145d6a86165d1bc39c873aa2382f22ff9103575a68e72ef4494ae61a5049d04d",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_3.json": "50fd707dff647deb09f8a028c641b131aeecae18e67b8320699a8b332ea6f701",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_4.json": "d45e7be2c93a433be228b06265c813f459d4b1ba649502334847aa5aee27f1c6",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/run_manifest.json": "f99cb994dad079bbf260dce68b7d6bd59a167410f1675ebdf79c36536cb21ec7",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/summary.csv": "d6334134d127f953c8bf27df19e0a131949801c4ad7f42a9887ccd0c0d017ce4",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/summary.json": "04fb8afb6ab7e33916e7890af528de5adc3804d0449c96004a482bf03718fed9",
+    "scared_aggregate_metrics.csv": "cc3187192e996e6292a070801d788682108dc6d902b457145f59b709b45ed700",
+    "scared_per_frame_metrics.csv": "e9446278fdf7825b7064e91b85328b42aad861aad9ddac6d3dd9206e3878ae70",
+    "scared_per_sequence_metrics.csv": "71ff1d8cb51e6520013fa6a257f6e334dac3b4bd4dd384d81519624589efaf5d",
+    "tables/scared_c.csv": "4daa2bf3e31377144ad92ae6d66dfd0e800f7303167e4722f83e1aeb50054c9e"
+  },
+  "outputs": [
+    "applicability.csv",
+    "definitive_table.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/applicability.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_2.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_3.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_2_keyframe_4.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/run_manifest.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/summary.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo/summary.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/applicability.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_1.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_2.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_3.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/reports/CREStereo/dataset_7_keyframe_4.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/run_manifest.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/summary.csv",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo/summary.json",
+    "scared_aggregate_metrics.csv",
+    "scared_per_frame_metrics.csv",
+    "scared_per_sequence_metrics.csv",
+    "tables/scared_c.csv"
+  ],
+  "project": "ARGOS v2",
+  "source_root": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs",
+  "source_runs": {
+    "scared-d2": {
+      "manifest_sha256": "97486d692f0a62c397d3d17eef0eed0e83bcf3e9219ecdcb99d6f85d7a7c3b9f",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_crestereo"
+    },
+    "scared-d7": {
+      "manifest_sha256": "f99cb994dad079bbf260dce68b7d6bd59a167410f1675ebdf79c36536cb21ec7",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/CREStereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_crestereo"
+    }
+  },
+  "status": "COMPLETE",
+  "unified_metrics": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+    "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+  },
+  "wrapper": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+    "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+  }
+}
