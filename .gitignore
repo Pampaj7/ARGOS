@@ -112,6 +112,10 @@ results/temporal evaluation/scared_multisequence_validation/
 ARGOS_hand/results/ablation_eval/
 ARGOS_hand/results/drends_a2/
 ARGOS_hand/results/drends_canonical_seeds/
-ARGOS_hand/results/*/scared_per_frame_metrics.csv
-ARGOS_hand/results/*/scared_aggregate_metrics.csv
+# A single * covers one path segment, so results/specialist_eval/<backbone>/... slipped
+# past this and five 900 MB CSVs entered the history on 2026-08-27. ** matches any depth.
+**/scared_per_frame_metrics.csv
+**/scared_aggregate_metrics.csv
+**/drends_per_frame_metrics.csv
+**/frame_metrics.csv
 .claude/settings.local.json
