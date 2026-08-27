@@ -87,7 +87,7 @@
 % ============================================================
 
 \newif\ifinternaldraft
-\internaldrafttrue        % <-- FALSE ONLY WHEN THE APPENDIX IS EMPTY
+\internaldraftfalse       % appendix empty, counter at zero: submission build
 
 \newcounter{tbk}
 \setcounter{tbk}{0}
@@ -263,9 +263,9 @@ of our constraint.
 
 \paragraph{What can actually be compared.}
 The nearest line is task-agnostic video temporal consistency
-\cite{lai2018blind,wang2023nvds}, which shares two of our constraints --- the
-producing network is a black box and its architecture is not assumed --- and,
-in \cite{lai2018blind}, our recurrence on the previous output. It differs in
+\cite{lai2018blind}, which shares two of our constraints --- the producing
+network is a black box and its architecture is not assumed --- and our
+recurrence on the previous output. It differs in
 the action space and in the objective: it regresses a stabilised frame where
 we emit one scalar per pixel confined to the interval between the raw estimate
 and aligned memory, and it optimises consistency, which
@@ -390,7 +390,8 @@ Writing $\mathrm{C}k$ for a $k\times k$ convolution and GN($g$) for GroupNorm
 over $g$ groups, the head is $\mathrm{C}3(38{\to}24)$--GN($8$)--SiLU and one
 residual block on the grid, then average-pool $2$, $\mathrm{C}3$ stride $2$ $(24{\to}48)$--GN--SiLU
 and three residual blocks at quarter resolution, a residual block being two
-bias-free $\mathrm{C}3$ with GN($8$) and one interior SiLU added to its input.
+bias-free $\mathrm{C}3$ each followed by GN($8$), one SiLU between them, added
+to its input.
 Reset reads the fine map concatenated with the upsampled coarse one,
 $r_t=\sigma(\mathrm{C}3(\cdot))$ at grid resolution; fusion reads the coarse
 map, $f_t=\uparrow_4\sigma(\mathrm{C}1(\cdot))$. Their product $w_t=r_tf_t$
@@ -592,9 +593,10 @@ spans $0.87$ points across backbones on Vid10 against $3.29$ on Vid13.
 Absolute depth MAE is $14.7 \to 14.1$\,mm: the out-of-domain regime is
 failed geometry improved, not good geometry polished.
 
-Averaged over backbones the mean EPE reduction is $3.96\%$ seen against
-$2.67\%$ unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on
-DRENDS: every combination positive. We separate neither group from the other
+Macro over cells, the mean EPE reduction is $3.96\%$ seen against $2.67\%$
+unseen on D2, $5.80$ and $4.79\%$ on D7, $5.57$ and $5.16\%$ on DRENDS: every
+combination positive. (Table~\ref{tab:grid} pools per backbone instead, so its
+cells do not reproduce these means.) We separate neither group from the other
 and report margins rather than a test --- with $3$ and $2$ backbones at one
 seed, absence of a detectable gap is not evidence of no gap --- and read no
 ordering into them: on D2 the seen advantage is carried entirely by Stereo
@@ -890,8 +892,8 @@ The control contribution~(i) invites is a specialist: the shipped head
 retrained on one backbone alone, at matched gradient budget, with three times
 the selection points and validation on its own backbone rather than a mean over
 three --- every deviation favouring it, and declared before any arm trained.
-Across five backbones it moves held-out bad-pixel rate by at most $0.04$ points
-in either direction, and loses mean EPE on four of the five, RAFT-Stereo by
+Across five backbones it moves held-out bad-pixel rate by at most $0.04$
+absolute percentage points in either direction, and loses mean EPE on four of the five, RAFT-Stereo by
 $0.013$\,px. One seed, and every arm selected at epoch $34$--$35$ of $36$, so
 this bounds the cost of sharing rather than measuring it: at matched budget, a
 module trained for one estimator is not better than one trained for all.
@@ -980,7 +982,7 @@ ground truth. No-reference temporal consistency is gameable, shown on D4D
 \cite{docea2026d4d}, its only role here: the module reduces that score by
 $53.9\%$, copy-previous by $97.3\%$, warped-previous by construction to zero.
 The accumulated-geometry measure of Sec.~\ref{sec:mapping} survives the same
-controls, which is why the robotics claim is measured by it. Pull-warp support
+controls, which is why we measure after accumulation as well as per frame. Pull-warp support
 detects out-of-frame sampling but not internal disocclusion.
 
 \paragraph{Where the intervention costs a map.}
@@ -1042,6 +1044,7 @@ What remains open is \emph{where} to intervene. An extended version (per-sequenc
 % ============================================================
 
 
+\balance
 \begin{thebibliography}{99}
 \scriptsize
 \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
