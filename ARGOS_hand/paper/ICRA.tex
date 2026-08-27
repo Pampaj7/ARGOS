@@ -303,9 +303,9 @@ SCARED \cite{allan2021scared} and DRENDS \cite{loza2025drends} supply the
 geometry we evaluate on; D4D \cite{docea2026d4d} is only the substrate of
 Sec.~\ref{sec:limits}'s no-reference control, and SERV-CT
 \cite{edwards2022servct}, whose pairs are non-consecutive, is not used.
-Downstream reconstruction consumes exactly the per-frame geometry we refine
+Downstream reconstruction consumes the per-frame geometry we refine
 \cite{long2021edssr,recasens2021endodepth}, which is why
-Sec.~\ref{sec:mapping} measures after accumulation as well.
+Sec.~\ref{sec:mapping} measures after accumulation too.
 
 \section{Method}
 \label{sec:method}
@@ -681,12 +681,10 @@ informative failure --- one of \steer's own cues, yet used directly as the
 weight it worsens EPE by $2.17\%$ and Bad1 by $32.35\%$. The uniform smoothing
 policies buy mean error with bad pixels, the more so the harder they blend:
 $w{=}0.3$ costs $0.18\%$ more bad pixels for $0.49\%$ of EPE, the best fixed
-blend $2.64\%$ for $0.59\%$, EMA3 $8.88\%$ for $0.30\%$. The tuned residual rule limits that statement: a quarter of our gain, Bad1 improved. The trade belongs to blending \emph{uniformly}: the moment a rule varies in space it stops buying mean error with tails, and the closest unlearned approach reaches $0.87\%$ against our $3.69$. What the learned head adds
-is not varying in space; it is knowing where. \steer\ is the only row of
-Table~\ref{tab:closure} simultaneously first on mean EPE and lowest on
-NewBad1: every unlearned policy pays for its share of the mean in newly
-broken pixels --- $3.4\times$ ours for the best fixed blend, $+40\%$ even
-for the residual rule at a quarter of the gain.
+blend $2.64\%$ for $0.59\%$, EMA3 $8.88\%$ for $0.30\%$. The tuned residual rule limits that statement: a quarter of our gain, Bad1 improved. The trade belongs to blending \emph{uniformly} --- the moment a rule varies in space it stops buying mean error with tails, and the closest unlearned approach reaches $0.87\%$ against our $3.69$ --- so what the learned head adds is not varying in space but knowing where. \steer\ is the only row of
+Table~\ref{tab:closure} first on mean EPE and lowest on NewBad1: every
+unlearned policy pays its share of the mean in newly broken pixels, $3.4\times$
+ours for the best fixed blend and $+40\%$ for the residual rule.
 
 The closure is development work, and a reviewer is right to ask whether the
 margin survives the split. We repeat it out of domain, on the arena the freeze
@@ -729,10 +727,9 @@ and finds the same risk structure independently.
 Across both splits and all five backbones \steer\ recovers $3.8$--$11.1\times$
 as many Bad1 pixels as it introduces, $B^+/H^+$ between $1.39$ and $3.25$.
 Per frame, $56\%$ of the $15{,}535$ held-out frames improve against $14\%$
-worsened ($45$ against $18\%$ on development, the rest exact Bad1 ties on
-cleaner frames), the worsened band hugging the diagonal while the improved
-mass extends far from it: the count-versus-magnitude asymmetry behind
-$B^+/H^+$.
+worsened ($45$ against $18\%$ on development, the rest exact Bad1 ties), the
+worsened band hugging the diagonal while the improved mass extends far from
+it: the asymmetry behind $B^+/H^+$.
 
 
 \subsection{What a Map Fuses, Not What a Frame Scores}
@@ -769,19 +766,16 @@ The two splits' excess ranges do not overlap ($0.171$--$0.290$\,mm against
 $0.518$--$1.113$), and the sign follows that division rather than any per-cell
 quantity (Sec.~\ref{sec:limits}).
 
-Both splits are monotone in $H$ and neither turns, so the horizon is set by an
-exchange rate rather than a peak. Held-out benefit saturates while development
-cost keeps growing --- successive steps buy $+1.5$, $+1.3$ and $+0.5$ points
-on D7 for $-5.0$, $-6.9$ and $-4.7$ on D2 --- so the price of lifetime rises
-from $3.3$ to $9.4$ points of development error per point of held-out gain,
-making $H{=}6$, which the D7 column read alone would recommend, the worst
-purchase on the sweep. $H{=}4$ was frozen on the per-frame trade before this
-measurement existed and the map is the third criterion to place it
-there (frame EPE unreadable at $0.21$ of spread, breakage rising, $4.7$
-paid per $0.5$ gained). A consumer that only accumulates
-may still prefer shorter --- $H{=}1$ returns $76\%$ of the held-out benefit at
-under a quarter of the development cost, for $1.24$ points of frame EPE ---
-which makes the horizon a dial rather than an optimum.
+Both splits are monotone in $H$ and neither turns, so the horizon is an
+exchange rate rather than a peak: successive steps buy $+1.5$, $+1.3$ and
+$+0.5$ points on D7 for $-5.0$, $-6.9$ and $-4.7$ on D2, raising the price of
+lifetime from $3.3$ to $9.4$ points of development error per point held out and
+making $H{=}6$, which the D7 column alone would recommend, the worst purchase on
+the sweep. $H{=}4$ was frozen on the per-frame trade before this measurement
+existed, and the map is the third criterion to place it there. A consumer that
+only accumulates may still prefer shorter --- $H{=}1$ returns $76\%$ of the
+held-out benefit at under a quarter of the development cost, for $1.24$ points
+of frame EPE --- which makes the horizon a dial rather than an optimum.
 
 \subsection{Head-to-Head Against a Published Stabiliser}
 \label{sec:bida}
@@ -799,10 +793,9 @@ where on this support our intervention is a net harm and the baseline's is
 not. The temporal measure reverses the ordering: the bidirectional baseline
 is markedly more stable at every lag and simultaneously less accurate on
 every geometric metric, this paper's own warning turned on its own
-comparison. TC-Stereo \cite{zeng2024tcstereo}, run as its authors specify,
-is outside its domain before its temporal path runs ($0.524$ against $0.303$
-raw), and enabling that path makes both metrics worse ($0.622$, $10.37\%$
-Bad1).
+comparison. TC-Stereo \cite{zeng2024tcstereo}, run as its authors specify, is outside its
+domain before its temporal path runs ($0.524$ against $0.303$ raw), which then
+makes both metrics worse ($0.622$, $10.37\%$ Bad1).
 
 \subsection{Ablating Our Own Design Decisions}
 \label{sec:ablations}
@@ -899,6 +892,16 @@ than softened. It is withdrawn and appears nowhere in this paper; the
 cross-\emph{split} statement above is a narrower claim, measured on A4's own
 three seeds.
 
+The control contribution~(i) invites is a specialist: the shipped head
+retrained on one backbone alone, at matched gradient budget, with three times
+the selection points and validation on its own backbone rather than a mean over
+three --- every deviation favouring it, and declared before any arm trained.
+Across five backbones it moves held-out bad-pixel rate by at most $0.04$ points
+in either direction, and loses mean EPE on four of the five, RAFT-Stereo by
+$0.013$\,px. One seed, and every arm selected at epoch $34$--$35$ of $36$, so
+this bounds the cost of sharing rather than measuring it: at matched budget, a
+module trained for one estimator is not better than one trained for all.
+
 \subsection{The Support Contract Is Load-Bearing}
 \label{sec:support}
 \label{sec:masking}
@@ -936,9 +939,8 @@ gained, the reset gate how little is broken, and a paper reporting only the
 product and only mean error would have seen neither.
 Sec.~\ref{sec:mapping} reaches the same division from accumulated geometry.
 Ablating convexity improves RMSE and worst case while collapsing the mean EPE
-gain (Sec.~\ref{sec:ablations}): the failure is broad degradation of pixels
-already close, so the constraint buys mean accuracy rather than safety from
-large corrections.
+gain (Sec.~\ref{sec:ablations}): it degrades pixels already close, so the
+constraint buys mean accuracy rather than safety from large corrections.
 
 \begin{figure}[!t]
 \centering
@@ -977,13 +979,10 @@ policy can be good on average and uninformative per pixel.
 \section{Discussion and Limitations}
 \label{sec:limits}
 
-\paragraph{What the splits support.}
+\paragraph{What the metrics cannot say.}
 One external domain does not establish universal robustness, and DRENDS
 supplies a temporally filtered ToF reference rather than independent stereo
-ground truth; the remaining scope caveats are stated where each result is.
-
-\paragraph{What the metrics cannot say.}
-No-reference temporal consistency is gameable, shown on D4D
+ground truth. No-reference temporal consistency is gameable, shown on D4D
 \cite{docea2026d4d}, its only role here: the module reduces that score by
 $53.9\%$, copy-previous by $97.3\%$, warped-previous by construction to zero.
 The accumulated-geometry measure of Sec.~\ref{sec:mapping} survives the same
