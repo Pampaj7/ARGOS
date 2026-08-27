@@ -801,12 +801,10 @@ makes both metrics worse ($0.622$, $10.37\%$ Bad1).
 \label{sec:ablations}
 
 Four design choices were ablated under a pre-registration naming held-out Bad1
-as the endpoint and a three-seed spread of $0.37$ points as the threshold
-below which a difference is not read --- the standard deviation over the base
-configuration's three seeds of its pooled Bad1 reduction across all $35$
-backbone--sequence cells, computed before the registration was written.
-Promotion to the shipped model is governed by a separate registration that
-decides on development only.
+as the endpoint and $0.37$ points as the threshold below which a difference is
+not read --- the base configuration's three-seed spread over all $35$ cells,
+computed before the registration was written. Promotion is governed by a
+separate registration deciding on development only.
 
 \begin{table}[!ht]
 \centering
@@ -837,10 +835,10 @@ $+$ learned evidence (3 seeds) & $142$ ch & $5.06\pm0.44$ & $5.15\pm0.34$ \\
 \end{tabular}
 \end{table}
 
-The result (Table~\ref{tab:ablations}) is not the one we expected. We began where the video-stereo
-literature does, with a frozen ResNet-18 \cite{he2016resnet} supplying
-appearance correlations and cost curves on top of the geometric channels ---
-the configuration the four deviations were pre-registered against. The
+The result (Table~\ref{tab:ablations}) is not the one we expected. We began
+where the video-stereo literature does, with a frozen ResNet-18
+\cite{he2016resnet} supplying appearance correlations and cost curves on top of
+the geometric channels, and registered the four deviations against that. The
 registered threshold assumes spreads comparable to the base's $0.37$, and
 every deviation of the shipped head exceeds it ($0.42$--$0.68$), so we read
 rather than apply the rule there: none of the shipped head's three deviations
@@ -1050,8 +1048,7 @@ What remains open is \emph{where} to intervene. An extended version (per-sequenc
 
 \begin{thebibliography}{99}
 \scriptsize
-\setlength{\itemsep}{-4.5pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
-\setlength{\labelsep}{2pt}\setlength{\leftmargin}{12pt}
+\setlength{\itemsep}{-3pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.}, ``Temporally consistent online depth estimation in
