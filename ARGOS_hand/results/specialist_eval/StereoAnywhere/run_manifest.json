@@ -1,0 +1,164 @@
+{
+  "comparison_driver": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+    "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+  },
+  "consumed_input_hashes": {
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_2.json": "1b74c4caa47c11ee35e52b6180ecac4258a6328b10103967ea392d8d68d22a3e",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_3.json": "b8a520fa318f2c3020929fc871f9f574f08fbb3915dc11095dea2e359aea88f4",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_4.json": "2ec902efb11f2d70cb88c7a588231763bf49f751a3b5c795ddce230b3f7d11ee",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/run_manifest.json": "daa48e2f951ae93d86cfbd5b0274ff96fb2b35340e3e33a0bef55f3276cd56ec",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_1.json": "bab711fc6a6b19c21997958c5f9c7626a7e73a581b862f26491b636082da2d98",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_2.json": "f332ab85afc3e9a1ddce840724fb3eafe9dd8496651e8b4341deea10016a73a1",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_3.json": "b3976c979849f8c90f50f9c0286939ca0a97eceb24c73b3901312a7b8fbdd5fb",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_4.json": "f375b32b30d692ee50c9142943839b6afe49dfc4c00ea18fb2b056573593ddd4",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/run_manifest.json": "c1174e8e8b3c5f9e4ecdf0ffe089a7c86fb05758b64463297755ebc9b5ffbdc0"
+  },
+  "consumed_input_hashes_note": "wrapper post-read integrity snapshot; source manifests do not predeclare every report/diagnostic/applicability artifact",
+  "datasets": [
+    "scared-d2",
+    "scared-d7"
+  ],
+  "dense_predictions_written": false,
+  "evaluator": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+    "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+  },
+  "mode": "compile",
+  "module_provenance": {
+    "arm": "specialist_StereoAnywhere",
+    "backbone": "StereoAnywhere",
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_StereoAnywhere/checkpoints/best_validation.pt",
+    "checkpoint_sha256": "d94d53316f843c209b3fff8f28c6ceb2e69dc06d149f7d5dc56c19a8d1172d14",
+    "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+    "declared_change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+    "module": "specialist_h4",
+    "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+    "seed": null,
+    "training_provenance": {
+      "arm": "specialist_StereoAnywhere",
+      "backbone": "StereoAnywhere",
+      "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+      "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+      "deviation": {
+        "backbones": {
+          "from": [
+            "S2M2-S",
+            "RAFT-Stereo",
+            "StereoAnywhere"
+          ],
+          "patched": "SEEN_BACKBONES",
+          "to": [
+            "StereoAnywhere"
+          ]
+        },
+        "epochs": {
+          "locked": 12,
+          "used": 36
+        },
+        "learned_stereo_evidence": false
+      },
+      "locked_training": {
+        "alpha_reg": 0.2,
+        "backbones": [
+          "S2M2-S",
+          "RAFT-Stereo",
+          "StereoAnywhere"
+        ],
+        "batch_size": 4,
+        "clip_length": 4,
+        "coverage_threshold": 0.5,
+        "epochs": 12,
+        "gradient_clip_norm": 1.0,
+        "learned_stereo_evidence": true,
+        "learning_rate": 0.0002,
+        "memory_state": "recurrent",
+        "mixed_precision_cuda": true,
+        "optimizer": "AdamW",
+        "scheduler": null,
+        "seed": 0,
+        "tau_fusion_native_px": 1.0,
+        "tau_reset_native_px": 5.0,
+        "train_dataset_ids": [
+          1,
+          3,
+          6
+        ],
+        "validation_dataset_ids": [
+          2
+        ],
+        "weight_decay": 0.0001
+      },
+      "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_StereoAnywhere"
+    },
+    "variant": "A2_no_learned_evidence",
+    "variant_of": "ablation_h4:A2_no_learned_evidence"
+  },
+  "output_hashes": {
+    "applicability.csv": "3edda0bf6a843ea868972543c4176af757faf421c7f49f3e9eafc343bbaaeff7",
+    "definitive_table.csv": "f39045f520da1ad62467aa7b6a21dfd351c4b4d6ddde0712c59eb22429251fd0",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_2.json": "1b74c4caa47c11ee35e52b6180ecac4258a6328b10103967ea392d8d68d22a3e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_3.json": "b8a520fa318f2c3020929fc871f9f574f08fbb3915dc11095dea2e359aea88f4",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_4.json": "2ec902efb11f2d70cb88c7a588231763bf49f751a3b5c795ddce230b3f7d11ee",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/run_manifest.json": "daa48e2f951ae93d86cfbd5b0274ff96fb2b35340e3e33a0bef55f3276cd56ec",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.csv": "5599506ea59b566fa7cba00998430a5711eb14e05ec308b81a646fdb8383c07c",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.json": "281ad5c8273bf2a275260e340143af7a2e65dd3c9fdb3e10485ee2f2610cabfc",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_1.json": "bab711fc6a6b19c21997958c5f9c7626a7e73a581b862f26491b636082da2d98",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_2.json": "f332ab85afc3e9a1ddce840724fb3eafe9dd8496651e8b4341deea10016a73a1",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_3.json": "b3976c979849f8c90f50f9c0286939ca0a97eceb24c73b3901312a7b8fbdd5fb",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_4.json": "f375b32b30d692ee50c9142943839b6afe49dfc4c00ea18fb2b056573593ddd4",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/run_manifest.json": "c1174e8e8b3c5f9e4ecdf0ffe089a7c86fb05758b64463297755ebc9b5ffbdc0",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.csv": "80dc6cb6ab0be5cc96c7aa4f23dccb247e250ef7c191a60a1693f87c03f3c40d",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.json": "e092ce154e1decb58caa53c1993064d9f3715336fe51f0c1ec476ca1b803e810",
+    "scared_aggregate_metrics.csv": "c7e692bb5d3c6b34bf76228108f788e81920c67c574345274b60e2d9e72f3713",
+    "scared_per_frame_metrics.csv": "bb132c8fb1f6d70b76f4c9c8d686ee7b4c85842a0d0de8161608658d9ea35547",
+    "scared_per_sequence_metrics.csv": "9a977b92ba5c8b3a55751a31ff114d59063ec35a03e5d73ff45d867151c099c0",
+    "tables/scared_c.csv": "f39045f520da1ad62467aa7b6a21dfd351c4b4d6ddde0712c59eb22429251fd0"
+  },
+  "outputs": [
+    "applicability.csv",
+    "definitive_table.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/applicability.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_2.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_3.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_2_keyframe_4.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/run_manifest.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/applicability.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_1.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_2.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_3.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/reports/StereoAnywhere/dataset_7_keyframe_4.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/run_manifest.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.csv",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere/summary.json",
+    "scared_aggregate_metrics.csv",
+    "scared_per_frame_metrics.csv",
+    "scared_per_sequence_metrics.csv",
+    "tables/scared_c.csv"
+  ],
+  "project": "ARGOS v2",
+  "source_root": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs",
+  "source_runs": {
+    "scared-d2": {
+      "manifest_sha256": "daa48e2f951ae93d86cfbd5b0274ff96fb2b35340e3e33a0bef55f3276cd56ec",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d2/model_design_comparison_specialist_h4__factory_stereoanywhere"
+    },
+    "scared-d7": {
+      "manifest_sha256": "c1174e8e8b3c5f9e4ecdf0ffe089a7c86fb05758b64463297755ebc9b5ffbdc0",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/StereoAnywhere/runs/scared-d7/model_design_comparison_specialist_h4__factory_stereoanywhere"
+    }
+  },
+  "status": "COMPLETE",
+  "unified_metrics": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+    "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+  },
+  "wrapper": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+    "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+  }
+}

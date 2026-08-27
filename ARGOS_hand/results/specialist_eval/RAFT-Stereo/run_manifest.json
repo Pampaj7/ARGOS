@@ -1,0 +1,164 @@
+{
+  "comparison_driver": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_comparison.py",
+    "sha256": "9c713ff0cbc28c1a18cf7c0b14b131f49472480bde0a4e921dd5b15299f03bd0"
+  },
+  "consumed_input_hashes": {
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_2.json": "6118e2bb359a15f2b830a637a4d11adaf137490bcf2dd7e8d967568754966f23",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_3.json": "758710fbbb7bfcc92bfe08a3d571caf42a9a04015bd361889e3860bfc626be66",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_4.json": "d018ce8f1832660128496909bbf27543ca9c5c0a8dfafb1fa9ab1d822e1444e6",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/run_manifest.json": "dd0dec0cfaff2f56e28d6c3198723820d7c7c1b79c71736afaf20fad3301deb0",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_1.json": "c98407907e8bc6cb5df0df7afcbc6f2bcb0a2672a619f5f24e9bf72a5da6acfa",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_2.json": "8665adf8183951b57190b07301116f00b51785596d3f884813b5837eb5c44320",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_3.json": "717b5bd979a9c5cff0266c14281cdb42096a1b4deb7c8367f170af35c066f9b8",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_4.json": "75b8dc760f8a55542d3e444886e74d95dc6f6ade432f217f9c31b42d8f37794c",
+    "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/run_manifest.json": "e65dc983927aa31a2739734de01bd31a293d7501c71c0d1e06c3e9e8f64a22c3"
+  },
+  "consumed_input_hashes_note": "wrapper post-read integrity snapshot; source manifests do not predeclare every report/diagnostic/applicability artifact",
+  "datasets": [
+    "scared-d2",
+    "scared-d7"
+  ],
+  "dense_predictions_written": false,
+  "evaluator": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/definitive_evaluation.py",
+    "sha256": "cefde2d5ce27f4a3d77df9fcaaee01f5bf79f3ca54931414fa30f43641c80432"
+  },
+  "mode": "compile",
+  "module_provenance": {
+    "arm": "specialist_RAFT-Stereo",
+    "backbone": "RAFT-Stereo",
+    "checkpoint": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_RAFT-Stereo/checkpoints/best_validation.pt",
+    "checkpoint_sha256": "0af5aef4fdb82311d100862d5733abcfb45e4361c46484698c78700829e52f6c",
+    "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+    "declared_change": "142 -> 38 channels: removes confidence curves, their supports, both appearance correlations and the ResNet block, leaving disparity/motion/RGB geometry",
+    "module": "specialist_h4",
+    "preregistration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/ablation_preregister.json",
+    "seed": null,
+    "training_provenance": {
+      "arm": "specialist_RAFT-Stereo",
+      "backbone": "RAFT-Stereo",
+      "canonical_checkpoint_sha256": "99c5745c164fd4903b8aa8acf8f57efccacd9cdcd0d4ed4305cd10609324d725",
+      "declaration": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/specialist_control_declaration.json",
+      "deviation": {
+        "backbones": {
+          "from": [
+            "S2M2-S",
+            "RAFT-Stereo",
+            "StereoAnywhere"
+          ],
+          "patched": "SEEN_BACKBONES",
+          "to": [
+            "RAFT-Stereo"
+          ]
+        },
+        "epochs": {
+          "locked": 12,
+          "used": 36
+        },
+        "learned_stereo_evidence": false
+      },
+      "locked_training": {
+        "alpha_reg": 0.2,
+        "backbones": [
+          "S2M2-S",
+          "RAFT-Stereo",
+          "StereoAnywhere"
+        ],
+        "batch_size": 4,
+        "clip_length": 4,
+        "coverage_threshold": 0.5,
+        "epochs": 12,
+        "gradient_clip_norm": 1.0,
+        "learned_stereo_evidence": true,
+        "learning_rate": 0.0002,
+        "memory_state": "recurrent",
+        "mixed_precision_cuda": true,
+        "optimizer": "AdamW",
+        "scheduler": null,
+        "seed": 0,
+        "tau_fusion_native_px": 1.0,
+        "tau_reset_native_px": 5.0,
+        "train_dataset_ids": [
+          1,
+          3,
+          6
+        ],
+        "validation_dataset_ids": [
+          2
+        ],
+        "weight_decay": 0.0001
+      },
+      "output": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/training_runs/specialist_RAFT-Stereo"
+    },
+    "variant": "A2_no_learned_evidence",
+    "variant_of": "ablation_h4:A2_no_learned_evidence"
+  },
+  "output_hashes": {
+    "applicability.csv": "618634398f79311f2e313ea46d7abed78f047577cd966ed7e6f64a5eba010ee0",
+    "definitive_table.csv": "ae6e224aa73632d3564f0b71494e076ad0d0570fce2298ea3564b10021d81393",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_2.json": "6118e2bb359a15f2b830a637a4d11adaf137490bcf2dd7e8d967568754966f23",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_3.json": "758710fbbb7bfcc92bfe08a3d571caf42a9a04015bd361889e3860bfc626be66",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_4.json": "d018ce8f1832660128496909bbf27543ca9c5c0a8dfafb1fa9ab1d822e1444e6",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/run_manifest.json": "dd0dec0cfaff2f56e28d6c3198723820d7c7c1b79c71736afaf20fad3301deb0",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/summary.csv": "b1e9f82e7b00c9b6ea2e22cb2e6f591e84cef697470cd105c22ac8da676fb368",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/summary.json": "104d7032d6837083847cadf9ec8b3eaf1b8b4943b04bb95caa8230a4e19850fe",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/applicability.json": "6bd47718a823cc6cb8532ecaa48a16bc2ab1e7f4e3072e67416a3f65df628a4e",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_1.json": "c98407907e8bc6cb5df0df7afcbc6f2bcb0a2672a619f5f24e9bf72a5da6acfa",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_2.json": "8665adf8183951b57190b07301116f00b51785596d3f884813b5837eb5c44320",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_3.json": "717b5bd979a9c5cff0266c14281cdb42096a1b4deb7c8367f170af35c066f9b8",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_4.json": "75b8dc760f8a55542d3e444886e74d95dc6f6ade432f217f9c31b42d8f37794c",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/run_manifest.json": "e65dc983927aa31a2739734de01bd31a293d7501c71c0d1e06c3e9e8f64a22c3",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/summary.csv": "0c25c6faa79d66628e8efa16dc4764c8a1579db15cffaa695d27f7ae2eb22e89",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/summary.json": "55d00417b4c79ef2b23027e886f05babbdd0eebe861436b86f294addc1d528e1",
+    "scared_aggregate_metrics.csv": "829137835f85494c87ed758c446a550ad135e7dfbf520fcd6eace651ba2fad22",
+    "scared_per_frame_metrics.csv": "23809f9e140210ddc35827db6b3ac9f109602eef5d41b4b4864dd543e96e6303",
+    "scared_per_sequence_metrics.csv": "68310554442108b0217fed5c94b2106f87ef337e722602d8b75e5bc8fdc982a6",
+    "tables/scared_c.csv": "ae6e224aa73632d3564f0b71494e076ad0d0570fce2298ea3564b10021d81393"
+  },
+  "outputs": [
+    "applicability.csv",
+    "definitive_table.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/applicability.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_2.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_3.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_2_keyframe_4.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/run_manifest.json",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/summary.csv",
+    "runs/scared-d2/model_design_comparison_specialist_h4__factory_raft/summary.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/applicability.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_1.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_2.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_3.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/reports/RAFT-Stereo/dataset_7_keyframe_4.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/run_manifest.json",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/summary.csv",
+    "runs/scared-d7/model_design_comparison_specialist_h4__factory_raft/summary.json",
+    "scared_aggregate_metrics.csv",
+    "scared_per_frame_metrics.csv",
+    "scared_per_sequence_metrics.csv",
+    "tables/scared_c.csv"
+  ],
+  "project": "ARGOS v2",
+  "source_root": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs",
+  "source_runs": {
+    "scared-d2": {
+      "manifest_sha256": "dd0dec0cfaff2f56e28d6c3198723820d7c7c1b79c71736afaf20fad3301deb0",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d2/model_design_comparison_specialist_h4__factory_raft"
+    },
+    "scared-d7": {
+      "manifest_sha256": "e65dc983927aa31a2739734de01bd31a293d7501c71c0d1e06c3e9e8f64a22c3",
+      "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/results/specialist_eval/RAFT-Stereo/runs/scared-d7/model_design_comparison_specialist_h4__factory_raft"
+    }
+  },
+  "status": "COMPLETE",
+  "unified_metrics": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/metrics/unified_metrics.py",
+    "sha256": "5542221bdfec5af945bf37db7bfbe3621f6e3ef0fcf2bde9c379cb48b2dff0e8"
+  },
+  "wrapper": {
+    "path": "/dtu/p1/leopam/ARGOS/ARGOS_hand/original_h4/model_design/comparison/run_definitive_evaluation.py",
+    "sha256": "de9a33e2eb01fa43ecfeb98fbd8e2f676e78f787df0452f6cf74fde9ab5392ae"
+  }
+}
