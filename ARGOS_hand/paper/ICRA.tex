@@ -634,13 +634,13 @@ selection rule: the instability was the evidence space, not the protocol.
 \centering
 \scriptsize
 \caption{
-Matched-policy closure on D2, seed $0$, fifteen backbone--sequence cells
-pooled before each ratio; reductions in \%, higher is better, DTCE at
-$k{=}4$. Every row shares the predictions, alignment, support contract,
-$H{=}4$ state machine and evaluation code --- only the policy changes; the
-first six load no checkpoint, and unbounded recurrence is our own head with
-the re-anchor removed. \steer's row is seed $0$, the weakest of its three
-($3.69$ against $4.13\pm0.38$), so every margin here understates it.
+Matched-policy closure on D2, seed $0$, fifteen backbone--sequence cells pooled
+before each ratio; reductions in \%, higher is better, DTCE at $k{=}4$. Every
+row shares the predictions, alignment, support contract, $H{=}4$ state machine
+and evaluation code --- only the policy changes; the first six load no
+checkpoint, and unbounded recurrence is our own head with the re-anchor
+removed. \steer's row is the weakest of its three seeds ($3.69$ against
+$4.13\pm0.38$), so every margin here understates it.
 }
 \label{tab:closure}
 \setlength{\tabcolsep}{2.5pt}
@@ -811,12 +811,11 @@ separate registration deciding on development only.
 \scriptsize
 \caption{
 Held-out relative reduction (\%), not error: higher is better, macro over
-backbone--sequence cells. Each indented deviation is measured against the
-un-indented base above it, as its pre-registration names. Dropping the
-learned evidence from the $142$-channel base is what \steer\ now is, so the
-shipped model heads the table; its own full-resolution and
-unconstrained-output deviations are in the text. Every row is a three-seed
-mean $\pm$ sd.
+backbone--sequence cells, every row a three-seed mean $\pm$ sd. Each indented
+deviation is measured against the un-indented base above it, as its
+pre-registration names. Dropping the learned evidence from the $142$-channel
+base is what \steer\ now is, so the shipped model heads the table; its
+full-resolution and unconstrained-output deviations are in the text.
 }
 \label{tab:ablations}
 \setlength{\tabcolsep}{2.5pt}
@@ -839,21 +838,18 @@ The result (Table~\ref{tab:ablations}) is not the one we expected. We began
 where the video-stereo literature does, with a frozen ResNet-18
 \cite{he2016resnet} supplying appearance correlations and cost curves on top of
 the geometric channels, and registered the four deviations against that. The
-registered threshold assumes spreads comparable to the base's $0.37$, and
-every deviation of the shipped head exceeds it ($0.42$--$0.68$), so we read
-rather than apply the rule there: none of the shipped head's three deviations
-separates. On the $142$-channel base the rule does fire once ---
-full-resolution context clears it against that base (below), declined on
-compute --- while three deviations sit above their base (the shipped head
-among them) and dropping appearance sits inside; the shipped head's three --- no FB cue
-($5.42\pm0.42$), geometry only ($5.36\pm0.68$), full-resolution context
-($5.57\pm0.68$) --- are unseparable from $5.84\pm0.22$, with seed
-$0$ again at the low end, as it is for the shipped model on the closure and
-at the high end for the base --- the pattern Sec.~\ref{sec:seeds} names. On
-EPE the direction is consistent for every deviation and A6 comes closest to
-separating ($4.61\pm0.21$ against $5.61\pm0.42$, under four standard
-errors): the evidence space shows on the mean where it does not show on the
-registered endpoint.
+registered threshold assumes spreads comparable to the base's $0.37$, and every
+deviation of the shipped head exceeds it ($0.42$--$0.68$), so we read rather
+than apply the rule there. None of the shipped head's three separates from
+$5.84\pm0.22$ --- no FB cue $5.42\pm0.42$, geometry only $5.36\pm0.68$,
+full-resolution context $5.57\pm0.68$ --- with seed $0$ again at the low end,
+as it is on the closure and at the high end for the base, the pattern
+Sec.~\ref{sec:seeds} names. The rule fires once, on the $142$-channel base,
+where full-resolution context clears it and is declined on compute. On EPE the
+direction is consistent for every deviation and A6 comes closest to separating
+($4.61\pm0.21$ against $5.61\pm0.42$, under four standard errors): the
+evidence space shows on the mean where it does not show on the registered
+endpoint.
 Removing the learned evidence entirely, under the promotion rule that decides on D2 with D7
 reported afterwards, stays ahead on both endpoints with seed deviation eight
 times tighter ($0.32$ against $2.53$ points of D2 Bad1), and out of domain the
@@ -871,12 +867,12 @@ Full-resolution context is the firing noted above: it wins the registered
 endpoint against its own base ($5.68\pm0.16$ against $5.15\pm0.34$), is
 unseparable on the base we ship ($5.57\pm0.68$), and is declined on compute.
 
-Ablating convexity (A4) posts the largest held-out Bad1 reduction in
-the table, $6.97\pm0.83\%$, but its margin over us ($1.13$ points) is not
-separable from its own three-seed spread, four times ours. Its EPE loss
-\emph{is} separable: $1.70\pm1.43\%$ against our
-$5.61\pm0.42$, over four standard errors. We decline it on the metric where
-the difference is real rather than on the metric that suits us. The two
+Ablating convexity (A4) posts the largest held-out Bad1 reduction in the table,
+$6.97\pm0.83\%$, but its margin over us ($1.13$ points) is not separable from
+its own three-seed spread, four times ours, while its EPE loss \emph{is}
+separable: $1.70\pm1.43\%$ against our $5.61\pm0.42$, over four standard
+errors. We decline it on the metric where the difference is real rather than on
+the one that suits us. The two
 trajectories put side by side say what the constraint buys: from development
 to held-out, A4's EPE gain falls $5.32 \to 1.70\pm1.43$ while ours rises
 $4.13 \to 5.61\pm0.42$, and the drop holds in all fifteen backbone--seed pairs
@@ -1048,19 +1044,19 @@ What remains open is \emph{where} to intervene. An extended version (per-sequenc
 
 \begin{thebibliography}{99}
 \scriptsize
-\setlength{\itemsep}{-3pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}
 
 \bibitem{li2023codd}
 Z.~Li \emph{et al.}, ``Temporally consistent online depth estimation in
-dynamic scenes,'' in \emph{Proc. WACV}, 2023.
+dynamic scenes,'' in \emph{WACV}, 2023.
 
 \bibitem{karaev2023dynamicstereo}
 N.~Karaev \emph{et al.}, ``DynamicStereo: Consistent dynamic depth from stereo
-videos,'' in \emph{Proc. CVPR}, 2023.
+videos,'' in \emph{CVPR}, 2023.
 
 \bibitem{jing2024bida}
 J.~Jing \emph{et al.}, ``Match Stereo Videos via Bidirectional Alignment,'' in
-\emph{Proc. ECCV}, 2024.
+\emph{ECCV}, 2024.
 
 \bibitem{wang2025ppm}
 Y.~Wang \emph{et al.}, ``PPMStereo: Pick-and-play memory construction for
@@ -1068,43 +1064,43 @@ consistent dynamic stereo matching,'' in \emph{NeurIPS}, 2025.
 
 \bibitem{wang2024searaft}
 Y.~Wang \emph{et al.}, ``SEA-RAFT: Simple, efficient, accurate RAFT for
-optical flow,'' in \emph{Proc. ECCV}, 2024.
+optical flow,'' in \emph{ECCV}, 2024.
 
 \bibitem{zeng2024tcstereo}
 J.~Zeng \emph{et al.}, ``Temporally consistent stereo matching,'' in
-\emph{Proc. ECCV}, 2024.
+\emph{ECCV}, 2024.
 
 \bibitem{xu2024stereodiffusion}
 H.~Xu \emph{et al.}, ``StereoDiffusion: Temporally consistent stereo depth
-estimation with diffusion models,'' in \emph{Proc. MICCAI}, 2024.
+estimation with diffusion models,'' in \emph{MICCAI}, 2024.
 
 \bibitem{aleotti2021ndr}
 F.~Aleotti \emph{et al.}, ``Neural disparity refinement for arbitrary
-resolution stereo,'' in \emph{Proc. 3DV}, 2021.
+resolution stereo,'' in \emph{3DV}, 2021.
 
 \bibitem{he2016resnet}
 K.~He \emph{et al.}, ``Deep residual learning for image recognition,'' in
-\emph{Proc. CVPR}, 2016.
+\emph{CVPR}, 2016.
 
 \bibitem{lipson2021raftstereo}
 L.~Lipson \emph{et al.}, ``RAFT-Stereo: Multilevel recurrent field transforms
-for stereo matching,'' in \emph{Proc. 3DV}, 2021.
+for stereo matching,'' in \emph{3DV}, 2021.
 
 \bibitem{li2022crestereo}
 J.~Li \emph{et al.}, ``Practical stereo matching via cascaded recurrent
-network with adaptive correlation,'' in \emph{Proc. CVPR}, 2022.
+network with adaptive correlation,'' in \emph{CVPR}, 2022.
 
 \bibitem{bartolomei2025stereoanywhere}
 L.~Bartolomei \emph{et al.}, ``Stereo Anywhere: Robust zero-shot deep stereo
-matching even where either stereo or mono fail,'' in \emph{Proc. CVPR}, 2025.
+matching even where either stereo or mono fail,'' in \emph{CVPR}, 2025.
 
 \bibitem{min2025s2m2}
 J.~Min \emph{et al.}, ``S$^2$M$^2$: Scalable stereo matching model for
-reliable depth estimation,'' in \emph{Proc. ICCV}, 2025.
+reliable depth estimation,'' in \emph{ICCV}, 2025.
 
 \bibitem{wen2026fastfoundationstereo}
 B.~Wen \emph{et al.}, ``Fast-FoundationStereo: Real-time zero-shot stereo
-matching,'' in \emph{Proc. CVPR}, 2026.
+matching,'' in \emph{CVPR}, 2026.
 
 \bibitem{wang2023nvds}
 Y.~Wang \emph{et al.}, ``NVDS+: Towards efficient and versatile neural
@@ -1112,11 +1108,11 @@ stabilizer for video depth estimation,'' 2023, arXiv:2307.08695.
 
 \bibitem{lai2018blind}
 W.-S. Lai \emph{et al.}, ``Learning blind video temporal consistency,'' in
-\emph{Proc. ECCV}, 2018.
+\emph{ECCV}, 2018.
 
 \bibitem{geifman2019selectivenet}
 Y.~Geifman and R.~El-Yaniv, ``SelectiveNet: A deep neural network with an
-integrated reject option,'' in \emph{Proc. ICML}, 2019.
+integrated reject option,'' in \emph{ICML}, 2019.
 
 \bibitem{allan2021scared}
 M.~Allan \emph{et al.}, ``Stereo correspondence and reconstruction of
@@ -1124,7 +1120,7 @@ endoscopic data challenge,'' 2021, arXiv:2101.01133.
 
 \bibitem{edwards2022servct}
 P.~J. Edwards \emph{et al.}, ``SERV-CT: A disparity dataset from cone-beam CT
-for endoscopic 3D reconstruction,'' \emph{Med. Image Anal.}, vol.~76, 2022.
+for endoscopic 3D reconstruction,'' \emph{Med. Image Anal.}, 2022.
 
 \bibitem{long2021edssr}
 Y.~Long \emph{et al.}, ``E-DSSR: Efficient dynamic surgical scene
@@ -1141,19 +1137,18 @@ dynamic scenarios,'' Zenodo Dataset, 2025, doi: 10.5281/zenodo.17598453.
 
 \bibitem{teed2020raft}
 Z.~Teed and J.~Deng, ``RAFT: Recurrent all-pairs field transforms for optical
-flow,'' in \emph{Proc. ECCV}, 2020.
+flow,'' in \emph{ECCV}, 2020.
 
 \bibitem{hu2025depthcrafter}
 W.~Hu \emph{et al.}, ``DepthCrafter: Generating consistent long depth
-sequences for open-world videos,'' in \emph{Proc. CVPR}, 2025.
+sequences for open-world videos,'' in \emph{CVPR}, 2025.
 
 \bibitem{poggi2022continual}
 M.~Poggi \emph{et al.}, ``Continual adaptation for deep stereo,'' \emph{IEEE
-TPAMI}, vol.~44, no.~9, 2022.
+TPAMI}, 2022.
 
 \bibitem{recasens2021endodepth}
-D.~Recasens \emph{et al.}, ``Endo-Depth-and-Motion,'' \emph{IEEE RA-L},
-vol.~6, no.~4, 2021.
+D.~Recasens \emph{et al.}, ``Endo-Depth-and-Motion,'' \emph{IEEE RA-L}, 2021.
 
 \end{thebibliography}
 
