@@ -33,6 +33,9 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
+# Every act draws on the same canvas. ffmpeg's image2 demuxer needs a constant
+# frame size, and per-act figsizes gave four different heights.
+FIG = (10, 3.6)
 FRAMES = ROOT.parent / "results" / "drends_video_frames"
 FPS = 15
 
@@ -81,8 +84,13 @@ def main() -> None:
     plt.rcParams.update({"font.size": 8, "text.color": "0.9",
                          "axes.labelcolor": "0.9", "figure.facecolor": "0.08"})
 
+    def cm(name):
+        # Invalid reference is masked, and white made the holes louder than the data.
+        return matplotlib.colormaps[name].with_extremes(bad="0.16")
+
     def panel(ax, image, cmap, vmin, vmax, title):
-        ax.imshow(image, cmap=cmap, vmin=vmin, vmax=vmax, interpolation="nearest")
+        ax.imshow(image, cmap=cm(cmap) if isinstance(cmap, str) else cmap,
+                  vmin=vmin, vmax=vmax, interpolation="nearest")
         ax.set_xticks([]); ax.set_yticks([])
         for spine in ax.spines.values():
             spine.set_color("0.35")
@@ -96,6 +104,7 @@ def main() -> None:
                             np.ones(valid.sum() * 2, bool), 2, 98)
     err_raw = np.abs(raw - gt); err_ref = np.abs(ref - gt)
     _, ehi = _percentiles(err_raw, valid, 0, 97)
+    cmax = float(np.percentile(np.abs(ref - raw)[valid], 99))
     delta = err_ref - err_raw
     dmax = float(np.percentile(np.abs(delta[valid]), 99))
 
@@ -112,18 +121,32 @@ def main() -> None:
         want = int(round(seconds * FPS))
         return np.linspace(0, n - 1, want).astype(int)
 
+    # --- Title: an attachment that does not name the model is a slideshow ---
+    for _ in range(int(round(2.5 * FPS))):
+        fig = plt.figure(figsize=FIG)
+        fig.text(0.5, 0.62, "TETHER", ha="center", size=26, weight="bold", color="#e8a765")
+        fig.text(0.5, 0.47, "a causal temporal refiner for frozen stereo",
+                 ha="center", size=12, color="0.88")
+        fig.text(0.5, 0.34, "one $154{,}874$-parameter checkpoint, trained once, attached "
+                            "unchanged to a frozen estimator", ha="center", size=9, color="0.72")
+        fig.text(0.5, 0.24, f"shown here on {backbone} over DRENDS -- zero-shot: no part of "
+                            "the module has seen this domain", ha="center", size=9, color="0.72")
+        save(fig)
+
     # --- Act 1: what a frame-wise estimator does between frames -------------
     for t in indices(args.seconds[0]):
-        fig = plt.figure(figsize=(10, 2.6))
-        gs = gridspec.GridSpec(1, 3, wspace=0.04)
+        fig = plt.figure(figsize=FIG)
+        gs = gridspec.GridSpec(1, 4, wspace=0.04, left=0.015, right=0.985, top=0.84, bottom=0.03)
         panel(fig.add_subplot(gs[0]), d["rgb"][t].transpose(1, 2, 0), None, None, None,
-              f"{hero}  ({backbone}, zero-shot)")
+              f"{hero}  ({backbone})")
         panel(fig.add_subplot(gs[1]), np.where(valid[t], raw[t], np.nan), "turbo", dlo, dhi,
               "frozen estimator")
         panel(fig.add_subplot(gs[2]), np.where(valid[t], ref[t], np.nan), "turbo", dlo, dhi,
               "+ TETHER")
-        fig.suptitle("one causal module, attached unchanged to a frozen estimator",
-                     fontsize=9, y=0.99)
+        panel(fig.add_subplot(gs[3]), np.where(valid[t], np.abs(ref[t] - raw[t]), np.nan),
+              "viridis", 0, cmax, "what TETHER changed")
+        fig.suptitle("the two depth maps differ by about five percent: the change itself "
+                     "is the fourth panel", fontsize=9, y=0.975)
         save(fig)
 
     # --- Act 2: error against the reference, not smoothness -----------------
@@ -132,8 +155,8 @@ def main() -> None:
         m = valid[t]
         run_raw.append(float(err_raw[t][m].mean()) if m.any() else np.nan)
         run_ref.append(float(err_ref[t][m].mean()) if m.any() else np.nan)
-        fig = plt.figure(figsize=(10, 3.1))
-        gs = gridspec.GridSpec(1, 3, width_ratios=[1, 1, 1.05], wspace=0.06)
+        fig = plt.figure(figsize=FIG)
+        gs = gridspec.GridSpec(1, 3, width_ratios=[1, 1, 1.15], wspace=0.20, left=0.02, right=0.97, top=0.86, bottom=0.13)
         panel(fig.add_subplot(gs[0]), np.where(m, err_raw[t], np.nan), "inferno", 0, ehi,
               "|frozen - reference|")
         panel(fig.add_subplot(gs[1]), np.where(m, err_ref[t], np.nan), "inferno", 0, ehi,
@@ -141,7 +164,7 @@ def main() -> None:
         ax = fig.add_subplot(gs[2]); ax.set_facecolor("0.12")
         ax.plot(run_raw, color="#f08c3a", lw=1.1, label="frozen")
         ax.plot(run_ref, color="#4fb3d9", lw=1.1, label="+ TETHER")
-        ax.set_xlim(0, int(round(args.seconds[1] * FPS))); ax.set_ylabel("frame EPE (px)")
+        ax.set_xlim(0, max(60, len(run_raw))); ax.set_ylabel("frame EPE (px)", fontsize=7, labelpad=1)
         ax.legend(loc="upper right", frameon=False, fontsize=7)
         ax.tick_params(colors="0.7", labelsize=7)
         for s in ax.spines.values():
@@ -153,11 +176,11 @@ def main() -> None:
     # --- Act 3: where it helped, and where it did not -----------------------
     for t in indices(args.seconds[2]):
         m = valid[t]
-        fig = plt.figure(figsize=(10, 2.9))
-        gs = gridspec.GridSpec(1, 2, width_ratios=[1, 1], wspace=0.06)
+        fig = plt.figure(figsize=FIG)
+        gs = gridspec.GridSpec(1, 2, width_ratios=[1, 1.1], wspace=0.06, left=0.06, right=0.94, top=0.86, bottom=0.03)
         panel(fig.add_subplot(gs[0]), d["rgb"][t].transpose(1, 2, 0), None, None, None, hero)
         ax = fig.add_subplot(gs[1])
-        im = ax.imshow(np.where(m, -delta[t], np.nan), cmap="RdBu", vmin=-dmax, vmax=dmax,
+        im = ax.imshow(np.where(m, -delta[t], np.nan), cmap=cm("RdBu"), vmin=-dmax, vmax=dmax,
                        interpolation="nearest")
         ax.set_xticks([]); ax.set_yticks([])
         for s in ax.spines.values():
@@ -178,8 +201,8 @@ def main() -> None:
         scales[r] = (0.0, float(np.percentile(a[v], 97)) if v.any() else 1.0)
     shortest = min(len(data[r]["raw"]) for r in order)
     for t in np.linspace(0, shortest - 1, int(round(args.seconds[3] * FPS))).astype(int):
-        fig = plt.figure(figsize=(10, 4.4))
-        gs = gridspec.GridSpec(2, len(order), hspace=0.12, wspace=0.04)
+        fig = plt.figure(figsize=FIG)
+        gs = gridspec.GridSpec(2, len(order), hspace=0.14, wspace=0.04, left=0.045, right=0.99, top=0.87, bottom=0.02)
         for c, r in enumerate(order):
             e = data[r]
             v = e["gt_valid"][t] & (e["gt"][t].astype(np.float32) > 0)
@@ -199,10 +222,16 @@ def main() -> None:
 
     print(f"{counter[0]} frames rendered")
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    # This site's ffmpeg has no libx264; libopenh264 is the available H.264 encoder
+    # and takes a bitrate rather than a CRF. 1400k over ninety seconds lands near
+    # 15 MB, inside the call's 20 MB.
     cmd = ["ffmpeg", "-y", "-framerate", str(FPS), "-i", str(work / "%06d.png"),
-           "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "26",
+           "-c:v", "libopenh264", "-b:v", "1400k", "-pix_fmt", "yuv420p",
            "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", str(args.output)]
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    done = subprocess.run(cmd, capture_output=True, text=True)
+    if done.returncode:
+        print(done.stderr[-1500:])
+        raise SystemExit("ffmpeg failed")
     size = args.output.stat().st_size / 1e6
     seconds = counter[0] / FPS
     print(f"{args.output}: {size:.1f} MB, {seconds:.0f} s "

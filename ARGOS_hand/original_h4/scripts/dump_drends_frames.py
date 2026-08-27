@@ -19,7 +19,19 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
+import sys
+
 import numpy as np
+
+# Run as a script, sys.path[0] is scripts/, so the package root and the frozen
+# component trees have to be added the way the sibling scripts here already do.
+_ROOT = Path(__file__).resolve().parents[1]
+_ARGOS = _ROOT.parents[1]
+for _p in (str(_ROOT), str(_ROOT / "scripts"), str(_ARGOS / "ARGOS_FREEZED/src"),
+           str(_ARGOS / "ARGOS-V2/scripts"),
+           str(_ARGOS / "ARGOS_FREEZED/experiments/02_massive_training/scripts")):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from model_design.comparison import drends_backbone_transfer as transfer
 from model_design.comparison import drends_evaluation as base
